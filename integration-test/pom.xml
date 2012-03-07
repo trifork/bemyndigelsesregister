@@ -74,6 +74,16 @@
                                 <pingURL>http://localhost:8080/bemyndigelsesservice/health</pingURL>
                                 <pingTimeout>20000</pingTimeout>
                             </deployable>
+                            <deployable>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>stamdataservice</artifactId>
+                                <type>war</type>
+                                <properties>
+                                    <context>stamdataservice</context>
+                                </properties>
+                                <pingURL>http://localhost:8080/stamdataservice/health</pingURL>
+                                <pingTimeout>20000</pingTimeout>
+                            </deployable>
                         </deployables>
                     </deployer>
                     <configuration>
@@ -90,6 +100,12 @@
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
             <artifactId>bemyndigelsesservice</artifactId>
+            <version>${project.parent.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>dk.bemyndigelsesregister</groupId>
+            <artifactId>stamdataservice</artifactId>
             <version>${project.parent.version}</version>
             <type>war</type>
         </dependency>

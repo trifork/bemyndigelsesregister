@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.bemyndigelsesservice.web;
+package dk.bemyndigelsesregister.shared.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
