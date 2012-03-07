@@ -11,5 +11,12 @@
 
     <artifactId>bemyndigelsesservice</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>bemyndigelsesservice</groupId>
+            <artifactId>shared-test</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
