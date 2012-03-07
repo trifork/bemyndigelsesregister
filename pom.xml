@@ -10,6 +10,7 @@
     <modules>
         <module>bemyndigelsesservice</module>
         <module>stamdataservice</module>
+        <module>integration-test</module>
     </modules>
 
     <packaging>pom</packaging>
