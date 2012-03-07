@@ -11,6 +11,8 @@
 
     <artifactId>bemyndigelsesservice</artifactId>
 
+    <packaging>war</packaging>
+
     <dependencies>
         <dependency>
             <groupId>bemyndigelsesservice</groupId>
