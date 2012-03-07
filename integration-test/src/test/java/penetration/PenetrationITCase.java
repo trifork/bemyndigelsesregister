@@ -11,7 +11,7 @@ public class PenetrationITCase {
 
     @Test
     public void canAccessHealth() throws Exception {
-        URLConnection urlConnection = new URL("http://localhost:8080/bemyndigelsesserver/health").openConnection();
+        URLConnection urlConnection = new URL("http://localhost:8080/bemyndigelsesservice/health").openConnection();
         assertEquals("OK", IOUtils.toString(urlConnection.getInputStream()));
     }
 }

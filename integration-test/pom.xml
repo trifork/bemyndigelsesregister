@@ -43,6 +43,7 @@
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>start</goal>
+                            <goal>deploy</goal>
                         </goals>
                     </execution>
                     <execution>
@@ -61,7 +62,7 @@
                             <url>http://download.jboss.org/jbossas/7.0/jboss-as-7.0.2.Final/jboss-as-web-7.0.2.Final.zip</url>
                         </zipUrlInstaller>
                     </container>
-                    <configuration>
+                    <deployer>
                         <deployables>
                             <deployable>
                                 <groupId>${project.groupId}</groupId>
@@ -70,8 +71,12 @@
                                 <properties>
                                     <context>bemyndigelsesservice</context>
                                 </properties>
+                                <pingURL>http://localhost:8080/bemyndigelsesservice/health</pingURL>
+                                <pingTimeout>20000</pingTimeout>
                             </deployable>
                         </deployables>
+                    </deployer>
+                    <configuration>
                         <properties>
                             <cargo.servlet.port>8080</cargo.servlet.port>
                         </properties>
