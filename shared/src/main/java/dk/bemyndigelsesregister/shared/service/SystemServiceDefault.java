@@ -1,5 +1,7 @@
 package dk.bemyndigelsesregister.shared.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -11,6 +13,7 @@ import java.util.jar.Manifest;
 
 @Service
 public class SystemServiceDefault implements SystemService {
+    private final Log logger = LogFactory.getLog(getClass());
     @Inject
     ServletContext servletContext;
 
@@ -35,7 +38,7 @@ public class SystemServiceDefault implements SystemService {
             try {
                 final InputStream resourceAsStream = servletContext.getResourceAsStream("META-INF/MANIFEST.MF");
                 if (resourceAsStream == null) {
-                    //logger.warn("No manifest file found");
+                    logger.warn("No manifest file found");
                     return null;
                 }
                 manifest = new Manifest(resourceAsStream);
