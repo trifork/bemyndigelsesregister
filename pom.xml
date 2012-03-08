@@ -34,6 +34,26 @@
         <module>shared</module>
     </modules>
 
+    <properties>
+        <functionaltest.serverport>8085</functionaltest.serverport>
+        <functionaltest.urlprefix>http://localhost:${functionaltest.serverport}</functionaltest.urlprefix>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>jenkins-ci</id>
+            <activation>
+                <property>
+                    <name>env.USER</name>
+                    <value>jenkins</value>
+                </property>
+            </activation>
+            <properties>
+                <functionaltest.serverport>${env.CONTAINERPORT}</functionaltest.serverport>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
