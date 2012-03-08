@@ -7,7 +7,7 @@ import java.net.*;
 
 import static org.junit.Assert.*;
 
-public class PenetrationITCase {
+public class HealthServiceITCase {
 
     @Test
     public void canAccessBemyndigelsesserviceHealth() throws Exception {
