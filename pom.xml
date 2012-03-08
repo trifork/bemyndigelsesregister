@@ -7,6 +7,25 @@
     <groupId>dk.bemyndigelsesregister</groupId>
     <artifactId>bemyndigelsesregister</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <scm>
+        <url>https://github.com/trifork/bemyndigelsesregister</url>
+        <connection>scm:git:git://github.com/trifork/bemyndigelsesregister.git</connection>
+        <developerConnection>scm:git:git://github.com/trifork/bemyndigelsesregister.git</developerConnection>
+    </scm>
+    <issueManagement>
+        <system>JIRA</system>
+        <url>https://TODO.trifork.com/</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://TODO.trifork.com</url>
+    </ciManagement>
+    <distributionManagement>
+        <downloadUrl>https://TODO.trifork.com/downloads</downloadUrl>
+    </distributionManagement>
+
     <modules>
         <module>bemyndigelsesservice</module>
         <module>stamdataservice</module>
@@ -14,8 +33,6 @@
         <module>shared-test</module>
         <module>shared</module>
     </modules>
-
-    <packaging>pom</packaging>
 
     <dependencyManagement>
         <dependencies>
