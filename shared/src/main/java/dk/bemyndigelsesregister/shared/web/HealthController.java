@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.shared.web;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +14,9 @@ import javax.inject.Inject;
 public class HealthController {
     @Inject
     SystemService systemService;
+
+    @Value("${github.home}")
+    String githubHome;
 
     @RequestMapping("/health")
     public @ResponseBody String health() {
@@ -28,7 +32,6 @@ public class HealthController {
     @RequestMapping("/health/home")
     @ResponseBody
     public ModelAndView versionHome() {
-        String ghHome = "https://www.github.com/trifork/bemyndigelsesregister";
-        return new ModelAndView(new RedirectView(ghHome + "/commits/" + version()));
+        return new ModelAndView(new RedirectView(githubHome + "/commits/" + version()));
     }
 }
