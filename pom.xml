@@ -41,10 +41,10 @@
 
     <profiles>
         <profile>
-            <id>jenkins-ci</id>
+            <id>ci</id>
             <activation>
                 <property>
-                    <name>env.USER</name>
+                    <name>env.CONTAINERPORT</name>
                     <value>jenkins</value>
                 </property>
             </activation>
