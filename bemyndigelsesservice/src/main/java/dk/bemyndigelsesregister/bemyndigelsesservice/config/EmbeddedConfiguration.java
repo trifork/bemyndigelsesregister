@@ -16,6 +16,6 @@ public class EmbeddedConfiguration {
     @Bean
     public DataSource dataSource() {
         //logger.info("Creating development database");
-        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();
+        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).addScript("classpath:/db/migrations/V1__Initial_db.sql").build();
     }
 }
