@@ -45,7 +45,6 @@
             <activation>
                 <property>
                     <name>env.CONTAINERPORT</name>
-                    <value>jenkins</value>
                 </property>
             </activation>
             <properties>
