@@ -1,6 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
@@ -10,7 +9,7 @@ import javax.sql.DataSource;
 public class EmbeddedConfiguration {
     //private final Log logger = LogFactory.getLog(getClass());
 
-    @Bean
+    //@Bean
     public DataSource dataSource() {
         //logger.info("Creating development database");
         //return new EmbeddedDatabaseBuilder().build();

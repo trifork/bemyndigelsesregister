@@ -17,7 +17,7 @@ public class ApplicationRootConfig {
     @Bean
     public PropertyPlaceholderConfigurer configuration() {
         final PropertyPlaceholderConfigurer props = new PropertyPlaceholderConfigurer();
-        props.setLocations(new Resource[] {
+        props.setLocations(new Resource[]{
                 new ClassPathResource("default.properties"),
                 new ClassPathResource("jdbc.default.properties"),
                 //not sure whether we will need this: new ClassPathResource("jdbc." + getProperty("user.name") + ".properties"),
