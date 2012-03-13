@@ -1,3 +1,3 @@
-create table Autorization (Id varchar(9) primary key, Name varchar(255) not null);
+create table Autorization (id varchar(9) primary key, name varchar(255) not null);
 
-INSERT INTO Autorization (Name) VALUES ("Foo");
+INSERT INTO Autorization (name) VALUES ("Foo");
