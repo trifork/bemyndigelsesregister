@@ -1,12 +1,16 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
+import com.googlecode.flyway.core.Flyway;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+
+import javax.sql.DataSource;
 
 import static java.lang.System.getProperty;
 
@@ -27,4 +31,10 @@ public class ApplicationRootConfig {
         return props;
     }
 
+    @Bean(initMethod = "migrate")
+    public Flyway flyway(DataSource dataSource) {
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(dataSource);
+        return flyway;
+    }
 }
