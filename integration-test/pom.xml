@@ -61,10 +61,9 @@
                 </executions>
                 <configuration>
                     <container>
-                        <containerId>jboss7x</containerId>
+                        <containerId>jboss61x</containerId>
                         <zipUrlInstaller>
-                            <!--url>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.0.Final/jboss-as-7.1.0.Final.zip</url-->
-                            <url>http://download.jboss.org/jbossas/7.0/jboss-as-7.0.2.Final/jboss-as-web-7.0.2.Final.zip</url>
+                            <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
                         </zipUrlInstaller>
                     </container>
                     <deployer>
