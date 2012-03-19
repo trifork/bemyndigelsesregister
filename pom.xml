@@ -45,7 +45,6 @@
             <activation>
                 <property>
                     <name>env.CONTAINERPORT</name>
-                    <value>jenkins</value>
                 </property>
             </activation>
             <properties>
@@ -56,6 +55,16 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>3.1.1.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>3.1.1.RELEASE</version>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
