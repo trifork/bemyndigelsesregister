@@ -61,9 +61,9 @@
                 </executions>
                 <configuration>
                     <container>
-                        <containerId>jboss61x</containerId>
+                        <containerId>tomcat7x</containerId>
                         <zipUrlInstaller>
-                            <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
+                            <url>http://apache.mirrors.webname.dk/tomcat/tomcat-7/v7.0.26/bin/apache-tomcat-7.0.26.zip</url>
                         </zipUrlInstaller>
                     </container>
                     <deployer>
