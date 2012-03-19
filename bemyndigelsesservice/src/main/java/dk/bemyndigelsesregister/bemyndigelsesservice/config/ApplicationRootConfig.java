@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import static java.lang.System.getProperty;
 
 @Configuration
-@ComponentScan("dk.bemyndigelsesregister.shared.service")
+@ComponentScan({"dk.bemyndigelsesregister.shared.service", "dk.bemyndigelsesregister.bemyndigelsesservice.server"})
 public class ApplicationRootConfig {
 
     @Bean
