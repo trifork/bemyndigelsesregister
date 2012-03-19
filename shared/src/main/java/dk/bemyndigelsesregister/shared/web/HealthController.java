@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.shared.web;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 
 @Controller
 public class HealthController {
+    private static Logger logger = Logger.getLogger(HealthController.class);
     @Inject
     SystemService systemService;
 
@@ -32,6 +34,8 @@ public class HealthController {
     @RequestMapping("/health/home")
     @ResponseBody
     public ModelAndView versionHome() {
-        return new ModelAndView(new RedirectView(githubHome + "/commits/" + version()));
+        final String url = githubHome + "/commits/" + version();
+        logger.debug("Redirecting user to url=" + url);
+        return new ModelAndView(new RedirectView(url));
     }
 }
