@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
 import com.googlecode.flyway.core.Flyway;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
@@ -36,5 +38,16 @@ public class ApplicationRootConfig {
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
         return flyway;
+    }
+
+    @Bean
+    public DataSource dataSource(@Value("${jdbc.url}") String url, @Value("${jdbc.username}") String username, @Value("${jdbc.password}") String password) {
+        final DriverManagerDataSource dataSource = new DriverManagerDataSource(
+                url,
+                username,
+                password
+        );
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        return dataSource;
     }
 }

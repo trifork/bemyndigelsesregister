@@ -16,11 +16,6 @@
         <param-value>dk.bemyndigelsesregister.bemyndigelsesservice.config</param-value>
     </context-param>
 
-    <context-param>
-        <param-name>spring.profiles.default</param-name>
-        <param-value>embedded</param-value>
-    </context-param>
-
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
