@@ -6,4 +6,14 @@ public class StatusType extends DomainObject {
     protected StatusType(Long id) {
         super(id);
     }
+
+    //<editor-fold desc="GettersAndSetters">
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    //</editor-fold>
 }
