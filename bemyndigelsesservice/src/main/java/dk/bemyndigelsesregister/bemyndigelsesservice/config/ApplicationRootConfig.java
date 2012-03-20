@@ -26,7 +26,7 @@ public class ApplicationRootConfig {
         props.setLocations(new Resource[]{
                 new ClassPathResource("default.properties"),
                 new ClassPathResource("jdbc.default.properties"),
-                //not sure whether we will need this: new ClassPathResource("jdbc." + getProperty("user.name") + ".properties"),
+                new ClassPathResource("jdbc." + getProperty("user.name") + ".properties"),
                 new FileSystemResource(getProperty("user.home") + "/.bemyndigelsesservice/passwords.properties")
         });
         props.setIgnoreResourceNotFound(true);
@@ -35,8 +35,19 @@ public class ApplicationRootConfig {
 
     @Bean(initMethod = "migrate")
     public Flyway flyway(DataSource dataSource) {
+        //TODO: when http://code.google.com/p/flyway/issues/detail?id=174 is finished, we want to use multiple paths for migration in test
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
+        return flyway;
+    }
+
+    @Bean(initMethod = "migrate") @DependsOn("flyway")
+    public Flyway flywayTestData(DataSource dataSource) {
+        Flyway flyway = new Flyway();
+        flyway.setDisableInitCheck(true);
+        flyway.setDataSource(dataSource);
+        flyway.setBaseDir("db/testdata");
+        flyway.setTable("testschema_version");
         return flyway;
     }
 

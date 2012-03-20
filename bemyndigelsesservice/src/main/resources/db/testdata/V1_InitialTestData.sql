@@ -1,0 +1,1 @@
+INSERT INTO status_type (status, sidst_modificeret, sidst_modificeret_af) VALUES ('OK', NOW(), 'mwl')
