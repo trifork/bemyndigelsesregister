@@ -2,14 +2,15 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import org.joda.time.DateTime;
 
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class DomainObject {
+    @Id
     private Long id;
     protected DateTime sidstModificeret;
     protected String sidstModificeretAf;
-
-    protected DomainObject(Long id) {
-        this.id = id;
-    }
 
     //<editor-fold desc="GettersAndSetters">
     public Long getId() {
