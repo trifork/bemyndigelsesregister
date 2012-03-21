@@ -18,7 +18,7 @@ public abstract class SupportDao<T> {
         return ebeanServer.find(klass, id);
     }
 
-    public void save(T object) {
-        ebeanServer.save(object);
+    public void save(T entity) {
+        ebeanServer.save(entity);
     }
 }

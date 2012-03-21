@@ -2,25 +2,29 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import org.joda.time.DateTime;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Bemyndigelse extends DomainObject {
     private String kode;
     private String bemyndigendeCpr;
     private String bemyndigedeCpr;
     private String bemyndigedeCvr;
     private String system;
+    @OneToOne
     private Arbejdsfunktion arbejdsfunktion;
+    @OneToOne
     private Rettighed rettighed;
+    @OneToOne
     private StatusType status;
+
     private DateTime godkendelsesdato;
     private DateTime gyldigFra;
     private DateTime gyldigTil;
     private int versionsid;
 
     public Bemyndigelse() {
-    }
-
-    public Bemyndigelse() {
-        super(null);
     }
 
     //<editor-fold desc="GettersAndSetters">

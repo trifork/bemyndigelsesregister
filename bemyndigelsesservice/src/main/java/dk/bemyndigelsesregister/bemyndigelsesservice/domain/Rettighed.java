@@ -1,5 +1,8 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Rettighed extends DomainObject {
     private String domaene;
     private String system;
