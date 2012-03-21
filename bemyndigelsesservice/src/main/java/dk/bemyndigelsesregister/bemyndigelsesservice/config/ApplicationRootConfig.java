@@ -3,6 +3,9 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
 import com.googlecode.flyway.core.Flyway;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DomainObject;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.StatusType;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -13,10 +16,18 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.util.CollectionUtils;
 
+import javax.persistence.Entity;
 import javax.sql.DataSource;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import static java.lang.System.getProperty;
+import static java.util.Arrays.asList;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.shared.service", "dk.bemyndigelsesregister.bemyndigelsesservice.server"})
@@ -29,7 +40,7 @@ public class ApplicationRootConfig {
                 new ClassPathResource("default.properties"),
                 new ClassPathResource("jdbc.default.properties"),
                 new ClassPathResource("jdbc." + getProperty("user.name") + ".properties"),
-                new FileSystemResource(getProperty("user.home") + "/.bemyndigelsesservice/passwords.properties")
+                new FileSystemResource(getProperty("user.home") + "..bemyndigelsesservice/passwords.properties")
         });
         props.setIgnoreResourceNotFound(true);
         return props;
@@ -65,10 +76,11 @@ public class ApplicationRootConfig {
     }
 
     @Bean
-    public EbeanServerFactoryBean ebeanServer(DataSource dataSource) {
+    public EbeanServerFactoryBean ebeanServer(DataSource dataSource) throws Exception {
         final EbeanServerFactoryBean factoryBean = new EbeanServerFactoryBean();
         final ServerConfig serverConfig = new ServerConfig();
         serverConfig.setName("localhostConfig");
+        serverConfig.setClasses(new ArrayList<Class<?>>(new Reflections("dk.bemyndigelsesregister.bemyndigelsesservice.domain").getTypesAnnotatedWith(Entity.class)));
         serverConfig.setDataSource(dataSource);
         factoryBean.setServerConfig(serverConfig);
         return factoryBean;
