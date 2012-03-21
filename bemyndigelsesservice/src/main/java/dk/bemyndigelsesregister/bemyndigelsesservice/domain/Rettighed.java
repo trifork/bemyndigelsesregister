@@ -6,8 +6,7 @@ public class Rettighed extends DomainObject {
     private String rettighedskode;
     private String beskrivelse;
 
-    protected Rettighed(Long id) {
-        super(id);
+    public Rettighed() {
     }
 
     //<editor-fold desc="GettersAndSetters">

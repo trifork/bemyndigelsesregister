@@ -1,5 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
+import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
 import com.googlecode.flyway.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -60,5 +62,15 @@ public class ApplicationRootConfig {
         );
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         return dataSource;
+    }
+
+    @Bean
+    public EbeanServerFactoryBean ebeanServer(DataSource dataSource) {
+        final EbeanServerFactoryBean factoryBean = new EbeanServerFactoryBean();
+        final ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setName("localhostConfig");
+        serverConfig.setDataSource(dataSource);
+        factoryBean.setServerConfig(serverConfig);
+        return factoryBean;
     }
 }
