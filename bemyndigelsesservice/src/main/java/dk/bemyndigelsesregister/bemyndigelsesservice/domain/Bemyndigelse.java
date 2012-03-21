@@ -20,6 +20,10 @@ public class Bemyndigelse extends DomainObject {
         super(id);
     }
 
+    public Bemyndigelse() {
+        super(null);
+    }
+
     //<editor-fold desc="GettersAndSetters">
     public String getKode() {
         return kode;

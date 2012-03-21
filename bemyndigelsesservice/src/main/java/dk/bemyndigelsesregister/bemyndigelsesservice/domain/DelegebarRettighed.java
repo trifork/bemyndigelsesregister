@@ -4,7 +4,7 @@ public class DelegebarRettighed extends DomainObject {
     private String domaene;
     private String system;
     private Arbejdsfunktion arbejdsfunktion;
-    private Rettighed Rettighedskode;
+    private Rettighed rettighedskode;
 
     public DelegebarRettighed(Long id) {
         super(id);
@@ -36,11 +36,11 @@ public class DelegebarRettighed extends DomainObject {
     }
 
     public Rettighed getRettighedskode() {
-        return Rettighedskode;
+        return rettighedskode;
     }
 
     public void setRettighedskode(Rettighed rettighedskode) {
-        Rettighedskode = rettighedskode;
+        this.rettighedskode = rettighedskode;
     }
     //</editor-fold>
 }
