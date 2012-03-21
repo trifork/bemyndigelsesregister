@@ -6,8 +6,7 @@ public class DelegebarRettighed extends DomainObject {
     private Arbejdsfunktion arbejdsfunktion;
     private Rettighed rettighedskode;
 
-    public DelegebarRettighed(Long id) {
-        super(id);
+    public DelegebarRettighed() {
     }
 
     //<editor-fold desc="GettersAndSetters">

@@ -1,10 +1,13 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class StatusType extends DomainObject {
+
     private String status;
 
-    protected StatusType(Long id) {
-        super(id);
+    public StatusType() {
     }
 
     //<editor-fold desc="GettersAndSetters">

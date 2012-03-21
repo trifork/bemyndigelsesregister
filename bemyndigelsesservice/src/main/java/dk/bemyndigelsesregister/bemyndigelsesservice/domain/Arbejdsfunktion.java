@@ -1,13 +1,15 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Arbejdsfunktion extends DomainObject {
     private String domaene;
     private String system;
     private String arbejdsfunktion;
     private String beskrivelse;
 
-    public Arbejdsfunktion(Long id) {
-        super(id);
+    public Arbejdsfunktion() {
     }
 
     //<editor-fold desc="GettersAndSetters">

@@ -16,8 +16,7 @@ public class Bemyndigelse extends DomainObject {
     private DateTime gyldigTil;
     private int versionsid;
 
-    protected Bemyndigelse(Long id) {
-        super(id);
+    public Bemyndigelse() {
     }
 
     public Bemyndigelse() {
