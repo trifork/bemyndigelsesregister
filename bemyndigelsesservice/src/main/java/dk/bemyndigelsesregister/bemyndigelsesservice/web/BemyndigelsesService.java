@@ -1,22 +1,21 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.StatusType;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ArbejdsfunktionDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.RettighedDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.StatusTypeDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import org.joda.time.DateTime;
+import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
-@WebService
+@WebService(serviceName = "bemyndigelsesservice.svc")
 public class BemyndigelsesService {
+    private static Logger logger = Logger.getLogger(BemyndigelsesService.class);
     @Inject
     SystemService systemService;
     @Inject
@@ -28,13 +27,17 @@ public class BemyndigelsesService {
     @Inject
     RettighedDao rettighedDao;
 
-    @WebMethod
-    public String hello() {
-        return "OK";
+    public BemyndigelsesService() {
+        logger.info("Starting Bemyndigelsesservice webservice");
     }
 
     @WebMethod
-    public void opretAnmodningOmBemyndigelse(String bemyndigedeCpr, String bemyndigedeCvr, String bemyndigendeCpr, long arbejdsfunktionId, long rettighedId) {
+    public void opretAnmodningOmBemyndigelse(
+            @WebParam(name = "bemyndigedeCpr") String bemyndigedeCpr,
+            @WebParam(name = "bemyndigedeCvr") String bemyndigedeCvr,
+            @WebParam(name = "bemyndigendeCpr") String bemyndigendeCpr,
+            @WebParam(name = "arbejdsfunktionId") long arbejdsfunktionId,
+            @WebParam(name = "rettighedId") long rettighedId) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
         bemyndigelse.setBemyndigedeCpr(bemyndigedeCpr);
         bemyndigelse.setBemyndigedeCvr(bemyndigedeCvr);

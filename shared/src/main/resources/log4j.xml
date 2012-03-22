@@ -22,6 +22,9 @@
     <logger name="org.springframework">
         <level value="WARN"/>
     </logger>
+    <logger name="org.springframework.web">
+        <level value="DEBUG"/>
+    </logger>
 
     <logger name="dk.bemyndigelsesregister">
         <level value="DEBUG"/>
