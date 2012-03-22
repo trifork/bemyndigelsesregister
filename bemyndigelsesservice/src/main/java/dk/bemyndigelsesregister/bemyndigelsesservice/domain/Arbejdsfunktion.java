@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 
 @Entity
 public class Arbejdsfunktion extends DomainObject {
-    private String domaene;
-    private String system;
+    private Domaene domaene;
+    private LinkedSystem system;
     private String arbejdsfunktion;
     private String beskrivelse;
 
@@ -13,21 +13,6 @@ public class Arbejdsfunktion extends DomainObject {
     }
 
     //<editor-fold desc="GettersAndSetters">
-    public String getDomaene() {
-        return domaene;
-    }
-
-    public void setDomaene(String domaene) {
-        this.domaene = domaene;
-    }
-
-    public String getSystem() {
-        return system;
-    }
-
-    public void setSystem(String system) {
-        this.system = system;
-    }
 
     public String getArbejdsfunktion() {
         return arbejdsfunktion;
@@ -44,5 +29,22 @@ public class Arbejdsfunktion extends DomainObject {
     public void setBeskrivelse(String beskrivelse) {
         this.beskrivelse = beskrivelse;
     }
+
+    public void setDomaene(Domaene domaene) {
+        this.domaene = domaene;
+    }
+
+    public Domaene getDomaene() {
+        return domaene;
+    }
+
+    public void setSystem(LinkedSystem system) {
+        this.system = system;
+    }
+
+    public LinkedSystem getSystem() {
+        return system;
+    }
     //</editor-fold>
+
 }

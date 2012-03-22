@@ -1,3 +1,20 @@
+CREATE TABLE `domaene` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `domaene` VARCHAR(255) NOT NULL,
+  `sidst_modificeret` datetime DEFAULT NULL,
+  `sidst_modificeret_af` varchar(255) DEFAULT NULL,
+
+   PRIMARY KEY (`id`) 
+);
+
+CREATE TABLE `system` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `system` VARCHAR(255) NOT NULL,
+  `sidst_modificeret` datetime DEFAULT NULL,
+  `sidst_modificeret_af` varchar(255) DEFAULT NULL,
+
+   PRIMARY KEY (`id`) 
+);
 
 CREATE TABLE `status_type` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
@@ -10,32 +27,56 @@ CREATE TABLE `status_type` (
 
 CREATE TABLE `arbejdsfunktion` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
-  `domaene` VARCHAR(255) NOT NULL,
-  `system` VARCHAR(255) NOT NULL,
+  `domaene_id` BIGINT NOT NULL,
+  `system_id` BIGINT NOT NULL,
   `arbejdsfunktion` VARCHAR(255) NOT NULL,
   `beskrivelse` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
   
+  CONSTRAINT `arbejdsfunktion_domaene_type`
+      FOREIGN KEY (`domaene_id` )
+      REFERENCES `domaene` (`id` )
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+
+  CONSTRAINT `arbejdsfunktion_system_type`
+      FOREIGN KEY (`system_id` )
+      REFERENCES `system` (`id` )
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+
   PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE `rettighed` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
-  `domaene` VARCHAR(255) NOT NULL,
-  `system` VARCHAR(255) NOT NULL,
+  `domaene_id` BIGINT NOT NULL,
+  `system_id` BIGINT NOT NULL,
   `rettighedskode` VARCHAR(255) NOT NULL,
   `beskrivelse` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
+
+  CONSTRAINT `rettighed_domaene_type`
+      FOREIGN KEY (`domaene_id` )
+      REFERENCES `domaene` (`id` )
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+
+  CONSTRAINT `rettighed_system_type`
+      FOREIGN KEY (`system_id` )
+      REFERENCES `system` (`id` )
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
   
   PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE `delegerbar_rettighed` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
-  `domaene` VARCHAR(255) NOT NULL,
-  `system` VARCHAR(255) NOT NULL,
+  `domaene_id` BIGINT NOT NULL,
+  `system_id` BIGINT NOT NULL,
   `arbejdsfunktion` BIGINT NOT NULL,
   `rettighedskode` BIGINT NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
@@ -53,6 +94,18 @@ CREATE TABLE `delegerbar_rettighed` (
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
 
+  CONSTRAINT `delegerbar_rettighed_domaene_type`
+      FOREIGN KEY (`domaene_id` )
+      REFERENCES `domaene` (`id` )
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+
+  CONSTRAINT `delegerbar_rettighed_system_type`
+      FOREIGN KEY (`system_id` )
+      REFERENCES `system` (`id` )
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+
   PRIMARY KEY (`id`) 
 );
 
@@ -62,7 +115,7 @@ CREATE TABLE `bemyndigelse` (
   `bemyndigende_cpr` VARCHAR(10) NOT NULL,
   `bemyndigede_cpr` VARCHAR(10) NOT NULL,
   `bemyndigede_cvr` VARCHAR(10) NULL DEFAULT NULL,
-  `system` VARCHAR(255) NOT NULL,
+  `system_id` BIGINT NOT NULL,
   `arbejdsfunktion_id` BIGINT NOT NULL,
   `rettighed_id` BIGINT NOT NULL,
   `status_id` BIGINT NOT NULL,
@@ -75,6 +128,12 @@ CREATE TABLE `bemyndigelse` (
   
   PRIMARY KEY (`id`),
   
+  CONSTRAINT `bemyndigelse_system_type`
+      FOREIGN KEY (`system_id` )
+      REFERENCES `system` (`id` )
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+
   CONSTRAINT `rettighed_type`
       FOREIGN KEY (`rettighed_id` )
       REFERENCES `rettighed` (`id` )

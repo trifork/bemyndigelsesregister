@@ -7,7 +7,7 @@ public class Bemyndigelse extends DomainObject {
     private String bemyndigendeCpr;
     private String bemyndigedeCpr;
     private String bemyndigedeCvr;
-    private String system;
+    private LinkedSystem system;
     private Arbejdsfunktion arbejdsfunktion;
     private Rettighed rettighed;
     private StatusType status;
@@ -50,14 +50,6 @@ public class Bemyndigelse extends DomainObject {
 
     public void setBemyndigedeCvr(String bemyndigedeCvr) {
         this.bemyndigedeCvr = bemyndigedeCvr;
-    }
-
-    public String getSystem() {
-        return system;
-    }
-
-    public void setSystem(String system) {
-        this.system = system;
     }
 
     public Arbejdsfunktion getArbejdsfunktion() {
@@ -115,5 +107,14 @@ public class Bemyndigelse extends DomainObject {
     public void setVersionsid(int versionsid) {
         this.versionsid = versionsid;
     }
+
+    public void setSystem(LinkedSystem system) {
+        this.system = system;
+    }
+
+    public LinkedSystem getSystem() {
+        return system;
+    }
     //</editor-fold>
+
 }
