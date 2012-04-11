@@ -1,5 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
+import com.sun.xml.ws.api.server.WSEndpoint;
+import com.sun.xml.ws.server.WSEndpointImpl;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ArbejdsfunktionDao;
@@ -11,9 +13,12 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebService;
 
-@Repository
+@Repository("bemyndigelsesServiceServer")
+@WebService(serviceName = "bemyndigelsesservice.svc")
 public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     private static Logger logger = Logger.getLogger(BemyndigelsesServiceImpl.class);
     @Inject
@@ -32,6 +37,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
+    @WebMethod
     public void opretAnmodningOmBemyndigelse(
             @WebParam(name = "bemyndigedeCpr") String bemyndigedeCpr,
             @WebParam(name = "bemyndigedeCvr") String bemyndigedeCvr,
