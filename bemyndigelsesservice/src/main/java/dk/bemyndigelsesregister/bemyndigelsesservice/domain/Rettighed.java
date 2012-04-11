@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 @Entity
 public class Rettighed extends DomainObject {
     private Domaene domaene;
-    private LinkedSystem system;
+    private LinkedSystem linkedSystem;
     private String rettighedskode;
     private String beskrivelse;
 
@@ -30,12 +30,12 @@ public class Rettighed extends DomainObject {
         this.beskrivelse = beskrivelse;
     }
 
-    public void setSystem(LinkedSystem system) {
-        this.system = system;
+    public void setLinkedSystem(LinkedSystem linkedSystem) {
+        this.linkedSystem = linkedSystem;
     }
 
-    public LinkedSystem getSystem() {
-        return system;
+    public LinkedSystem getLinkedSystem() {
+        return linkedSystem;
     }
 
     public void setDomaene(Domaene domaene) {

@@ -2,7 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 public class DelegebarRettighed extends DomainObject {
     private Domaene domaene;
-    private LinkedSystem system;
+    private LinkedSystem linkedSystem;
     private Arbejdsfunktion arbejdsfunktion;
     private Rettighed rettighedskode;
 
@@ -35,12 +35,12 @@ public class DelegebarRettighed extends DomainObject {
         return domaene;
     }
 
-    public void setSystem(LinkedSystem system) {
-        this.system = system;
+    public void setLinkedSystem(LinkedSystem linkedSystem) {
+        this.linkedSystem = linkedSystem;
     }
 
-    public LinkedSystem getSystem() {
-        return system;
+    public LinkedSystem getLinkedSystem() {
+        return linkedSystem;
     }
     //</editor-fold>
 

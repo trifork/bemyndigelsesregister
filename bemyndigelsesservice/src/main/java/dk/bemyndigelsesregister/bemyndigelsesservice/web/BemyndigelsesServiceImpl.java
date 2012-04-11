@@ -1,13 +1,8 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import com.sun.xml.ws.api.server.WSEndpoint;
-import com.sun.xml.ws.server.WSEndpointImpl;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ArbejdsfunktionDao;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.RettighedDao;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.StatusTypeDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -31,6 +26,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     StatusTypeDao statusTypeDao;
     @Inject
     RettighedDao rettighedDao;
+    @Inject
+    LinkedSystemDao linkedSystemDao;
 
     public BemyndigelsesServiceImpl() {
         logger.info("Starting Bemyndigelsesservice webservice");
@@ -52,7 +49,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         bemyndigelse.setStatus(statusTypeDao.get(1));
         bemyndigelse.setRettighed(rettighedDao.get(rettighedId));
         bemyndigelse.setKode("KODE");
-        bemyndigelse.setSystem("Trifork test system");
+        bemyndigelse.setLinkedSystem(linkedSystemDao.get(1l));
         bemyndigelse.setGyldigFra(systemService.getDateTime());
         bemyndigelse.setGyldigTil(systemService.getDateTime().plusYears(99));
         bemyndigelse.setVersionsid(1);

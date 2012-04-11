@@ -5,7 +5,6 @@ import org.joda.time.DateTime;
 import javax.persistence.OneToOne;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Bemyndigelse extends DomainObject {
@@ -14,7 +13,7 @@ public class Bemyndigelse extends DomainObject {
     private String bemyndigedeCpr;
     private String bemyndigedeCvr;
     @OneToOne
-    private LinkedSystem system;
+    private LinkedSystem linkedSystem;
     @OneToOne
     private Arbejdsfunktion arbejdsfunktion;
     @OneToOne
@@ -119,12 +118,12 @@ public class Bemyndigelse extends DomainObject {
         this.versionsid = versionsid;
     }
 
-    public void setSystem(LinkedSystem system) {
-        this.system = system;
+    public void setLinkedSystem(LinkedSystem linkedSystem) {
+        this.linkedSystem = linkedSystem;
     }
 
-    public LinkedSystem getSystem() {
-        return system;
+    public LinkedSystem getLinkedSystem() {
+        return linkedSystem;
     }
     //</editor-fold>
 }
