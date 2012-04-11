@@ -1,11 +1,14 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Arbejdsfunktion extends DomainObject {
+    @OneToOne
     private Domaene domaene;
-    private LinkedSystem system;
+    @OneToOne
+    private LinkedSystem LinkedSystem;
     private String arbejdsfunktion;
     private String beskrivelse;
 
@@ -38,12 +41,12 @@ public class Arbejdsfunktion extends DomainObject {
         return domaene;
     }
 
-    public void setSystem(LinkedSystem system) {
-        this.system = system;
+    public void setLinkedSystem(LinkedSystem linkedSystem) {
+        this.LinkedSystem = linkedSystem;
     }
 
-    public LinkedSystem getSystem() {
-        return system;
+    public LinkedSystem getLinkedSystem() {
+        return LinkedSystem;
     }
     //</editor-fold>
 
