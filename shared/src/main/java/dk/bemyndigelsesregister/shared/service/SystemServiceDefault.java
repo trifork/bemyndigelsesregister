@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.shared.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -20,6 +21,11 @@ public class SystemServiceDefault implements SystemService {
     @Override
     public Date getDate() {
         return new Date();
+    }
+
+    @Override
+    public DateTime getDateTime() {
+        return new DateTime();
     }
 
     @Override
