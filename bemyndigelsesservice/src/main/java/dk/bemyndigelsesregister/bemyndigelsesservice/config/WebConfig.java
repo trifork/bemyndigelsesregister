@@ -17,12 +17,4 @@ public class WebConfig extends WebMvcConfigurationSupport {
     private static Logger logger = Logger.getLogger(WebConfig.class);
     @Inject
     ApplicationRootConfig applicationRootConfig;
-
-
-    @Bean
-    public SimpleJaxWsServiceExporter simpleJaxWsServiceExporter() {
-        final SimpleJaxWsServiceExporter serviceExporter = new SimpleJaxWsServiceExporter();
-        serviceExporter.setBaseAddress("http://localhost:8080/bemyndigelsesservice/");
-        return serviceExporter;
-    }
 }
