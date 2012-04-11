@@ -5,6 +5,8 @@ import wslite.soap.SOAPClient
 
 import shared.WebServiceSupport
 
+import static org.junit.Assert.*
+
 class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
 
     @Test
@@ -24,5 +26,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 }
             }
         }
+
+        assertFalse response.hasFault()
     }
 }
