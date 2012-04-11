@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.remoting.jaxws.SimpleJaxWsServiceExporter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
+@ImportResource({"classpath:config/servicesContext.xml"})
 public class WebConfig extends WebMvcConfigurationSupport {
     private static Logger logger = Logger.getLogger(WebConfig.class);
     @Inject
