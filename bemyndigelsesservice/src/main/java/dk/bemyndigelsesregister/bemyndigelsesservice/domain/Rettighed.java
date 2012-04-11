@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 
 @Entity
 public class Rettighed extends DomainObject {
-    private String domaene;
-    private String system;
+    private Domaene domaene;
+    private LinkedSystem system;
     private String rettighedskode;
     private String beskrivelse;
 
@@ -13,21 +13,6 @@ public class Rettighed extends DomainObject {
     }
 
     //<editor-fold desc="GettersAndSetters">
-    public String getDomaene() {
-        return domaene;
-    }
-
-    public void setDomaene(String domaene) {
-        this.domaene = domaene;
-    }
-
-    public String getSystem() {
-        return system;
-    }
-
-    public void setSystem(String system) {
-        this.system = system;
-    }
 
     public String getRettighedskode() {
         return rettighedskode;
@@ -44,5 +29,23 @@ public class Rettighed extends DomainObject {
     public void setBeskrivelse(String beskrivelse) {
         this.beskrivelse = beskrivelse;
     }
+
+    public void setSystem(LinkedSystem system) {
+        this.system = system;
+    }
+
+    public LinkedSystem getSystem() {
+        return system;
+    }
+
+    public void setDomaene(Domaene domaene) {
+        this.domaene = domaene;
+    }
+
+    public Domaene getDomaene() {
+        return domaene;
+    }
+
     //</editor-fold>
+
 }

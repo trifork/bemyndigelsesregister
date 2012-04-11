@@ -2,6 +2,8 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import org.joda.time.DateTime;
 
+import javax.persistence.OneToOne;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
@@ -11,7 +13,8 @@ public class Bemyndigelse extends DomainObject {
     private String bemyndigendeCpr;
     private String bemyndigedeCpr;
     private String bemyndigedeCvr;
-    private String system;
+    @OneToOne
+    private LinkedSystem system;
     @OneToOne
     private Arbejdsfunktion arbejdsfunktion;
     @OneToOne
@@ -58,14 +61,6 @@ public class Bemyndigelse extends DomainObject {
 
     public void setBemyndigedeCvr(String bemyndigedeCvr) {
         this.bemyndigedeCvr = bemyndigedeCvr;
-    }
-
-    public String getSystem() {
-        return system;
-    }
-
-    public void setSystem(String system) {
-        this.system = system;
     }
 
     public Arbejdsfunktion getArbejdsfunktion() {
@@ -122,6 +117,14 @@ public class Bemyndigelse extends DomainObject {
 
     public void setVersionsid(int versionsid) {
         this.versionsid = versionsid;
+    }
+
+    public void setSystem(LinkedSystem system) {
+        this.system = system;
+    }
+
+    public LinkedSystem getSystem() {
+        return system;
     }
     //</editor-fold>
 }
