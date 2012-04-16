@@ -6,6 +6,7 @@ import wslite.soap.SOAPClient
 import shared.WebServiceSupport
 
 import static org.junit.Assert.*
+import wslite.soap.SOAPFaultException
 
 class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
 
@@ -17,7 +18,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
         ) {
             envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/'
             body {
-                "web:opretAnmodningOmBemyndigelse" {
+                "web:opretAnmodningOmBemyndigelseRequest" {
                     bemyndigedeCpr(1)
                     bemyndigedeCvr(2)
                     bemyndigendeCpr(3)
@@ -26,7 +27,6 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 }
             }
         }
-
         assertFalse response.hasFault()
     }
 }
