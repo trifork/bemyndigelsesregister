@@ -1,16 +1,19 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretAnmodningOmBemyndigelseResponse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
+import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
+import org.springframework.ws.server.endpoint.annotation.RequestPayload;
+import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import org.springframework.ws.soap.addressing.server.annotation.Action;
+
 import javax.jws.WebService;
 
 @WebService(serviceName = "bemyndigelsesservice.svc")
 public interface BemyndigelsesService {
-    @WebMethod
-    void opretAnmodningOmBemyndigelse(
-            @WebParam(name = "bemyndigedeCpr") String bemyndigedeCpr,
-            @WebParam(name = "bemyndigedeCvr") String bemyndigedeCvr,
-            @WebParam(name = "bemyndigendeCpr") String bemyndigendeCpr,
-            @WebParam(name = "arbejdsfunktionId") long arbejdsfunktionId,
-            @WebParam(name = "rettighedId") long rettighedId);
+
+    @PayloadRoot(localPart="opretAnmodningOmBemyndigelseRequest", namespace="http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
+    @Action("http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse")
+    @ResponsePayload
+    OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelse(@RequestPayload OpretAnmodningOmBemyndigelseRequest request);
 }

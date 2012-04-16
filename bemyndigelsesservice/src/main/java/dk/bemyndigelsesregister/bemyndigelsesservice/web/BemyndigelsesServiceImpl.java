@@ -3,17 +3,19 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretAnmodningOmBemyndigelseResponse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
+import org.springframework.ws.server.endpoint.annotation.Endpoint;
+import org.springframework.ws.server.endpoint.annotation.RequestPayload;
+import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import javax.inject.Inject;
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebService;
 
 @Repository("bemyndigelsesServiceServer")
-@WebService(serviceName = "bemyndigelsesservice.svc")
+@Endpoint
 public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     private static Logger logger = Logger.getLogger(BemyndigelsesServiceImpl.class);
     @Inject
@@ -34,20 +36,14 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @WebMethod
-    public void opretAnmodningOmBemyndigelse(
-            @WebParam(name = "bemyndigedeCpr") String bemyndigedeCpr,
-            @WebParam(name = "bemyndigedeCvr") String bemyndigedeCvr,
-            @WebParam(name = "bemyndigendeCpr") String bemyndigendeCpr,
-            @WebParam(name = "arbejdsfunktionId") long arbejdsfunktionId,
-            @WebParam(name = "rettighedId") long rettighedId) {
+    public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelse(@RequestPayload OpretAnmodningOmBemyndigelseRequest request) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
-        bemyndigelse.setBemyndigedeCpr(bemyndigedeCpr);
-        bemyndigelse.setBemyndigedeCvr(bemyndigedeCvr);
-        bemyndigelse.setBemyndigendeCpr(bemyndigendeCpr);
-        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.get(arbejdsfunktionId));
+        bemyndigelse.setBemyndigedeCpr(request.getBemyndigedeCpr());
+        bemyndigelse.setBemyndigedeCvr(request.getBemyndigedeCvr());
+        bemyndigelse.setBemyndigendeCpr(request.getBemyndigendeCpr());
+        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.get(request.getArbejdsfunktionId()));
         bemyndigelse.setStatus(statusTypeDao.get(1));
-        bemyndigelse.setRettighed(rettighedDao.get(rettighedId));
+        bemyndigelse.setRettighed(rettighedDao.get(request.getRettighedId()));
         bemyndigelse.setKode("KODE");
         bemyndigelse.setLinkedSystem(linkedSystemDao.get(1l));
         bemyndigelse.setGyldigFra(systemService.getDateTime());
@@ -55,5 +51,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         bemyndigelse.setVersionsid(1);
 
         bemyndigelseDao.save(bemyndigelse);
+        return new OpretAnmodningOmBemyndigelseResponse();
     }
 }
