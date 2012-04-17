@@ -17,6 +17,14 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
         ) {
             envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/'
+            header {
+                Header (xmlns:'http://www.medcom.dk/dgws/2006/04/dgws-1.0.xsd') {
+                    Linking {
+                        FlowID("FlowID")
+                        MessageID("MessageID")
+                    }
+                }
+            }
             body {
                 "web:opretAnmodningOmBemyndigelseRequest" {
                     bemyndigedeCpr(1)
