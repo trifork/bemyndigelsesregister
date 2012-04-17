@@ -3,6 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
+@ImportResource({"classpath:/dk/trifork/dgws/dgws-protection.xml"})
 public class WebConfig extends WebMvcConfigurationSupport {
     @Inject
     ApplicationRootConfig applicationRootConfig;

@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
+import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
@@ -36,6 +37,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
+    @Protected(whitelist = "TEST")
     public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelse(@RequestPayload OpretAnmodningOmBemyndigelseRequest request) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
         bemyndigelse.setBemyndigedeCpr(request.getBemyndigedeCpr());
