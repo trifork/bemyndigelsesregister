@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
 
@@ -38,7 +39,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @Protected(whitelist = "TEST")
-    public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelse(@RequestPayload OpretAnmodningOmBemyndigelseRequest request) {
+    public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelse(
+            @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
         bemyndigelse.setBemyndigedeCpr(request.getBemyndigedeCpr());
         bemyndigelse.setBemyndigedeCvr(request.getBemyndigedeCvr());

@@ -46,7 +46,8 @@ public class WebConfig extends WebMvcConfigurationSupport {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
         bean.setContextPaths(
                 "dk.bemyndigelsesregister.bemyndigelsesservice.web.request",
-                "dk.bemyndigelsesregister.bemyndigelsesservice.web.response"
+                "dk.bemyndigelsesregister.bemyndigelsesservice.web.response",
+                "dk.medcom.dgws._2006._04.dgws_1_0"
         );
         return bean;
     }
