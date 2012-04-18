@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.persistence.Entity;
 import javax.sql.DataSource;
@@ -79,4 +80,16 @@ public class ApplicationRootConfig {
         factoryBean.setServerConfig(serverConfig);
         return factoryBean;
     }
+
+    @Bean
+    public Jaxb2Marshaller jaxb2Marshaller() {
+        final Jaxb2Marshaller bean = new Jaxb2Marshaller();
+        bean.setContextPaths(
+                "dk.bemyndigelsesregister.bemyndigelsesservice.web.request",
+                "dk.bemyndigelsesregister.bemyndigelsesservice.web.response",
+                "dk.medcom.dgws._2006._04.dgws_1_0"
+        );
+        return bean;
+    }
+
 }
