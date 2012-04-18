@@ -42,17 +42,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public Jaxb2Marshaller jaxb2Marshaller() {
-        final Jaxb2Marshaller bean = new Jaxb2Marshaller();
-        bean.setContextPaths(
-                "dk.bemyndigelsesregister.bemyndigelsesservice.web.request",
-                "dk.bemyndigelsesregister.bemyndigelsesservice.web.response",
-                "dk.medcom.dgws._2006._04.dgws_1_0"
-        );
-        return bean;
-    }
-
-    @Bean
     public WebServiceMessageFactory messageFactory() {
         return new SaajSoapMessageFactory();
     }
