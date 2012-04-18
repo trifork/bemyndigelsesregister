@@ -54,7 +54,7 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
             throw new RuntimeException("Could not marshal responseMessage", e);
         }
 
-        MessageReplay messageReplay = new MessageReplay(messageID, result.toString().getBytes());
+        MessageReplay messageReplay = new MessageReplay(messageID, result.toString());
 
         messageReplayDao.save(messageReplay);
     }

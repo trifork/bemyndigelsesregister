@@ -36,7 +36,7 @@ public class MedcomReplayRegisterImplTest {
         String unmarshalledObject = "UnmarshalledObject";
         String messageID = "TEST";
 
-        when(messageReplayDao.getByMessageID(messageID)).thenReturn(new MessageReplay(messageID, new byte[0]));
+        when(messageReplayDao.getByMessageID(messageID)).thenReturn(new MessageReplay(messageID, "TEST"));
         when(unmarshaller.unmarshal(any(Source.class))).thenReturn(unmarshalledObject);
 
         MedcomReplay medcomReplay = register.getReplay(messageID);

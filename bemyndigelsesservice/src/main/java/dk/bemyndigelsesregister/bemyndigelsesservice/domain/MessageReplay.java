@@ -2,17 +2,18 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import java.util.Arrays;
 
 @Entity
 public class MessageReplay extends DomainObject {
     private String messageID;
     @Lob
-    private byte[] messageResponse;
+    private String messageResponse;
 
     public MessageReplay() {
     }
 
-    public MessageReplay(String messageID, byte[] messageResponse) {
+    public MessageReplay(String messageID, String messageResponse) {
         this.messageID = messageID;
         this.messageResponse = messageResponse;
     }
@@ -27,11 +28,11 @@ public class MessageReplay extends DomainObject {
         this.messageID = messageID;
     }
 
-    public byte[] getMessageResponse() {
+    public String getMessageResponse() {
         return messageResponse;
     }
 
-    public void setMessageResponse(byte[] messageResponse) {
+    public void setMessageResponse(String messageResponse) {
         this.messageResponse = messageResponse;
     }
     //</editor-fold>
