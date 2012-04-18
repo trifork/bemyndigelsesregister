@@ -2,7 +2,6 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
-import java.util.Arrays;
 
 @Entity
 public class MessageReplay extends DomainObject {
@@ -10,6 +9,7 @@ public class MessageReplay extends DomainObject {
     @Lob
     private String messageResponse;
 
+    @SuppressWarnings("UnusedDeclaration")
     public MessageReplay() {
     }
 
