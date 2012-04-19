@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import com.trifork.dgws.MedcomReplay;
-import com.trifork.dgws.MedcomReplayRegister;
+import com.trifork.dgws.MedcomRetransmission;
+import com.trifork.dgws.MedcomRetransmissionRegister;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
@@ -15,8 +15,8 @@ import javax.xml.transform.Result;
 import java.io.IOException;
 
 @Repository
-public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
-    private static final Logger logger = Logger.getLogger(MedcomReplayRegisterImpl.class);
+public class MedcomRetransmissionRegisterImpl implements MedcomRetransmissionRegister {
+    private static final Logger logger = Logger.getLogger(MedcomRetransmissionRegisterImpl.class);
 
     @Inject
     Marshaller marshaller;
@@ -31,7 +31,7 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
     SystemService systemService;
 
     @Override
-    public MedcomReplay getReplay(String messageID) {
+    public MedcomRetransmission getReplay(String messageID) {
         //TODO: check for implementationbuild
         MessageRetransmission messageRetransmission = messageRetransmissionDao.getByMessageIDAndImplementationBuild(messageID, systemService.getImplementationBuild());
         if (messageRetransmission == null) {
@@ -46,7 +46,7 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
             throw new RuntimeException("Could not unmarshal responseMessage", e);
         }
 
-        return new MedcomReplay(messageRetransmission.getMessageID(), responseMessage);
+        return new MedcomRetransmission(messageRetransmission.getMessageID(), responseMessage);
     }
 
     @Override
