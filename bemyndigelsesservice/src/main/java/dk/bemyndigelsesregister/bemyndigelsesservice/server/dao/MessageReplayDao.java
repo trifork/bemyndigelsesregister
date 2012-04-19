@@ -7,5 +7,5 @@ public interface MessageReplayDao {
 
     void save(MessageReplay messageReplay);
 
-    MessageReplay getByMessageID(String messageID);
+    MessageReplay getByMessageIDAndImplementationBuild(String messageID, String implementationBuild);
 }

@@ -13,6 +13,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
     @Test
     public void canAccessMethod() {
         SOAPClient client = getClient()
+        String messageID = UUID.randomUUID().toString()
         def response = client.send(
                 SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
         ) {
@@ -21,7 +22,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 Header (xmlns:'http://www.medcom.dk/dgws/2006/04/dgws-1.0.xsd') {
                     Linking {
                         FlowID("FlowID")
-                        MessageID("MessageID")
+                        MessageID(messageID)
                     }
                 }
             }

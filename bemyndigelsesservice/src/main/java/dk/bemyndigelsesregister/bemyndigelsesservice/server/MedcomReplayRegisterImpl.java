@@ -32,7 +32,8 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
 
     @Override
     public MedcomReplay getReplay(String messageID) {
-        MessageReplay messageReplay = messageReplayDao.getByMessageID(messageID);
+        //TODO: check for implementationbuild
+        MessageReplay messageReplay = messageReplayDao.getByMessageIDAndImplementationBuild(messageID, systemService.getImplementationBuild());
         if (messageReplay == null) {
             logger.debug("Found no MessageReplay for messageID=" + messageID);
             return null;
@@ -57,7 +58,7 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
             throw new RuntimeException("Could not marshal responseMessage", e);
         }
 
-        MessageReplay messageReplay = new MessageReplay(messageID, result.toString());
+        MessageReplay messageReplay = new MessageReplay(messageID, result.toString(), systemService.getImplementationBuild());
 
         messageReplayDao.save(messageReplay);
     }

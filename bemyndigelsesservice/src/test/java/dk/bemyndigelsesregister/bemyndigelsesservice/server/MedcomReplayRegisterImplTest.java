@@ -27,6 +27,7 @@ public class MedcomReplayRegisterImplTest {
     private final Object unmarshalledObject = "UnmarshalledObject";
     private final String marshalledObject = "MarshalledObject";
     private final String messageID = "MessageID";
+    private String implementationBuild = "V1";
 
     @Before
     public void setUp() throws Exception {
@@ -45,13 +46,29 @@ public class MedcomReplayRegisterImplTest {
     public void willReturnMappedMedcomReplay() throws Exception {
         Source source = mock(Source.class);
 
-        when(messageReplayDao.getByMessageID(messageID)).thenReturn(new MessageReplay(messageID, marshalledObject));
+        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, null)).thenReturn(new MessageReplay(messageID, marshalledObject, implementationBuild));
         when(systemService.createXmlTransformSource(marshalledObject)).thenReturn(source);
         when(unmarshaller.unmarshal(source)).thenReturn(unmarshalledObject);
 
         MedcomReplay medcomReplay = register.getReplay(messageID);
 
         assertEquals(messageID, medcomReplay.getMessageId());
+        assertEquals(unmarshalledObject, medcomReplay.getResponseMessage());
+    }
+
+    @Test
+    public void willNotReturnMappedMedcomRetransmissionWhenVersionHasChanged() throws Exception {
+        Source source = mock(Source.class);
+
+        when(systemService.getImplementationBuild()).thenReturn(implementationBuild);
+        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, implementationBuild)).thenReturn(new MessageReplay(messageID, marshalledObject, implementationBuild));
+        when(systemService.createXmlTransformSource(marshalledObject)).thenReturn(source);
+        when(unmarshaller.unmarshal(source)).thenReturn(unmarshalledObject);
+
+        MedcomReplay medcomReplay = register.getReplay(messageID);
+
+        verify(messageReplayDao).getByMessageIDAndImplementationBuild(messageID, implementationBuild);
+
         assertEquals(unmarshalledObject, medcomReplay.getResponseMessage());
     }
 

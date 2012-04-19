@@ -11,7 +11,7 @@ public class MessageReplayDaoEbean extends SupportDao<MessageReplay> implements 
     }
 
     @Override
-    public MessageReplay getByMessageID(String messageID) {
-        return query().where().eq("message_id", messageID).findUnique();
+    public MessageReplay getByMessageIDAndImplementationBuild(String messageID, String implementationBuild) {
+        return query().where().eq("message_id", messageID).eq("implementation_build", implementationBuild).findUnique();
     }
 }

@@ -16,18 +16,20 @@ public class MessageReplayDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void willReturnNullOnNoRowsWithMessageID() throws Exception {
-        assertNull(dao.getByMessageID(UUID.randomUUID().toString()));
+        assertNull(dao.getByMessageIDAndImplementationBuild(UUID.randomUUID().toString(), "V1"));
     }
 
     @Test
-    public void canFindAReplayByMessageID() throws Exception {
+    public void canFindAReplayByMessageIDAndImplementationBuild() throws Exception {
         String messageID = UUID.randomUUID().toString();
-        MessageReplay messageReplay = new MessageReplay(messageID, "TEST");
+        MessageReplay messageReplay = new MessageReplay(messageID, "TEST", "V2");
         dao.save(messageReplay);
         assertNotNull(messageReplay.getId());
+        dao.save(new MessageReplay(messageID, "TEST", "V1"));
 
-        MessageReplay foundMessageReplay = dao.getByMessageID(messageID);
+        MessageReplay foundMessageReplay = dao.getByMessageIDAndImplementationBuild(messageID, "V2");
         assertEquals(messageReplay.getMessageID(), foundMessageReplay.getMessageID());
         assertEquals(messageReplay.getMessageResponse(), foundMessageReplay.getMessageResponse());
+        assertEquals(messageReplay.getImplementationBuild(), foundMessageReplay.getImplementationBuild());
     }
 }

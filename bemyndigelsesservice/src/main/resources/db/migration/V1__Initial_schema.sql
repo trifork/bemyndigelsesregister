@@ -159,6 +159,7 @@ CREATE TABLE `message_replay` (
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
   `message_id` varchar(255) NOT NULL,
   `message_response` BLOB NOT NULL,
+  `implementation_build` varchar(255) NOT NULL,
 
   PRIMARY KEY(`id`)
 );
