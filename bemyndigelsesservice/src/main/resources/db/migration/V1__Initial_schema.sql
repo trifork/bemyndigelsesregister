@@ -153,7 +153,7 @@ CREATE TABLE `bemyndigelse` (
       ON UPDATE NO ACTION
 );
 
-CREATE TABLE `message_replay` (
+CREATE TABLE `message_retransmission` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,

@@ -3,7 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import com.trifork.dgws.MedcomReplay;
 import com.trifork.dgws.MedcomReplayRegister;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageReplayDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.springframework.oxm.Marshaller;
@@ -25,7 +25,7 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
     Unmarshaller unmarshaller;
 
     @Inject
-    MessageReplayDao messageReplayDao;
+    MessageRetransmissionDao messageRetransmissionDao;
 
     @Inject
     SystemService systemService;
@@ -33,7 +33,7 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
     @Override
     public MedcomReplay getReplay(String messageID) {
         //TODO: check for implementationbuild
-        MessageRetransmission messageRetransmission = messageReplayDao.getByMessageIDAndImplementationBuild(messageID, systemService.getImplementationBuild());
+        MessageRetransmission messageRetransmission = messageRetransmissionDao.getByMessageIDAndImplementationBuild(messageID, systemService.getImplementationBuild());
         if (messageRetransmission == null) {
             logger.debug("Found no MessageRetransmission for messageID=" + messageID);
             return null;
@@ -60,6 +60,6 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
 
         MessageRetransmission messageRetransmission = new MessageRetransmission(messageID, result.toString(), systemService.getImplementationBuild());
 
-        messageReplayDao.save(messageRetransmission);
+        messageRetransmissionDao.save(messageRetransmission);
     }
 }

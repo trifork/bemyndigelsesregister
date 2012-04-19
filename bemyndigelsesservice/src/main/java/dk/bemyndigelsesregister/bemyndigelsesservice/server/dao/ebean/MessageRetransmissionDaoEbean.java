@@ -1,12 +1,12 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageReplayDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MessageReplayDaoEbean extends SupportDao<MessageRetransmission> implements MessageReplayDao {
-    public MessageReplayDaoEbean() {
+public class MessageRetransmissionDaoEbean extends SupportDao<MessageRetransmission> implements MessageRetransmissionDao {
+    public MessageRetransmissionDaoEbean() {
         super(MessageRetransmission.class);
     }
 

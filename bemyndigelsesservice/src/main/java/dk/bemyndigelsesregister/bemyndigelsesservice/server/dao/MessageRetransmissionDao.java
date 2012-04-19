@@ -2,7 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
 
-public interface MessageReplayDao {
+public interface MessageRetransmissionDao {
     MessageRetransmission get(long id);
 
     void save(MessageRetransmission messageRetransmission);

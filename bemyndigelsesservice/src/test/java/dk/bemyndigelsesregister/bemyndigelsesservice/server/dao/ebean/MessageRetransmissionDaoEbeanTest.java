@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageReplayDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -9,10 +9,10 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-public class MessageReplayDaoEbeanTest extends DaoUnitTestSupport {
+public class MessageRetransmissionDaoEbeanTest extends DaoUnitTestSupport {
 
     @Inject
-    MessageReplayDao dao;
+    MessageRetransmissionDao dao;
 
     @Test
     public void willReturnNullOnNoRowsWithMessageID() throws Exception {

@@ -2,7 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import com.trifork.dgws.MedcomReplay;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageReplayDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.hamcrest.Description;
 import org.junit.Before;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class MedcomReplayRegisterImplTest {
-    private final MessageReplayDao messageReplayDao = mock(MessageReplayDao.class);
+    private final MessageRetransmissionDao messageRetransmissionDao = mock(MessageRetransmissionDao.class);
     private final MedcomReplayRegisterImpl register = new MedcomReplayRegisterImpl();
     private final Marshaller marshaller = mock(Marshaller.class);
     private final Unmarshaller unmarshaller = mock(Unmarshaller.class);
@@ -31,7 +31,7 @@ public class MedcomReplayRegisterImplTest {
 
     @Before
     public void setUp() throws Exception {
-        register.messageReplayDao = messageReplayDao;
+        register.messageRetransmissionDao = messageRetransmissionDao;
         register.marshaller = marshaller;
         register.unmarshaller = unmarshaller;
         register.systemService = systemService;
@@ -46,7 +46,7 @@ public class MedcomReplayRegisterImplTest {
     public void willReturnMappedMedcomReplay() throws Exception {
         Source source = mock(Source.class);
 
-        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, null)).thenReturn(new MessageRetransmission(messageID, marshalledObject, implementationBuild));
+        when(messageRetransmissionDao.getByMessageIDAndImplementationBuild(messageID, null)).thenReturn(new MessageRetransmission(messageID, marshalledObject, implementationBuild));
         when(systemService.createXmlTransformSource(marshalledObject)).thenReturn(source);
         when(unmarshaller.unmarshal(source)).thenReturn(unmarshalledObject);
 
@@ -61,13 +61,13 @@ public class MedcomReplayRegisterImplTest {
         Source source = mock(Source.class);
 
         when(systemService.getImplementationBuild()).thenReturn(implementationBuild);
-        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, implementationBuild)).thenReturn(new MessageRetransmission(messageID, marshalledObject, implementationBuild));
+        when(messageRetransmissionDao.getByMessageIDAndImplementationBuild(messageID, implementationBuild)).thenReturn(new MessageRetransmission(messageID, marshalledObject, implementationBuild));
         when(systemService.createXmlTransformSource(marshalledObject)).thenReturn(source);
         when(unmarshaller.unmarshal(source)).thenReturn(unmarshalledObject);
 
         MedcomReplay medcomReplay = register.getReplay(messageID);
 
-        verify(messageReplayDao).getByMessageIDAndImplementationBuild(messageID, implementationBuild);
+        verify(messageRetransmissionDao).getByMessageIDAndImplementationBuild(messageID, implementationBuild);
 
         assertEquals(unmarshalledObject, medcomReplay.getResponseMessage());
     }
@@ -81,7 +81,7 @@ public class MedcomReplayRegisterImplTest {
 
         register.createReplay(messageID, unmarshalledObject);
 
-        verify(messageReplayDao).save(argThat(new TypeSafeMatcher<MessageRetransmission>() {
+        verify(messageRetransmissionDao).save(argThat(new TypeSafeMatcher<MessageRetransmission>() {
             @Override
             public boolean matchesSafely(MessageRetransmission item) {
                 return item.getMessageID().equals(messageID) && item.getMessageResponse().equals(marshalledObject);
