@@ -1,11 +1,11 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageReplay;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
 
 public interface MessageReplayDao {
-    MessageReplay get(long id);
+    MessageRetransmission get(long id);
 
-    void save(MessageReplay messageReplay);
+    void save(MessageRetransmission messageRetransmission);
 
-    MessageReplay getByMessageIDAndImplementationBuild(String messageID, String implementationBuild);
+    MessageRetransmission getByMessageIDAndImplementationBuild(String messageID, String implementationBuild);
 }

@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 
 @Entity
-public class MessageReplay extends DomainObject {
+public class MessageRetransmission extends DomainObject {
     private String messageID;
     @Lob
     private String messageResponse;
@@ -12,10 +12,10 @@ public class MessageReplay extends DomainObject {
     private String implementationBuild;
 
     @SuppressWarnings("UnusedDeclaration")
-    public MessageReplay() {
+    public MessageRetransmission() {
     }
 
-    public MessageReplay(String messageID, String messageResponse, String implementationBuild) {
+    public MessageRetransmission(String messageID, String messageResponse, String implementationBuild) {
         this.messageID = messageID;
         this.messageResponse = messageResponse;
         this.implementationBuild = implementationBuild;

@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import com.trifork.dgws.MedcomReplay;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageReplay;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageReplayDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.hamcrest.Description;
@@ -46,7 +46,7 @@ public class MedcomReplayRegisterImplTest {
     public void willReturnMappedMedcomReplay() throws Exception {
         Source source = mock(Source.class);
 
-        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, null)).thenReturn(new MessageReplay(messageID, marshalledObject, implementationBuild));
+        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, null)).thenReturn(new MessageRetransmission(messageID, marshalledObject, implementationBuild));
         when(systemService.createXmlTransformSource(marshalledObject)).thenReturn(source);
         when(unmarshaller.unmarshal(source)).thenReturn(unmarshalledObject);
 
@@ -61,7 +61,7 @@ public class MedcomReplayRegisterImplTest {
         Source source = mock(Source.class);
 
         when(systemService.getImplementationBuild()).thenReturn(implementationBuild);
-        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, implementationBuild)).thenReturn(new MessageReplay(messageID, marshalledObject, implementationBuild));
+        when(messageReplayDao.getByMessageIDAndImplementationBuild(messageID, implementationBuild)).thenReturn(new MessageRetransmission(messageID, marshalledObject, implementationBuild));
         when(systemService.createXmlTransformSource(marshalledObject)).thenReturn(source);
         when(unmarshaller.unmarshal(source)).thenReturn(unmarshalledObject);
 
@@ -81,9 +81,9 @@ public class MedcomReplayRegisterImplTest {
 
         register.createReplay(messageID, unmarshalledObject);
 
-        verify(messageReplayDao).save(argThat(new TypeSafeMatcher<MessageReplay>() {
+        verify(messageReplayDao).save(argThat(new TypeSafeMatcher<MessageRetransmission>() {
             @Override
-            public boolean matchesSafely(MessageReplay item) {
+            public boolean matchesSafely(MessageRetransmission item) {
                 return item.getMessageID().equals(messageID) && item.getMessageResponse().equals(marshalledObject);
             }
             @Override

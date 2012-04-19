@@ -1,6 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageReplay;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageReplayDao;
 import org.junit.Test;
 
@@ -22,14 +22,14 @@ public class MessageReplayDaoEbeanTest extends DaoUnitTestSupport {
     @Test
     public void canFindAReplayByMessageIDAndImplementationBuild() throws Exception {
         String messageID = UUID.randomUUID().toString();
-        MessageReplay messageReplay = new MessageReplay(messageID, "TEST", "V2");
-        dao.save(messageReplay);
-        assertNotNull(messageReplay.getId());
-        dao.save(new MessageReplay(messageID, "TEST", "V1"));
+        MessageRetransmission messageRetransmission = new MessageRetransmission(messageID, "TEST", "V2");
+        dao.save(messageRetransmission);
+        assertNotNull(messageRetransmission.getId());
+        dao.save(new MessageRetransmission(messageID, "TEST", "V1"));
 
-        MessageReplay foundMessageReplay = dao.getByMessageIDAndImplementationBuild(messageID, "V2");
-        assertEquals(messageReplay.getMessageID(), foundMessageReplay.getMessageID());
-        assertEquals(messageReplay.getMessageResponse(), foundMessageReplay.getMessageResponse());
-        assertEquals(messageReplay.getImplementationBuild(), foundMessageReplay.getImplementationBuild());
+        MessageRetransmission foundMessageRetransmission = dao.getByMessageIDAndImplementationBuild(messageID, "V2");
+        assertEquals(messageRetransmission.getMessageID(), foundMessageRetransmission.getMessageID());
+        assertEquals(messageRetransmission.getMessageResponse(), foundMessageRetransmission.getMessageResponse());
+        assertEquals(messageRetransmission.getImplementationBuild(), foundMessageRetransmission.getImplementationBuild());
     }
 }
