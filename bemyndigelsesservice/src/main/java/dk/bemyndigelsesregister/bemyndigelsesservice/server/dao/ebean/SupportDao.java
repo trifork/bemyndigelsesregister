@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.Query;
 
 import javax.inject.Inject;
 
@@ -18,7 +19,11 @@ public abstract class SupportDao<T> {
         return ebeanServer.find(klass, id);
     }
 
-    public void save(T object) {
-        ebeanServer.save(object);
+    public void save(T entity) {
+        ebeanServer.save(entity);
+    }
+
+    protected Query<T> query() {
+        return ebeanServer.find(klass);
     }
 }

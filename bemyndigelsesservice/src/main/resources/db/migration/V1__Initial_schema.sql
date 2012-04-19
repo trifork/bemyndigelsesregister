@@ -7,7 +7,7 @@ CREATE TABLE `domaene` (
    PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `system` (
+CREATE TABLE `linked_system` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `system` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE `status_type` (
 CREATE TABLE `arbejdsfunktion` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `domaene_id` BIGINT NOT NULL,
-  `system_id` BIGINT NOT NULL,
+  `linked_system_id` BIGINT NOT NULL,
   `arbejdsfunktion` VARCHAR(255) NOT NULL,
   `beskrivelse` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
@@ -41,8 +41,8 @@ CREATE TABLE `arbejdsfunktion` (
       ON UPDATE NO ACTION,
 
   CONSTRAINT `arbejdsfunktion_system_type`
-      FOREIGN KEY (`system_id` )
-      REFERENCES `system` (`id` )
+      FOREIGN KEY (`linked_system_id` )
+      REFERENCES `linked_system` (`id` )
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
 
@@ -52,7 +52,7 @@ CREATE TABLE `arbejdsfunktion` (
 CREATE TABLE `rettighed` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `domaene_id` BIGINT NOT NULL,
-  `system_id` BIGINT NOT NULL,
+  `linked_system_id` BIGINT NOT NULL,
   `rettighedskode` VARCHAR(255) NOT NULL,
   `beskrivelse` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
@@ -65,8 +65,8 @@ CREATE TABLE `rettighed` (
       ON UPDATE NO ACTION,
 
   CONSTRAINT `rettighed_system_type`
-      FOREIGN KEY (`system_id` )
-      REFERENCES `system` (`id` )
+      FOREIGN KEY (`linked_system_id` )
+      REFERENCES `linked_system` (`id` )
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
   
@@ -76,7 +76,7 @@ CREATE TABLE `rettighed` (
 CREATE TABLE `delegerbar_rettighed` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `domaene_id` BIGINT NOT NULL,
-  `system_id` BIGINT NOT NULL,
+  `linked_system_id` BIGINT NOT NULL,
   `arbejdsfunktion` BIGINT NOT NULL,
   `rettighedskode` BIGINT NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
@@ -101,8 +101,8 @@ CREATE TABLE `delegerbar_rettighed` (
       ON UPDATE NO ACTION,
 
   CONSTRAINT `delegerbar_rettighed_system_type`
-      FOREIGN KEY (`system_id` )
-      REFERENCES `system` (`id` )
+      FOREIGN KEY (`linked_system_id` )
+      REFERENCES `linked_system` (`id` )
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
 
@@ -115,7 +115,7 @@ CREATE TABLE `bemyndigelse` (
   `bemyndigende_cpr` VARCHAR(10) NOT NULL,
   `bemyndigede_cpr` VARCHAR(10) NOT NULL,
   `bemyndigede_cvr` VARCHAR(10) NULL DEFAULT NULL,
-  `system_id` BIGINT NOT NULL,
+  `linked_system_id` BIGINT NOT NULL,
   `arbejdsfunktion_id` BIGINT NOT NULL,
   `rettighed_id` BIGINT NOT NULL,
   `status_id` BIGINT NOT NULL,
@@ -129,8 +129,8 @@ CREATE TABLE `bemyndigelse` (
   PRIMARY KEY (`id`),
   
   CONSTRAINT `bemyndigelse_system_type`
-      FOREIGN KEY (`system_id` )
-      REFERENCES `system` (`id` )
+      FOREIGN KEY (`linked_system_id` )
+      REFERENCES `linked_system` (`id` )
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
 
@@ -151,5 +151,15 @@ CREATE TABLE `bemyndigelse` (
       REFERENCES `status_type` (`id` )
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
+);
+
+CREATE TABLE `message_replay` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `sidst_modificeret` datetime DEFAULT NULL,
+  `sidst_modificeret_af` varchar(255) DEFAULT NULL,
+  `message_id` varchar(255) NOT NULL,
+  `message_response` BLOB NOT NULL,
+
+  PRIMARY KEY(`id`)
 );
 

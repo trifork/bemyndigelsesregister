@@ -2,12 +2,16 @@ package dk.bemyndigelsesregister.shared.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 import java.util.Date;
 import java.util.jar.Manifest;
 
@@ -20,6 +24,11 @@ public class SystemServiceDefault implements SystemService {
     @Override
     public Date getDate() {
         return new Date();
+    }
+
+    @Override
+    public DateTime getDateTime() {
+        return new DateTime();
     }
 
     @Override
@@ -49,4 +58,39 @@ public class SystemServiceDefault implements SystemService {
         return manifest;
     }
 
+    /**
+     * Creates a Result equivalent to Spring-xml org.springframework.xml.transform.StringResult
+     * @return Slightly modified StreamReader
+     */
+    @Override
+    public Result createXmlTransformResult() {
+        return new StreamResult(new StringWriter()) {
+            @Override
+            public String toString() {
+
+                return getWriter().toString();
+            }
+        };
+    }
+
+    @Override
+    public Source createXmlTransformSource(final String unmarshalledObject) {
+        return new StreamSource() {
+            private final String content;
+
+            {
+                content = unmarshalledObject;
+            }
+
+            @Override
+            public Reader getReader() {
+                return new StringReader(content);
+            }
+
+            @Override
+            public String toString() {
+                return content;
+            }
+        };
+    }
 }
