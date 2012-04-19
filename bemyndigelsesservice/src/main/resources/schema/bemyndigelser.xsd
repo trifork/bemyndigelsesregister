@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Bemyndigelser" type="BemyndigelserType" />
+
+	<xs:complexType name="BemyndigelserType">
+		<xs:sequence>
+			<xs:element name="Bemyndigelse" type="BemyndigelseType" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="Dato" type="DatoType" use="required" />
+        <xs:attribute name="TimeStamp" type="TimestampType" use="required" />
+        <xs:attribute name="Version" type="xs:string" use="required" />
+        <xs:attribute name="AntalPost" type="xs:positiveInteger" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="BemyndigelseType">
+		<xs:sequence>
+			<xs:element name="kode" type="xs:string" />
+			<xs:element name="bemyndigende_cpr" type="xs:string" />
+			<xs:element name="bemyndigede_cpr" type="xs:string" />
+			<xs:element name="bemyndigede_cvr" type="xs:string" />
+			<xs:element name="system" type="xs:string" />
+			<xs:element name="rettighed" type="xs:string" />
+			<xs:element name="godkendelsesdato" type="xs:dateTime" />
+			<xs:element name="CreatedDate" type="xs:dateTime" />
+			<xs:element name="ModifiedDate" type="xs:dateTime" />
+			<xs:element name="ValidFrom" type="xs:dateTime" />
+			<xs:element name="ValidTo" type="xs:dateTime" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="DatoType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{8}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+    <xs:simpleType name="TimestampType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{9}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
