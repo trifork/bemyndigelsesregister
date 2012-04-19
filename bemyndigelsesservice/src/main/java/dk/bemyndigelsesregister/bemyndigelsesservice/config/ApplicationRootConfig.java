@@ -15,6 +15,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.persistence.Entity;
 import javax.sql.DataSource;
@@ -24,6 +25,7 @@ import static java.lang.System.getProperty;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.shared.service", "dk.bemyndigelsesregister.bemyndigelsesservice.server"})
+@EnableScheduling
 public class ApplicationRootConfig {
 
     @Bean

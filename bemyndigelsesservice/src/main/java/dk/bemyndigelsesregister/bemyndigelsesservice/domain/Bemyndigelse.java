@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import generated.BemyndigelseType;
 import org.joda.time.DateTime;
 
 import javax.persistence.OneToOne;
@@ -126,4 +127,20 @@ public class Bemyndigelse extends DomainObject {
         return linkedSystem;
     }
     //</editor-fold>
+
+    public BemyndigelseType toBemyndigelseType() {
+        BemyndigelseType type = new BemyndigelseType();
+        type.setBemyndigedeCpr(bemyndigedeCpr);
+        type.setBemyndigedeCvr(bemyndigedeCvr);
+        type.setBemyndigendeCpr(bemyndigendeCpr);
+        type.setCreatedDate(null);
+        type.setGodkendelsesdato(null);
+        type.setKode(kode);
+        type.setModifiedDate(null);
+        type.setRettighed(rettighed.getRettighedskode());
+        type.setSystem(linkedSystem.getSystem());
+        type.setValidFrom(null);
+        type.setValidTo(null);
+        return type;
+    }
 }
