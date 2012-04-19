@@ -2,8 +2,8 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import com.trifork.dgws.MedcomReplay;
 import com.trifork.dgws.MedcomReplayRegister;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageReplay;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageReplayDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.springframework.oxm.Marshaller;
@@ -25,27 +25,28 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
     Unmarshaller unmarshaller;
 
     @Inject
-    MessageReplayDao messageReplayDao;
+    MessageRetransmissionDao messageRetransmissionDao;
 
     @Inject
     SystemService systemService;
 
     @Override
     public MedcomReplay getReplay(String messageID) {
-        MessageReplay messageReplay = messageReplayDao.getByMessageID(messageID);
-        if (messageReplay == null) {
-            logger.debug("Found no MessageReplay for messageID=" + messageID);
+        //TODO: check for implementationbuild
+        MessageRetransmission messageRetransmission = messageRetransmissionDao.getByMessageIDAndImplementationBuild(messageID, systemService.getImplementationBuild());
+        if (messageRetransmission == null) {
+            logger.debug("Found no MessageRetransmission for messageID=" + messageID);
             return null;
         }
 
         Object responseMessage;
         try {
-            responseMessage = unmarshaller.unmarshal(systemService.createXmlTransformSource(messageReplay.getMessageResponse()));
+            responseMessage = unmarshaller.unmarshal(systemService.createXmlTransformSource(messageRetransmission.getMessageResponse()));
         } catch (IOException e) {
             throw new RuntimeException("Could not unmarshal responseMessage", e);
         }
 
-        return new MedcomReplay(messageReplay.getMessageID(), responseMessage);
+        return new MedcomReplay(messageRetransmission.getMessageID(), responseMessage);
     }
 
     @Override
@@ -57,8 +58,8 @@ public class MedcomReplayRegisterImpl implements MedcomReplayRegister {
             throw new RuntimeException("Could not marshal responseMessage", e);
         }
 
-        MessageReplay messageReplay = new MessageReplay(messageID, result.toString());
+        MessageRetransmission messageRetransmission = new MessageRetransmission(messageID, result.toString(), systemService.getImplementationBuild());
 
-        messageReplayDao.save(messageReplay);
+        messageRetransmissionDao.save(messageRetransmission);
     }
 }

@@ -37,7 +37,12 @@ public class SystemServiceDefault implements SystemService {
         if (manifest == null) {
             return "develop";
         }
-        return manifest.getMainAttributes().getValue("Implementation-Build");
+        final String implementationBuild = manifest.getMainAttributes().getValue("Implementation-Build");
+        if (implementationBuild == null) {
+            logger.warn("No Implementation-Build property found in Manifest file");
+            return "develop";
+        }
+        return implementationBuild;
     }
 
     private static Manifest manifest;
