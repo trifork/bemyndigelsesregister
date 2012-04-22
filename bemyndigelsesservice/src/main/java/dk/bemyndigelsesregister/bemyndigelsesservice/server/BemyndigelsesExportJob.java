@@ -6,10 +6,12 @@ import dk.bemyndigelsesregister.shared.service.SystemService;
 import generated.BemyndigelserType;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.oxm.Marshaller;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -25,15 +27,22 @@ public class BemyndigelsesExportJob {
     @Inject
     SystemService systemService;
 
+    @Inject
+    Marshaller marshaller;
+
+    @Inject
+    NspManager nspManager;
+
+
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
-    public void startExport() {
+    public void startExport() throws IOException {
         final DateTime startTime = systemService.getDateTime();
-        startExport(lastRun, startTime);
+        doExport(lastRun, startTime);
 
         updateLastRun(startTime);
     }
 
-    public void startExport(DateTime modifiedSince, DateTime startTime) {
+    public void doExport(DateTime modifiedSince, DateTime startTime) throws IOException {
         logger.debug("Starting bemyndigelse sync job");
         List<Bemyndigelse> bemyndigelser = bemyndigelseDao.findBySidstModificeretGreaterThan(modifiedSince);
 
@@ -43,8 +52,10 @@ public class BemyndigelsesExportJob {
         }
         bemyndigelserType.setAntalPost(BigInteger.valueOf(bemyndigelser.size()));
         bemyndigelserType.setDato(startTime.toString("yyyyMMdd"));
-        bemyndigelserType.setTimeStamp(startTime.toString()); //TODO: format
+        bemyndigelserType.setTimeStamp(startTime.toString("HHmmssSSS"));
         bemyndigelserType.setVersion("v00001");
+
+        nspManager.send(bemyndigelserType, startTime);
     }
 
     private void updateLastRun(DateTime startTime) {

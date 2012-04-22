@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.shared.service;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -20,11 +21,6 @@ public class SystemServiceDefault implements SystemService {
     private final Log logger = LogFactory.getLog(getClass());
     @Inject
     ServletContext servletContext;
-
-    @Override
-    public Date getDate() {
-        return new Date();
-    }
 
     @Override
     public DateTime getDateTime() {
@@ -97,5 +93,16 @@ public class SystemServiceDefault implements SystemService {
                 return content;
             }
         };
+    }
+
+    @Override
+    public File writeToTempDir(String filename, String data) {
+        final File file = new File(System.getProperty("java.io.tmpdir"), filename);
+        try {
+            FileUtils.writeStringToFile(file, data);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not write to file=" + file.getAbsolutePath(), e);
+        }
+        return file;
     }
 }
