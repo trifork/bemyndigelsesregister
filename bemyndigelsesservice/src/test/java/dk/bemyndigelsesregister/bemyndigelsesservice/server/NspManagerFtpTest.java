@@ -2,6 +2,8 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import generated.BemyndigelserType;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -9,12 +11,16 @@ import org.junit.Test;
 import org.mockftpserver.fake.FakeFtpServer;
 import org.mockftpserver.fake.UserAccount;
 import org.mockftpserver.fake.filesystem.DirectoryEntry;
+import org.mockftpserver.fake.filesystem.FileEntry;
 import org.mockftpserver.fake.filesystem.FileSystem;
 import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
 import org.springframework.oxm.Marshaller;
 
 import javax.xml.transform.Result;
 
+import java.io.File;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class NspManagerFtpTest {
@@ -22,7 +28,7 @@ public class NspManagerFtpTest {
     SystemService systemService = mock(SystemService.class);
     Marshaller marshaller = mock(Marshaller.class);
 
-    private final DateTime startTime = new DateTime();
+    private final DateTime startTime = new DateTime(1982, 5, 21, 2, 15, 3);
     private final BemyndigelserType bemyndigelser = new BemyndigelserType();
     private FakeFtpServer ftpServer;
 
@@ -50,8 +56,19 @@ public class NspManagerFtpTest {
     public void canUploadToFtp() throws Exception {
         Result result = mock(Result.class);
         when(systemService.createXmlTransformResult()).thenReturn(result);
+        final String fileBody = "File body";
+        final File tempFile = File.createTempFile("test", ".bemyndigelse");
+        FileUtils.writeStringToFile(tempFile, fileBody);
+        final String filename = "19820521_021503000_v1.bemyndigelse";
+
+        when(result.toString()).thenReturn(fileBody);
+        when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);
+
         nspManagerFtp.send(bemyndigelser, startTime);
 
+        assertTrue(ftpServer.getFileSystem().exists("/" + filename));
+
+        assertEquals(fileBody, IOUtils.toString(((FileEntry) ftpServer.getFileSystem().getEntry("/" + filename)).createInputStream()));
     }
 
     @After

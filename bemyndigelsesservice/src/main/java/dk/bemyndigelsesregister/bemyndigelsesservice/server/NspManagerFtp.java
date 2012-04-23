@@ -16,8 +16,7 @@ import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
 
-import static org.springframework.util.Assert.hasText;
-import static org.springframework.util.Assert.notNull;
+import static org.springframework.util.Assert.*;
 
 @Repository
 public class NspManagerFtp implements NspManager, InitializingBean {
@@ -61,12 +60,14 @@ public class NspManagerFtp implements NspManager, InitializingBean {
         try {
             marshaller.marshal(bemyndigelser, result);
 
-            File file = systemService.writeToTempDir(startTime.toString("yyyyMMdd'_'HHmmssSSS'_v1.bemyndigelse'"), result.toString());
+            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_v1.bemyndigelse'");
+            logger.debug("Writing to " + filename);
+            File file = systemService.writeToTempDir(filename, result.toString());
             logger.info(String.format("Connecting to ftp://%s@%s:%s%s", ftpUsername, ftpHostname, ftpPort, ftpRemote));
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(ftpHostname, ftpPort);
             ftpClient.login(ftpUsername, ftpPassword);
-            ftpClient.storeFile(ftpRemote, FileUtils.openInputStream(file));
+            ftpClient.storeFile(ftpRemote + filename, FileUtils.openInputStream(file));
             ftpClient.disconnect();
         } catch (IOException e) {
             throw new RuntimeException("Failed to send file", e);
