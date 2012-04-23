@@ -3,7 +3,9 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import generated.BemyndigelserType;
 import org.hamcrest.Description;
@@ -22,6 +24,8 @@ import static org.mockito.Mockito.*;
 public class BemyndigelsesExportJobTest {
     BemyndigelsesExportJob job = new BemyndigelsesExportJob();
     BemyndigelseDao bemyndigelseDao = mock(BemyndigelseDao.class);
+    private final SystemVariableDao systemVariableDao = Mockito.mock(SystemVariableDao.class);
+
     NspManager nspManager = mock(NspManager.class);
     private final SystemService systemService = Mockito.mock(SystemService.class);
 
@@ -29,6 +33,7 @@ public class BemyndigelsesExportJobTest {
     public void setUp() throws Exception {
         job.nspManager = nspManager;
         job.bemyndigelseDao = bemyndigelseDao;
+        job.systemVariableDao = systemVariableDao;
         job.systemService = systemService;
     }
 
@@ -38,12 +43,15 @@ public class BemyndigelsesExportJobTest {
         final DateTime startTime = new DateTime();
         final DateTime lastRun = new DateTime(0l);
 
+        final SystemVariable lastRunSV = new SystemVariable("lastRun", lastRun);
+        when(systemVariableDao.getByName("lastRun")).thenReturn(lastRunSV);
         when(systemService.getDateTime()).thenReturn(startTime);
         when(bemyndigelseDao.findBySidstModificeretGreaterThan(lastRun)).thenReturn(bemyndigelser);
 
         job.startExport();
 
         verify(nspManager).send(bemyndigelserEq(bemyndigelser), eq(startTime));
+        verify(systemVariableDao).save(lastRunSV);
     }
 
     @Test
@@ -51,12 +59,15 @@ public class BemyndigelsesExportJobTest {
         final DateTime startTime = new DateTime();
         final List<Bemyndigelse> bemyndigelser = asList(createBemyndigelse("bemyndigede cpr 1"), createBemyndigelse("bemyndigede cpr 2"));
 
+        final SystemVariable lastRunSV = new SystemVariable("lastRun", new DateTime(0l));
+        when(systemVariableDao.getByName("lastRun")).thenReturn(lastRunSV);
         when(systemService.getDateTime()).thenReturn(startTime);
         when(bemyndigelseDao.list()).thenReturn(bemyndigelser);
 
         job.completeExport();
 
         verify(nspManager).send(bemyndigelserEq(bemyndigelser), eq(startTime));
+        verify(systemVariableDao).save(lastRunSV);
     }
 
     private Bemyndigelse createBemyndigelse(String bemyndigedeCpr) {

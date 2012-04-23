@@ -66,3 +66,5 @@ INSERT INTO `bemyndigelse` (
         0,
         '2011-05-22 02:15:00',
         NULL);
+
+INSERT INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
