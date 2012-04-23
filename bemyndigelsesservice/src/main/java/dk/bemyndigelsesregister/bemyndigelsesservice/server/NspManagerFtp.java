@@ -42,6 +42,9 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     @Value("${ftp.remote}")
     String ftpRemote = "/";
 
+    @Value("${ftp.enabled}")
+    boolean exportEnabled = true;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         hasText(ftpHostname, "No ftp hostname has been set");
@@ -63,12 +66,17 @@ public class NspManagerFtp implements NspManager, InitializingBean {
             final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_v1.bemyndigelse'");
             logger.debug("Writing to " + filename);
             File file = systemService.writeToTempDir(filename, result.toString());
-            logger.info(String.format("Connecting to ftp://%s@%s:%s%s", ftpUsername, ftpHostname, ftpPort, ftpRemote));
-            FTPClient ftpClient = new FTPClient();
-            ftpClient.connect(ftpHostname, ftpPort);
-            ftpClient.login(ftpUsername, ftpPassword);
-            ftpClient.storeFile(ftpRemote + filename, FileUtils.openInputStream(file));
-            ftpClient.disconnect();
+            if (exportEnabled) {
+                logger.info(String.format("Connecting to ftp://%s@%s:%s%s", ftpUsername, ftpHostname, ftpPort, ftpRemote));
+                FTPClient ftpClient = new FTPClient();
+                ftpClient.connect(ftpHostname, ftpPort);
+                ftpClient.login(ftpUsername, ftpPassword);
+                ftpClient.storeFile(ftpRemote + filename, FileUtils.openInputStream(file));
+                ftpClient.disconnect();
+            }
+            else {
+                logger.info("FTP export has been disabled. Was supposed to send file=" + file.getAbsolutePath());
+            }
         } catch (IOException e) {
             throw new RuntimeException("Failed to send file", e);
         }

@@ -4,6 +4,7 @@ import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.Query;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public abstract class SupportDao<T> {
     @Inject
@@ -17,6 +18,10 @@ public abstract class SupportDao<T> {
 
     public T get(long id) {
         return ebeanServer.find(klass, id);
+    }
+
+    public List<T> list() {
+        return ebeanServer.findList(query(), null);
     }
 
     public void save(T entity) {

@@ -33,6 +33,7 @@ public class ApplicationRootConfig {
         final PropertyPlaceholderConfigurer props = new PropertyPlaceholderConfigurer();
         props.setLocations(new Resource[]{
                 new ClassPathResource("default.properties"),
+                new ClassPathResource("bms." + getProperty("user.name") + ".properties"),
                 new ClassPathResource("jdbc.default.properties"),
                 new ClassPathResource("jdbc." + getProperty("user.name") + ".properties"),
                 new FileSystemResource(getProperty("user.home") + "/.bemyndigelsesservice/passwords.properties")

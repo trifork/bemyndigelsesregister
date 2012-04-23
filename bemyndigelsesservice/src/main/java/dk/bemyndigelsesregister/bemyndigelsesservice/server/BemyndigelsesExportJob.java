@@ -37,14 +37,25 @@ public class BemyndigelsesExportJob {
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
     public void startExport() throws IOException {
         final DateTime startTime = systemService.getDateTime();
-        doExport(lastRun, startTime);
+        doExport(startTime, bemyndigelseDao.findBySidstModificeretGreaterThan(lastRun));
 
         updateLastRun(startTime);
     }
 
-    public void doExport(DateTime modifiedSince, DateTime startTime) throws IOException {
-        logger.debug("Starting bemyndigelse sync job");
-        List<Bemyndigelse> bemyndigelser = bemyndigelseDao.findBySidstModificeretGreaterThan(modifiedSince);
+    public void completeExport() throws IOException {
+        final DateTime startTime = systemService.getDateTime();
+        doExport(startTime, bemyndigelseDao.list());
+
+        updateLastRun(startTime);
+    }
+
+    public void doExport(DateTime startTime, List<Bemyndigelse> bemyndigelser) throws IOException {
+        logger.info("Starting bemyndigelse sync job");
+
+        if (bemyndigelser == null || bemyndigelser.size() == 0) {
+            logger.info("Nothing to export. Stopping export job.");
+            return;
+        }
 
         BemyndigelserType bemyndigelserType = new BemyndigelserType();
         for (Bemyndigelse bemyndigelse : bemyndigelser) {

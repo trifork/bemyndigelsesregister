@@ -11,4 +11,6 @@ public interface BemyndigelseDao {
     void save(Bemyndigelse bemyndigelse);
 
     List<Bemyndigelse> findBySidstModificeretGreaterThan(DateTime dateTime);
+
+    List<Bemyndigelse> list();
 }
