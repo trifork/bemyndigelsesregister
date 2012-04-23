@@ -6,6 +6,7 @@ import dk.bemyndigelsesregister.shared.service.SystemService;
 import generated.BemyndigelserType;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.Marshaller;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,9 @@ public class BemyndigelsesExportJob {
 
     @Inject
     NspManager nspManager;
+
+    @Value("${nsp.schema.version}")
+    String nspSchemaVersion;
 
 
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
@@ -64,7 +68,7 @@ public class BemyndigelsesExportJob {
         bemyndigelserType.setAntalPost(BigInteger.valueOf(bemyndigelser.size()));
         bemyndigelserType.setDato(startTime.toString("yyyyMMdd"));
         bemyndigelserType.setTimeStamp(startTime.toString("HHmmssSSS"));
-        bemyndigelserType.setVersion("v00001");
+        bemyndigelserType.setVersion(nspSchemaVersion);
 
         nspManager.send(bemyndigelserType, startTime);
     }

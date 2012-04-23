@@ -60,25 +60,31 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     @Override
     public void send(BemyndigelserType bemyndigelser, DateTime startTime) {
         final Result result = systemService.createXmlTransformResult();
+        FTPClient ftpClient = new FTPClient();
         try {
             marshaller.marshal(bemyndigelser, result);
 
-            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_v1.bemyndigelse'");
+            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
             logger.debug("Writing to " + filename);
-            File file = systemService.writeToTempDir(filename, result.toString());
+            File file = systemService.writeToTempDir(filename, result.toString()); //TODO: don't "file" it
             if (exportEnabled) {
                 logger.info(String.format("Connecting to ftp://%s@%s:%s%s", ftpUsername, ftpHostname, ftpPort, ftpRemote));
-                FTPClient ftpClient = new FTPClient();
                 ftpClient.connect(ftpHostname, ftpPort);
                 ftpClient.login(ftpUsername, ftpPassword);
                 ftpClient.storeFile(ftpRemote + filename, FileUtils.openInputStream(file));
-                ftpClient.disconnect();
             }
             else {
                 logger.info("FTP export has been disabled. Was supposed to send file=" + file.getAbsolutePath());
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to send file", e);
+        }
+        finally {
+            try {
+                ftpClient.disconnect();
+            } catch (IOException e) {
+                logger.error("Could not disconnect from FTP server");
+            }
         }
     }
 }
