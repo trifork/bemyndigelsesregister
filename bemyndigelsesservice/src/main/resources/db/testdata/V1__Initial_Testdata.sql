@@ -3,3 +3,66 @@ INSERT INTO linked_system(system) VALUES ('Trifork test system');
 INSERT INTO domaene(domaene) VALUES ('trifork');
 INSERT INTO arbejdsfunktion(arbejdsfunktion, domaene_id, beskrivelse, linked_system_id) values ('Laege', 1, 'For unit test only', 1);
 INSERT INTO rettighed(rettighedskode, beskrivelse, domaene_id, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1, 1);
+
+##Bemyndigelser
+INSERT INTO `bemyndigelse` (
+        `kode`,
+        `bemyndigende_cpr`,
+        `bemyndigede_cpr`,
+        `bemyndigede_cvr`,
+        `linked_system_id`,
+        `arbejdsfunktion_id`,
+        `rettighed_id`,
+        `status_id`,
+        `godkendelsesdato`,
+        `gyldig_fra`,
+        `gyldig_til`,
+        `versionsid`,
+        `sidst_modificeret`,
+        `sidst_modificeret_af`)
+  VALUES (
+        '1',
+        '1010101010',
+        '1010101012',
+        '1',
+        1,
+        1,
+        1,
+        1,
+        '2011-05-21 02:15:00',
+        '2011-05-21 02:15:00',
+        '2011-05-21 02:15:00',
+        0,
+        '2011-05-21 02:15:00',
+        NULL);
+
+INSERT INTO `bemyndigelse` (
+        `kode`,
+        `bemyndigende_cpr`,
+        `bemyndigede_cpr`,
+        `bemyndigede_cvr`,
+        `linked_system_id`,
+        `arbejdsfunktion_id`,
+        `rettighed_id`,
+        `status_id`,
+        `godkendelsesdato`,
+        `gyldig_fra`,
+        `gyldig_til`,
+        `versionsid`,
+        `sidst_modificeret`,
+        `sidst_modificeret_af`)
+  VALUES (
+        '2',
+        '1010101010',
+        '1010101012',
+        '1',
+        1,
+        1,
+        1,
+        1,
+        '2011-05-22 02:15:00',
+        '2011-05-22 02:15:00',
+        '2011-05-22 02:15:00',
+        0,
+        '2011-05-22 02:15:00',
+        NULL);
