@@ -1,7 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import generated.BemyndigelserType;
 import org.apache.log4j.Logger;
@@ -20,10 +22,11 @@ import java.util.List;
 public class BemyndigelsesExportJob {
     private static Logger logger = Logger.getLogger(BemyndigelsesExportJob.class);
 
-    private static DateTime lastRun = new DateTime(0l); //TODO: persist?
-
     @Inject
     BemyndigelseDao bemyndigelseDao;
+
+    @Inject
+    SystemVariableDao systemVariableDao;
 
     @Inject
     SystemService systemService;
@@ -40,17 +43,19 @@ public class BemyndigelsesExportJob {
 
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
     public void startExport() throws IOException {
+        SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         final DateTime startTime = systemService.getDateTime();
-        doExport(startTime, bemyndigelseDao.findBySidstModificeretGreaterThan(lastRun));
+        doExport(startTime, bemyndigelseDao.findBySidstModificeretGreaterThan(lastRun.getDateTimeValue()));
 
-        updateLastRun(startTime);
+        updateLastRun(lastRun, startTime);
     }
 
     public void completeExport() throws IOException {
+        SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         final DateTime startTime = systemService.getDateTime();
         doExport(startTime, bemyndigelseDao.list());
 
-        updateLastRun(startTime);
+        updateLastRun(lastRun, startTime);
     }
 
     public void doExport(DateTime startTime, List<Bemyndigelse> bemyndigelser) throws IOException {
@@ -73,7 +78,11 @@ public class BemyndigelsesExportJob {
         nspManager.send(bemyndigelserType, startTime);
     }
 
-    private void updateLastRun(DateTime startTime) {
-        lastRun = startTime;
+    private void updateLastRun(SystemVariable lastRun, DateTime startTime) {
+        if (!lastRun.getName().equals("lastRun")) {
+            throw new IllegalArgumentException("System variable name is NOT \"lastRun\", but " + lastRun.getName());
+        }
+        lastRun.setDateTimeValue(startTime);
+        systemVariableDao.save(lastRun);
     }
 }
