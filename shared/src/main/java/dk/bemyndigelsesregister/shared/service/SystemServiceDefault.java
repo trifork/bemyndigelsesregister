@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -67,7 +68,7 @@ public class SystemServiceDefault implements SystemService {
      * @return Slightly modified StreamReader
      */
     @Override
-    public StreamResult createXmlTransformResult() {
+    public Result createXmlTransformResult() {
         return new StreamResult(new StringWriter()) {
             @Override
             public String toString() {
