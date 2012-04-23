@@ -1,24 +1,26 @@
 package dk.bemyndigelsesregister.shared.service;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-import java.util.Date;
 import java.util.jar.Manifest;
 
 @Service
 public class SystemServiceDefault implements SystemService {
-    private final Log logger = LogFactory.getLog(getClass());
+    private static Logger logger = Logger.getLogger(SystemServiceDefault.class);
+
+    @Value("${temp.dir}")
+    String tempDirLocation;
+
     @Inject
     ServletContext servletContext;
 
@@ -61,14 +63,14 @@ public class SystemServiceDefault implements SystemService {
 
     /**
      * Creates a Result equivalent to Spring-xml org.springframework.xml.transform.StringResult
+     *
      * @return Slightly modified StreamReader
      */
     @Override
-    public Result createXmlTransformResult() {
+    public StreamResult createXmlTransformResult() {
         return new StreamResult(new StringWriter()) {
             @Override
             public String toString() {
-
                 return getWriter().toString();
             }
         };
@@ -97,7 +99,7 @@ public class SystemServiceDefault implements SystemService {
 
     @Override
     public File writeToTempDir(String filename, String data) {
-        final File file = new File(System.getProperty("java.io.tmpdir"), filename);
+        final File file = new File(tempDirLocation, filename);
         try {
             FileUtils.writeStringToFile(file, data);
         } catch (IOException e) {

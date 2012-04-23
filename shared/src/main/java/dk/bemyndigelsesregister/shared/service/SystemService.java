@@ -5,7 +5,6 @@ import org.joda.time.DateTime;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import java.io.File;
-import java.util.Date;
 
 public interface SystemService {
     String getImplementationBuild();

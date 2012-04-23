@@ -29,7 +29,9 @@ public class NspManagerFtpTest {
     Marshaller marshaller = mock(Marshaller.class);
 
     private final DateTime startTime = new DateTime(1982, 5, 21, 2, 15, 3);
-    private final BemyndigelserType bemyndigelser = new BemyndigelserType();
+    private final BemyndigelserType bemyndigelser = new BemyndigelserType() {{
+        version = "v001";
+    }};
     private FakeFtpServer ftpServer;
 
     @Before
@@ -59,7 +61,7 @@ public class NspManagerFtpTest {
         final String fileBody = "File body";
         final File tempFile = File.createTempFile("test", ".bemyndigelse");
         FileUtils.writeStringToFile(tempFile, fileBody);
-        final String filename = "19820521_021503000_v1.bemyndigelse";
+        final String filename = "19820521_021503000_v001.bemyndigelse";
 
         when(result.toString()).thenReturn(fileBody);
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);

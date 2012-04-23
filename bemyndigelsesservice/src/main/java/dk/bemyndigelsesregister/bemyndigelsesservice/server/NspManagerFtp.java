@@ -15,8 +15,9 @@ import javax.inject.Inject;
 import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 
-import static org.springframework.util.Assert.*;
+import static org.springframework.util.Assert.hasText;
 
 @Repository
 public class NspManagerFtp implements NspManager, InitializingBean {
@@ -65,8 +66,8 @@ public class NspManagerFtp implements NspManager, InitializingBean {
             marshaller.marshal(bemyndigelser, result);
 
             final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
-            logger.debug("Writing to " + filename);
-            File file = systemService.writeToTempDir(filename, result.toString()); //TODO: don't "file" it
+            File file = systemService.writeToTempDir(filename, result.toString());
+            logger.debug("Sending " + file.getAbsolutePath() + " with name " + filename);
             if (exportEnabled) {
                 logger.info(String.format("Connecting to ftp://%s@%s:%s%s", ftpUsername, ftpHostname, ftpPort, ftpRemote));
                 ftpClient.connect(ftpHostname, ftpPort);
@@ -78,8 +79,7 @@ public class NspManagerFtp implements NspManager, InitializingBean {
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to send file", e);
-        }
-        finally {
+        } finally {
             try {
                 ftpClient.disconnect();
             } catch (IOException e) {
