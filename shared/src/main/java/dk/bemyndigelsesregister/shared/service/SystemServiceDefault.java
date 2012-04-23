@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.shared.service;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.joda.time.DateTime;
@@ -22,11 +23,6 @@ public class SystemServiceDefault implements SystemService {
     ServletContext servletContext;
 
     @Override
-    public Date getDate() {
-        return new Date();
-    }
-
-    @Override
     public DateTime getDateTime() {
         return new DateTime();
     }
@@ -37,7 +33,12 @@ public class SystemServiceDefault implements SystemService {
         if (manifest == null) {
             return "develop";
         }
-        return manifest.getMainAttributes().getValue("Implementation-Build");
+        final String implementationBuild = manifest.getMainAttributes().getValue("Implementation-Build");
+        if (implementationBuild == null) {
+            logger.warn("No Implementation-Build property found in Manifest file");
+            return "develop";
+        }
+        return implementationBuild;
     }
 
     private static Manifest manifest;
@@ -92,5 +93,16 @@ public class SystemServiceDefault implements SystemService {
                 return content;
             }
         };
+    }
+
+    @Override
+    public File writeToTempDir(String filename, String data) {
+        final File file = new File(System.getProperty("java.io.tmpdir"), filename);
+        try {
+            FileUtils.writeStringToFile(file, data);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not write to file=" + file.getAbsolutePath(), e);
+        }
+        return file;
     }
 }
