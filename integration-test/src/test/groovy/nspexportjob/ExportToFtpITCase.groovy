@@ -40,14 +40,13 @@ class ExportToFtpITCase {
         FileEntry uploadedFile = ftpServer.fileSystem.listFiles("/").find {FileSystemEntry entry ->
             entry.lastModified.after(startTime)
         }
-        println uploadedFile.name
         def bemyndiglser = new XmlParser().parse(uploadedFile.createInputStream())
 
-        println bemyndiglser
-        println bemyndiglser.'@AntalPost'
+        println "bemyndiglser = $bemyndiglser"
+        assert bemyndiglser.'@AntalPost' >= 2
+        assert bemyndiglser.'@AntalPost'.toInteger() == bemyndiglser.'Bemyndigelse'.size()
+        assert bemyndiglser.'Bemyndigelse'.find {it.'bemyndigende_cpr'.text() == '1010101010'}
 
-        Thread.sleep(100000)
-        //TODO: check file on FTP server
     }
 
     @After
