@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.Marshaller;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class BemyndigelsesExportJob {
 
 
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
+    @Transactional
     public void startExport() throws IOException {
         SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         final DateTime startTime = systemService.getDateTime();
@@ -50,6 +52,7 @@ public class BemyndigelsesExportJob {
         updateLastRun(lastRun, startTime);
     }
 
+    @Transactional
     public void completeExport() {
         SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         final DateTime startTime = systemService.getDateTime();
