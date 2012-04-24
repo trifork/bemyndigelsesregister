@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import generated.BemyndigelserType;
+import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
@@ -59,7 +59,7 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     }
 
     @Override
-    public void send(BemyndigelserType bemyndigelser, DateTime startTime) {
+    public void send(Bemyndigelser bemyndigelser, DateTime startTime) {
         final Result result = systemService.createXmlTransformResult();
         FTPClient ftpClient = new FTPClient();
         try {
@@ -77,7 +77,7 @@ public class NspManagerFtp implements NspManager, InitializingBean {
             else {
                 logger.info("FTP export has been disabled. Was supposed to send file=" + file.getAbsolutePath());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Failed to send file", e);
         } finally {
             try {

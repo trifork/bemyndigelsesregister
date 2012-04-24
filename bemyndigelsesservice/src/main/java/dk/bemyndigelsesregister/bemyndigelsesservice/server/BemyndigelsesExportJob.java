@@ -5,7 +5,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import generated.BemyndigelserType;
+import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,12 +50,15 @@ public class BemyndigelsesExportJob {
         updateLastRun(lastRun, startTime);
     }
 
-    public void completeExport() throws IOException {
+    public void completeExport() {
         SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         final DateTime startTime = systemService.getDateTime();
-        doExport(startTime, bemyndigelseDao.list());
-
-        updateLastRun(lastRun, startTime);
+        try {
+            doExport(startTime, bemyndigelseDao.list());
+            updateLastRun(lastRun, startTime);
+        } catch (IOException e) {
+            logger.error("Export failed", e);
+        }
     }
 
     public void doExport(DateTime startTime, List<Bemyndigelse> bemyndigelser) throws IOException {
@@ -65,8 +68,11 @@ public class BemyndigelsesExportJob {
             logger.info("Nothing to export. Stopping export job.");
             return;
         }
+        else {
+            logger.info("Exporting " + bemyndigelser.size() + " entries");
+        }
 
-        BemyndigelserType bemyndigelserType = new BemyndigelserType();
+        Bemyndigelser bemyndigelserType = new Bemyndigelser();
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
             bemyndigelserType.getBemyndigelse().add(bemyndigelse.toBemyndigelseType());
         }
@@ -76,6 +82,8 @@ public class BemyndigelsesExportJob {
         bemyndigelserType.setVersion(nspSchemaVersion);
 
         nspManager.send(bemyndigelserType, startTime);
+
+        logger.info("Completed export");
     }
 
     private void updateLastRun(SystemVariable lastRun, DateTime startTime) {

@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import generated.BemyndigelserType;
+import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
@@ -29,7 +29,7 @@ public class NspManagerFtpTest {
     Marshaller marshaller = mock(Marshaller.class);
 
     private final DateTime startTime = new DateTime(1982, 5, 21, 2, 15, 3);
-    private final BemyndigelserType bemyndigelser = new BemyndigelserType() {{
+    private final Bemyndigelser bemyndigelser = new Bemyndigelser() {{
         version = "v001";
     }};
     private FakeFtpServer ftpServer;
