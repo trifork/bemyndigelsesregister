@@ -20,12 +20,7 @@ public class OperationsController {
     @RequestMapping("/export")
     @ResponseBody
     public String startCompleteExport() {
-        try {
-            exportJob.completeExport();
-        } catch (IOException e) {
-            logger.error("Could run complete export", e);
-            return "Could not complete with reason: " + e.getMessage();
-        }
+        exportJob.completeExport();
         return "DONE";
     }
 }

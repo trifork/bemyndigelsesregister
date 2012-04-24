@@ -7,7 +7,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import generated.BemyndigelserType;
+import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -86,11 +86,11 @@ public class BemyndigelsesExportJobTest {
         return bemyndigelse;
     }
 
-    private BemyndigelserType bemyndigelserEq(final List<Bemyndigelse> bemyndigelser) {
+    private Bemyndigelser bemyndigelserEq(final List<Bemyndigelse> bemyndigelser) {
         System.out.println("Cheking bemyndigelser");
-        return argThat(new TypeSafeMatcher<BemyndigelserType>() {
+        return argThat(new TypeSafeMatcher<Bemyndigelser>() {
             @Override
-            public boolean matchesSafely(BemyndigelserType item) {
+            public boolean matchesSafely(Bemyndigelser item) {
                 if (!item.getAntalPost().equals(BigInteger.valueOf(bemyndigelser.size()))) {
                     System.out.println("Not same size");
                     return false;

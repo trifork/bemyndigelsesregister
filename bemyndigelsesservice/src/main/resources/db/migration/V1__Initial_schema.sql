@@ -174,3 +174,5 @@ CREATE TABLE `system_variable` (
   PRIMARY KEY(`id`)
 );
 
+INSERT INTO `system_variable` (`name`, `value`) VALUES ('lastRun', '0');
+

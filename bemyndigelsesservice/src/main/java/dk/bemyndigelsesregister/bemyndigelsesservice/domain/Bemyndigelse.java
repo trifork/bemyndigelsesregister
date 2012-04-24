@@ -1,6 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
-import generated.BemyndigelseType;
+import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.joda.time.DateTime;
 
 import javax.persistence.OneToOne;
@@ -128,8 +128,8 @@ public class Bemyndigelse extends DomainObject {
     }
     //</editor-fold>
 
-    public BemyndigelseType toBemyndigelseType() {
-        BemyndigelseType type = new BemyndigelseType();
+    public Bemyndigelser.Bemyndigelse toBemyndigelseType() {
+        Bemyndigelser.Bemyndigelse type = new Bemyndigelser.Bemyndigelse();
         type.setBemyndigedeCpr(bemyndigedeCpr);
         type.setBemyndigedeCvr(bemyndigedeCvr);
         type.setBemyndigendeCpr(bemyndigendeCpr);

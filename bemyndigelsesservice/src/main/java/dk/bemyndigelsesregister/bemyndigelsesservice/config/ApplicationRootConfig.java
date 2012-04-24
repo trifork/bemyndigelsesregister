@@ -90,7 +90,8 @@ public class ApplicationRootConfig {
         bean.setContextPaths(
                 "dk.bemyndigelsesregister.bemyndigelsesservice.web.request",
                 "dk.bemyndigelsesregister.bemyndigelsesservice.web.response",
-                "dk.medcom.dgws._2006._04.dgws_1_0"
+                "dk.medcom.dgws._2006._04.dgws_1_0",
+                "dk.nsi.bemyndigelser._2012._04"
         );
         return bean;
     }
