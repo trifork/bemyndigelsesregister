@@ -9,6 +9,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningO
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
@@ -39,6 +40,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @Protected(whitelist = "TEST")
+    @Transactional
     public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelse(
             @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
