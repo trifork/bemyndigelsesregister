@@ -6,11 +6,11 @@ import wslite.soap.SOAPClient
 import shared.WebServiceSupport
 
 import static org.junit.Assert.*
-import wslite.soap.SOAPFaultException
+import org.junit.Ignore
 
 class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
 
-    @Test
+    @Test @Ignore("Ignored for now, until we have a client with a real header")
     public void canAccessMethod() {
         SOAPClient client = getClient()
         String messageID = UUID.randomUUID().toString()

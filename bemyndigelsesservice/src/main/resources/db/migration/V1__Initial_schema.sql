@@ -176,3 +176,10 @@ CREATE TABLE `system_variable` (
 
 INSERT INTO `system_variable` (`name`, `value`) VALUES ('lastRun', '0');
 
+CREATE TABLE `whitelist` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `legal_cvr` varchar(255) NOT NULL,
+
+  PRIMARY KEY(`id`)
+);

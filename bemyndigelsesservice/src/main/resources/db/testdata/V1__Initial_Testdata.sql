@@ -68,3 +68,6 @@ INSERT INTO `bemyndigelse` (
         NULL);
 
 INSERT INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
+
+INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '1');
+INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '2');
