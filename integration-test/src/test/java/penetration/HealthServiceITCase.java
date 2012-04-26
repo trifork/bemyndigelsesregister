@@ -16,10 +16,4 @@ public class HealthServiceITCase {
         URLConnection urlConnection = new URL(urlPrefix() +  "/bemyndigelsesservice/health").openConnection();
         assertEquals("OK", IOUtils.toString(urlConnection.getInputStream()));
     }
-
-    @Test
-    public void canAccessStamdataserviceHealth() throws Exception {
-        URLConnection urlConnection = new URL(urlPrefix() + "/stamdataservice/health").openConnection();
-        assertEquals("OK", IOUtils.toString(urlConnection.getInputStream()));
-    }
 }
