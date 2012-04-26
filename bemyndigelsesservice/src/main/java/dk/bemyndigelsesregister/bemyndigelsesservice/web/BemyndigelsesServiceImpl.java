@@ -39,7 +39,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "TEST")
+    @Protected(whitelist = "BemyndigelsesService.opretAnmodningOmBemyndigelse")
     @Transactional
     public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelse(
             @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader) {
