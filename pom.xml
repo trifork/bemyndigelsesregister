@@ -10,6 +10,10 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>trifork.public</id>
+            <url>https://nexus.trifork.com/content/groups/public/</url>
+        </repository>
     </repositories>         
     <modelVersion>4.0.0</modelVersion>
 
