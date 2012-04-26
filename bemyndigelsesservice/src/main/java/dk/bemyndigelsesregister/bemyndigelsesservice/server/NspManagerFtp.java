@@ -12,6 +12,7 @@ import org.springframework.oxm.Marshaller;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     @Inject
     SystemService systemService;
 
-    @Inject
+    @Inject @Named("nspMarshaller")
     Marshaller marshaller;
 
     @Value("${ftp.hostname}")
