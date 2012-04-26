@@ -6,10 +6,8 @@ import wslite.soap.SOAPClient
 import shared.WebServiceSupport
 
 import static org.junit.Assert.*
-import org.junit.Ignore
 import sosi.SOSIUtil
 import org.w3c.dom.NodeList
-import groovy.xml.XmlUtil
 
 class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
 
