@@ -7,23 +7,28 @@ import shared.WebServiceSupport
 
 import static org.junit.Assert.*
 import org.junit.Ignore
+import sosi.SOSIUtil
+import org.w3c.dom.NodeList
+import groovy.xml.XmlUtil
 
 class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
 
-    @Test @Ignore("Ignored for now, until we have a client with a real header")
+    @Test
     public void canAccessMethod() {
         SOAPClient client = getClient()
-        String messageID = UUID.randomUUID().toString()
         def response = client.send(
                 SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
         ) {
-            envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/'
+            envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
+                    'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
             header {
-                Header (xmlns:'http://www.medcom.dk/dgws/2006/04/dgws-1.0.xsd') {
-                    Linking {
-                        FlowID("FlowID")
-                        MessageID(messageID)
-                    }
+                NodeList header = SOSIUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
+                println "header = $header"
+                for (int i = 0; i < header.item(0).childNodes.length; i++) {
+                    String headerItem = header.item(0).childNodes.item(i) as String
+                    assert headerItem
+                    println "header[i] = ${headerItem}"
+                    mkp.yieldUnescaped headerItem.substring(headerItem.indexOf("?>") + 2)
                 }
             }
             body {

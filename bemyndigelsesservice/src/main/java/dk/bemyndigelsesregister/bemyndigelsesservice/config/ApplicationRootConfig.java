@@ -108,7 +108,11 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         bean.setContextPaths(
                 "dk.bemyndigelsesregister.bemyndigelsesservice.web.request",
                 "dk.bemyndigelsesregister.bemyndigelsesservice.web.response",
-                "dk.medcom.dgws._2006._04.dgws_1_0"
+                "dk.medcom.dgws._2006._04.dgws_1_0",
+                "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_secext_1_0",
+                "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_utility_1_0",
+                "org.w3._2000._09.xmldsig",
+                "oasis.names.tc.saml._2_0.assertion"
         );
         return bean;
     }

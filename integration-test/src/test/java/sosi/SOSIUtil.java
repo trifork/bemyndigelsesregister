@@ -29,10 +29,9 @@ import dk.sosi.seal.pki.SOSIFederation;
 import dk.sosi.seal.vault.ClasspathCredentialVault;
 import dk.sosi.seal.xml.XmlUtil;
 
-// SOSIITCase
-public class SOSIITCase {
-    @Test
-    public void testSosi() throws Exception {
+public class SOSIUtil {
+
+    public static Document getIdCard() throws Exception {
         Properties props = SignatureUtil.setupCryptoProviderForJVM();
 
         props.setProperty(SOSIFactory.PROPERTYNAME_SOSI_VALIDATE_ENHANCED, "false");
@@ -79,9 +78,10 @@ public class SOSIITCase {
 
         String xmlRequest = XmlUtil.node2String(reqdoc, false, true);
         System.out.println(xmlRequest);
+        return reqdoc;
     }
 
-    private String sendRequest(String url, String action, String docXml, boolean failOnError) throws IOException {
+    private static String sendRequest(String url, String action, String docXml, boolean failOnError) throws IOException {
         URL u = new URL(url);
         HttpURLConnection uc = (HttpURLConnection) u.openConnection();
         uc.setDoOutput(true);
