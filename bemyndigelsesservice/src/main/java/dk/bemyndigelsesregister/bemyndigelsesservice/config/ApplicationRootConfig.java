@@ -102,13 +102,21 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         return factoryBean;
     }
 
-    @Bean
-    public Jaxb2Marshaller jaxb2Marshaller() {
+    @Bean(name = {"serviceMarshaller", "serviceUnmarshaller"}) @Primary
+    public Jaxb2Marshaller serviceMarshaller() {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
         bean.setContextPaths(
                 "dk.bemyndigelsesregister.bemyndigelsesservice.web.request",
                 "dk.bemyndigelsesregister.bemyndigelsesservice.web.response",
-                "dk.medcom.dgws._2006._04.dgws_1_0",
+                "dk.medcom.dgws._2006._04.dgws_1_0"
+        );
+        return bean;
+    }
+
+    @Bean(name = {"nspMarshaller", "nspUnarshaller"})
+    public Jaxb2Marshaller nspMarshaller() {
+        final Jaxb2Marshaller bean = new Jaxb2Marshaller();
+        bean.setContextPath(
                 "dk.nsi.bemyndigelser._2012._04"
         );
         return bean;

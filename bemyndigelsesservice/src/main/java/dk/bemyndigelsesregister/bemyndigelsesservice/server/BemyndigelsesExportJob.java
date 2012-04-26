@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
@@ -31,9 +32,6 @@ public class BemyndigelsesExportJob {
 
     @Inject
     SystemService systemService;
-
-    @Inject
-    Marshaller marshaller;
 
     @Inject
     NspManager nspManager;
