@@ -21,11 +21,9 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                     'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
             header {
                 NodeList header = SOSIUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
-                println "header = $header"
                 for (int i = 0; i < header.item(0).childNodes.length; i++) {
                     String headerItem = header.item(0).childNodes.item(i) as String
                     assert headerItem
-                    println "header[i] = ${headerItem}"
                     mkp.yieldUnescaped headerItem.substring(headerItem.indexOf("?>") + 2)
                 }
             }
