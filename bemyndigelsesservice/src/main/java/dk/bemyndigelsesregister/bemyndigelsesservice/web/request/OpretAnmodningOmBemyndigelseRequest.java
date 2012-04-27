@@ -1,15 +1,28 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web.request;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "opretAnmodningOmBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class OpretAnmodningOmBemyndigelseRequest {
 
-    private String bemyndigedeCvr;
-    private String bemyndigedeCpr;
-    private String bemyndigendeCpr;
-    private long arbejdsfunktionId;
-    private long rettighedId;
+    @XmlElement(name = "bemyndigedeCvr", required = true)
+    protected String bemyndigedeCvr;
+
+    @XmlElement(name = "bemyndigedeCpr", required = true)
+    protected String bemyndigedeCpr;
+
+    @XmlElement(name = "bemyndigendeCpr", required = true)
+    protected String bemyndigendeCpr;
+
+    @XmlElement(name = "arbejdsfunktionId", required = true)
+    protected long arbejdsfunktionId;
+
+    @XmlElement(name = "rettighedId", required = true)
+    protected long rettighedId;
 
     public void setBemyndigedeCvr(String bemyndigedeCvr) {
         this.bemyndigedeCvr = bemyndigedeCvr;

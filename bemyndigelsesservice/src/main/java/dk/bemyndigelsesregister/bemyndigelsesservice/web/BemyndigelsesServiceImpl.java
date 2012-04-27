@@ -17,7 +17,7 @@ import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
 
-@Repository("bemyndigelsesServiceServer")
+@Repository("bemyndigelsesService")
 @Endpoint
 public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     private static Logger logger = Logger.getLogger(BemyndigelsesServiceImpl.class);
