@@ -34,7 +34,7 @@ class ExportToFtpITCase {
     public void completeJobWillExportAllBemyndigelser() {
         Date startTime = new Date()
 
-        URLConnection urlConnection = new URL(urlPrefix() + "/bemyndigelsesservice/op/export").openConnection()
+        URLConnection urlConnection = new URL(urlPrefix() + "/op/export").openConnection()
         assertEquals "DONE", IOUtils.toString(urlConnection.inputStream)
 
         FileEntry uploadedFile = ftpServer.fileSystem.listFiles("/").find {FileSystemEntry entry ->

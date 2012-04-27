@@ -6,16 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
-import org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter;
-import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.server.EndpointInterceptor;
 import org.springframework.ws.server.EndpointMapping;
@@ -28,13 +21,10 @@ import org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAda
 import org.springframework.ws.transport.http.WsdlDefinitionHandlerAdapter;
 import org.springframework.ws.wsdl.WsdlDefinition;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
-import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
-import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
@@ -110,7 +100,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     }
 
     //@Bean
-    public EndpointInterceptor paylEndpointInterceptor() {
+    public EndpointInterceptor payloadValidationEndpointInterceptor() {
         final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
         interceptor.setSchemas(new Resource[]{
                 new ClassPathResource("schema1.xsd")

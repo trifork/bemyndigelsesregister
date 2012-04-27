@@ -96,9 +96,9 @@
                                 <artifactId>bemyndigelsesservice</artifactId>
                                 <type>war</type>
                                 <properties>
-                                    <context>bemyndigelsesservice</context>
+                                    <context>ROOT</context>
                                 </properties>
-                                <pingURL>${functionaltest.urlprefix}/bemyndigelsesservice/health</pingURL>
+                                <pingURL>${functionaltest.urlprefix}/health</pingURL>
                                 <pingTimeout>20000</pingTimeout>
                             </deployable>
                         </deployables>

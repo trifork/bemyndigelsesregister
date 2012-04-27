@@ -13,7 +13,7 @@ public class HealthServiceITCase {
 
     @Test
     public void canAccessBemyndigelsesserviceHealth() throws Exception {
-        URLConnection urlConnection = new URL(urlPrefix() +  "/bemyndigelsesservice/health").openConnection();
+        URLConnection urlConnection = new URL(urlPrefix() +  "/health").openConnection();
         assertEquals("OK", IOUtils.toString(urlConnection.getInputStream()));
     }
 }
