@@ -6,22 +6,22 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "opretAnmodningOmBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
+@XmlRootElement(name = "OpretAnmodningOmBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class OpretAnmodningOmBemyndigelseRequest {
 
-    @XmlElement(name = "bemyndigedeCvr", required = true)
+    @XmlElement(name = "BemyndigedeCvr", required = true)
     protected String bemyndigedeCvr;
 
-    @XmlElement(name = "bemyndigedeCpr", required = true)
+    @XmlElement(name = "BemyndigedeCpr", required = true)
     protected String bemyndigedeCpr;
 
-    @XmlElement(name = "bemyndigendeCpr", required = true)
+    @XmlElement(name = "BemyndigendeCpr", required = true)
     protected String bemyndigendeCpr;
 
-    @XmlElement(name = "arbejdsfunktionId", required = true)
+    @XmlElement(name = "ArbejdsfunktionId", required = true)
     protected long arbejdsfunktionId;
 
-    @XmlElement(name = "rettighedId", required = true)
+    @XmlElement(name = "RettighedId", required = true)
     protected long rettighedId;
 
     public void setBemyndigedeCvr(String bemyndigedeCvr) {

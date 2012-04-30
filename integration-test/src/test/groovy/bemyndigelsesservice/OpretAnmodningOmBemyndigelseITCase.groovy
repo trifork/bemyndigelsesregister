@@ -29,12 +29,12 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 }
             }
             body {
-                "web:opretAnmodningOmBemyndigelseRequest" {
-                    bemyndigedeCvr(2)
-                    bemyndigedeCpr(1)
-                    bemyndigendeCpr(3)
-                    arbejdsfunktionId(1)
-                    rettighedId(1)
+                "web:OpretAnmodningOmBemyndigelseRequest" {
+                    "BemyndigedeCvr"(2)
+                    "BemyndigedeCpr"(1)
+                    "BemyndigendeCpr"(3)
+                    "ArbejdsfunktionId"(1)
+                    "RettighedId"(1)
                 }
             }
         }
@@ -45,7 +45,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
     public void willRequireBemyndigedeCpr() {
         SOAPClient client = getClient()
         try {
-            def response = client.send(
+            client.send(
                     SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
             ) {
                 envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
@@ -59,11 +59,11 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                     }
                 }
                 body {
-                    "web:opretAnmodningOmBemyndigelseRequest" {
-                        bemyndigedeCvr(2)
-                        bemyndigendeCpr(3)
-                        arbejdsfunktionId(1)
-                        rettighedId(1)
+                    "web:OpretAnmodningOmBemyndigelseRequest" {
+                        "BemyndigedeCvr"(2)
+                        "BemyndigendeCpr"(3)
+                        "ArbejdsfunktionId"(1)
+                        "RettighedId"(1)
                     }
                 }
             }
