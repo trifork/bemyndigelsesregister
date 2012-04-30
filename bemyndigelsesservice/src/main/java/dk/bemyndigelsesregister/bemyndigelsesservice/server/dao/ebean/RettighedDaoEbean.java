@@ -12,8 +12,7 @@ public class RettighedDaoEbean extends SupportDao<Rettighed> implements Rettighe
     }
 
     @Override
-    public Rettighed findByKode(String rettighedskode) {
-        //TODO:
-        return null;
+    public Rettighed findByRettighedskode(String rettighedskode) {
+        return query().where().eq("rettighedskode", rettighedskode).findUnique();
     }
 }

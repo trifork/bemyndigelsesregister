@@ -7,5 +7,5 @@ public interface RettighedDao {
 
     void save(Rettighed rettighed);
 
-    Rettighed findByKode(String rettighedskode);
+    Rettighed findByRettighedskode(String rettighedskode);
 }

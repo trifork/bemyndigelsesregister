@@ -52,10 +52,10 @@ public class BemyndigelsesServiceImplTest {
         final DateTime now = new DateTime();
 
         when(systemService.createUUIDString()).thenReturn(kode);
-        when(arbejdsfunktionDao.findByKode("Arbejdsfunktion")).thenReturn(arbejdsfunktion);
+        when(arbejdsfunktionDao.findByArbejdsfunktion("Arbejdsfunktion")).thenReturn(arbejdsfunktion);
         when(statusTypeDao.get(1l)).thenReturn(statusType);
-        when(rettighedDao.findByKode("Rettighedskode")).thenReturn(rettighed);
-        when(linkedSystemDao.findByKode("SystemKode")).thenReturn(linkedSystem);
+        when(rettighedDao.findByRettighedskode("Rettighedskode")).thenReturn(rettighed);
+        when(linkedSystemDao.findBySystem("SystemKode")).thenReturn(linkedSystem);
         when(systemService.getDateTime()).thenReturn(now);
 
         OpretAnmodningOmBemyndigelseRequest request = new OpretAnmodningOmBemyndigelseRequest() {{

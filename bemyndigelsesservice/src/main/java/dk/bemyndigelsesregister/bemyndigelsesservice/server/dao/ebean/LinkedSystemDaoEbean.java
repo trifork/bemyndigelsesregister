@@ -12,8 +12,7 @@ public class LinkedSystemDaoEbean extends SupportDao<LinkedSystem> implements Li
     }
 
     @Override
-    public LinkedSystem findByKode(String linkedSystemKode) {
-        //TODO
-        return null;
+    public LinkedSystem findBySystem(String system) {
+        return query().where().eq("system", system).findUnique();
     }
 }

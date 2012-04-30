@@ -57,11 +57,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         bemyndigelse.setBemyndigedeCpr(request.getBemyndigedeCpr());
         bemyndigelse.setBemyndigedeCvr(request.getBemyndigedeCvr());
         bemyndigelse.setBemyndigendeCpr(request.getBemyndigendeCpr());
-        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByKode(request.getArbejdsfunktion()));
+        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(request.getArbejdsfunktion()));
         bemyndigelse.setStatus(statusTypeDao.get(1));
-        bemyndigelse.setRettighed(rettighedDao.findByKode(request.getRettighed()));
+        bemyndigelse.setRettighed(rettighedDao.findByRettighedskode(request.getRettighed()));
         bemyndigelse.setKode(systemService.createUUIDString());
-        bemyndigelse.setLinkedSystem(linkedSystemDao.findByKode(request.getLinkedSystem()));
+        bemyndigelse.setLinkedSystem(linkedSystemDao.findBySystem(request.getLinkedSystem()));
         final DateTime now = systemService.getDateTime();
         bemyndigelse.setGyldigFra(now);
         bemyndigelse.setGyldigTil(now.plusYears(99));
