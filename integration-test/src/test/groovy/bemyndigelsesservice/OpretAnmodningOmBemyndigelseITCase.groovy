@@ -32,9 +32,10 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 "web:OpretAnmodningOmBemyndigelseRequest" {
                     "BemyndigedeCvr"(2)
                     "BemyndigedeCpr"(1)
-                    "BemyndigendeCpr"(3)
-                    "ArbejdsfunktionId"(1)
-                    "RettighedId"(1)
+                    "BemyndigendeCpr"(2006271866)
+                    "Arbejdsfunktion"("Laege")
+                    "Rettighed"("R01")
+                    "System"("Trifork test system")
                 }
             }
         }
@@ -62,8 +63,9 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                     "web:OpretAnmodningOmBemyndigelseRequest" {
                         "BemyndigedeCvr"(2)
                         "BemyndigendeCpr"(3)
-                        "ArbejdsfunktionId"(1)
-                        "RettighedId"(1)
+                        "Arbejdsfunktion"("Laege")
+                        "Rettighed"("R01")
+                        "System"("Trifork test system")
                     }
                 }
             }

@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "OpretAnmodningOmBemyndigelserRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
+@XmlRootElement(name = "SletBemyndigelserRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class SletBemyndigelserRequest {
     @XmlElement(name = "BemyndigelsesKode", required = true)
     protected List<String> bemyndigelsesKoder;
