@@ -11,4 +11,6 @@ public interface ArbejdsfunktionDao {
     void save(Arbejdsfunktion arbejdsfunktion);
 
     List<Arbejdsfunktion> findBy(Domaene domaene);
+
+    Arbejdsfunktion findByKode(String arbejdsfunktion);
 }

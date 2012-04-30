@@ -10,4 +10,10 @@ public class LinkedSystemDaoEbean extends SupportDao<LinkedSystem> implements Li
     public LinkedSystemDaoEbean() {
         super(LinkedSystem.class);
     }
+
+    @Override
+    public LinkedSystem findByKode(String linkedSystemKode) {
+        //TODO
+        return null;
+    }
 }

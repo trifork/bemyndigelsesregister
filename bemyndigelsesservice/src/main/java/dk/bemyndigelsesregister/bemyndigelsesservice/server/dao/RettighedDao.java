@@ -6,4 +6,6 @@ public interface RettighedDao {
     Rettighed get(long id);
 
     void save(Rettighed rettighed);
+
+    Rettighed findByKode(String rettighedskode);
 }

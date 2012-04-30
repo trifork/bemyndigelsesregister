@@ -1,14 +1,17 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.trifork.dgws.util.SecurityHelper;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.matchers.TypeSafeMatcher;
 import org.springframework.ws.soap.SoapHeader;
 
 import static java.util.Arrays.asList;
@@ -18,10 +21,14 @@ import static org.mockito.Mockito.*;
 public class BemyndigelsesServiceImplTest {
     BemyndigelsesServiceImpl service = new BemyndigelsesServiceImpl();
     BemyndigelseDao bemyndigelseDao = mock(BemyndigelseDao.class);
+    ArbejdsfunktionDao arbejdsfunktionDao = mock(ArbejdsfunktionDao.class);
+    StatusTypeDao statusTypeDao = mock(StatusTypeDao.class);
+    RettighedDao rettighedDao = mock(RettighedDao.class);
+    private final LinkedSystemDao linkedSystemDao = mock(LinkedSystemDao.class);
     SystemService systemService = mock(SystemService.class);
     SecurityHelper securityHelper = mock(SecurityHelper.class);
-    SoapHeader soapHeader = mock(SoapHeader.class);
 
+    SoapHeader soapHeader = mock(SoapHeader.class);
     private final DateTime now = new DateTime();
 
     @Before
@@ -29,6 +36,55 @@ public class BemyndigelsesServiceImplTest {
         service.bemyndigelseDao = bemyndigelseDao;
         service.systemService = systemService;
         service.securityHelper = securityHelper;
+        service.arbejdsfunktionDao = arbejdsfunktionDao;
+        service.statusTypeDao = statusTypeDao;
+        service.rettighedDao = rettighedDao;
+        service.linkedSystemDao = linkedSystemDao;
+    }
+
+    @Test
+    public void canCreateBemyndigelseAndmodning() throws Exception {
+        final String kode = "UUID kode";
+        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
+        final StatusType statusType = new StatusType();
+        final Rettighed rettighed = new Rettighed();
+        final LinkedSystem linkedSystem = new LinkedSystem();
+        final DateTime now = new DateTime();
+
+        when(systemService.createUUIDString()).thenReturn(kode);
+        when(arbejdsfunktionDao.findByKode("Arbejdsfunktion")).thenReturn(arbejdsfunktion);
+        when(statusTypeDao.get(1l)).thenReturn(statusType);
+        when(rettighedDao.findByKode("Rettighedskode")).thenReturn(rettighed);
+        when(linkedSystemDao.findByKode("SystemKode")).thenReturn(linkedSystem);
+        when(systemService.getDateTime()).thenReturn(now);
+
+        OpretAnmodningOmBemyndigelseRequest request = new OpretAnmodningOmBemyndigelseRequest() {{
+            setBemyndigedeCpr("BemyndigedeCpr");
+            setBemyndigendeCpr("BemyndigendeCpr");
+            setArbejdsfunktion("Arbejdsfunktion");
+            setRettighed("Rettighedskode");
+            setLinkedSystem("SystemKode");
+        }};
+
+        service.opretAnmodningOmBemyndigelser(request, soapHeader);
+
+        verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
+            @Override
+            public boolean matchesSafely(Bemyndigelse item) {
+                return allTrue(
+                        item.getKode().equals(kode),
+                        item.getBemyndigendeCpr().equals("BemyndigendeCpr"),
+                        item.getArbejdsfunktion() == arbejdsfunktion,
+                        item.getStatus() == statusType,
+                        item.getRettighed() == rettighed,
+                        item.getLinkedSystem() == linkedSystem,
+                        item.getGyldigFra() == now,
+                        item.getGyldigTil().equals(now.plusYears(99))
+                );
+            }
+            @Override
+            public void describeTo(Description description) { }
+        }));
     }
 
     @Test
@@ -100,5 +156,17 @@ public class BemyndigelsesServiceImplTest {
 
         assertNull(response);
         verify(bemyndigelseDao, never()).save(bemyndigelse);
+    }
+
+    public boolean allTrue(boolean... eval) {
+        int a = 0;
+        for (boolean b : eval) {
+            if (!b) {
+                System.out.println("Arg " + a + " was not true");
+                return false;
+            }
+            a++;
+        }
+        return true;
     }
 }

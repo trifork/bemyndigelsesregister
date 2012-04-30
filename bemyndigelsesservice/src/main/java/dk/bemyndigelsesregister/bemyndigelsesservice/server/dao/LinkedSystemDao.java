@@ -6,4 +6,6 @@ public interface LinkedSystemDao {
     LinkedSystem get(long id);
 
     void save(LinkedSystem linkedSystem);
+
+    LinkedSystem findByKode(String linkedSystemKode);
 }

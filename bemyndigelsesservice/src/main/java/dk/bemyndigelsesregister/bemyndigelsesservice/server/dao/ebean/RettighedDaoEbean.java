@@ -10,4 +10,10 @@ public class RettighedDaoEbean extends SupportDao<Rettighed> implements Rettighe
     public RettighedDaoEbean() {
         super(Rettighed.class);
     }
+
+    @Override
+    public Rettighed findByKode(String rettighedskode) {
+        //TODO:
+        return null;
+    }
 }
