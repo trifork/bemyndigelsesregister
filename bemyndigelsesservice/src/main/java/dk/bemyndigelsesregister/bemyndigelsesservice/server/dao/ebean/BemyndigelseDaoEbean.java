@@ -20,7 +20,6 @@ public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements Be
 
     @Override
     public Bemyndigelse findByKode(String kode) {
-        //TODO:
-        return null;
+        return query().where().eq("kode", kode).findUnique();
     }
 }

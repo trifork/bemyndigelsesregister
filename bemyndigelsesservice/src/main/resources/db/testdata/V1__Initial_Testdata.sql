@@ -21,7 +21,7 @@ INSERT INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
-        '1',
+        'TestKode1',
         '1010101010',
         '1010101012',
         '1',
@@ -52,7 +52,7 @@ INSERT INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
-        '2',
+        'TestKode2',
         '1010101010',
         '1010101012',
         '1',
