@@ -16,7 +16,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
     public void canAccessMethod() {
         SOAPClient client = getClient()
         def response = client.send(
-                SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
+                SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelser",
         ) {
             envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
                     'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
@@ -46,7 +46,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
         SOAPClient client = getClient()
         try {
             client.send(
-                    SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
+                    SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelser",
             ) {
                 envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
                         'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
