@@ -4,15 +4,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
+import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.ws.WebServiceMessageFactory;
+import org.springframework.ws.server.EndpointInterceptor;
+import org.springframework.ws.server.EndpointMapping;
+import org.springframework.ws.server.endpoint.mapping.PayloadRootAnnotationMethodEndpointMapping;
 import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.soap.server.SoapMessageDispatcher;
+import org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor;
+import org.springframework.ws.soap.server.endpoint.interceptor.SoapEnvelopeLoggingInterceptor;
 import org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAdapter;
+import org.springframework.ws.transport.http.WsdlDefinitionHandlerAdapter;
+import org.springframework.ws.wsdl.WsdlDefinition;
+import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
+import org.springframework.xml.xsd.SimpleXsdSchema;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
@@ -22,11 +34,40 @@ public class WebConfig extends WebMvcConfigurationSupport {
     ApplicationRootConfig applicationRootConfig;
 
     @Bean
-    public DefaultAnnotationHandlerMapping defaultAnnotationHandlerMapping(SoapMessageDispatcher soapMessageDispatcher) {
-        final DefaultAnnotationHandlerMapping bean = new DefaultAnnotationHandlerMapping();
-        bean.setOrder(1);
-        bean.setDefaultHandler(soapMessageDispatcher);
+    public WsdlDefinition serviceDefinition() {
+        final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
+        bean.setSchema(schema1XsdSchema());
+        bean.setPortTypeName("BemyndigelsesService");
+        bean.setLocationUri("http://localhost:8080/BemyndigelsesService");
         return bean;
+    }
+
+    @Bean
+    public SimpleXsdSchema schema1XsdSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("schema1.xsd"));
+    }
+
+    @Bean
+    public WsdlDefinitionHandlerAdapter wsdlDefinitionHandlerAdapter() {
+        return new WsdlDefinitionHandlerAdapter();
+    }
+
+    @Bean
+    public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
+        final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+        mapping.setOrder(1);
+        final HashMap<String, Object> urlMap = new HashMap<String, Object>();
+        urlMap.put("*.wsdl", serviceDefinition());
+        mapping.setUrlMap(urlMap);
+        return mapping;
+    }
+
+    @Override
+    @Bean
+    public BeanNameUrlHandlerMapping beanNameHandlerMapping() {
+        final BeanNameUrlHandlerMapping mapping = super.beanNameHandlerMapping();
+        mapping.setDefaultHandler(soapMessageDispatcher());
+        return mapping;
     }
 
     @Bean
@@ -45,4 +86,28 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public WebServiceMessageFactory messageFactory() {
         return new SaajSoapMessageFactory();
     }
+
+    @Bean
+    public EndpointMapping endpointMapping(EndpointInterceptor[] endpointInterceptors) {
+        final PayloadRootAnnotationMethodEndpointMapping mapping = new PayloadRootAnnotationMethodEndpointMapping();
+        mapping.setInterceptors(endpointInterceptors);
+        return mapping;
+    }
+
+    @Bean
+    public EndpointInterceptor SoapEnvelopeEndpointInterceptor() {
+        return new SoapEnvelopeLoggingInterceptor();
+    }
+
+    @Bean
+    public EndpointInterceptor payloadValidationEndpointInterceptor() {
+        final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
+        interceptor.setSchemas(new Resource[]{
+                new ClassPathResource("schema1.xsd")
+        });
+        interceptor.setValidateRequest(true);
+        interceptor.setValidateResponse(false);
+        return interceptor;
+    }
+
 }

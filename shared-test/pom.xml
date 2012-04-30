@@ -35,6 +35,6 @@
             <groupId>org.mockftpserver</groupId>
             <artifactId>MockFtpServer</artifactId>
             <version>2.3</version>
-          </dependency>
+        </dependency>
     </dependencies>
 </project>

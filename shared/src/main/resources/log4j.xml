@@ -23,6 +23,11 @@
         <level value="WARN"/>
     </logger>
 
+    <!--Log incoming soap:envelope-->
+    <logger name="org.springframework.ws.soap.server.endpoint.interceptor.SoapEnvelopeLoggingInterceptor">
+        <level value="DEBUG"/>
+    </logger>
+
     <logger name="dk.bemyndigelsesregister">
         <level value="DEBUG"/>
     </logger>
