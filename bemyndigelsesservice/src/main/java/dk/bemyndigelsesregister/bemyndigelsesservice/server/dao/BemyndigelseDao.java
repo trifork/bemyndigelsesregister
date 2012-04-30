@@ -13,4 +13,6 @@ public interface BemyndigelseDao {
     List<Bemyndigelse> findBySidstModificeretGreaterThan(DateTime sidstModificeret);
 
     List<Bemyndigelse> list();
+
+    Bemyndigelse findByKode(String kode);
 }

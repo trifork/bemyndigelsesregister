@@ -16,4 +16,6 @@ public interface SystemService {
     Source createXmlTransformSource(String unmarshalledObject);
 
     File writeToTempDir(String filename, String data);
+
+    String createUUIDString();
 }

@@ -21,7 +21,7 @@ INSERT INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
-        '1',
+        'TestKode1',
         '1010101010',
         '1010101012',
         '1',
@@ -52,7 +52,7 @@ INSERT INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
-        '2',
+        'TestKode2',
         '1010101010',
         '1010101012',
         '1',
@@ -71,4 +71,4 @@ INSERT INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den god
 
 INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '1');
 INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '2');
-INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('BemyndigelsesService.opretAnmodningOmBemyndigelse', '25520041');
+INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('BemyndigelsesService.opretAnmodningOmBemyndigelser', '25520041');

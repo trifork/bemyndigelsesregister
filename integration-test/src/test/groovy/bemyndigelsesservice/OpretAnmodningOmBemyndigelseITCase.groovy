@@ -16,7 +16,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
     public void canAccessMethod() {
         SOAPClient client = getClient()
         def response = client.send(
-                SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
+                SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelser",
         ) {
             envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
                     'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
@@ -32,9 +32,10 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 "web:OpretAnmodningOmBemyndigelseRequest" {
                     "BemyndigedeCvr"(2)
                     "BemyndigedeCpr"(1)
-                    "BemyndigendeCpr"(3)
-                    "ArbejdsfunktionId"(1)
-                    "RettighedId"(1)
+                    "BemyndigendeCpr"(2006271866)
+                    "Arbejdsfunktion"("Laege")
+                    "Rettighed"("R01")
+                    "System"("Trifork test system")
                 }
             }
         }
@@ -46,7 +47,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
         SOAPClient client = getClient()
         try {
             client.send(
-                    SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
+                    SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelser",
             ) {
                 envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
                         'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
@@ -62,8 +63,9 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                     "web:OpretAnmodningOmBemyndigelseRequest" {
                         "BemyndigedeCvr"(2)
                         "BemyndigendeCpr"(3)
-                        "ArbejdsfunktionId"(1)
-                        "RettighedId"(1)
+                        "Arbejdsfunktion"("Laege")
+                        "Rettighed"("R01")
+                        "System"("Trifork test system")
                     }
                 }
             }

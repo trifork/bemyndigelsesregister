@@ -13,6 +13,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.util.UUID;
 import java.util.jar.Manifest;
 
 @Service
@@ -107,5 +108,10 @@ public class SystemServiceDefault implements SystemService {
             throw new RuntimeException("Could not write to file=" + file.getAbsolutePath(), e);
         }
         return file;
+    }
+
+    @Override
+    public String createUUIDString() {
+        return UUID.randomUUID().toString();
     }
 }

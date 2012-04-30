@@ -10,4 +10,9 @@ public class RettighedDaoEbean extends SupportDao<Rettighed> implements Rettighe
     public RettighedDaoEbean() {
         super(Rettighed.class);
     }
+
+    @Override
+    public Rettighed findByRettighedskode(String rettighedskode) {
+        return query().where().eq("rettighedskode", rettighedskode).findUnique();
+    }
 }

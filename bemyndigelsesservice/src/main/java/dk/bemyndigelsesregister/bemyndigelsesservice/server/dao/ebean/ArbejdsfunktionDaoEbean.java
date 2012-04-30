@@ -18,4 +18,8 @@ public class ArbejdsfunktionDaoEbean extends SupportDao<Arbejdsfunktion> impleme
         return query().where().eq("domaene", domaene).findList();
     }
 
+    @Override
+    public Arbejdsfunktion findByArbejdsfunktion(String arbejdsfunktion) {
+        return query().where().eq("arbejdsfunktion", arbejdsfunktion).findUnique();
+    }
 }
