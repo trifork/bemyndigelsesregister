@@ -99,7 +99,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
         return new SoapEnvelopeLoggingInterceptor();
     }
 
-    //@Bean
+    @Bean
     public EndpointInterceptor payloadValidationEndpointInterceptor() {
         final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
         interceptor.setSchemas(new Resource[]{

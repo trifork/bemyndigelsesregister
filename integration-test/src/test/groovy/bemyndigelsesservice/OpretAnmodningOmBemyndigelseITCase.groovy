@@ -8,6 +8,7 @@ import shared.WebServiceSupport
 import static org.junit.Assert.*
 import sosi.SOSIUtil
 import org.w3c.dom.NodeList
+import wslite.soap.SOAPFaultException
 
 class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
 
@@ -29,8 +30,8 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
             }
             body {
                 "web:opretAnmodningOmBemyndigelseRequest" {
-                    bemyndigedeCpr(1)
                     bemyndigedeCvr(2)
+                    bemyndigedeCpr(1)
                     bemyndigendeCpr(3)
                     arbejdsfunktionId(1)
                     rettighedId(1)
@@ -38,5 +39,37 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
             }
         }
         assertFalse response.hasFault()
+    }
+
+    @Test
+    public void willRequireBemyndigedeCpr() {
+        SOAPClient client = getClient()
+        try {
+            def response = client.send(
+                    SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelse",
+            ) {
+                envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
+                        'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
+                header {
+                    NodeList header = SOSIUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
+                    for (int i = 0; i < header.item(0).childNodes.length; i++) {
+                        String headerItem = header.item(0).childNodes.item(i) as String
+                        assert headerItem
+                        mkp.yieldUnescaped headerItem.substring(headerItem.indexOf("?>") + 2)
+                    }
+                }
+                body {
+                    "web:opretAnmodningOmBemyndigelseRequest" {
+                        bemyndigedeCvr(2)
+                        bemyndigendeCpr(3)
+                        arbejdsfunktionId(1)
+                        rettighedId(1)
+                    }
+                }
+            }
+            fail("No Exception was thrown")
+        } catch (SOAPFaultException e) {
+            assertEquals "Validation error", e.fault.':faultstring'.text()
+        }
     }
 }
