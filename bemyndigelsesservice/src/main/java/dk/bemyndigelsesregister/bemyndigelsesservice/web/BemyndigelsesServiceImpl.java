@@ -78,7 +78,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(kode);
 
             DateTime validTo = bemyndigelse.getGyldigTil();
-            if (validTo == null || validTo.isAfter(now)) {
+            if (validTo.isAfter(now)) {
                 logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelseDao.save(bemyndigelse);

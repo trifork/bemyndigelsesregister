@@ -20,6 +20,8 @@ public class BemyndigelsesServiceImplTest {
     SystemService systemService = mock(SystemService.class);
     SoapHeader soapHeader = mock(SoapHeader.class);
 
+    private final DateTime now = new DateTime();
+
     @Before
     public void setUp() throws Exception {
         service.bemyndigelseDao = bemyndigelseDao;
@@ -28,10 +30,10 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void willDeleteBemyndigelse() throws Exception {
-        DateTime now = new DateTime();
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
             setId(1l);
             setKode("TestKode1");
+            setGyldigTil(now.plusYears(1));
         }};
 
         when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
@@ -48,7 +50,6 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void willNotDeleteBemyndigelseWithPastGyldigTil() throws Exception {
-        final DateTime now = new DateTime();
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
             setId(1l);
             setKode("TestKode1");
