@@ -5,11 +5,15 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretAnmodningOmBemyndigelseResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import org.apache.commons.collections15.CollectionUtils;
+import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.oxm.Unmarshaller;
@@ -22,6 +26,8 @@ import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Repository("bemyndigelsesService")
@@ -69,6 +75,30 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         bemyndigelseDao.save(bemyndigelse);
         return new OpretAnmodningOmBemyndigelseResponse();
+    }
+
+    public HentBemyndigelserResponse hentBemyndigelser(HentBemyndigelserRequest request) {
+        Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
+        if (request.getBemyndigende() != null) {
+            foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigende());
+        }
+        else if (request.getBemyndigede() != null) {
+            foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigede());
+        }
+
+        final Collection<Bemyndigelse> finalFoundBemyndigelser = foundBemyndigelser;
+
+        return new HentBemyndigelserResponse() {{
+            setBemyndigelser(CollectionUtils.collect(
+                    finalFoundBemyndigelser,
+                    new Transformer<Bemyndigelse, String>() {
+                        @Override
+                        public String transform(Bemyndigelse bemyndigelse) {
+                            return bemyndigelse.getKode();
+                        }
+                    }
+            ));
+        }};
     }
 
     @Override

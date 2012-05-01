@@ -3,8 +3,10 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.hamcrest.Description;
@@ -16,6 +18,7 @@ import org.springframework.ws.soap.SoapHeader;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
+import static org.junit.internal.matchers.IsCollectionContaining.*;
 import static org.mockito.Mockito.*;
 
 public class BemyndigelsesServiceImplTest {
@@ -85,6 +88,36 @@ public class BemyndigelsesServiceImplTest {
             @Override
             public void describeTo(Description description) { }
         }));
+    }
+
+    @Test
+    public void canGetBemyndigelserByBemyndigende() throws Exception {
+        final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setKode("Bem1");
+        }};
+        when(bemyndigelseDao.findByBemyndigendeCpr("Bemyndigende")).thenReturn(asList(bemyndigelse));
+
+        final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
+            setBemyndigende("Bemyndigende");
+        }};
+        HentBemyndigelserResponse response = service.hentBemyndigelser(request);
+
+        assertThat(response.getBemyndigelser(), hasItem("Bem1"));
+    }
+
+    @Test
+    public void canGetBemyndigelserByBemyndigede() throws Exception {
+        final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setKode("Bem1");
+        }};
+        when(bemyndigelseDao.findByBemyndigedeCpr("Bemyndigede")).thenReturn(asList(bemyndigelse));
+
+        final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
+            setBemyndigede("Bemyndigede");
+        }};
+        HentBemyndigelserResponse response = service.hentBemyndigelser(request);
+
+        assertThat(response.getBemyndigelser(), hasItem("Bem1"));
     }
 
     @Test
