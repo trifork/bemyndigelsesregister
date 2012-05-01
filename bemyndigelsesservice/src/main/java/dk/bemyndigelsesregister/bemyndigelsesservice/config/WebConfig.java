@@ -1,11 +1,13 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
@@ -30,8 +32,14 @@ import java.util.HashMap;
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
 @ImportResource({"classpath:/dk/trifork/dgws/dgws-protection.xml"})
 public class WebConfig extends WebMvcConfigurationSupport {
+    private static Logger logger = Logger.getLogger(WebConfig.class);
     @Inject
     ApplicationRootConfig applicationRootConfig;
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //TODO: add *.xsd mapping, http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/mvc.html#mvc-config-static-resources
+    }
 
     @Bean
     public WsdlDefinition serviceDefinition() {
