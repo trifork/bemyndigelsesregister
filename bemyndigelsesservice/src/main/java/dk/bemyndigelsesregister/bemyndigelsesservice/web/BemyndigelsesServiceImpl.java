@@ -5,11 +5,8 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
@@ -119,13 +116,17 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }};
     }
 
-    public OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(final OpretGodkendtBemyndigelseRequest request) {
+    @Override
+    @Protected(whitelist = "BemyndigelsesService.opretGodkendtBemyndigelse")
+    @Transactional
+    public @ResponsePayload OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
+            @RequestPayload final OpretGodkendtBemyndigelseRequest request) {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
             setBemyndigendeCpr(request.getBemyndigende());
             setBemyndigedeCpr(request.getBemyndigede());
             setBemyndigedeCvr(request.getBemyndigedeCvr());
             setLinkedSystem(linkedSystemDao.findBySystem(request.getSystem()));
-            setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(request.getArbejdsFunktion()));
+            setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(request.getArbejdsfunktion()));
             setRettighed(rettighedDao.findByRettighedskode(request.getRettighedskode()));
 
             setKode(systemService.createUUIDString());

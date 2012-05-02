@@ -1,11 +1,26 @@
-package dk.bemyndigelsesregister.bemyndigelsesservice.web;
+package dk.bemyndigelsesregister.bemyndigelsesservice.web.request;
 
+import javax.xml.bind.annotation.*;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "OpretGodkendtBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class OpretGodkendtBemyndigelseRequest {
+    @XmlElement(name = "Bemyndigende", required = true)
     private String bemyndigende;
+
+    @XmlElement(name = "Bemyndigene", required = true)
     private String bemyndigede;
+
+    @XmlElement(name = "BemyndigedeCVR", required = true)
     private String bemyndigedeCvr;
+
+    @XmlElement(name = "System", required = true)
     private String system;
-    private String arbejdsFunktion;
+
+    @XmlElement(name = "arbejdsfunktion", required = true)
+    private String arbejdsfunktion;
+
+    @XmlElement(name = "rettighedskode", required = true)
     private String rettighedskode;
 
 //<editor-fold desc="GettersAndSetters">
@@ -42,12 +57,12 @@ public class OpretGodkendtBemyndigelseRequest {
         this.system = system;
     }
 
-    public String getArbejdsFunktion() {
-        return arbejdsFunktion;
+    public String getArbejdsfunktion() {
+        return arbejdsfunktion;
     }
 
-    public void setArbejdsFunktion(String arbejdsFunktion) {
-        this.arbejdsFunktion = arbejdsFunktion;
+    public void setArbejdsfunktion(String arbejdsfunktion) {
+        this.arbejdsfunktion = arbejdsfunktion;
     }
 
     public String getRettighedskode() {

@@ -1,9 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.*;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -26,6 +23,12 @@ public interface BemyndigelsesService {
     @ResponsePayload
     GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader);
+
+    @PayloadRoot(localPart = "OpretGodkendtBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
+    @Action("http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretGodkendtBemyndigelse")
+    @ResponsePayload
+    OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
+            @RequestPayload OpretGodkendtBemyndigelseRequest request);
 
     @PayloadRoot(localPart = "SletBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
     @Action("http://web.bemyndigelsesservice.bemyndigelsesregister.dk/sletBemyndigelser")
