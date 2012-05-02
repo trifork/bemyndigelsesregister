@@ -5,6 +5,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
@@ -75,7 +76,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         return new OpretAnmodningOmBemyndigelseResponse();
     }
 
-    public GodkendBemyndigelseResponse godkendBemyndigelse(GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
+    @Override
+    @Protected(whitelist = "BemyndigelsesService.godkendBemyndigelse")
+    @Transactional
+    public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
+            @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
         final Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(request.getBemyndigelsesKode());
 
         bemyndigelse.setGodkendelsesdato(systemService.getDateTime());

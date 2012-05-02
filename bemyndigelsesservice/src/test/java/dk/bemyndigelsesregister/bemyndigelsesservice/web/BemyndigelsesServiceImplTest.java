@@ -6,7 +6,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.GodkendBemyndigelseRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.GodkendBemyndigelseResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;

@@ -1,11 +1,10 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretAnmodningOmBemyndigelseResponse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.*;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -22,13 +21,19 @@ public interface BemyndigelsesService {
     OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelser(
             @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader);
 
+    @PayloadRoot(localPart = "GodkendBemyndigelserRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
+    @Action("http://web.bemyndigelsesservice.bemyndigelsesregister.dk/godkendBemyndigelser")
+    @ResponsePayload
+    GodkendBemyndigelseResponse godkendBemyndigelse(
+            @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader);
+
     @PayloadRoot(localPart = "SletBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
     @Action("http://web.bemyndigelsesservice.bemyndigelsesregister.dk/sletBemyndigelser")
     @ResponsePayload
     SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader);
 
-    @PayloadRoot(localPart = "HentBemyndigelerRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
+    @PayloadRoot(localPart = "HentBemyndigelserRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
     @Action("http://web.bemyndigelsesservice.bemyndigelsesregister.dk/hentBemyndigelser")
     @ResponsePayload
     HentBemyndigelserResponse hentBemyndigelser(
