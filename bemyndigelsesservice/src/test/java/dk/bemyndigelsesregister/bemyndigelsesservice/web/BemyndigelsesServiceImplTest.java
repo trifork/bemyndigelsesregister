@@ -6,6 +6,8 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.GodkendBemyndigelseRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.GodkendBemyndigelseResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import dk.bemyndigelsesregister.shared.service.SystemService;
@@ -88,6 +90,26 @@ public class BemyndigelsesServiceImplTest {
             @Override
             public void describeTo(Description description) { }
         }));
+    }
+
+    @Test
+    public void canApproveBemyndigelse() throws Exception {
+        final GodkendBemyndigelseRequest request = new GodkendBemyndigelseRequest() {{
+            setBemyndigelsesKode("Kode 1");
+        }};
+        final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setKode("Kode 1");
+        }};
+        final DateTime now = new DateTime();
+
+        when(bemyndigelseDao.findByKode("Kode 1")).thenReturn(bemyndigelse);
+        when(systemService.getDateTime()).thenReturn(now);
+
+        final GodkendBemyndigelseResponse response = service.godkendBemyndigelse(request, soapHeader);
+
+        assertEquals("Kode 1", response.getGodkendtBemyndigelsesKode());
+        assertEquals(now, bemyndigelse.getGodkendelsesdato());
+        verify(bemyndigelseDao).save(bemyndigelse);
     }
 
     @Test

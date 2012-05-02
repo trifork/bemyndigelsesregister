@@ -1,7 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretAnmodningOmBemyndigelseResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
