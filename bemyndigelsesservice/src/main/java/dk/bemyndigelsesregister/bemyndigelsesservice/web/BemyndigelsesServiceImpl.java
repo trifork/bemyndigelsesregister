@@ -5,12 +5,11 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretAnmodningOmBemyndigelseResponse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
@@ -77,7 +76,26 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         return new OpretAnmodningOmBemyndigelseResponse();
     }
 
-    public HentBemyndigelserResponse hentBemyndigelser(HentBemyndigelserRequest request) {
+    @Override
+    @Protected(whitelist = "BemyndigelsesService.godkendBemyndigelse")
+    @Transactional
+    public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
+            @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
+        final Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(request.getBemyndigelsesKode());
+
+        bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
+
+        bemyndigelseDao.save(bemyndigelse);
+
+        final GodkendBemyndigelseResponse response = new GodkendBemyndigelseResponse();
+        response.setGodkendtBemyndigelsesKode(bemyndigelse.getKode());
+        return response;
+    }
+
+    @Override
+    @Protected(whitelist = "BemyndigelsesService.hentBemyndigelser")
+    public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
+            @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
         if (request.getBemyndigende() != null) {
             foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigende());

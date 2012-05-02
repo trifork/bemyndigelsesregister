@@ -1,7 +1,13 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web.request;
 
+import javax.xml.bind.annotation.*;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "HentBemyndigelserRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class HentBemyndigelserRequest {
+    @XmlElement(name = "Bemyndigende", required = true)
     protected String bemyndigende;
+    @XmlElement(name = "Bemyndigede", required = true)
     protected String bemyndigede;
 
 //<editor-fold desc="GettersAndSetters">
