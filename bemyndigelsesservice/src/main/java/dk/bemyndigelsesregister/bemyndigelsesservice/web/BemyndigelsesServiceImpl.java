@@ -119,6 +119,25 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }};
     }
 
+    public OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(final OpretGodkendtBemyndigelseRequest request) {
+        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setBemyndigendeCpr(request.getBemyndigende());
+            setBemyndigedeCpr(request.getBemyndigede());
+            setBemyndigedeCvr(request.getBemyndigedeCvr());
+            setLinkedSystem(linkedSystemDao.findBySystem(request.getSystem()));
+            setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(request.getArbejdsFunktion()));
+            setRettighed(rettighedDao.findByRettighedskode(request.getRettighedskode()));
+
+            setKode(systemService.createUUIDString());
+            setGodkendelsesdato(systemService.getDateTime());
+        }};
+
+        final OpretGodkendtBemyndigelseResponse response = new OpretGodkendtBemyndigelseResponse();
+        response.setGodkendtBemyndigelsesKode(bemyndigelse.getKode());
+        bemyndigelseDao.save(bemyndigelse);
+        return response;
+    }
+
     @Override
     @Protected(whitelist = "BemyndigelsesService.sletBemyndigelser")
     @Transactional

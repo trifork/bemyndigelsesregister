@@ -9,6 +9,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigels
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.GodkendBemyndigelseResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretGodkendtBemyndigelseResponse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.hamcrest.Description;
@@ -110,6 +111,51 @@ public class BemyndigelsesServiceImplTest {
         assertEquals("Kode 1", response.getGodkendtBemyndigelsesKode());
         assertEquals(now, bemyndigelse.getGodkendelsesdato());
         verify(bemyndigelseDao).save(bemyndigelse);
+    }
+
+    @Test
+    public void canCreateApprovedBemyndigelse() throws Exception {
+        final DateTime now = new DateTime();
+        final OpretGodkendtBemyndigelseRequest request = new OpretGodkendtBemyndigelseRequest() {{
+            setBemyndigende("bemyndigendeCpr");
+            setBemyndigede("bemyndigedeCpr");
+            setBemyndigedeCvr("bemyndigedeCvr");
+            setSystem("system");
+            setArbejdsFunktion("arbejdsfunktion");
+            setRettighedskode("rettighed");
+        }};
+        final LinkedSystem system = new LinkedSystem();
+        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
+        final Rettighed rettighed = new Rettighed();
+
+        when(systemService.createUUIDString()).thenReturn("UUID kode");
+        when(systemService.getDateTime()).thenReturn(now);
+        when(linkedSystemDao.findBySystem("system")).thenReturn(system);
+        when(arbejdsfunktionDao.findByArbejdsfunktion("arbejdsfunktion")).thenReturn(arbejdsfunktion);
+        when(rettighedDao.findByRettighedskode("rettighed")).thenReturn(rettighed);
+
+        final OpretGodkendtBemyndigelseResponse response = service.opretGodkendtBemyndigelse(request);
+
+        assertEquals("UUID kode", response.getGodkendtBemyndigelsesKode());
+        verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
+            @Override
+            public boolean matchesSafely(Bemyndigelse item) {
+                return allTrue(
+                        item.getBemyndigendeCpr().equals("bemyndigendeCpr"),
+                        item.getBemyndigedeCpr().equals("bemyndigedeCpr"),
+                        item.getBemyndigedeCvr().equals("bemyndigedeCvr"),
+                        item.getKode().equals("UUID kode"),
+                        item.getGodkendelsesdato() == now,
+                        item.getLinkedSystem() == system,
+                        item.getArbejdsfunktion() == arbejdsfunktion,
+                        item.getRettighed() == rettighed
+                        );
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        }));
     }
 
     @Test
