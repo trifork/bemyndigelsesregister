@@ -100,7 +100,7 @@ public class BemyndigelsesServiceImplTest {
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
             setBemyndigende("Bemyndigende");
         }};
-        HentBemyndigelserResponse response = service.hentBemyndigelser(request);
+        HentBemyndigelserResponse response = service.hentBemyndigelser(request, soapHeader);
 
         assertThat(response.getBemyndigelser(), hasItem("Bem1"));
     }
@@ -115,7 +115,7 @@ public class BemyndigelsesServiceImplTest {
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
             setBemyndigede("Bemyndigede");
         }};
-        HentBemyndigelserResponse response = service.hentBemyndigelser(request);
+        HentBemyndigelserResponse response = service.hentBemyndigelser(request, soapHeader);
 
         assertThat(response.getBemyndigelser(), hasItem("Bem1"));
     }

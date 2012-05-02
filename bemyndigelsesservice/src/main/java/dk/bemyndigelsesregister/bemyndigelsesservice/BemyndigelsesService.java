@@ -25,4 +25,10 @@ public interface BemyndigelsesService {
     @ResponsePayload
     SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader);
+
+    @PayloadRoot(localPart = "HentBemyndigelerRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
+    @Action("http://web.bemyndigelsesservice.bemyndigelsesregister.dk/hentBemyndigelser")
+    @ResponsePayload
+    HentBemyndigelserResponse hentBemyndigelser(
+            @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader);
 }

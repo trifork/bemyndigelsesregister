@@ -78,6 +78,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     public HentBemyndigelserResponse hentBemyndigelser(HentBemyndigelserRequest request) {
+    @Override
+    @Protected(whitelist = "BemyndigelsesService.hentBemyndigelser")
+    public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
+            @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
         if (request.getBemyndigende() != null) {
             foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigende());
