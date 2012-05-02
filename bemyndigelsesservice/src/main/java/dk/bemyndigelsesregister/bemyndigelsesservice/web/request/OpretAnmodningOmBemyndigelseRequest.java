@@ -1,21 +1,21 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web.request;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "OpretAnmodningOmBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class OpretAnmodningOmBemyndigelseRequest {
 
     @XmlElement(name = "BemyndigedeCvr", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/", name = "CVRnumberIdentifierType")
     protected String bemyndigedeCvr;
 
     @XmlElement(name = "BemyndigedeCpr", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/", name = "PersonCivilRegistrationIdentifier")
     protected String bemyndigedeCpr;
 
     @XmlElement(name = "BemyndigendeCpr", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/", name = "PersonCivilRegistrationIdentifier")
     protected String bemyndigendeCpr;
 
     @XmlElement(name = "Arbejdsfunktion", required = true)

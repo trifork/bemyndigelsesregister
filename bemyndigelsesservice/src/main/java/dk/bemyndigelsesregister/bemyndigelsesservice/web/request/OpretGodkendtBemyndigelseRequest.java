@@ -6,12 +6,15 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "OpretGodkendtBemyndigelseRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class OpretGodkendtBemyndigelseRequest {
     @XmlElement(name = "Bemyndigende", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/", name = "PersonCivilRegistrationIdentifier")
     private String bemyndigende;
 
-    @XmlElement(name = "Bemyndigene", required = true)
+    @XmlElement(name = "Bemyndigede", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/", name = "PersonCivilRegistrationIdentifier")
     private String bemyndigede;
 
     @XmlElement(name = "BemyndigedeCVR", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/", name = "CVRnumberIdentifierType")
     private String bemyndigedeCvr;
 
     @XmlElement(name = "System", required = true)

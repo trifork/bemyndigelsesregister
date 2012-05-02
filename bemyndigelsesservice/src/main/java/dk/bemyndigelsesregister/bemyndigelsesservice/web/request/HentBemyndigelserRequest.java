@@ -6,8 +6,10 @@ import javax.xml.bind.annotation.*;
 @XmlRootElement(name = "HentBemyndigelserRequest", namespace = "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/")
 public class HentBemyndigelserRequest {
     @XmlElement(name = "Bemyndigende", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/", name = "PersonCivilRegistrationIdentifier")
     protected String bemyndigende;
     @XmlElement(name = "Bemyndigede", required = true)
+    @XmlSchemaType(namespace = "http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/", name = "PersonCivilRegistrationIdentifier")
     protected String bemyndigede;
 
 //<editor-fold desc="GettersAndSetters">
