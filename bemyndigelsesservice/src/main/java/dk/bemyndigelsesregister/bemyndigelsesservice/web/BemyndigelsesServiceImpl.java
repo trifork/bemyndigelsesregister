@@ -5,12 +5,8 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.GodkendBemyndigelseRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.HentBemyndigelserRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.OpretAnmodningOmBemyndigelseRequest;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.SletBemyndigelserRequest;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.nsi.bemyndigelse._2012._05._01.*;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
@@ -24,10 +20,8 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Repository("bemyndigelsesService")
 @Endpoint
@@ -66,7 +60,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         bemyndigelse.setStatus(statusTypeDao.get(1));
         bemyndigelse.setRettighed(rettighedDao.findByRettighedskode(request.getRettighed()));
         bemyndigelse.setKode(systemService.createUUIDString());
-        bemyndigelse.setLinkedSystem(linkedSystemDao.findBySystem(request.getLinkedSystem()));
+        bemyndigelse.setLinkedSystem(linkedSystemDao.findBySystem(request.getSystem()));
         final DateTime now = systemService.getDateTime();
         bemyndigelse.setGyldigFra(now);
         bemyndigelse.setGyldigTil(now.plusYears(99));
@@ -107,7 +101,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         final Collection<Bemyndigelse> finalFoundBemyndigelser = foundBemyndigelser;
 
         return new HentBemyndigelserResponse() {{
-            setBemyndigelser(CollectionUtils.collect(
+            //TODO: Replace with real xsd type
+            getBemyndigelser().addAll(CollectionUtils.collect(
                     finalFoundBemyndigelser,
                     new Transformer<Bemyndigelse, String>() {
                         @Override
@@ -120,6 +115,29 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
+    @Protected(whitelist = "BemyndigelsesService.opretGodkendtBemyndigelse")
+    @Transactional
+    public @ResponsePayload OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
+            @RequestPayload final OpretGodkendtBemyndigelseRequest request) {
+        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setBemyndigendeCpr(request.getBemyndigende());
+            setBemyndigedeCpr(request.getBemyndigede());
+            setBemyndigedeCvr(request.getBemyndigedeCVR());
+            setLinkedSystem(linkedSystemDao.findBySystem(request.getSystem()));
+            setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(request.getArbejdsfunktion()));
+            setRettighed(rettighedDao.findByRettighedskode(request.getRettighedskode()));
+
+            setKode(systemService.createUUIDString());
+            setGodkendelsesdato(systemService.getDateTime());
+        }};
+
+        final OpretGodkendtBemyndigelseResponse response = new OpretGodkendtBemyndigelseResponse();
+        response.setGodkendtBemyndigelsesKode(bemyndigelse.getKode());
+        bemyndigelseDao.save(bemyndigelse);
+        return response;
+    }
+
+    @Override
     @Protected(whitelist = "BemyndigelsesService.sletBemyndigelser")
     @Transactional
     public @ResponsePayload SletBemyndigelserResponse sletBemyndigelser(
@@ -127,9 +145,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         String cpr = securityHelper.getCpr(soapHeader);
 
-        List<String> deletedBemyndigelser = new ArrayList<String>();
-
         DateTime now = systemService.getDateTime();
+
+        SletBemyndigelserResponse response = new SletBemyndigelserResponse();
 
         for (String kode : request.getBemyndigelsesKoder()) {
             Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(kode);
@@ -144,15 +162,13 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelseDao.save(bemyndigelse);
-                deletedBemyndigelser.add(bemyndigelse.getKode());
+                response.getSlettedeBemyndigelsesKoder().add(bemyndigelse.getKode());
             }
             else {
                 logger.info("Bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
         }
 
-        SletBemyndigelserResponse response = new SletBemyndigelserResponse();
-        response.setSlettedeBemyndigelsesKoder(deletedBemyndigelser);
         return response;
     }
 }

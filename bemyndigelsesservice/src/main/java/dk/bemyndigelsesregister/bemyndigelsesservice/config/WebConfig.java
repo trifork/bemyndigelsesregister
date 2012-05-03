@@ -32,7 +32,6 @@ import java.util.HashMap;
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
 @ImportResource({"classpath:/dk/trifork/dgws/dgws-protection.xml"})
 public class WebConfig extends WebMvcConfigurationSupport {
-    private static Logger logger = Logger.getLogger(WebConfig.class);
     @Inject
     ApplicationRootConfig applicationRootConfig;
 
@@ -52,7 +51,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public SimpleXsdSchema schema1XsdSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("schema1.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("schema/bemyndigelsesservice.xsd"));
     }
 
     @Bean
@@ -111,7 +110,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public EndpointInterceptor payloadValidationEndpointInterceptor() {
         final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
         interceptor.setSchemas(new Resource[]{
-                new ClassPathResource("schema1.xsd")
+                new ClassPathResource("schema/bemyndigelsesservice.xsd"),
         });
         interceptor.setValidateRequest(true);
         interceptor.setValidateResponse(false);

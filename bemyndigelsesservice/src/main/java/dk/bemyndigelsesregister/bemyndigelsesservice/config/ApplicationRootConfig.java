@@ -106,13 +106,14 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     public Jaxb2Marshaller serviceMarshaller() {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
         bean.setContextPaths(
-                "dk.bemyndigelsesregister.bemyndigelsesservice.web.request",
-                "dk.bemyndigelsesregister.bemyndigelsesservice.web.response",
+                "dk.nsi.bemyndigelse._2012._05._01",
                 "dk.medcom.dgws._2006._04.dgws_1_0",
                 "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_secext_1_0",
                 "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_utility_1_0",
                 "org.w3._2000._09.xmldsig",
-                "oasis.names.tc.saml._2_0.assertion"
+                "oasis.names.tc.saml._2_0.assertion",
+                "dk.oio.rep.cpr_dk.xml.schemas.core._2005._03._18",
+                "dk.oio.rep.cvr_dk.xml.schemas._2005._03._22"
         );
         return bean;
     }
