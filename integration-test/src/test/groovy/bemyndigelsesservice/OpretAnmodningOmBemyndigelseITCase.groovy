@@ -16,9 +16,9 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
     public void canAccessMethod() {
         SOAPClient client = getClient()
         def response = client.send(
-                SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelser",
+                SOAPAction: "http://nsi.dk/bemyndigelse/2012/05/01/opretAnmodningOmBemyndigelser",
         ) {
-            envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
+            envelopeAttributes 'xmlns:web': 'http://nsi.dk/bemyndigelse/2012/05/01/',
                     'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
             header {
                 NodeList header = SOSIUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
@@ -30,9 +30,9 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
             }
             body {
                 "web:OpretAnmodningOmBemyndigelseRequest" {
-                    "BemyndigedeCvr"(2)
-                    "BemyndigedeCpr"(1)
-                    "BemyndigendeCpr"(2006271866)
+                    "BemyndigedeCvr"('20000000')
+                    "BemyndigedeCpr"('1010101010')
+                    "BemyndigendeCpr"('2006271866')
                     "Arbejdsfunktion"("Laege")
                     "Rettighed"("R01")
                     "System"("Trifork test system")
@@ -47,9 +47,9 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
         SOAPClient client = getClient()
         try {
             client.send(
-                    SOAPAction: "http://web.bemyndigelsesservice.bemyndigelsesregister.dk/opretAnmodningOmBemyndigelser",
+                    SOAPAction: "http://nsi.dk/bemyndigelse/2012/05/01/opretAnmodningOmBemyndigelser",
             ) {
-                envelopeAttributes 'xmlns:web': 'http://web.bemyndigelsesservice.bemyndigelsesregister.dk/',
+                envelopeAttributes 'xmlns:web': 'http://nsi.dk/bemyndigelse/2012/05/01/',
                         'xmlns:sosi':"http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
                 header {
                     NodeList header = SOSIUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
@@ -61,8 +61,8 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 }
                 body {
                     "web:OpretAnmodningOmBemyndigelseRequest" {
-                        "BemyndigedeCvr"(2)
-                        "BemyndigendeCpr"(3)
+                        "BemyndigedeCvr"('20000000')
+                        "BemyndigendeCpr"('2006271866')
                         "Arbejdsfunktion"("Laege")
                         "Rettighed"("R01")
                         "System"("Trifork test system")

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://nsi.dk/bemyndigelse/2012/05/01/"
+           xmlns:cpr="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/"
+           xmlns:cvr="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" schemaLocation="CPR_PersonCivilRegistrationIdentifier.xsd"/>
+
+    <xs:import namespace="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/" schemaLocation="CVR_CVRnumberIdentifier.xsd"/>
+
+    <xs:element name="GodkendBemyndigelseRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="BemyndigelsesKode" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GodkendBemyndigelseResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="GodkendtBemyndigelsesKode" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentBemyndigelserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentBemyndigelserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigelser" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretAnmodningOmBemyndigelseRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
+                <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="Arbejdsfunktion" type="xs:string"/>
+                <xs:element name="Rettighed" type="xs:string"/>
+                <xs:element name="System" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretAnmodningOmBemyndigelseResponse">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretGodkendtBemyndigelseRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="BemyndigedeCVR" type="cvr:CVRnumberIdentifierType"/>
+                <xs:element name="System" type="xs:string"/>
+                <xs:element name="arbejdsfunktion" type="xs:string"/>
+                <xs:element name="rettighedskode" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretGodkendtBemyndigelseResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="GodkendtBemyndigelsesKode" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SletBemyndigelserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="BemyndigelsesKoder" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SletBemyndigelserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="SlettedeBemyndigelsesKoder" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+

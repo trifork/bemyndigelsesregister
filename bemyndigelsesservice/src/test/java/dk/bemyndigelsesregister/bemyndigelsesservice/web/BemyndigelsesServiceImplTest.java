@@ -3,12 +3,8 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.request.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.GodkendBemyndigelseResponse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.HentBemyndigelserResponse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.OpretGodkendtBemyndigelseResponse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.web.response.SletBemyndigelserResponse;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.nsi.bemyndigelse._2012._05._01.*;
 import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -66,7 +62,7 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("BemyndigendeCpr");
             setArbejdsfunktion("Arbejdsfunktion");
             setRettighed("Rettighedskode");
-            setLinkedSystem("SystemKode");
+            setSystem("SystemKode");
         }};
 
         service.opretAnmodningOmBemyndigelser(request, soapHeader);
@@ -116,7 +112,7 @@ public class BemyndigelsesServiceImplTest {
         final OpretGodkendtBemyndigelseRequest request = new OpretGodkendtBemyndigelseRequest() {{
             setBemyndigende("bemyndigendeCpr");
             setBemyndigede("bemyndigedeCpr");
-            setBemyndigedeCvr("bemyndigedeCvr");
+            setBemyndigedeCVR("bemyndigedeCvr");
             setSystem("system");
             setArbejdsfunktion("arbejdsfunktion");
             setRettighedskode("rettighed");
@@ -199,7 +195,7 @@ public class BemyndigelsesServiceImplTest {
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest();
-        request.setBemyndigelsesKoder(asList("TestKode1"));
+        request.getBemyndigelsesKoder().add("TestKode1");
         SletBemyndigelserResponse response = service.sletBemyndigelser(request, soapHeader);
 
         assertEquals("TestKode1", response.getSlettedeBemyndigelsesKoder().get(0));
@@ -221,7 +217,7 @@ public class BemyndigelsesServiceImplTest {
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest();
-        request.setBemyndigelsesKoder(asList("TestKode1"));
+        request.getBemyndigelsesKoder().add(("TestKode1"));
         SletBemyndigelserResponse response = service.sletBemyndigelser(request, soapHeader);
 
         assertEquals(0, response.getSlettedeBemyndigelsesKoder().size());
@@ -243,7 +239,7 @@ public class BemyndigelsesServiceImplTest {
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest();
-        request.setBemyndigelsesKoder(asList("TestKode1"));
+        request.getBemyndigelsesKoder().add("TestKode1");
         SletBemyndigelserResponse response = null;
         try {
             response = service.sletBemyndigelser(request, soapHeader);
