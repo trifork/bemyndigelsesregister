@@ -30,12 +30,14 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
             }
             body {
                 "web:OpretAnmodningOmBemyndigelseRequest" {
-                    "BemyndigedeCvr"('20000000')
-                    "BemyndigedeCpr"('1010101010')
-                    "BemyndigendeCpr"('2006271866')
-                    "Arbejdsfunktion"("Laege")
-                    "Rettighed"("R01")
-                    "System"("Trifork test system")
+                    "Anmodninger" {
+                        "BemyndigedeCvr"('20000000')
+                        "BemyndigedeCpr"('1010101010')
+                        "BemyndigendeCpr"('2006271866')
+                        "Arbejdsfunktion"("Laege")
+                        "Rettighed"("R01")
+                        "System"("Trifork test system")
+                    }
                 }
             }
         }
@@ -61,11 +63,13 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 }
                 body {
                     "web:OpretAnmodningOmBemyndigelseRequest" {
-                        "BemyndigedeCvr"('20000000')
-                        "BemyndigendeCpr"('2006271866')
-                        "Arbejdsfunktion"("Laege")
-                        "Rettighed"("R01")
-                        "System"("Trifork test system")
+                        "Anmodninger" {
+                            "BemyndigedeCvr"('20000000')
+                            "BemyndigendeCpr"('2006271866')
+                            "Arbejdsfunktion"("Laege")
+                            "Rettighed"("R01")
+                            "System"("Trifork test system")
+                        }
                     }
                 }
             }
