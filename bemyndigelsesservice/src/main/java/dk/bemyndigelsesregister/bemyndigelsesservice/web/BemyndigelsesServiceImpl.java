@@ -88,14 +88,23 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
-        final Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(request.getBemyndigelsesKode());
+        Collection<Bemyndigelse> bemyndigelser = bemyndigelseDao.findByKoder(request.getBemyndigelsesKoder());
 
-        bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
-
-        bemyndigelseDao.save(bemyndigelse);
+        for (Bemyndigelse bemyndigelse : bemyndigelser) {
+            bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
+            bemyndigelseDao.save(bemyndigelse);
+        }
 
         final GodkendBemyndigelseResponse response = new GodkendBemyndigelseResponse();
-        response.setGodkendtBemyndigelsesKode(bemyndigelse.getKode());
+        response.getBemyndigelser().addAll(CollectionUtils.collect(
+                bemyndigelser,
+                new Transformer<Bemyndigelse, dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
+                    @Override
+                    public dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse transform(Bemyndigelse bemyndigelse) {
+                        return toJaxbType(bemyndigelse);
+                    }
+                }
+        ));
         return response;
     }
 
@@ -126,7 +135,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }};
     }
 
-    private dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse toJaxbType(final Bemyndigelse bem) {
+    public static dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse toJaxbType(final Bemyndigelse bem) {
         return new dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse() {{
             setKode(bem.getKode());
             setBemyndigende(bem.getBemyndigendeCpr());

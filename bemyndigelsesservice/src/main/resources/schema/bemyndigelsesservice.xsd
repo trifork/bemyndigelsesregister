@@ -28,7 +28,7 @@
     <xs:element name="GodkendBemyndigelseRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="BemyndigelsesKode" type="xs:string"/>
+                <xs:element name="BemyndigelsesKoder" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -36,7 +36,7 @@
     <xs:element name="GodkendBemyndigelseResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="GodkendtBemyndigelsesKode" type="xs:string"/>
+                <xs:element name="Bemyndigelser" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

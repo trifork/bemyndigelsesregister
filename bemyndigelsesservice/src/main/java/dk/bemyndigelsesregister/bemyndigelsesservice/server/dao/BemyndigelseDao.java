@@ -20,4 +20,6 @@ public interface BemyndigelseDao {
     Collection<Bemyndigelse> findByBemyndigendeCpr(String bemyndigende);
 
     Collection<Bemyndigelse> findByBemyndigedeCpr(String bemyndigede);
+
+    Collection<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder);
 }

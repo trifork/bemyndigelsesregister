@@ -14,6 +14,7 @@ import org.junit.internal.matchers.TypeSafeMatcher;
 import org.springframework.ws.soap.SoapHeader;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 import static org.junit.internal.matchers.IsCollectionContaining.*;
 import static org.mockito.Mockito.*;
@@ -96,19 +97,18 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canApproveBemyndigelse() throws Exception {
         final GodkendBemyndigelseRequest request = new GodkendBemyndigelseRequest() {{
-            setBemyndigelsesKode("Kode 1");
+            getBemyndigelsesKoder().add("Kode 1");
         }};
-        final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setKode("Kode 1");
-        }};
+        final Bemyndigelse bemyndigelse = createBemyndigelse("Kode 1");
         final DateTime now = new DateTime();
 
-        when(bemyndigelseDao.findByKode("Kode 1")).thenReturn(bemyndigelse);
+        when(bemyndigelseDao.findByKoder(singletonList("Kode 1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
         final GodkendBemyndigelseResponse response = service.godkendBemyndigelse(request, soapHeader);
 
-        assertEquals("Kode 1", response.getGodkendtBemyndigelsesKode());
+        assertEquals(1, response.getBemyndigelser().size());
+        assertEquals("Kode 1", response.getBemyndigelser().get(0).getKode());
         assertEquals(now, bemyndigelse.getGodkendelsesdato());
         verify(bemyndigelseDao).save(bemyndigelse);
     }
