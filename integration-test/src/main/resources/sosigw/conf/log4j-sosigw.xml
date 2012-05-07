@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.out"/>
+      <param name="Threshold" value="WARN"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+      </layout>
+   </appender>
+
+   <!-- intended for debug logging -->
+   <appender name="SOSIGW_LOG" class="org.apache.log4j.RollingFileAppender">
+      <param name="File" value="${catalina.home}/logs/sosigw.log"/>
+      <param name="Append" value="true"/>
+      <param name="ImmediateFlush" value="true"/>
+      <param name="MaxFileSize" value="20MB"/>
+      <param name="MaxBackupIndex" value="5"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
+      </layout>        
+   </appender>
+
+  <category name="com.trifork.sosigw" additivity="true">
+      <priority value="INFO"/>
+  </category>
+
+  <category name="com.trifork.sosigw.cluster.intercom" additivity="true">
+      <priority value="INFO"/>
+  </category>
+
+<!--  Set to debug to get content of modified headers. lots of lines...  -->
+  <category name="com.trifork.sosigw.proxy.ProxyRequestHandler.content" additivity="false">
+      <priority value="WARN"/>
+  </category>
+
+  <category name="dk.sosi" additivity="true">
+      <priority value="INFO"/>
+  </category>
+   
+  <category name="org.apache.commons.httpclient" additivity="true">
+      <priority value="WARN"/>
+  </category>
+
+  <category name="org.apache.xml" additivity="true">
+      <priority value="INFO"/>
+  </category>
+
+  <category name="org.apache.xml.security.signature.Reference" additivity="true">
+      <priority value="WARN"/>
+  </category>
+
+   <root>
+      <priority value="WARN"/>
+      <appender-ref ref="SOSIGW_LOG"/>
+      <appender-ref ref="CONSOLE"/>
+   </root>
+
+</log4j:configuration>
+     

@@ -11,6 +11,13 @@
 
     <artifactId>integration-test</artifactId>
 
+    <repositories>
+        <repository>
+            <id>trifork-releases</id>
+            <url>https://nexus.trifork.com/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -88,6 +95,10 @@
                         <zipUrlInstaller>
                             <url>http://apache.mirrors.webname.dk/tomcat/tomcat-7/v7.0.26/bin/apache-tomcat-7.0.26.zip</url>
                         </zipUrlInstaller>
+                        <systemProperties>
+                            <!--Sadly sosigw doesn't read conf from ${catalina.base}/conf-->
+                            <sosigw.config>${project.basedir}/src/main/resources/sosigw/conf/sosigw-staticconf.properties</sosigw.config>
+                        </systemProperties>
                     </container>
                     <deployer>
                         <deployables>
@@ -101,12 +112,32 @@
                                 <pingURL>${functionaltest.urlprefix}/health</pingURL>
                                 <pingTimeout>20000</pingTimeout>
                             </deployable>
+                            <deployable>
+                                <groupId>com.trifork</groupId>
+                                <artifactId>sosigw</artifactId>
+                                <type>war</type>
+                                <properties>
+                                    <context>dbcp</context>
+                                </properties>
+                                <pingURL>http://localhost:${functionaltest.serverport}/dbcp/jsp/consolelogin.jsp</pingURL>
+                                <pingTimeout>200000</pingTimeout>
+                            </deployable>
                         </deployables>
                     </deployer>
                     <configuration>
                         <properties>
                             <cargo.servlet.port>${functionaltest.serverport}</cargo.servlet.port>
                         </properties>
+                        <configfiles>
+                            <configfile>
+                                <file>${project.basedir}/src/main/resources/sosigw/conf/log4j-sosigw.xml</file>
+                                <todir>conf</todir>
+                            </configfile>
+                            <configfile>
+                                <file>${project.basedir}/src/main/resources/sosigw/conf/sosigw-staticconf.properties</file>
+                                <todir>conf</todir>
+                            </configfile>
+                        </configfiles>
                     </configuration>
                 </configuration>
             </plugin>
@@ -118,6 +149,12 @@
             <groupId>dk.bemyndigelsesregister</groupId>
             <artifactId>bemyndigelsesservice</artifactId>
             <version>${project.parent.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>com.trifork</groupId>
+            <artifactId>sosigw</artifactId>
+            <version>1.1.5</version>
             <type>war</type>
         </dependency>
         <dependency>
