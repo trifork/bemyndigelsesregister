@@ -43,10 +43,10 @@
 
     <xs:element name="HentBemyndigelserRequest">
         <xs:complexType>
-            <xs:sequence>
+            <xs:choice>
                 <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
                 <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
-            </xs:sequence>
+            </xs:choice>
         </xs:complexType>
     </xs:element>
 
