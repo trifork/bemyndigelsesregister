@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
@@ -101,13 +102,24 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         final Collection<Bemyndigelse> finalFoundBemyndigelser = foundBemyndigelser;
 
         return new HentBemyndigelserResponse() {{
-            //TODO: Replace with real xsd type
             getBemyndigelser().addAll(CollectionUtils.collect(
                     finalFoundBemyndigelser,
-                    new Transformer<Bemyndigelse, String>() {
+                    new Transformer<Bemyndigelse, dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
                         @Override
-                        public String transform(Bemyndigelse bemyndigelse) {
-                            return bemyndigelse.getKode();
+                        public dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse transform(final Bemyndigelse bem) {
+                            return new dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse() {{
+                                setKode(bem.getKode());
+                                setBemyndigende(bem.getBemyndigendeCpr());
+                                setBemyndigede(bem.getBemyndigedeCpr());
+                                setBemyndigedeCvr(bem.getBemyndigedeCvr());
+                                setSystem(bem.getLinkedSystem().getSystem());
+                                setArbejdsfunktion(bem.getArbejdsfunktion().getArbejdsfunktion());
+                                setRettighedskode(bem.getRettighed().getRettighedskode());
+                                setStatus(bem.getStatus().getStatus());
+                                setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
+                                setGyldigFra(new XMLGregorianCalendarImpl(bem.getGyldigFra().toGregorianCalendar()));
+                                setGyldigTil(new XMLGregorianCalendarImpl(bem.getGyldigTil().toGregorianCalendar()));
+                            }};
                         }
                     }
             ));
