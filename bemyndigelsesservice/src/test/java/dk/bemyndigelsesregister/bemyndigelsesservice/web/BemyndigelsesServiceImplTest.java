@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
@@ -153,9 +154,7 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void canGetBemyndigelserByBemyndigende() throws Exception {
-        final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setKode("Bem1");
-        }};
+        final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1");
         when(bemyndigelseDao.findByBemyndigendeCpr("Bemyndigende")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -163,14 +162,47 @@ public class BemyndigelsesServiceImplTest {
         }};
         HentBemyndigelserResponse response = service.hentBemyndigelser(request, soapHeader);
 
-        assertThat(response.getBemyndigelser(), hasItem("Bem1"));
+        assertThat(response.getBemyndigelser(), hasItem(new TypeSafeMatcher<dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
+            @Override
+            public boolean matchesSafely(dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse item) {
+                return item.getKode().equals("Bem1");
+            }
+
+            @Override
+            public void describeTo(Description description) { }
+        }));
+    }
+
+    private Bemyndigelse createBemyndigelse(final String kode) {
+        return new Bemyndigelse() {{
+            setKode(kode);
+
+            final LinkedSystem system = new LinkedSystem();
+            system.setSystem("system1");
+            setLinkedSystem(system);
+
+            final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
+            arbejdsfunktion.setArbejdsfunktion("arbejdsfunktion1");
+            setArbejdsfunktion(arbejdsfunktion);
+
+            final Rettighed rettighed = new Rettighed();
+            rettighed.setRettighedskode("rettighed1");
+            setRettighed(rettighed);
+
+            final StatusType status = new StatusType();
+            status.setStatus("status1");
+            setStatus(status);
+
+            setGodkendelsesdato(now.minusDays(7));
+
+            setGyldigFra(now.minusDays(1));
+            setGyldigTil(now.plusDays(1));
+        }};
     }
 
     @Test
     public void canGetBemyndigelserByBemyndigede() throws Exception {
-        final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setKode("Bem1");
-        }};
+        final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1");
         when(bemyndigelseDao.findByBemyndigedeCpr("Bemyndigede")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -178,7 +210,16 @@ public class BemyndigelsesServiceImplTest {
         }};
         HentBemyndigelserResponse response = service.hentBemyndigelser(request, soapHeader);
 
-        assertThat(response.getBemyndigelser(), hasItem("Bem1"));
+        assertThat(response.getBemyndigelser(), hasItem(new TypeSafeMatcher<dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
+                    @Override
+                    public boolean matchesSafely(dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse item) {
+                        return item.getKode().equals("Bem1");
+                    }
+
+                    @Override
+                    public void describeTo(Description description) { }
+                }
+        ));
     }
 
     @Test
