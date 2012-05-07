@@ -59,14 +59,16 @@ public class BemyndigelsesServiceImplTest {
         when(systemService.getDateTime()).thenReturn(now);
 
         OpretAnmodningOmBemyndigelseRequest request = new OpretAnmodningOmBemyndigelseRequest() {{
-            setBemyndigedeCpr("BemyndigedeCpr");
-            setBemyndigendeCpr("BemyndigendeCpr");
-            setArbejdsfunktion("Arbejdsfunktion");
-            setRettighed("Rettighedskode");
-            setSystem("SystemKode");
+            getAnmodninger().add(new Anmodninger() {{
+                setBemyndigedeCpr("BemyndigedeCpr");
+                setBemyndigendeCpr("BemyndigendeCpr");
+                setArbejdsfunktion("Arbejdsfunktion");
+                setRettighed("Rettighedskode");
+                setSystem("SystemKode");
+            }});
         }};
 
-        service.opretAnmodningOmBemyndigelser(request, soapHeader);
+        final OpretAnmodningOmBemyndigelseResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
 
         verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
             @Override
@@ -85,6 +87,10 @@ public class BemyndigelsesServiceImplTest {
             @Override
             public void describeTo(Description description) { }
         }));
+
+
+        assertEquals(1, response.getBemyndigelser().size());
+        assertEquals(kode, response.getBemyndigelser().get(0).getKode());
     }
 
     @Test
