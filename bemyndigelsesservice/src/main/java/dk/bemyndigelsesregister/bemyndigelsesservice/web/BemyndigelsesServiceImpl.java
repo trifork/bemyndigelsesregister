@@ -150,7 +150,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Protected(whitelist = "BemyndigelsesService.opretGodkendtBemyndigelse")
     @Transactional
     public @ResponsePayload OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
-            @RequestPayload final OpretGodkendtBemyndigelseRequest request) {
+            @RequestPayload final OpretGodkendtBemyndigelseRequest request, SoapHeader soapHeader) {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
             setBemyndigendeCpr(request.getBemyndigende());
             setBemyndigedeCpr(request.getBemyndigede());

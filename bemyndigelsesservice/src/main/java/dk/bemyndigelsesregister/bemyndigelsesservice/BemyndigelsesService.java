@@ -27,7 +27,7 @@ public interface BemyndigelsesService {
     @Action("http://nsi.dk/bemyndigelse/2012/05/01/opretGodkendtBemyndigelse")
     @ResponsePayload
     OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
-            @RequestPayload OpretGodkendtBemyndigelseRequest request);
+            @RequestPayload OpretGodkendtBemyndigelseRequest request, SoapHeader soapHeader);
 
     @PayloadRoot(localPart = "SletBemyndigelseRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
     @Action("http://nsi.dk/bemyndigelse/2012/05/01/sletBemyndigelser")

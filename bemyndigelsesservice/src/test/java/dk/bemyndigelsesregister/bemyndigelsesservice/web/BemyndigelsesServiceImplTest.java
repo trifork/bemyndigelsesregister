@@ -124,7 +124,7 @@ public class BemyndigelsesServiceImplTest {
         when(arbejdsfunktionDao.findByArbejdsfunktion("arbejdsfunktion")).thenReturn(arbejdsfunktion);
         when(rettighedDao.findByRettighedskode("rettighed")).thenReturn(rettighed);
 
-        final OpretGodkendtBemyndigelseResponse response = service.opretGodkendtBemyndigelse(request);
+        final OpretGodkendtBemyndigelseResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
         assertEquals("UUID kode", response.getGodkendtBemyndigelsesKode());
         verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
