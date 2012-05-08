@@ -3,6 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,7 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 @Repository
 public class BemyndigelseManagerImpl implements BemyndigelseManager {
+    private static Logger logger = Logger.getLogger(BemyndigelseManagerImpl.class);
     @Inject
     BemyndigelseDao bemyndigelseDao;
 
@@ -33,7 +35,15 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
 
     @Override
     public Bemyndigelse opretAnmodningOmBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
-        final DateTime now = systemService.getDateTime();
+        final Bemyndigelse bemyndigelse = createBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, gyldigFra, gyldigTil);
+
+        bemyndigelseDao.save(bemyndigelse);
+
+        return bemyndigelse;
+    }
+
+    private Bemyndigelse createBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
+        DateTime now = systemService.getDateTime();
 
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
         bemyndigelse.setKode(systemService.createUUIDString());
@@ -48,8 +58,6 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         bemyndigelse.setRettighed(rettighedDao.findByRettighedskode(rettighedKode));
         bemyndigelse.setLinkedSystem(linkedSystemDao.findBySystem(systemKode));
 
-        bemyndigelse.setGodkendelsesdato(null);
-
         final DateTime validFrom = defaultIfNull(gyldigFra, now);
         final DateTime validTo = defaultIfNull(gyldigTil, now.plusYears(100));
         if (!validFrom.isBefore(validTo)) {
@@ -59,8 +67,6 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         bemyndigelse.setGyldigTil(validTo);
 
         bemyndigelse.setVersionsid(1);
-        bemyndigelseDao.save(bemyndigelse);
-
         return bemyndigelse;
     }
 
@@ -69,25 +75,37 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         Collection<Bemyndigelse> bemyndigelser = bemyndigelseDao.findByKoder(bemyndigelsesKoder);
 
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
-            final Collection<Bemyndigelse> existingBemyndigelser = bemyndigelseDao.findByInPeriod(
-                    bemyndigelse.getBemyndigedeCpr(),
-                    bemyndigelse.getBemyndigedeCvr(),
-                    bemyndigelse.getArbejdsfunktion(),
-                    bemyndigelse.getRettighed(),
-                    bemyndigelse.getLinkedSystem(),
-                    bemyndigelse.getGyldigFra(),
-                    bemyndigelse.getGyldigTil()
-            );
-            for (Bemyndigelse existingBemyndigelse : existingBemyndigelser) {
-                existingBemyndigelse.setGyldigTil(bemyndigelse.getGyldigFra());
-                bemyndigelseDao.save(existingBemyndigelse);
-            }
-
-            bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
-            bemyndigelseDao.save(bemyndigelse);
+            approveBemyndigelseAndShutdownConflicts(bemyndigelse);
         }
         return bemyndigelser;
     }
 
+    private void approveBemyndigelseAndShutdownConflicts(Bemyndigelse bemyndigelse) {
+        final Collection<Bemyndigelse> existingBemyndigelser = bemyndigelseDao.findByInPeriod(
+                bemyndigelse.getBemyndigedeCpr(),
+                bemyndigelse.getBemyndigedeCvr(),
+                bemyndigelse.getArbejdsfunktion(),
+                bemyndigelse.getRettighed(),
+                bemyndigelse.getLinkedSystem(),
+                bemyndigelse.getGyldigFra(),
+                bemyndigelse.getGyldigTil()
+        );
+        for (Bemyndigelse existingBemyndigelse : existingBemyndigelser) {
+            logger.info("Shutting down Bemyndigelse with kode=" + existingBemyndigelse.getKode());
+            existingBemyndigelse.setGyldigTil(bemyndigelse.getGyldigFra());
+            bemyndigelseDao.save(existingBemyndigelse);
+        }
 
+        bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
+        bemyndigelseDao.save(bemyndigelse);
+    }
+
+    @Override
+    public Bemyndigelse opretGodkendtBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
+        Bemyndigelse bemyndigelse = createBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, gyldigFra, gyldigTil);
+
+        approveBemyndigelseAndShutdownConflicts(bemyndigelse);
+
+        return bemyndigelse;
+    }
 }

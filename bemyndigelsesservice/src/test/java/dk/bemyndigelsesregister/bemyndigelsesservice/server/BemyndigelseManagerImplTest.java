@@ -21,12 +21,18 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BemyndigelseManagerImplTest {
-    @Mock BemyndigelseDao bemyndigelseDao;
-    @Mock SystemService systemService;
-    @Mock ArbejdsfunktionDao arbejdsfunktionDao;
-    @Mock RettighedDao rettighedDao;
-    @Mock StatusTypeDao statusTypeDao;
-    @Mock LinkedSystemDao linkedSystemDao;
+    @Mock
+    BemyndigelseDao bemyndigelseDao;
+    @Mock
+    SystemService systemService;
+    @Mock
+    ArbejdsfunktionDao arbejdsfunktionDao;
+    @Mock
+    RettighedDao rettighedDao;
+    @Mock
+    StatusTypeDao statusTypeDao;
+    @Mock
+    LinkedSystemDao linkedSystemDao;
 
     @InjectMocks
     BemyndigelseManagerImpl manager = new BemyndigelseManagerImpl();
@@ -57,16 +63,7 @@ public class BemyndigelseManagerImplTest {
         verify(bemyndigelseDao).save(bemyndigelse);
         assertNull(bemyndigelse.getGodkendelsesdato());
 
-        assertEquals(kode, bemyndigelse.getKode());
-        assertEquals(now, bemyndigelse.getGyldigFra());
-        assertEquals(now.plusYears(100), bemyndigelse.getGyldigTil());
-        assertEquals(bemyndigendeCpr, bemyndigelse.getBemyndigendeCpr());
-        assertEquals(bemyndigedeCpr, bemyndigelse.getBemyndigedeCpr());
-        assertEquals(bemyndigedeCvr, bemyndigelse.getBemyndigedeCvr());
-        assertEquals(arbejdsfunktionKode, bemyndigelse.getArbejdsfunktion().getArbejdsfunktion());
-        //TODO: Hvad med status?
-        assertEquals(rettighedKode, bemyndigelse.getRettighed().getRettighedskode());
-        assertEquals(systemKode, bemyndigelse.getLinkedSystem().getSystem());
+        verifyAllFields(bemyndigelse);
     }
 
     @Test
@@ -103,7 +100,7 @@ public class BemyndigelseManagerImplTest {
     }
 
     @Test
-    public void willEndOtherBemyndigelserOnGodkend() throws Exception {
+    public void willShutdownOtherBemyndigelserOnGodkend() throws Exception {
         final DateTime gyldigFra = now;
         final DateTime gyldigTil = now.plusYears(100);
         final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
@@ -148,5 +145,67 @@ public class BemyndigelseManagerImplTest {
             public void describeTo(Description description) {
             }
         }));
+    }
+
+    @Test
+    public void canCreateApprovedBemyndigelser() throws Exception {
+        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
+        when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(Rettighed.createForTest(rettighedKode));
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(LinkedSystem.createForTest(systemKode));
+        when(systemService.getDateTime()).thenReturn(now);
+        when(systemService.createUUIDString()).thenReturn(kode);
+
+        Bemyndigelse bemyndigelse = manager.opretGodkendtBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
+
+        assertEquals(now, bemyndigelse.getGodkendelsesdato());
+        verifyAllFields(bemyndigelse);
+        verify(bemyndigelseDao).save(bemyndigelse);
+    }
+
+    @Test
+    public void willShutdownExistingBemyndigelserWhenCreatingApprovedBemyndigelse() throws Exception {
+        final DateTime gyldigFra = now;
+        DateTime gyldigTil = now.plusYears(100);
+        Bemyndigelse existingBemyndigelse = new Bemyndigelse() {{
+            setKode("Existing");
+        }};
+
+        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(arbejdsfunktion);
+        when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(rettighed);
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
+        when(systemService.getDateTime()).thenReturn(now);
+        when(systemService.createUUIDString()).thenReturn(kode);
+        when(bemyndigelseDao.findByInPeriod(bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighed, linkedSystem, gyldigFra, gyldigTil)).thenReturn(singletonList(existingBemyndigelse));
+
+
+        Bemyndigelse bemyndigelse = manager.opretGodkendtBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
+
+        verify(bemyndigelseDao).findByInPeriod(bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighed, linkedSystem, gyldigFra, gyldigTil);
+        verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
+            @Override
+            public boolean matchesSafely(Bemyndigelse item) {
+                return item.getKode().equals("Existing") && item.getGyldigTil() == gyldigFra;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        }));
+        verify(bemyndigelseDao).save(bemyndigelse);
+
+        assertEquals(now, bemyndigelse.getGodkendelsesdato());
+    }
+
+    private void verifyAllFields(Bemyndigelse bemyndigelse) {
+        assertEquals(kode, bemyndigelse.getKode());
+        assertEquals(now, bemyndigelse.getGyldigFra());
+        assertEquals(now.plusYears(100), bemyndigelse.getGyldigTil());
+        assertEquals(bemyndigendeCpr, bemyndigelse.getBemyndigendeCpr());
+        assertEquals(bemyndigedeCpr, bemyndigelse.getBemyndigedeCpr());
+        assertEquals(bemyndigedeCvr, bemyndigelse.getBemyndigedeCvr());
+        assertEquals(arbejdsfunktionKode, bemyndigelse.getArbejdsfunktion().getArbejdsfunktion());
+        //TODO: Hvad med status?
+        assertEquals(rettighedKode, bemyndigelse.getRettighed().getRettighedskode());
+        assertEquals(systemKode, bemyndigelse.getLinkedSystem().getSystem());
     }
 }
