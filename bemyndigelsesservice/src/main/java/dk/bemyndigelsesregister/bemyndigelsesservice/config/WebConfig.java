@@ -1,11 +1,13 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
@@ -33,6 +35,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Inject
     ApplicationRootConfig applicationRootConfig;
 
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //TODO: add *.xsd mapping, http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/mvc.html#mvc-config-static-resources
+    }
+
     @Bean
     public WsdlDefinition serviceDefinition() {
         final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
@@ -44,7 +51,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public SimpleXsdSchema schema1XsdSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("schema1.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("schema/bemyndigelsesservice.xsd"));
     }
 
     @Bean
@@ -103,7 +110,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public EndpointInterceptor payloadValidationEndpointInterceptor() {
         final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
         interceptor.setSchemas(new Resource[]{
-                new ClassPathResource("schema1.xsd")
+                new ClassPathResource("schema/bemyndigelsesservice.xsd"),
         });
         interceptor.setValidateRequest(true);
         interceptor.setValidateResponse(false);

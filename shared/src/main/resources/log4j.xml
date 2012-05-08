@@ -27,6 +27,9 @@
     <logger name="org.springframework.ws.soap.server.endpoint.interceptor.SoapEnvelopeLoggingInterceptor">
         <level value="DEBUG"/>
     </logger>
+    <logger name="org.springframework.ws">
+        <level value="DEBUG"/>
+    </logger>
 
     <logger name="dk.bemyndigelsesregister">
         <level value="DEBUG"/>
