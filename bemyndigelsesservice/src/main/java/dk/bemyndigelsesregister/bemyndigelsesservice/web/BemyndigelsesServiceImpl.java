@@ -5,6 +5,7 @@ import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import com.trifork.dgws.util.SecurityHelper;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
@@ -24,6 +25,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Repository("bemyndigelsesService")
 @Endpoint
@@ -31,6 +33,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     private static Logger logger = Logger.getLogger(BemyndigelsesServiceImpl.class);
     @Inject
     SystemService systemService;
+    @Inject
+    BemyndigelseManager bemyndigelseManager;
     @Inject
     BemyndigelseDao bemyndigelseDao;
     @Inject
@@ -56,23 +60,17 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> createdBemyndigelser = new ArrayList<Bemyndigelse>();
 
-        final DateTime now = systemService.getDateTime();
-
         for (OpretAnmodningOmBemyndigelseRequest.Anmodninger anmodning : request.getAnmodninger()) {
-            final Bemyndigelse bemyndigelse = new Bemyndigelse();
-            bemyndigelse.setBemyndigedeCpr(anmodning.getBemyndigedeCpr());
-            bemyndigelse.setBemyndigedeCvr(anmodning.getBemyndigedeCvr());
-            bemyndigelse.setBemyndigendeCpr(anmodning.getBemyndigendeCpr());
-            bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(anmodning.getArbejdsfunktion()));
-            bemyndigelse.setStatus(statusTypeDao.get(1)); //TODO:
-            bemyndigelse.setRettighed(rettighedDao.findByRettighedskode(anmodning.getRettighed()));
-            bemyndigelse.setKode(systemService.createUUIDString());
-            bemyndigelse.setLinkedSystem(linkedSystemDao.findBySystem(anmodning.getSystem()));
-            bemyndigelse.setGodkendelsesdato(now);
-            bemyndigelse.setGyldigFra(now);
-            bemyndigelse.setGyldigTil(now.plusYears(99));
-            bemyndigelse.setVersionsid(1); //TODO: could we actually remove this?
-            bemyndigelseDao.save(bemyndigelse);
+            logger.debug("Creating Bemyndigelse for anmodning=" + anmodning.toString());
+            final Bemyndigelse bemyndigelse = bemyndigelseManager.opretAnmodningOmBemyndigelse(
+                    anmodning.getBemyndigendeCpr(),
+                    anmodning.getBemyndigedeCpr(),
+                    anmodning.getBemyndigedeCvr(),
+                    anmodning.getArbejdsfunktion(),
+                    anmodning.getRettighed(),
+                    anmodning.getSystem()
+            );
+            logger.debug("Got bemyndigelse with kode=" + bemyndigelse.getKode());
             createdBemyndigelser.add(bemyndigelse);
         }
 
@@ -88,12 +86,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
-        Collection<Bemyndigelse> bemyndigelser = bemyndigelseDao.findByKoder(request.getBemyndigelsesKoder());
+        final List<String> bemyndigelsesKoder = request.getBemyndigelsesKoder();
 
-        for (Bemyndigelse bemyndigelse : bemyndigelser) {
-            bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
-            bemyndigelseDao.save(bemyndigelse);
-        }
+        Collection<Bemyndigelse> bemyndigelser = bemyndigelseManager.godkendBemyndigelser(bemyndigelsesKoder);
 
         final GodkendBemyndigelseResponse response = new GodkendBemyndigelseResponse();
         response.getBemyndigelser().addAll(CollectionUtils.collect(
