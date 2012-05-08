@@ -69,7 +69,20 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         Collection<Bemyndigelse> bemyndigelser = bemyndigelseDao.findByKoder(bemyndigelsesKoder);
 
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
-            //TODO: find alle tilsvarende bemyndigelser??
+            final Collection<Bemyndigelse> existingBemyndigelser = bemyndigelseDao.findByInPeriod(
+                    bemyndigelse.getBemyndigedeCpr(),
+                    bemyndigelse.getBemyndigedeCvr(),
+                    bemyndigelse.getArbejdsfunktion(),
+                    bemyndigelse.getRettighed(),
+                    bemyndigelse.getLinkedSystem(),
+                    bemyndigelse.getGyldigFra(),
+                    bemyndigelse.getGyldigTil()
+            );
+            for (Bemyndigelse existingBemyndigelse : existingBemyndigelser) {
+                existingBemyndigelse.setGyldigTil(bemyndigelse.getGyldigFra());
+                bemyndigelseDao.save(existingBemyndigelse);
+            }
+
             bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
             bemyndigelseDao.save(bemyndigelse);
         }

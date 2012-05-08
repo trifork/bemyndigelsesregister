@@ -1,6 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
@@ -27,6 +30,11 @@ public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements Be
     @Override
     public Collection<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder) {
         return query().where().in("kode", bemyndigelsesKoder).findList();
+    }
+
+    @Override
+    public Collection<Bemyndigelse> findByInPeriod(String bemyndigedeCpr, String bemyndigedeCvr, Arbejdsfunktion arbejdsfunktion, Rettighed rettighed, LinkedSystem linkedSystem, DateTime gyldigFra, DateTime gyldigTil) {
+        return null;
     }
 
     @Override

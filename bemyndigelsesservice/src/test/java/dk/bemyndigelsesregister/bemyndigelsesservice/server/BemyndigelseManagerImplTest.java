@@ -6,13 +6,16 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.junit.Test;
+import org.junit.internal.matchers.TypeSafeMatcher;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -33,9 +36,12 @@ public class BemyndigelseManagerImplTest {
     final String bemyndigedeCpr = "BemyndigedeCpr";
     final String bemyndigedeCvr = "BemyndigedeCvr";
     final String arbejdsfunktionKode = "Arbejdsfunktion";
+    final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
     final String rettighedKode = "Rettighedskode";
+    final Rettighed rettighed = new Rettighed();
     final String systemKode = "SystemKode";
-    final String statusKode = "StatusKode";
+    final LinkedSystem linkedSystem = new LinkedSystem();
+    //final String statusKode = "StatusKode";
     final DateTime now = new DateTime();
 
     @Test
@@ -81,5 +87,66 @@ public class BemyndigelseManagerImplTest {
         when(systemService.getDateTime()).thenReturn(now);
 
         manager.opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, gyldigTil);
+    }
+
+    @Test
+    public void canGodkendeBemyndigelse() throws Exception {
+        final Bemyndigelse bemyndigelse = new Bemyndigelse();
+
+        when(bemyndigelseDao.findByKoder(singletonList(kode))).thenReturn(singletonList(bemyndigelse));
+        when(systemService.getDateTime()).thenReturn(now);
+
+        manager.godkendBemyndigelser(singletonList(kode));
+
+        verify(bemyndigelseDao).save(bemyndigelse);
+        assertEquals(now, bemyndigelse.getGodkendelsesdato());
+    }
+
+    @Test
+    public void willEndOtherBemyndigelserOnGodkend() throws Exception {
+        final DateTime gyldigFra = now;
+        final DateTime gyldigTil = now.plusYears(100);
+        final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setKode(kode);
+            setBemyndigendeCpr(bemyndigendeCpr);
+            setBemyndigedeCpr(bemyndigedeCpr);
+            setBemyndigedeCvr(bemyndigedeCvr);
+            setArbejdsfunktion(arbejdsfunktion);
+            setRettighed(rettighed);
+            setLinkedSystem(linkedSystem);
+            setGyldigFra(gyldigFra);
+            setGyldigTil(gyldigTil);
+            setGodkendelsesdato(null);
+        }};
+        final Bemyndigelse existingBemyndigelse = new Bemyndigelse() {{
+            setKode("Existing");
+        }};
+
+        when(bemyndigelseDao.findByKoder(singletonList(kode))).thenReturn(singletonList(bemyndigelse));
+        when(bemyndigelseDao.findByInPeriod(bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighed, linkedSystem, gyldigFra, gyldigTil)).thenReturn(singletonList(existingBemyndigelse));
+        when(systemService.getDateTime()).thenReturn(now);
+
+        manager.godkendBemyndigelser(singletonList(kode));
+
+        verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
+            @Override
+            public boolean matchesSafely(Bemyndigelse item) {
+                return item.getKode().equals("Existing") && item.getGyldigTil() == gyldigFra;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        }));
+        verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
+            @Override
+            public boolean matchesSafely(Bemyndigelse item) {
+                return item.getKode().equals(kode) && item.getGodkendelsesdato() == now;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        }));
     }
 }

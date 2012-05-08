@@ -1,6 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
@@ -22,4 +25,6 @@ public interface BemyndigelseDao {
     Collection<Bemyndigelse> findByBemyndigedeCpr(String bemyndigede);
 
     Collection<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder);
+
+    Collection<Bemyndigelse> findByInPeriod(String bemyndigedeCpr, String bemyndigedeCvr, Arbejdsfunktion arbejdsfunktion, Rettighed rettighed, LinkedSystem linkedSystem, DateTime gyldigFra, DateTime gyldigTil);
 }
