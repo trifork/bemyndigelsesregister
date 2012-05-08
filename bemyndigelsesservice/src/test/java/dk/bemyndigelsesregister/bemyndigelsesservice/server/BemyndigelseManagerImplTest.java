@@ -55,8 +55,9 @@ public class BemyndigelseManagerImplTest {
         final Bemyndigelse bemyndigelse = manager.opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
 
         verify(bemyndigelseDao).save(bemyndigelse);
+        assertNull(bemyndigelse.getGodkendelsesdato());
+
         assertEquals(kode, bemyndigelse.getKode());
-        assertEquals(now, bemyndigelse.getGodkendelsesdato());
         assertEquals(now, bemyndigelse.getGyldigFra());
         assertEquals(now.plusYears(100), bemyndigelse.getGyldigTil());
         assertEquals(bemyndigendeCpr, bemyndigelse.getBemyndigendeCpr());
@@ -76,7 +77,6 @@ public class BemyndigelseManagerImplTest {
 
         final Bemyndigelse bemyndigelse = manager.opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, gyldigFra, gyldigTil);
 
-        assertEquals(now, bemyndigelse.getGodkendelsesdato());
         assertEquals(gyldigFra, bemyndigelse.getGyldigFra());
         assertEquals(gyldigTil, bemyndigelse.getGyldigTil());
     }
