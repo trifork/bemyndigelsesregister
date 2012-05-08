@@ -57,7 +57,7 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void canCreateBemyndigelseAndmodning() throws Exception {
-        final Bemyndigelse bemyndigelse = createBemyndigelse(kode);
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kode, null);
 
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
                 bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighedskode, systemKode,
@@ -93,7 +93,7 @@ public class BemyndigelsesServiceImplTest {
         final GodkendBemyndigelseRequest request = new GodkendBemyndigelseRequest() {{
             getBemyndigelsesKoder().add(kode);
         }};
-        final Bemyndigelse bemyndigelse = createBemyndigelse(kode);
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kode, null);
 
         when(bemyndigelseManager.godkendBemyndigelser(singletonList(kode))).thenReturn(singletonList(bemyndigelse));
 
@@ -150,7 +150,7 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void canGetBemyndigelserByBemyndigende() throws Exception {
-        final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1");
+        final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
         when(bemyndigelseDao.findByBemyndigendeCpr("Bemyndigende")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -169,7 +169,7 @@ public class BemyndigelsesServiceImplTest {
         }));
     }
 
-    private Bemyndigelse createBemyndigelse(final String kode) {
+    private Bemyndigelse createBemyndigelse(final String kode, DateTime godkendelsesdato) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
 
         bemyndigelse.setKode(kode);
@@ -194,7 +194,7 @@ public class BemyndigelsesServiceImplTest {
         status.setStatus(this.statusKode);
         bemyndigelse.setStatus(status);
 
-        bemyndigelse.setGodkendelsesdato(now.minusDays(7));
+        bemyndigelse.setGodkendelsesdato(godkendelsesdato);
 
         bemyndigelse.setGyldigFra(now.minusDays(1));
         bemyndigelse.setGyldigTil(now.plusDays(1));
@@ -204,7 +204,7 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void canGetBemyndigelserByBemyndigede() throws Exception {
-        final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1");
+        final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
         when(bemyndigelseDao.findByBemyndigedeCpr("Bemyndigede")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{

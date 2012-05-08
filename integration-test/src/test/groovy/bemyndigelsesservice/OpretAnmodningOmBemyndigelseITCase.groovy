@@ -64,8 +64,8 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                 body {
                     "web:OpretAnmodningOmBemyndigelseRequest" {
                         "Anmodninger" {
-                            "BemyndigedeCvr"('20000000')
                             "BemyndigendeCpr"('2006271866')
+                            "BemyndigedeCvr"('20000000')
                             "Arbejdsfunktion"("Laege")
                             "Rettighed"("R01")
                             "System"("Trifork test system")

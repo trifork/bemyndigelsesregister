@@ -140,7 +140,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setArbejdsfunktion(bem.getArbejdsfunktion().getArbejdsfunktion());
             setRettighedskode(bem.getRettighed().getRettighedskode());
             setStatus(bem.getStatus().getStatus());
-            setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
+            if (bem.getGodkendelsesdato() != null) {
+                setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
+            }
             setGyldigFra(new XMLGregorianCalendarImpl(bem.getGyldigFra().toGregorianCalendar()));
             setGyldigTil(new XMLGregorianCalendarImpl(bem.getGyldigTil().toGregorianCalendar()));
         }};
