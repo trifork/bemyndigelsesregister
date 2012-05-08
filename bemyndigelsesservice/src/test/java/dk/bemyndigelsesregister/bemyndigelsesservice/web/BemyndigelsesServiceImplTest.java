@@ -60,8 +60,8 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kode);
 
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
-                bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighedskode, systemKode
-        )).thenReturn(bemyndigelse);
+                bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighedskode, systemKode,
+                null, null)).thenReturn(bemyndigelse);
 
         OpretAnmodningOmBemyndigelseRequest request = new OpretAnmodningOmBemyndigelseRequest() {{
             getAnmodninger().add(new Anmodninger() {{
@@ -76,7 +76,7 @@ public class BemyndigelsesServiceImplTest {
 
         final OpretAnmodningOmBemyndigelseResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
 
-        verify(bemyndigelseManager).opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighedskode, systemKode);
+        verify(bemyndigelseManager).opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighedskode, systemKode, null, null);
 
         assertEquals(1, response.getBemyndigelser().size());
         final dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse responseBemyndigelse = response.getBemyndigelser().get(0);

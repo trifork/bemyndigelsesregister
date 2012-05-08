@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import javax.inject.Inject;
 import java.util.Collection;
 
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+
 @Repository
 public class BemyndigelseManagerImpl implements BemyndigelseManager {
     @Inject
@@ -30,7 +32,7 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
     LinkedSystemDao linkedSystemDao;
 
     @Override
-    public Bemyndigelse opretAnmodningOmBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode) {
+    public Bemyndigelse opretAnmodningOmBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
         final DateTime now = systemService.getDateTime();
 
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
@@ -47,8 +49,15 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         bemyndigelse.setLinkedSystem(linkedSystemDao.findBySystem(systemKode));
 
         bemyndigelse.setGodkendelsesdato(now);
-        bemyndigelse.setGyldigFra(now);
-        bemyndigelse.setGyldigTil(now.plusYears(100));
+
+        final DateTime validFrom = defaultIfNull(gyldigFra, now);
+        final DateTime validTo = defaultIfNull(gyldigTil, now.plusYears(100));
+        if (!validFrom.isBefore(validTo)) {
+            throw new IllegalArgumentException("GyldigFra=" + validFrom + " must be before GyldigTil=" + validTo);
+        }
+        bemyndigelse.setGyldigFra(validFrom);
+        bemyndigelse.setGyldigTil(validTo);
+
         bemyndigelse.setVersionsid(1);
         bemyndigelseDao.save(bemyndigelse);
 
@@ -66,4 +75,6 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         }
         return bemyndigelser;
     }
+
+
 }

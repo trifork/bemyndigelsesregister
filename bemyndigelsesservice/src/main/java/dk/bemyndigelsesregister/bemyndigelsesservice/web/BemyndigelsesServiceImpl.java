@@ -68,8 +68,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     anmodning.getBemyndigedeCvr(),
                     anmodning.getArbejdsfunktion(),
                     anmodning.getRettighed(),
-                    anmodning.getSystem()
-            );
+                    anmodning.getSystem(),
+                    null, null);
             logger.debug("Got bemyndigelse with kode=" + bemyndigelse.getKode());
             createdBemyndigelser.add(bemyndigelse);
         }

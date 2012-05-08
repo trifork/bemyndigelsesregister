@@ -48,4 +48,9 @@ public class Rettighed extends DomainObject {
 
     //</editor-fold>
 
+    public static Rettighed createForTest(final String kode) {
+        return new Rettighed() {{
+            setRettighedskode(kode);
+        }};
+    }
 }
