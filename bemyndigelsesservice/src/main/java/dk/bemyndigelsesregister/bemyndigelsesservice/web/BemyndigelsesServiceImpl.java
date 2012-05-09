@@ -13,7 +13,6 @@ import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -22,6 +21,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,16 +37,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     BemyndigelseManager bemyndigelseManager;
     @Inject
     BemyndigelseDao bemyndigelseDao;
-    @Inject
-    ArbejdsfunktionDao arbejdsfunktionDao;
-    @Inject
-    StatusTypeDao statusTypeDao;
-    @Inject
-    RettighedDao rettighedDao;
-    @Inject
-    LinkedSystemDao linkedSystemDao;
-    @Inject
-    Unmarshaller unmarshaller;
     @Inject
     SecurityHelper securityHelper;
 
@@ -154,7 +144,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     public @ResponsePayload OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
             @RequestPayload final OpretGodkendtBemyndigelseRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
-        final DateTime now = systemService.getDateTime();
 
         for (final OpretGodkendtBemyndigelseRequest.Bemyndigelser bemyndigelseRequest : request.getBemyndigelser()) {
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretGodkendtBemyndigelse(
@@ -164,10 +153,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     bemyndigelseRequest.getArbejdsfunktion(),
                     bemyndigelseRequest.getRettighed(),
                     bemyndigelseRequest.getSystem(),
-                    null,
-                    null
+                    nullableDateTime(bemyndigelseRequest.getGyldigFra()),
+                    nullableDateTime(bemyndigelseRequest.getGyldigTil())
             );
-            bemyndigelseDao.save(bemyndigelse);
             bemyndigelser.add(bemyndigelse);
         }
 
@@ -217,5 +205,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }
 
         return response;
+    }
+
+    private DateTime nullableDateTime(XMLGregorianCalendar xmlDate) {
+        return xmlDate != null ? new DateTime(xmlDate.toGregorianCalendar()) : null;
     }
 }

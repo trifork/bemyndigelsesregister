@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
@@ -30,10 +31,6 @@ public class BemyndigelsesServiceImplTest {
 
     @Mock BemyndigelseManager bemyndigelseManager;
     @Mock BemyndigelseDao bemyndigelseDao;
-    @Mock ArbejdsfunktionDao arbejdsfunktionDao;
-    @Mock StatusTypeDao statusTypeDao;
-    @Mock RettighedDao rettighedDao;
-    @Mock LinkedSystemDao linkedSystemDao;
     @Mock SystemService systemService;
     @Mock SecurityHelper securityHelper;
 
@@ -108,29 +105,18 @@ public class BemyndigelsesServiceImplTest {
                 setSystem(systemKode);
                 setArbejdsfunktion(arbejdsfunktionKode);
                 setRettighed(rettighedKode);
+                setGyldigFra(new XMLGregorianCalendarImpl(now.toGregorianCalendar()));
             }});
         }};
 
         final Bemyndigelse bemyndigelse = createBemyndigelse(kode, now);
 
-        when(bemyndigelseManager.opretGodkendtBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null)).thenReturn(bemyndigelse);
+        when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCpr), eq(bemyndigedeCpr), eq(bemyndigedeCvr), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
 
         final OpretGodkendtBemyndigelseResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
         assertEquals(1, response.getBemyndigelser().size());
         assertEquals(kode, response.getBemyndigelser().get(0).getKode());
-        verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
-            @Override
-            public boolean matchesSafely(Bemyndigelse item) {
-                return allTrue(
-                        item.getGodkendelsesdato() == now
-                        );
-            }
-
-            @Override
-            public void describeTo(Description description) {
-            }
-        }));
     }
 
     @Test
