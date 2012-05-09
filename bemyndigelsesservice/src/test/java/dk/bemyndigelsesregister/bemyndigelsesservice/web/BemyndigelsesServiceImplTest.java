@@ -9,9 +9,12 @@ import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
 import org.hamcrest.Description;
 import org.joda.time.DateTime;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
 import static java.util.Arrays.asList;
@@ -20,16 +23,19 @@ import static org.junit.Assert.*;
 import static org.junit.internal.matchers.IsCollectionContaining.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BemyndigelsesServiceImplTest {
+    @InjectMocks
     BemyndigelsesServiceImpl service = new BemyndigelsesServiceImpl();
-    BemyndigelseManager bemyndigelseManager = mock(BemyndigelseManager.class);
-    BemyndigelseDao bemyndigelseDao = mock(BemyndigelseDao.class);
-    ArbejdsfunktionDao arbejdsfunktionDao = mock(ArbejdsfunktionDao.class);
-    StatusTypeDao statusTypeDao = mock(StatusTypeDao.class);
-    RettighedDao rettighedDao = mock(RettighedDao.class);
-    private final LinkedSystemDao linkedSystemDao = mock(LinkedSystemDao.class);
-    SystemService systemService = mock(SystemService.class);
-    SecurityHelper securityHelper = mock(SecurityHelper.class);
+
+    @Mock BemyndigelseManager bemyndigelseManager;
+    @Mock BemyndigelseDao bemyndigelseDao;
+    @Mock ArbejdsfunktionDao arbejdsfunktionDao;
+    @Mock StatusTypeDao statusTypeDao;
+    @Mock RettighedDao rettighedDao;
+    @Mock LinkedSystemDao linkedSystemDao;
+    @Mock SystemService systemService;
+    @Mock SecurityHelper securityHelper;
 
     SoapHeader soapHeader = mock(SoapHeader.class);
     private final DateTime now = new DateTime();
@@ -42,18 +48,6 @@ public class BemyndigelsesServiceImplTest {
     final String rettighedskode = "Rettighedskode";
     final String systemKode = "SystemKode";
     final String statusKode = "StatusKode";
-
-    @Before
-    public void setUp() throws Exception {
-        service.bemyndigelseManager = bemyndigelseManager;
-        service.bemyndigelseDao = bemyndigelseDao;
-        service.systemService = systemService;
-        service.securityHelper = securityHelper;
-        service.arbejdsfunktionDao = arbejdsfunktionDao;
-        service.statusTypeDao = statusTypeDao;
-        service.rettighedDao = rettighedDao;
-        service.linkedSystemDao = linkedSystemDao;
-    }
 
     @Test
     public void canCreateBemyndigelseAndmodning() throws Exception {
