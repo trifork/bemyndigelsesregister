@@ -157,20 +157,16 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         final DateTime now = systemService.getDateTime();
 
         for (final OpretGodkendtBemyndigelseRequest.Bemyndigelser bemyndigelseRequest : request.getBemyndigelser()) {
-            final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-                setBemyndigendeCpr(bemyndigelseRequest.getBemyndigende());
-                setBemyndigedeCpr(bemyndigelseRequest.getBemyndigede());
-                setBemyndigedeCvr(bemyndigelseRequest.getBemyndigedeCVR());
-                setLinkedSystem(linkedSystemDao.findBySystem(bemyndigelseRequest.getSystem()));
-                setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(bemyndigelseRequest.getArbejdsfunktion()));
-                setRettighed(rettighedDao.findByRettighedskode(bemyndigelseRequest.getRettighed()));
-                setKode(systemService.createUUIDString());
-                setStatus(statusTypeDao.get(0));
-                setGodkendelsesdato(now);
-                setGyldigFra(now);
-                setGyldigTil(now.plusYears(100));
-
-            }};
+            final Bemyndigelse bemyndigelse = bemyndigelseManager.opretGodkendtBemyndigelse(
+                    bemyndigelseRequest.getBemyndigende(),
+                    bemyndigelseRequest.getBemyndigede(),
+                    bemyndigelseRequest.getBemyndigedeCVR(),
+                    bemyndigelseRequest.getArbejdsfunktion(),
+                    bemyndigelseRequest.getRettighed(),
+                    bemyndigelseRequest.getSystem(),
+                    null,
+                    null
+            );
             bemyndigelseDao.save(bemyndigelse);
             bemyndigelser.add(bemyndigelse);
         }

@@ -100,7 +100,6 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void canCreateApprovedBemyndigelse() throws Exception {
-        final DateTime now = new DateTime();
         final OpretGodkendtBemyndigelseRequest request = new OpretGodkendtBemyndigelseRequest() {{
             getBemyndigelser().add(new Bemyndigelser() {{
                 setBemyndigende(bemyndigendeCpr);
@@ -111,18 +110,10 @@ public class BemyndigelsesServiceImplTest {
                 setRettighed(rettighedKode);
             }});
         }};
-        final LinkedSystem system = new LinkedSystem();
-        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
-        final Rettighed rettighed = new Rettighed();
 
-        when(systemService.createUUIDString()).thenReturn(kode);
-        when(systemService.getDateTime()).thenReturn(now);
-        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(system);
-        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(arbejdsfunktion);
-        when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(rettighed);
-        when(statusTypeDao.get(0)).thenReturn(new StatusType() {{
-            setStatus(statusKode);
-        }});
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kode, now);
+
+        when(bemyndigelseManager.opretGodkendtBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null)).thenReturn(bemyndigelse);
 
         final OpretGodkendtBemyndigelseResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
@@ -132,14 +123,7 @@ public class BemyndigelsesServiceImplTest {
             @Override
             public boolean matchesSafely(Bemyndigelse item) {
                 return allTrue(
-                        item.getKode().equals(kode),
-                        item.getBemyndigendeCpr().equals(bemyndigendeCpr),
-                        item.getBemyndigedeCpr().equals(bemyndigedeCpr),
-                        item.getBemyndigedeCvr().equals(bemyndigedeCvr),
-                        item.getGodkendelsesdato() == now,
-                        item.getLinkedSystem() == system,
-                        item.getArbejdsfunktion() == arbejdsfunktion,
-                        item.getRettighed() == rettighed
+                        item.getGodkendelsesdato() == now
                         );
             }
 
