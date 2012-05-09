@@ -46,11 +46,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected(whitelist = "BemyndigelsesService.opretAnmodningOmBemyndigelser")
     @Transactional
-    public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelser(
-            @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader) {
+    public @ResponsePayload OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
+            @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> createdBemyndigelser = new ArrayList<Bemyndigelse>();
 
-        for (OpretAnmodningOmBemyndigelseRequest.Anmodninger anmodning : request.getAnmodninger()) {
+        for (OpretAnmodningOmBemyndigelserRequest.Anmodning anmodning : request.getAnmodning()) {
             logger.debug("Creating Bemyndigelse for anmodning=" + anmodning.toString());
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretAnmodningOmBemyndigelse(
                     anmodning.getBemyndigendeCpr(),
@@ -64,7 +64,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             createdBemyndigelser.add(bemyndigelse);
         }
 
-        final OpretAnmodningOmBemyndigelseResponse response = new OpretAnmodningOmBemyndigelseResponse();
+        final OpretAnmodningOmBemyndigelserResponse response = new OpretAnmodningOmBemyndigelserResponse();
         for (Bemyndigelse bemyndigelse : createdBemyndigelser) {
             response.getBemyndigelser().add(toJaxbType(bemyndigelse));
         }
@@ -139,13 +139,13 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.opretGodkendtBemyndigelse")
+    @Protected(whitelist = "BemyndigelsesService.opretGodkendteBemyndigelser")
     @Transactional
-    public @ResponsePayload OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
-            @RequestPayload final OpretGodkendtBemyndigelseRequest request, SoapHeader soapHeader) {
+    public @ResponsePayload OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
+            @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
 
-        for (final OpretGodkendtBemyndigelseRequest.Bemyndigelser bemyndigelseRequest : request.getBemyndigelser()) {
+        for (final OpretGodkendteBemyndigelserRequest.Bemyndigelse bemyndigelseRequest : request.getBemyndigelse()) {
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretGodkendtBemyndigelse(
                     bemyndigelseRequest.getBemyndigende(),
                     bemyndigelseRequest.getBemyndigede(),
@@ -159,8 +159,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             bemyndigelser.add(bemyndigelse);
         }
 
-        final OpretGodkendtBemyndigelseResponse response = new OpretGodkendtBemyndigelseResponse();
-        response.getBemyndigelser().addAll(CollectionUtils.collect(
+        final OpretGodkendteBemyndigelserResponse response = new OpretGodkendteBemyndigelserResponse();
+        response.getBemyndigelse().addAll(CollectionUtils.collect(
                 bemyndigelser,
                 new Transformer<Bemyndigelse, dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
                     @Override

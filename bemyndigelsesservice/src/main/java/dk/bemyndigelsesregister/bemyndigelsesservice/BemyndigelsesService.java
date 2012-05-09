@@ -11,11 +11,11 @@ import org.springframework.ws.soap.addressing.server.annotation.Action;
 @Endpoint
 public interface BemyndigelsesService {
 
-    @PayloadRoot(localPart = "OpretAnmodningOmBemyndigelseRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
+    @PayloadRoot(localPart = "OpretAnmodningOmBemyndigelserRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
     @Action("http://nsi.dk/bemyndigelse/2012/05/01/opretAnmodningOmBemyndigelser")
     @ResponsePayload
-    OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelser(
-            @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader);
+    OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
+            @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader);
 
     @PayloadRoot(localPart = "GodkendBemyndigelserRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
     @Action("http://nsi.dk/bemyndigelse/2012/05/01/godkendBemyndigelser")
@@ -23,11 +23,11 @@ public interface BemyndigelsesService {
     GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader);
 
-    @PayloadRoot(localPart = "OpretGodkendtBemyndigelseRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
-    @Action("http://nsi.dk/bemyndigelse/2012/05/01/opretGodkendtBemyndigelse")
+    @PayloadRoot(localPart = "OpretGodkendteBemyndigelserRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
+    @Action("http://nsi.dk/bemyndigelse/2012/05/01/opretGodkendteBemyndigelser")
     @ResponsePayload
-    OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
-            @RequestPayload OpretGodkendtBemyndigelseRequest request, SoapHeader soapHeader);
+    OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
+            @RequestPayload OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader);
 
     @PayloadRoot(localPart = "SletBemyndigelseRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
     @Action("http://nsi.dk/bemyndigelse/2012/05/01/sletBemyndigelser")

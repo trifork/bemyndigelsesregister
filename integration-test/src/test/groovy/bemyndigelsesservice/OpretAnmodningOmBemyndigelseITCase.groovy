@@ -11,8 +11,8 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
     @Test
     public void canAccessMethod() {
         def response = send("opretAnmodningOmBemyndigelser") {
-            "bms:OpretAnmodningOmBemyndigelseRequest" {
-                "Anmodninger" {
+            "bms:OpretAnmodningOmBemyndigelserRequest" {
+                "Anmodning" {
                     "BemyndigedeCvr"('20000000')
                     "BemyndigedeCpr"('1010101010')
                     "BemyndigendeCpr"('2006271866')
@@ -29,8 +29,8 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
     public void willRequireBemyndigedeCpr() {
         try {
             send("opretAnmodningOmBemyndigelser") {
-                "bms:OpretAnmodningOmBemyndigelseRequest" {
-                    "Anmodninger" {
+                "bms:OpretAnmodningOmBemyndigelserRequest" {
+                    "Anmodning" {
                         "BemyndigendeCpr"('2006271866')
                         "BemyndigedeCvr"('20000000')
                         "Arbejdsfunktion"("Laege")

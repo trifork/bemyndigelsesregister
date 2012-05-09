@@ -34,7 +34,8 @@ public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements Be
 
     @Override
     public Collection<Bemyndigelse> findByInPeriod(String bemyndigedeCpr, String bemyndigedeCvr, Arbejdsfunktion arbejdsfunktion, Rettighed rettighed, LinkedSystem linkedSystem, DateTime gyldigFra, DateTime gyldigTil) {
-        return null;
+        //TODO: implement!
+        return java.util.Collections.emptyList();
     }
 
     @Override

@@ -55,8 +55,8 @@ public class BemyndigelsesServiceImplTest {
                 bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
 
-        OpretAnmodningOmBemyndigelseRequest request = new OpretAnmodningOmBemyndigelseRequest() {{
-            getAnmodninger().add(new Anmodninger() {{
+        OpretAnmodningOmBemyndigelserRequest request = new OpretAnmodningOmBemyndigelserRequest() {{
+            getAnmodning().add(new Anmodning() {{
                 setBemyndigendeCpr("BemyndigendeCpr");
                 setBemyndigedeCpr("BemyndigedeCpr");
                 setBemyndigedeCvr("BemyndigedeCvr");
@@ -66,7 +66,7 @@ public class BemyndigelsesServiceImplTest {
             }});
         }};
 
-        final OpretAnmodningOmBemyndigelseResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
+        final OpretAnmodningOmBemyndigelserResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
 
         verify(bemyndigelseManager).opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
 
@@ -97,8 +97,8 @@ public class BemyndigelsesServiceImplTest {
 
     @Test
     public void canCreateApprovedBemyndigelse() throws Exception {
-        final OpretGodkendtBemyndigelseRequest request = new OpretGodkendtBemyndigelseRequest() {{
-            getBemyndigelser().add(new Bemyndigelser() {{
+        final OpretGodkendteBemyndigelserRequest request = new OpretGodkendteBemyndigelserRequest() {{
+            getBemyndigelse().add(new Bemyndigelse() {{
                 setBemyndigende(bemyndigendeCpr);
                 setBemyndigede(bemyndigedeCpr);
                 setBemyndigedeCVR(bemyndigedeCvr);
@@ -113,10 +113,10 @@ public class BemyndigelsesServiceImplTest {
 
         when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCpr), eq(bemyndigedeCpr), eq(bemyndigedeCvr), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
 
-        final OpretGodkendtBemyndigelseResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
+        final OpretGodkendteBemyndigelserResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
-        assertEquals(1, response.getBemyndigelser().size());
-        assertEquals(kode, response.getBemyndigelser().get(0).getKode());
+        assertEquals(1, response.getBemyndigelse().size());
+        assertEquals(kode, response.getBemyndigelse().get(0).getKode());
     }
 
     @Test
