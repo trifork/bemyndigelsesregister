@@ -12,12 +12,12 @@
     <xs:complexType name="Bemyndigelse">
         <xs:sequence>
             <xs:element name="Kode" type="xs:string"/>
-            <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
-            <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
+            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
             <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
             <xs:element name="System" type="xs:string"/>
             <xs:element name="Arbejdsfunktion" type="xs:string"/>
-            <xs:element name="Rettighedskode" type="xs:string"/>
+            <xs:element name="Rettighed" type="xs:string"/>
             <xs:element name="Status" type="xs:string"/>
             <xs:element name="Godkendelsesdato" type="xs:dateTime"/>
             <xs:element name="Gyldig_fra" type="xs:dateTime"/>
@@ -28,7 +28,7 @@
     <xs:element name="GodkendBemyndigelseRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="BemyndigelsesKoder" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="BemyndigelsesKode" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -44,9 +44,9 @@
     <xs:element name="HentBemyndigelserRequest">
         <xs:complexType>
             <xs:choice>
-                <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="BemyndigelseKode" type="xs:string"/>
+                <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="Kode" type="xs:string"/>
             </xs:choice>
         </xs:complexType>
     </xs:element>
@@ -54,7 +54,7 @@
     <xs:element name="HentBemyndigelserResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Bemyndigelser" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
+                <xs:element name="Bemyndigelse" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -81,7 +81,7 @@
     <xs:element name="OpretAnmodningOmBemyndigelserResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Bemyndigelser" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
+                <xs:element name="Bemyndigelse" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -92,9 +92,9 @@
                 <xs:element name="Bemyndigelse" minOccurs="1" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                            <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                            <xs:element name="BemyndigedeCVR" type="cvr:CVRnumberIdentifierType"/>
+                            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
                             <xs:element name="System" type="xs:string"/>
                             <xs:element name="Arbejdsfunktion" type="xs:string"/>
                             <xs:element name="Rettighed" type="xs:string"/>
@@ -118,7 +118,7 @@
     <xs:element name="SletBemyndigelserRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="BemyndigelsesKoder" type="xs:string" maxOccurs="unbounded"/>
+                <xs:element name="Kode" type="xs:string" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -126,7 +126,7 @@
     <xs:element name="SletBemyndigelserResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="SlettedeBemyndigelsesKoder" type="xs:string" maxOccurs="unbounded"/>
+                <xs:element name="Kode" type="xs:string" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

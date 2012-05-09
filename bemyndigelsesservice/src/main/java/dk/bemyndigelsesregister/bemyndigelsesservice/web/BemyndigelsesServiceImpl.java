@@ -68,7 +68,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         final OpretAnmodningOmBemyndigelserResponse response = new OpretAnmodningOmBemyndigelserResponse();
         for (Bemyndigelse bemyndigelse : createdBemyndigelser) {
-            response.getBemyndigelser().add(toJaxbType(bemyndigelse));
+            response.getBemyndigelse().add(toJaxbType(bemyndigelse));
         }
         return response;
     }
@@ -78,7 +78,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
-        final List<String> bemyndigelsesKoder = request.getBemyndigelsesKoder();
+        final List<String> bemyndigelsesKoder = request.getBemyndigelsesKode();
 
         Collection<Bemyndigelse> bemyndigelser = bemyndigelseManager.godkendBemyndigelser(bemyndigelsesKoder);
 
@@ -100,20 +100,20 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
-        if (request.getBemyndigelseKode() != null) {
-            foundBemyndigelser = singletonList(bemyndigelseDao.findByKode(request.getBemyndigelseKode()));
+        if (request.getKode() != null) {
+            foundBemyndigelser = singletonList(bemyndigelseDao.findByKode(request.getKode()));
         }
-        else if (request.getBemyndigende() != null) {
-            foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigende());
+        else if (request.getBemyndigendeCpr() != null) {
+            foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigendeCpr());
         }
-        else if (request.getBemyndigede() != null) {
-            foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigede());
+        else if (request.getBemyndigedeCpr() != null) {
+            foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigedeCpr());
         }
 
         final Collection<Bemyndigelse> finalFoundBemyndigelser = foundBemyndigelser;
 
         return new HentBemyndigelserResponse() {{
-            getBemyndigelser().addAll(CollectionUtils.collect(
+            getBemyndigelse().addAll(CollectionUtils.collect(
                     finalFoundBemyndigelser,
                     new Transformer<Bemyndigelse, dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
                         @Override
@@ -128,12 +128,12 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     public static dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse toJaxbType(final Bemyndigelse bem) {
         return new dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse() {{
             setKode(bem.getKode());
-            setBemyndigende(bem.getBemyndigendeCpr());
-            setBemyndigede(bem.getBemyndigedeCpr());
+            setBemyndigendeCpr(bem.getBemyndigendeCpr());
+            setBemyndigedeCpr(bem.getBemyndigedeCpr());
             setBemyndigedeCvr(bem.getBemyndigedeCvr());
             setSystem(bem.getLinkedSystem().getSystem());
             setArbejdsfunktion(bem.getArbejdsfunktion().getArbejdsfunktion());
-            setRettighedskode(bem.getRettighed().getRettighedskode());
+            setRettighed(bem.getRettighed().getRettighedskode());
             setStatus(bem.getStatus().getStatus());
             if (bem.getGodkendelsesdato() != null) {
                 setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
@@ -152,9 +152,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         for (final OpretGodkendteBemyndigelserRequest.Bemyndigelse bemyndigelseRequest : request.getBemyndigelse()) {
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretGodkendtBemyndigelse(
-                    bemyndigelseRequest.getBemyndigende(),
-                    bemyndigelseRequest.getBemyndigede(),
-                    bemyndigelseRequest.getBemyndigedeCVR(),
+                    bemyndigelseRequest.getBemyndigendeCpr(),
+                    bemyndigelseRequest.getBemyndigedeCpr(),
+                    bemyndigelseRequest.getBemyndigedeCvr(),
                     bemyndigelseRequest.getArbejdsfunktion(),
                     bemyndigelseRequest.getRettighed(),
                     bemyndigelseRequest.getSystem(),
@@ -189,7 +189,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         SletBemyndigelserResponse response = new SletBemyndigelserResponse();
 
-        for (String kode : request.getBemyndigelsesKoder()) {
+        for (String kode : request.getKode()) {
             Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(kode);
 
             if (!bemyndigelse.getBemyndigendeCpr().equals(cpr)) {
@@ -202,7 +202,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelseDao.save(bemyndigelse);
-                response.getSlettedeBemyndigelsesKoder().add(bemyndigelse.getKode());
+                response.getKode().add(bemyndigelse.getKode());
             }
             else {
                 logger.info("Bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
