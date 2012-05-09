@@ -140,6 +140,27 @@ public class BemyndigelsesServiceImplTest {
         }));
     }
 
+    @Test
+    public void canGetBemyndigelserByKode() throws Exception {
+        final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
+        when(bemyndigelseDao.findByKode(kode)).thenReturn(bemyndigelse);
+
+        final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
+            setBemyndigelseKode(kode);
+        }};
+        HentBemyndigelserResponse response = service.hentBemyndigelser(request, soapHeader);
+
+        assertThat(response.getBemyndigelser(), hasItem(new TypeSafeMatcher<dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
+            @Override
+            public boolean matchesSafely(dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse item) {
+                return item.getKode().equals("Bem1");
+            }
+
+            @Override
+            public void describeTo(Description description) { }
+        }));
+    }
+
     private Bemyndigelse createBemyndigelse(final String kode, DateTime godkendelsesdato) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
 

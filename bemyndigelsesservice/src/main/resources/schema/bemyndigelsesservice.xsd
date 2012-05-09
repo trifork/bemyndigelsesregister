@@ -46,6 +46,7 @@
             <xs:choice>
                 <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
                 <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="BemyndigelseKode" type="xs:string"/>
             </xs:choice>
         </xs:complexType>
     </xs:element>

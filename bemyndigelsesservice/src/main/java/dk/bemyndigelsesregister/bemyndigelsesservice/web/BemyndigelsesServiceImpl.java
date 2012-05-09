@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
+
 @Repository("bemyndigelsesService")
 @Endpoint
 public class BemyndigelsesServiceImpl implements BemyndigelsesService {
@@ -98,7 +100,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
-        if (request.getBemyndigende() != null) {
+        if (request.getBemyndigelseKode() != null) {
+            foundBemyndigelser = singletonList(bemyndigelseDao.findByKode(request.getBemyndigelseKode()));
+        }
+        else if (request.getBemyndigende() != null) {
             foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigende());
         }
         else if (request.getBemyndigede() != null) {
