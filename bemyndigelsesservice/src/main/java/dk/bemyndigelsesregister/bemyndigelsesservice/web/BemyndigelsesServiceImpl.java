@@ -153,21 +153,38 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     public @ResponsePayload OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
             @RequestPayload final OpretGodkendtBemyndigelseRequest request, SoapHeader soapHeader) {
-        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setBemyndigendeCpr(request.getBemyndigende());
-            setBemyndigedeCpr(request.getBemyndigede());
-            setBemyndigedeCvr(request.getBemyndigedeCVR());
-            setLinkedSystem(linkedSystemDao.findBySystem(request.getSystem()));
-            setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(request.getArbejdsfunktion()));
-            setRettighed(rettighedDao.findByRettighedskode(request.getRettighedskode()));
+        Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
+        final DateTime now = systemService.getDateTime();
 
-            setKode(systemService.createUUIDString());
-            setGodkendelsesdato(systemService.getDateTime());
-        }};
+        for (final OpretGodkendtBemyndigelseRequest.Bemyndigelser bemyndigelseRequest : request.getBemyndigelser()) {
+            final Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+                setBemyndigendeCpr(bemyndigelseRequest.getBemyndigende());
+                setBemyndigedeCpr(bemyndigelseRequest.getBemyndigede());
+                setBemyndigedeCvr(bemyndigelseRequest.getBemyndigedeCVR());
+                setLinkedSystem(linkedSystemDao.findBySystem(bemyndigelseRequest.getSystem()));
+                setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(bemyndigelseRequest.getArbejdsfunktion()));
+                setRettighed(rettighedDao.findByRettighedskode(bemyndigelseRequest.getRettighed()));
+                setKode(systemService.createUUIDString());
+                setStatus(statusTypeDao.get(0));
+                setGodkendelsesdato(now);
+                setGyldigFra(now);
+                setGyldigTil(now.plusYears(100));
+
+            }};
+            bemyndigelseDao.save(bemyndigelse);
+            bemyndigelser.add(bemyndigelse);
+        }
 
         final OpretGodkendtBemyndigelseResponse response = new OpretGodkendtBemyndigelseResponse();
-        response.setGodkendtBemyndigelsesKode(bemyndigelse.getKode());
-        bemyndigelseDao.save(bemyndigelse);
+        response.getBemyndigelser().addAll(CollectionUtils.collect(
+                bemyndigelser,
+                new Transformer<Bemyndigelse, dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
+                    @Override
+                    public dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse transform(Bemyndigelse bemyndigelse) {
+                        return toJaxbType(bemyndigelse);
+                    }
+                }
+        ));
         return response;
     }
 

@@ -37,15 +37,16 @@ public class BemyndigelsesServiceImplTest {
     @Mock SystemService systemService;
     @Mock SecurityHelper securityHelper;
 
-    SoapHeader soapHeader = mock(SoapHeader.class);
+    @Mock SoapHeader soapHeader;
+
     private final DateTime now = new DateTime();
 
     final String kode = "UUID kode";
     final String bemyndigendeCpr = "BemyndigendeCpr";
     final String bemyndigedeCpr = "BemyndigedeCpr";
     final String bemyndigedeCvr = "BemyndigedeCvr";
-    final String arbejdsfunktion = "Arbejdsfunktion";
-    final String rettighedskode = "Rettighedskode";
+    final String arbejdsfunktionKode = "Arbejdsfunktion";
+    final String rettighedKode = "Rettighedskode";
     final String systemKode = "SystemKode";
     final String statusKode = "StatusKode";
 
@@ -54,7 +55,7 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kode, null);
 
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
-                bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighedskode, systemKode,
+                bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
 
         OpretAnmodningOmBemyndigelseRequest request = new OpretAnmodningOmBemyndigelseRequest() {{
@@ -70,15 +71,15 @@ public class BemyndigelsesServiceImplTest {
 
         final OpretAnmodningOmBemyndigelseResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
 
-        verify(bemyndigelseManager).opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighedskode, systemKode, null, null);
+        verify(bemyndigelseManager).opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
 
         assertEquals(1, response.getBemyndigelser().size());
         final dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse responseBemyndigelse = response.getBemyndigelser().get(0);
         assertEquals(kode, responseBemyndigelse.getKode());
         assertEquals(bemyndigendeCpr, responseBemyndigelse.getBemyndigende());
         assertEquals(bemyndigedeCpr, responseBemyndigelse.getBemyndigede());
-        assertEquals(arbejdsfunktion, responseBemyndigelse.getArbejdsfunktion());
-        assertEquals(rettighedskode, responseBemyndigelse.getRettighedskode());
+        assertEquals(arbejdsfunktionKode, responseBemyndigelse.getArbejdsfunktion());
+        assertEquals(rettighedKode, responseBemyndigelse.getRettighedskode());
         assertEquals(systemKode, responseBemyndigelse.getSystem());
     }
 
@@ -101,34 +102,40 @@ public class BemyndigelsesServiceImplTest {
     public void canCreateApprovedBemyndigelse() throws Exception {
         final DateTime now = new DateTime();
         final OpretGodkendtBemyndigelseRequest request = new OpretGodkendtBemyndigelseRequest() {{
-            setBemyndigende("bemyndigendeCpr");
-            setBemyndigede("bemyndigedeCpr");
-            setBemyndigedeCVR("bemyndigedeCvr");
-            setSystem("system");
-            setArbejdsfunktion("arbejdsfunktion");
-            setRettighedskode("rettighed");
+            getBemyndigelser().add(new Bemyndigelser() {{
+                setBemyndigende(bemyndigendeCpr);
+                setBemyndigede(bemyndigedeCpr);
+                setBemyndigedeCVR(bemyndigedeCvr);
+                setSystem(systemKode);
+                setArbejdsfunktion(arbejdsfunktionKode);
+                setRettighed(rettighedKode);
+            }});
         }};
         final LinkedSystem system = new LinkedSystem();
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
         final Rettighed rettighed = new Rettighed();
 
-        when(systemService.createUUIDString()).thenReturn("UUID kode");
+        when(systemService.createUUIDString()).thenReturn(kode);
         when(systemService.getDateTime()).thenReturn(now);
-        when(linkedSystemDao.findBySystem("system")).thenReturn(system);
-        when(arbejdsfunktionDao.findByArbejdsfunktion("arbejdsfunktion")).thenReturn(arbejdsfunktion);
-        when(rettighedDao.findByRettighedskode("rettighed")).thenReturn(rettighed);
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(system);
+        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(arbejdsfunktion);
+        when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(rettighed);
+        when(statusTypeDao.get(0)).thenReturn(new StatusType() {{
+            setStatus(statusKode);
+        }});
 
         final OpretGodkendtBemyndigelseResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
-        assertEquals("UUID kode", response.getGodkendtBemyndigelsesKode());
+        assertEquals(1, response.getBemyndigelser().size());
+        assertEquals(kode, response.getBemyndigelser().get(0).getKode());
         verify(bemyndigelseDao).save(argThat(new TypeSafeMatcher<Bemyndigelse>() {
             @Override
             public boolean matchesSafely(Bemyndigelse item) {
                 return allTrue(
-                        item.getBemyndigendeCpr().equals("bemyndigendeCpr"),
-                        item.getBemyndigedeCpr().equals("bemyndigedeCpr"),
-                        item.getBemyndigedeCvr().equals("bemyndigedeCvr"),
-                        item.getKode().equals("UUID kode"),
+                        item.getKode().equals(kode),
+                        item.getBemyndigendeCpr().equals(bemyndigendeCpr),
+                        item.getBemyndigedeCpr().equals(bemyndigedeCpr),
+                        item.getBemyndigedeCvr().equals(bemyndigedeCvr),
                         item.getGodkendelsesdato() == now,
                         item.getLinkedSystem() == system,
                         item.getArbejdsfunktion() == arbejdsfunktion,
@@ -177,11 +184,11 @@ public class BemyndigelsesServiceImplTest {
         bemyndigelse.setLinkedSystem(system);
 
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
-        arbejdsfunktion.setArbejdsfunktion(this.arbejdsfunktion);
+        arbejdsfunktion.setArbejdsfunktion(this.arbejdsfunktionKode);
         bemyndigelse.setArbejdsfunktion(arbejdsfunktion);
 
         final Rettighed rettighed = new Rettighed();
-        rettighed.setRettighedskode(this.rettighedskode);
+        rettighed.setRettighedskode(this.rettighedKode);
         bemyndigelse.setRettighed(rettighed);
 
         final StatusType status = new StatusType();

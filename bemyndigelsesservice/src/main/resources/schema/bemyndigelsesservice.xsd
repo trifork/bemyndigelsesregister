@@ -88,12 +88,18 @@
     <xs:element name="OpretGodkendtBemyndigelseRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="BemyndigedeCVR" type="cvr:CVRnumberIdentifierType"/>
-                <xs:element name="System" type="xs:string"/>
-                <xs:element name="arbejdsfunktion" type="xs:string"/>
-                <xs:element name="rettighedskode" type="xs:string"/>
+                <xs:element name="Bemyndigelser" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Bemyndigende" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="Bemyndigede" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="BemyndigedeCVR" type="cvr:CVRnumberIdentifierType"/>
+                            <xs:element name="System" type="xs:string"/>
+                            <xs:element name="Arbejdsfunktion" type="xs:string"/>
+                            <xs:element name="Rettighed" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -101,7 +107,7 @@
     <xs:element name="OpretGodkendtBemyndigelseResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="GodkendtBemyndigelsesKode" type="xs:string"/>
+                <xs:element name="Bemyndigelser" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
