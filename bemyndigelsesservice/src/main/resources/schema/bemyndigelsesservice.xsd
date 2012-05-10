@@ -64,14 +64,16 @@
             <xs:sequence>
                 <xs:element name="Anmodning" minOccurs="1" maxOccurs="unbounded">
                     <xs:complexType>
-                        <xs:sequence>
+                        <xs:all>
                             <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
                             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                             <xs:element name="Arbejdsfunktion" type="xs:string"/>
                             <xs:element name="Rettighed" type="xs:string"/>
                             <xs:element name="System" type="xs:string"/>
-                        </xs:sequence>
+                            <!-- TODO: xs:element name="GyldigFra" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+         git                   <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0" maxOccurs="1"/-->
+                        </xs:all>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
@@ -91,7 +93,7 @@
             <xs:sequence>
                 <xs:element name="Bemyndigelse" minOccurs="1" maxOccurs="unbounded">
                     <xs:complexType>
-                        <xs:sequence>
+                        <xs:all>
                             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                             <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
@@ -100,7 +102,7 @@
                             <xs:element name="Rettighed" type="xs:string"/>
                             <xs:element name="GyldigFra" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
                             <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
-                        </xs:sequence>
+                        </xs:all>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>

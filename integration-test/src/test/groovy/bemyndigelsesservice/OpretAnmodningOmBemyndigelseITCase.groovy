@@ -13,9 +13,9 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
         def response = send("opretAnmodningOmBemyndigelser") {
             "bms:OpretAnmodningOmBemyndigelserRequest" {
                 "Anmodning" {
-                    "BemyndigedeCvr"('20000000')
-                    "BemyndigedeCpr"('1010101010')
                     "BemyndigendeCpr"('2006271866')
+                    "BemyndigedeCpr"('1010101010')
+                    "BemyndigedeCvr"('20000000')
                     "Arbejdsfunktion"("Laege")
                     "Rettighed"("R01")
                     "System"("Trifork test system")
