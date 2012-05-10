@@ -14,8 +14,8 @@ class HentBemyndigelserITCase extends WebServiceSupport {
         try {
             send("hentBemyndigelser") {
                 "bms:HentBemyndigelserRequest" {
-                    "Bemyndigende"('2006271866')
-                    "Bemyndigede"('1010101010')
+                    "BemyndigendeCpr"('2006271866')
+                    "BemyndigedeCpr"('1010101010')
                 }
             }
         } catch (SOAPFaultException e) {
@@ -24,10 +24,10 @@ class HentBemyndigelserITCase extends WebServiceSupport {
     }
 
     @Test
-    public void willValidateOnBothBemyndigendeParameter() {
+    public void willValidateOnBemyndigendeParameter() {
         def response = send("hentBemyndigelser") {
             "bms:HentBemyndigelserRequest" {
-                "Bemyndigende"('2006271866')
+                "BemyndigendeCpr"('2006271866')
             }
 
         }
