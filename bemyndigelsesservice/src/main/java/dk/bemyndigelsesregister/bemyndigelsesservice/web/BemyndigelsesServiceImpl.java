@@ -46,7 +46,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.opretAnmodningOmBemyndigelser")
+    @Protected
     @Transactional
     public @ResponsePayload OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
             @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
@@ -74,7 +74,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.godkendBemyndigelse")
+    @Protected
     @Transactional
     public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
@@ -96,7 +96,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.hentBemyndigelser")
+    @Protected
     public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
@@ -144,7 +144,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.opretGodkendteBemyndigelser")
+    @Protected
     @Transactional
     public @ResponsePayload OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
             @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
@@ -178,7 +178,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.sletBemyndigelser")
+    @Protected
     @Transactional
     public @ResponsePayload SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader) {

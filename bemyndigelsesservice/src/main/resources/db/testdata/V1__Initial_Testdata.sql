@@ -102,6 +102,3 @@ INSERT INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den god
 
 INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '1');
 INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '2');
-INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('BemyndigelsesService.opretAnmodningOmBemyndigelser', '25520041');
-INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('BemyndigelsesService.hentBemyndigelser', '25520041');
-INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('BemyndigelsesService.opretGodkendteBemyndigelser', '25520041');
