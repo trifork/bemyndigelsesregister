@@ -48,12 +48,12 @@ public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements Be
     }
 
     @Override
-    public Collection<Bemyndigelse> findByBemyndigendeCpr(String bemyndigendeCpr) {
+    public List<Bemyndigelse> findByBemyndigendeCpr(String bemyndigendeCpr) {
         return query().where().eq("bemyndigende_cpr", bemyndigendeCpr).findList();
     }
 
     @Override
-    public Collection<Bemyndigelse> findByBemyndigedeCpr(String bemyndigedeCpr) {
+    public List<Bemyndigelse> findByBemyndigedeCpr(String bemyndigedeCpr) {
         return query().where().eq("bemyndigede_cpr", bemyndigedeCpr).findList();
     }
 }

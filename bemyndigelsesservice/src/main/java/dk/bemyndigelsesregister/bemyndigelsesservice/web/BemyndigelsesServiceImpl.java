@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import com.trifork.dgws.DgwsRequestContext;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
@@ -11,6 +12,7 @@ import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
@@ -41,6 +43,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     BemyndigelseDao bemyndigelseDao;
     @Inject
     SecurityHelper securityHelper;
+    @Inject
+    DgwsRequestContext dgwsRequestContext;
 
     public BemyndigelsesServiceImpl() {
     }
@@ -99,14 +103,19 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Protected
     public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
-        Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
+        List<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
+        String idCardCpr = dgwsRequestContext.getIdCardCpr();
         if (request.getKode() != null) {
-            foundBemyndigelser = singletonList(bemyndigelseDao.findByKode(request.getKode()));
+            final Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(request.getKode());
+            foundBemyndigelser = singletonList(bemyndigelse);
+            verifyCprIn(idCardCpr, "IDCard CPR was not found in bemyndigelse", bemyndigelse.getBemyndigendeCpr(), bemyndigelse.getBemyndigedeCpr());
         }
         else if (request.getBemyndigendeCpr() != null) {
+            verifyCprIn(idCardCpr, "IDCard CPR was not equal to BemyndigendeCpr", request.getBemyndigendeCpr());
             foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigendeCpr());
         }
         else if (request.getBemyndigedeCpr() != null) {
+            verifyCprIn(idCardCpr, "IDCard CPR was not equal to BemyndigedeCpr", request.getBemyndigedeCpr());
             foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigedeCpr());
         }
 
@@ -123,6 +132,16 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     }
             ));
         }};
+    }
+
+    public void verifyCprIn(String idCardCpr, String errorMessage, String... cprs) {
+        for (String cpr : cprs) {
+            if (idCardCpr.equals(cpr)) {
+                return;
+            }
+        }
+        logger.error("IDCard cpr=" + idCardCpr + " was not found in[" + StringUtils.join(cprs, ",") + "]");
+        throw new IllegalAccessError(errorMessage);
     }
 
     public static dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse toJaxbType(final Bemyndigelse bem) {

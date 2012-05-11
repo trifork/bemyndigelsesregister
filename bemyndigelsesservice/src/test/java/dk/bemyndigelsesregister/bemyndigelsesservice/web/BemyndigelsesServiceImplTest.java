@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import com.trifork.dgws.DgwsRequestContext;
 import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
@@ -33,6 +34,7 @@ public class BemyndigelsesServiceImplTest {
     @Mock BemyndigelseDao bemyndigelseDao;
     @Mock SystemService systemService;
     @Mock SecurityHelper securityHelper;
+    @Mock DgwsRequestContext dgwsRequestContext;
 
     @Mock SoapHeader soapHeader;
 
@@ -122,6 +124,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canGetBemyndigelserByBemyndigende() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Bemyndigende");
         when(bemyndigelseDao.findByBemyndigendeCpr("Bemyndigende")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -144,6 +147,7 @@ public class BemyndigelsesServiceImplTest {
     public void canGetBemyndigelserByKode() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now.minusDays(7));
         when(bemyndigelseDao.findByKode(kodeText)).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigelse.getBemyndigendeCpr());
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
             setKode(kodeText);
@@ -197,6 +201,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canGetBemyndigelserByBemyndigede() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Bemyndigede");
         when(bemyndigelseDao.findByBemyndigedeCpr("Bemyndigede")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -214,6 +219,27 @@ public class BemyndigelsesServiceImplTest {
                     public void describeTo(Description description) { }
                 }
         ));
+    }
+
+    @Test(expected = IllegalAccessError.class)
+    public void canNotHentBemyndigelserWhenBemyndigeCprIsDifferentFromIDCard() throws Exception {
+        final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
+            setBemyndigendeCpr("Wrong CPR");
+        }};
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("IDcard CPR");
+
+        service.hentBemyndigelser(request, soapHeader);
+    }
+
+    @Test(expected = IllegalAccessError.class)
+    public void canNotHentBemyndigelserWhenIDCardCprIsNotInBemyndigelse() throws Exception {
+        final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
+            setKode(kodeText);
+        }};
+        when(bemyndigelseDao.findByKode(kodeText)).thenReturn(createBemyndigelse(kodeText, now));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("IDcard CPR");
+
+        service.hentBemyndigelser(request, soapHeader);
     }
 
     @Test
