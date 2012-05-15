@@ -172,7 +172,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
 
+        final String idCardCpr = dgwsRequestContext.getIdCardCpr();
+
         for (final OpretGodkendteBemyndigelserRequest.Bemyndigelse bemyndigelseRequest : request.getBemyndigelse()) {
+            verifyCprIn(idCardCpr, "IDCard CPR was different from BemyndigendeCpr", bemyndigelseRequest.getBemyndigendeCpr());
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretGodkendtBemyndigelse(
                     bemyndigelseRequest.getBemyndigendeCpr(),
                     bemyndigelseRequest.getBemyndigedeCpr(),

@@ -103,7 +103,7 @@ public class BemyndigelsesServiceImplTest {
             }});
         }};
 
-        final OpretAnmodningOmBemyndigelserResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
+        service.opretAnmodningOmBemyndigelser(request, soapHeader);
     }
 
     @Test
@@ -138,11 +138,33 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
 
         when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigendeCprText);
 
         final OpretGodkendteBemyndigelserResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
         assertEquals(1, response.getBemyndigelse().size());
         assertEquals(kodeText, response.getBemyndigelse().get(0).getKode());
+    }
+
+    @Test(expected = IllegalAccessError.class)
+    public void canNotCreateApprovedBemyndigelseForAnotherCpr() throws Exception {
+        final OpretGodkendteBemyndigelserRequest request = new OpretGodkendteBemyndigelserRequest() {{
+            getBemyndigelse().add(new Bemyndigelse() {{
+                setBemyndigendeCpr(bemyndigendeCprText);
+                setBemyndigedeCpr(bemyndigedeCprText);
+                setBemyndigedeCvr(bemyndigedeCvrText);
+                setSystem(systemKode);
+                setArbejdsfunktion(arbejdsfunktionKode);
+                setRettighed(rettighedKode);
+                setGyldigFra(new XMLGregorianCalendarImpl(now.toGregorianCalendar()));
+            }});
+        }};
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
+
+        when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+
+        service.opretGodkendtBemyndigelse(request, soapHeader);
     }
 
     @Test
