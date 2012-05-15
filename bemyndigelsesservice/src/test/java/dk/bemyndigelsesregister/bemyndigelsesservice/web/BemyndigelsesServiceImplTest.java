@@ -303,7 +303,7 @@ public class BemyndigelsesServiceImplTest {
     }
 
     @Test
-    public void willDeleteBemyndigelse() throws Exception {
+    public void canDeleteBemyndigelse() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
             setId(1l);
             setKode("TestKode1");
@@ -311,7 +311,7 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("Cpr 1");
         }};
 
-        when(securityHelper.getCpr(soapHeader)).thenReturn("Cpr 1");
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
         when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
         when(systemService.getDateTime()).thenReturn(now);
 
@@ -324,6 +324,25 @@ public class BemyndigelsesServiceImplTest {
         verify(bemyndigelseDao).save(bemyndigelse);
     }
 
+    @Test(expected = IllegalAccessError.class)
+    public void canNotDeleteBemyndigelseWithAnotherCpr() throws Exception {
+        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setId(1l);
+            setKode("TestKode1");
+            setGyldigTil(now.plusYears(1));
+            setBemyndigendeCpr("Cpr 1");
+        }};
+
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil Cpr");
+        when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
+        when(systemService.getDateTime()).thenReturn(now);
+
+        SletBemyndigelserRequest request = new SletBemyndigelserRequest() {{
+            getKode().add("TestKode1");
+        }};
+        service.sletBemyndigelser(request, soapHeader);
+    }
+
     @Test
     public void willNotDeleteBemyndigelseWithPastGyldigTil() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
@@ -333,7 +352,7 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("Cpr 1");
         }};
 
-        when(securityHelper.getCpr(soapHeader)).thenReturn("Cpr 1");
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
         when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
         when(systemService.getDateTime()).thenReturn(now);
 
@@ -343,33 +362,6 @@ public class BemyndigelsesServiceImplTest {
 
         assertEquals(0, response.getKode().size());
         assertEquals(now.minusDays(1), bemyndigelse.getGyldigTil());
-        verify(bemyndigelseDao, never()).save(bemyndigelse);
-    }
-
-    @Test
-    public void willDeclineWhenCprIsDifferentFromBemyndigendeCpr() throws Exception {
-        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setId(1l);
-            setKode(kodeText);
-            setGyldigTil(now.minusDays(1));
-            setBemyndigendeCpr("Cpr 1");
-        }};
-
-        when(securityHelper.getCpr(soapHeader)).thenReturn("Evil Cpr");
-        when(bemyndigelseDao.findByKode(kodeText)).thenReturn(bemyndigelse);
-        when(systemService.getDateTime()).thenReturn(now);
-
-        SletBemyndigelserRequest request = new SletBemyndigelserRequest();
-        request.getKode().add(kodeText);
-        SletBemyndigelserResponse response = null;
-        try {
-            response = service.sletBemyndigelser(request, soapHeader);
-            fail("Did not throw exception");
-        } catch (IllegalAccessError e) {
-            assertEquals("User has different CPR than BemyndigedeCpr for kode=" + kodeText, e.getMessage());
-        }
-
-        assertNull(response);
         verify(bemyndigelseDao, never()).save(bemyndigelse);
     }
 

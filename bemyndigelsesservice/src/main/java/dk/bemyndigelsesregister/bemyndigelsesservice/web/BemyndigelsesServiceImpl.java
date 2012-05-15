@@ -212,19 +212,13 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     public @ResponsePayload SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader) {
 
-        String cpr = securityHelper.getCpr(soapHeader);
-
         DateTime now = systemService.getDateTime();
 
         SletBemyndigelserResponse response = new SletBemyndigelserResponse();
 
         for (String kode : request.getKode()) {
             Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(kode);
-
-            if (!bemyndigelse.getBemyndigendeCpr().equals(cpr)) {
-                logger.error("User has different Cpr=" + cpr + " than BemyndigendeCpr=" + bemyndigelse.getBemyndigendeCpr());
-                throw new IllegalAccessError("User has different CPR than BemyndigedeCpr for kode=" + bemyndigelse.getKode());
-            }
+            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + kode, bemyndigelse.getBemyndigendeCpr());
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
