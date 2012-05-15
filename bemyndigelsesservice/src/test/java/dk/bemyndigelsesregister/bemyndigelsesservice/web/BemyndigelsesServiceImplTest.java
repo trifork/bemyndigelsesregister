@@ -56,6 +56,7 @@ public class BemyndigelsesServiceImplTest {
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
                 bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("BemyndigedeCpr");
 
         OpretAnmodningOmBemyndigelserRequest request = new OpretAnmodningOmBemyndigelserRequest() {{
             getAnmodning().add(new Anmodning() {{
@@ -80,6 +81,29 @@ public class BemyndigelsesServiceImplTest {
         assertEquals(arbejdsfunktionKode, responseBemyndigelse.getArbejdsfunktion());
         assertEquals(rettighedKode, responseBemyndigelse.getRettighed());
         assertEquals(systemKode, responseBemyndigelse.getSystem());
+    }
+
+    @Test(expected = IllegalAccessError.class)
+    public void canNotCreateBemyndigelseAndmodningForAnotherCpr() throws Exception {
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
+
+        when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
+                bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
+                null, null)).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+
+        OpretAnmodningOmBemyndigelserRequest request = new OpretAnmodningOmBemyndigelserRequest() {{
+            getAnmodning().add(new Anmodning() {{
+                setBemyndigendeCpr("BemyndigendeCpr");
+                setBemyndigedeCpr("BemyndigedeCpr");
+                setBemyndigedeCvr("BemyndigedeCvr");
+                setArbejdsfunktion("Arbejdsfunktion");
+                setRettighed("Rettighedskode");
+                setSystem("SystemKode");
+            }});
+        }};
+
+        final OpretAnmodningOmBemyndigelserResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
     }
 
     @Test

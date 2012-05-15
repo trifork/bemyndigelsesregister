@@ -54,9 +54,12 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     public @ResponsePayload OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
             @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
+        String idCardCpr = dgwsRequestContext.getIdCardCpr();
+
         Collection<Bemyndigelse> createdBemyndigelser = new ArrayList<Bemyndigelse>();
 
         for (OpretAnmodningOmBemyndigelserRequest.Anmodning anmodning : request.getAnmodning()) {
+            verifyCprIn(idCardCpr, "IDCard CPR was different from BemyndigedeCpr", anmodning.getBemyndigedeCpr());
             logger.debug("Creating Bemyndigelse for anmodning=" + anmodning.toString());
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretAnmodningOmBemyndigelse(
                     anmodning.getBemyndigendeCpr(),
