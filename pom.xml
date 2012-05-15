@@ -57,6 +57,17 @@
     <properties>
         <functionaltest.serverport>8085</functionaltest.serverport>
         <functionaltest.urlprefix>http://localhost:${functionaltest.serverport}</functionaltest.urlprefix>
+        <deployment.cargo.hostname>localhost</deployment.cargo.hostname>
+        <deployment.pingURL>http://${deployment.cargo.hostname}:8080/health</deployment.pingURL>
+        <deployment.serversettings>bms.localhost</deployment.serversettings> <!-- Add a server setting to your ~/.m2/settings.xml
+        <server>
+            <id>bms.localhost</id>
+            <configuration>
+                <cargo.remote.username>admin</cargo.remote.username>
+                <cargo.remote.password>SECRET</cargo.remote.password>
+            </configuration>
+        </server>
+        For more info, read http://docs.codehaus.org/display/CARGO/Maven2+Plugin+Reference+Guide#Maven2PluginReferenceGuide-settingsXML -->
     </properties>
 
     <profiles>
@@ -69,6 +80,13 @@
             </activation>
             <properties>
                 <functionaltest.serverport>${env.CONTAINERPORT}</functionaltest.serverport>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <deployment.cargo.hostname>test03.ddv.netic.dk</deployment.cargo.hostname>
+                <deployment.serversettings>bms.dev</deployment.serversettings>
             </properties>
         </profile>
     </profiles>
@@ -172,6 +190,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
