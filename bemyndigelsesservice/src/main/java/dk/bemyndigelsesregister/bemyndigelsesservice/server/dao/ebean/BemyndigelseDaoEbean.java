@@ -28,7 +28,7 @@ public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements Be
     }
 
     @Override
-    public Collection<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder) {
+    public List<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder) {
         return query().where().in("kode", bemyndigelsesKoder).findList();
     }
 

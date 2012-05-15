@@ -216,9 +216,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         SletBemyndigelserResponse response = new SletBemyndigelserResponse();
 
-        for (String kode : request.getKode()) {
-            Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(kode);
-            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + kode, bemyndigelse.getBemyndigendeCpr());
+        List<Bemyndigelse> bemyndigelser = bemyndigelseDao.findByKoder(request.getKode());
+        for (Bemyndigelse bemyndigelse : bemyndigelser) {
+            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
@@ -230,6 +230,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             else {
                 logger.info("Bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
+
         }
 
         return response;

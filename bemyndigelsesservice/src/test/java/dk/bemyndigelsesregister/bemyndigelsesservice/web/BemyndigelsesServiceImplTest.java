@@ -2,7 +2,6 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import com.trifork.dgws.DgwsRequestContext;
-import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
@@ -33,7 +32,6 @@ public class BemyndigelsesServiceImplTest {
     @Mock BemyndigelseManager bemyndigelseManager;
     @Mock BemyndigelseDao bemyndigelseDao;
     @Mock SystemService systemService;
-    @Mock SecurityHelper securityHelper;
     @Mock DgwsRequestContext dgwsRequestContext;
 
     @Mock SoapHeader soapHeader;
@@ -312,7 +310,7 @@ public class BemyndigelsesServiceImplTest {
         }};
 
         when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
-        when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
+        when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest();
@@ -334,7 +332,7 @@ public class BemyndigelsesServiceImplTest {
         }};
 
         when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil Cpr");
-        when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
+        when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest() {{
@@ -353,7 +351,7 @@ public class BemyndigelsesServiceImplTest {
         }};
 
         when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
-        when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
+        when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest();
