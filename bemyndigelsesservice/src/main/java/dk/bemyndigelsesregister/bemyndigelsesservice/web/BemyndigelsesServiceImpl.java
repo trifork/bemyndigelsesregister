@@ -5,7 +5,6 @@ import com.trifork.dgws.DgwsRequestContext;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
-import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
@@ -41,8 +40,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     BemyndigelseManager bemyndigelseManager;
     @Inject
     BemyndigelseDao bemyndigelseDao;
-    @Inject
-    SecurityHelper securityHelper;
     @Inject
     DgwsRequestContext dgwsRequestContext;
 
