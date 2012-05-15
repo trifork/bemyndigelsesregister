@@ -114,11 +114,25 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
 
         when(bemyndigelseManager.godkendBemyndigelser(singletonList(kodeText))).thenReturn(singletonList(bemyndigelse));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigendeCprText);
 
         final GodkendBemyndigelseResponse response = service.godkendBemyndigelse(request, soapHeader);
 
         assertEquals(1, response.getBemyndigelser().size());
         assertEquals(kodeText, response.getBemyndigelser().get(0).getKode());
+    }
+
+    @Test(expected = IllegalAccessError.class)
+    public void canNotApproveBemyndigelseWithAnotherCpr() throws Exception {
+        final GodkendBemyndigelseRequest request = new GodkendBemyndigelseRequest() {{
+            getBemyndigelsesKode().add(kodeText);
+        }};
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
+
+        when(bemyndigelseManager.godkendBemyndigelser(singletonList(kodeText))).thenReturn(singletonList(bemyndigelse));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+
+        service.godkendBemyndigelse(request, soapHeader);
     }
 
     @Test

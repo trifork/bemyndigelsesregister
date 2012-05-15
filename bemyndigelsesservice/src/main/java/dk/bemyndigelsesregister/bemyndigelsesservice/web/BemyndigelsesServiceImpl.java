@@ -89,6 +89,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         Collection<Bemyndigelse> bemyndigelser = bemyndigelseManager.godkendBemyndigelser(bemyndigelsesKoder);
 
+        for (Bemyndigelse bemyndigelse : bemyndigelser) {
+            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
+        }
+
         final GodkendBemyndigelseResponse response = new GodkendBemyndigelseResponse();
         response.getBemyndigelser().addAll(CollectionUtils.collect(
                 bemyndigelser,
