@@ -75,11 +75,6 @@
             <version>2.2</version>
         </dependency>
         <dependency>
-            <groupId>dk.sosi.seal</groupId>
-            <artifactId>seal</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.mockftpserver</groupId>
             <artifactId>MockFtpServer</artifactId>
             <version>2.3</version>

@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
-import com.trifork.dgws.util.SecurityHelper;
+import com.trifork.dgws.DgwsRequestContext;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
@@ -32,7 +32,7 @@ public class BemyndigelsesServiceImplTest {
     @Mock BemyndigelseManager bemyndigelseManager;
     @Mock BemyndigelseDao bemyndigelseDao;
     @Mock SystemService systemService;
-    @Mock SecurityHelper securityHelper;
+    @Mock DgwsRequestContext dgwsRequestContext;
 
     @Mock SoapHeader soapHeader;
 
@@ -54,6 +54,7 @@ public class BemyndigelsesServiceImplTest {
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
                 bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("BemyndigedeCpr");
 
         OpretAnmodningOmBemyndigelserRequest request = new OpretAnmodningOmBemyndigelserRequest() {{
             getAnmodning().add(new Anmodning() {{
@@ -80,6 +81,29 @@ public class BemyndigelsesServiceImplTest {
         assertEquals(systemKode, responseBemyndigelse.getSystem());
     }
 
+    @Test(expected = IllegalAccessError.class)
+    public void canNotCreateBemyndigelseAndmodningForAnotherCpr() throws Exception {
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
+
+        when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
+                bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
+                null, null)).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+
+        OpretAnmodningOmBemyndigelserRequest request = new OpretAnmodningOmBemyndigelserRequest() {{
+            getAnmodning().add(new Anmodning() {{
+                setBemyndigendeCpr("BemyndigendeCpr");
+                setBemyndigedeCpr("BemyndigedeCpr");
+                setBemyndigedeCvr("BemyndigedeCvr");
+                setArbejdsfunktion("Arbejdsfunktion");
+                setRettighed("Rettighedskode");
+                setSystem("SystemKode");
+            }});
+        }};
+
+        service.opretAnmodningOmBemyndigelser(request, soapHeader);
+    }
+
     @Test
     public void canApproveBemyndigelse() throws Exception {
         final GodkendBemyndigelseRequest request = new GodkendBemyndigelseRequest() {{
@@ -88,11 +112,25 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
 
         when(bemyndigelseManager.godkendBemyndigelser(singletonList(kodeText))).thenReturn(singletonList(bemyndigelse));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigendeCprText);
 
         final GodkendBemyndigelseResponse response = service.godkendBemyndigelse(request, soapHeader);
 
         assertEquals(1, response.getBemyndigelser().size());
         assertEquals(kodeText, response.getBemyndigelser().get(0).getKode());
+    }
+
+    @Test(expected = IllegalAccessError.class)
+    public void canNotApproveBemyndigelseWithAnotherCpr() throws Exception {
+        final GodkendBemyndigelseRequest request = new GodkendBemyndigelseRequest() {{
+            getBemyndigelsesKode().add(kodeText);
+        }};
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
+
+        when(bemyndigelseManager.godkendBemyndigelser(singletonList(kodeText))).thenReturn(singletonList(bemyndigelse));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+
+        service.godkendBemyndigelse(request, soapHeader);
     }
 
     @Test
@@ -112,6 +150,7 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
 
         when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigendeCprText);
 
         final OpretGodkendteBemyndigelserResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
@@ -119,9 +158,31 @@ public class BemyndigelsesServiceImplTest {
         assertEquals(kodeText, response.getBemyndigelse().get(0).getKode());
     }
 
+    @Test(expected = IllegalAccessError.class)
+    public void canNotCreateApprovedBemyndigelseForAnotherCpr() throws Exception {
+        final OpretGodkendteBemyndigelserRequest request = new OpretGodkendteBemyndigelserRequest() {{
+            getBemyndigelse().add(new Bemyndigelse() {{
+                setBemyndigendeCpr(bemyndigendeCprText);
+                setBemyndigedeCpr(bemyndigedeCprText);
+                setBemyndigedeCvr(bemyndigedeCvrText);
+                setSystem(systemKode);
+                setArbejdsfunktion(arbejdsfunktionKode);
+                setRettighed(rettighedKode);
+                setGyldigFra(new XMLGregorianCalendarImpl(now.toGregorianCalendar()));
+            }});
+        }};
+        final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
+
+        when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+
+        service.opretGodkendtBemyndigelse(request, soapHeader);
+    }
+
     @Test
     public void canGetBemyndigelserByBemyndigende() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Bemyndigende");
         when(bemyndigelseDao.findByBemyndigendeCpr("Bemyndigende")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -144,6 +205,7 @@ public class BemyndigelsesServiceImplTest {
     public void canGetBemyndigelserByKode() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now.minusDays(7));
         when(bemyndigelseDao.findByKode(kodeText)).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigelse.getBemyndigendeCpr());
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
             setKode(kodeText);
@@ -197,6 +259,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canGetBemyndigelserByBemyndigede() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Bemyndigede");
         when(bemyndigelseDao.findByBemyndigedeCpr("Bemyndigede")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -216,8 +279,29 @@ public class BemyndigelsesServiceImplTest {
         ));
     }
 
+    @Test(expected = IllegalAccessError.class)
+    public void canNotHentBemyndigelserWhenBemyndigeCprIsDifferentFromIDCard() throws Exception {
+        final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
+            setBemyndigendeCpr("Wrong CPR");
+        }};
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("IDcard CPR");
+
+        service.hentBemyndigelser(request, soapHeader);
+    }
+
+    @Test(expected = IllegalAccessError.class)
+    public void canNotHentBemyndigelserWhenIDCardCprIsNotInBemyndigelse() throws Exception {
+        final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
+            setKode(kodeText);
+        }};
+        when(bemyndigelseDao.findByKode(kodeText)).thenReturn(createBemyndigelse(kodeText, now));
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("IDcard CPR");
+
+        service.hentBemyndigelser(request, soapHeader);
+    }
+
     @Test
-    public void willDeleteBemyndigelse() throws Exception {
+    public void canDeleteBemyndigelse() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
             setId(1l);
             setKode("TestKode1");
@@ -225,8 +309,8 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("Cpr 1");
         }};
 
-        when(securityHelper.getCpr(soapHeader)).thenReturn("Cpr 1");
-        when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
+        when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest();
@@ -238,6 +322,25 @@ public class BemyndigelsesServiceImplTest {
         verify(bemyndigelseDao).save(bemyndigelse);
     }
 
+    @Test(expected = IllegalAccessError.class)
+    public void canNotDeleteBemyndigelseWithAnotherCpr() throws Exception {
+        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
+            setId(1l);
+            setKode("TestKode1");
+            setGyldigTil(now.plusYears(1));
+            setBemyndigendeCpr("Cpr 1");
+        }};
+
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil Cpr");
+        when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
+        when(systemService.getDateTime()).thenReturn(now);
+
+        SletBemyndigelserRequest request = new SletBemyndigelserRequest() {{
+            getKode().add("TestKode1");
+        }};
+        service.sletBemyndigelser(request, soapHeader);
+    }
+
     @Test
     public void willNotDeleteBemyndigelseWithPastGyldigTil() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
@@ -247,8 +350,8 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("Cpr 1");
         }};
 
-        when(securityHelper.getCpr(soapHeader)).thenReturn("Cpr 1");
-        when(bemyndigelseDao.findByKode("TestKode1")).thenReturn(bemyndigelse);
+        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
+        when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
         SletBemyndigelserRequest request = new SletBemyndigelserRequest();
@@ -257,33 +360,6 @@ public class BemyndigelsesServiceImplTest {
 
         assertEquals(0, response.getKode().size());
         assertEquals(now.minusDays(1), bemyndigelse.getGyldigTil());
-        verify(bemyndigelseDao, never()).save(bemyndigelse);
-    }
-
-    @Test
-    public void willDeclineWhenCprIsDifferentFromBemyndigendeCpr() throws Exception {
-        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setId(1l);
-            setKode(kodeText);
-            setGyldigTil(now.minusDays(1));
-            setBemyndigendeCpr("Cpr 1");
-        }};
-
-        when(securityHelper.getCpr(soapHeader)).thenReturn("Evil Cpr");
-        when(bemyndigelseDao.findByKode(kodeText)).thenReturn(bemyndigelse);
-        when(systemService.getDateTime()).thenReturn(now);
-
-        SletBemyndigelserRequest request = new SletBemyndigelserRequest();
-        request.getKode().add(kodeText);
-        SletBemyndigelserResponse response = null;
-        try {
-            response = service.sletBemyndigelser(request, soapHeader);
-            fail("Did not throw exception");
-        } catch (IllegalAccessError e) {
-            assertEquals("User has different CPR than BemyndigedeCpr for kode=" + kodeText, e.getMessage());
-        }
-
-        assertNull(response);
         verify(bemyndigelseDao, never()).save(bemyndigelse);
     }
 

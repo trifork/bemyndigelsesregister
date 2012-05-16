@@ -13,8 +13,8 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
         def response = send("opretAnmodningOmBemyndigelser") {
             "bms:OpretAnmodningOmBemyndigelserRequest" {
                 "Anmodning" {
-                    "BemyndigendeCpr"('2006271866')
-                    "BemyndigedeCpr"('1010101010')
+                    "BemyndigendeCpr"('1010101010')
+                    "BemyndigedeCpr"('2006271866')
                     "BemyndigedeCvr"('20000000')
                     "Arbejdsfunktion"("Laege")
                     "Rettighed"("R01")
@@ -31,7 +31,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
             send("opretAnmodningOmBemyndigelser") {
                 "bms:OpretAnmodningOmBemyndigelserRequest" {
                     "Anmodning" {
-                        "BemyndigendeCpr"('2006271866')
+                        "BemyndigendeCpr"('1010101010')
                         "BemyndigedeCvr"('20000000')
                         "Arbejdsfunktion"("Laege")
                         "Rettighed"("R01")
