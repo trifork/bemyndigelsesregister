@@ -239,8 +239,14 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    public HentBemyndigelserResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
+    @Transactional
+    public IndlaesMetadataResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader) {
         return null;
     }
 }

@@ -92,10 +92,28 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="IndlaesMetadataResponse">
         <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentMetadataRequest">
+        <xs:complexType>
             <xs:sequence>
-                <xs:element name="Kode" type="xs:string"/>
+                <xs:element name="Domaene" type="bms:Domaene"/>
+                <xs:element name="System" type="bms:System"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentMetadataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Arbejdsfunktioner" type="bms:Arbejdsfunktioner" minOccurs="0"/>
+                <xs:element name="Rettigheder" type="bms:Rettigheder" minOccurs="0"/>
+                <xs:element name="DelegerbarRettigheder" type="bms:DelegerbarRettigheder" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

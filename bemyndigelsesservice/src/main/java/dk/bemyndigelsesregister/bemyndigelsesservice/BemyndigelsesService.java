@@ -44,6 +44,10 @@ public interface BemyndigelsesService {
     @PayloadRoot(localPart = "IndlaesMetadataRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
     @Action("http://nsi.dk/bemyndigelse/2012/05/01/indlaesMetadata")
     @ResponsePayload
-    HentBemyndigelserResponse indlaesMetadata(
+    IndlaesMetadataResponse indlaesMetadata(
             @RequestPayload IndlaesMetadataRequest request, SoapHeader soapHeader);
+
+    @PayloadRoot(localPart = "HentMetadataRequest", namespace = "http://nsi.dk/bemyndigelse/2012/05/01/")
+    @Action("http://nsi.dk/bemyndigelse/2012/05/01/hentMetadata")
+    HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader);
 }
