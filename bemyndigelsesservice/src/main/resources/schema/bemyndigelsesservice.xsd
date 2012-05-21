@@ -25,6 +25,74 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="ArbejdsfunktionListe">
+        <xs:sequence>
+            <xs:element name="Domaene" type="bms:Domaene"/>
+            <xs:element name="System" type="bms:System"/>
+            <xs:element name="Arbejdsfunktion" type="bms:Arbejdsfunktion"/>
+            <xs:element name="Beskrivelse" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RettighedListe">
+        <xs:sequence>
+            <xs:element name="Domaene" type="bms:Domaene"/>
+            <xs:element name="System" type="bms:System"/>
+            <xs:element name="Rettighedskode" type="bms:Rettighedskode"/>
+            <xs:element name="Beskrivelse" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DelegerbarRettighedListe">
+        <xs:sequence>
+            <xs:element name="Domaene" type="bms:Domaene"/>
+            <xs:element name="System" type="bms:System"/>
+            <xs:element name="Arbejdsfunktion" type="bms:Arbejdsfunktion"/>
+            <xs:element name="Rettighedskode" type="bms:Rettighedskode"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Domaene">
+        <xs:sequence>
+            <xs:element name="Domaene" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="System">
+        <xs:sequence>
+            <xs:element name="System" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Arbejdsfunktion">
+        <xs:sequence>
+            <xs:element name="Arbejdsfunktion" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Rettighedskode">
+        <xs:sequence>
+            <xs:element name="Rettighedskode" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="IndlaesMetadataRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Arbejdsfunktion" type="bms:ArbejdsfunktionListe"/>
+                <xs:element name="Rettighed" type = "bms:RettighedListe"/>
+                <xs:element name="DelegerbarRettighed" type = "bms:DelegerbarRettighedListe"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="IndlaesMetadataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Kode" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="GodkendBemyndigelseRequest">
         <xs:complexType>
             <xs:sequence>
@@ -72,7 +140,7 @@
                             <xs:element name="Rettighed" type="xs:string"/>
                             <xs:element name="System" type="xs:string"/>
                             <!-- TODO: xs:element name="GyldigFra" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
-         git                   <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0" maxOccurs="1"/-->
+                            <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0" maxOccurs="1"/-->
                         </xs:all>
                     </xs:complexType>
                 </xs:element>

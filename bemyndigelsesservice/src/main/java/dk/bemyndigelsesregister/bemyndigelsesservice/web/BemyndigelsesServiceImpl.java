@@ -9,6 +9,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
+
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.lang.StringUtils;
@@ -235,5 +236,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     private DateTime nullableDateTime(XMLGregorianCalendar xmlDate) {
         return xmlDate != null ? new DateTime(xmlDate.toGregorianCalendar()) : null;
+    }
+
+    @Override
+    public HentBemyndigelserResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
