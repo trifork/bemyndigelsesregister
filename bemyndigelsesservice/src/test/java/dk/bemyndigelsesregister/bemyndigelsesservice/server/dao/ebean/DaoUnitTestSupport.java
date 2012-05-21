@@ -2,6 +2,10 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import com.googlecode.flyway.core.Flyway;
 import dk.bemyndigelsesregister.bemyndigelsesservice.config.ApplicationRootConfig;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ArbejdsfunktionDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.LinkedSystemDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.RettighedDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.StatusTypeDao;
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -24,6 +28,12 @@ import static org.mockito.Mockito.mock;
 public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTests {
     @Inject
     Flyway flyway;
+
+    @Inject ArbejdsfunktionDao arbejdsfunktionDao;
+    @Inject LinkedSystemDao linkedSystemDao;
+    @Inject StatusTypeDao statusTypeDao;
+    @Inject RettighedDao rettighedDao;
+
 
     public static class MockContext {
         @Bean

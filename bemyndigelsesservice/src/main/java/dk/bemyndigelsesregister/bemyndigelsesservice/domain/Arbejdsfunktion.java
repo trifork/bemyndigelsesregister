@@ -50,4 +50,9 @@ public class Arbejdsfunktion extends DomainObject {
     }
     //</editor-fold>
 
+    public static Arbejdsfunktion createForTest(final String kode) {
+        return new Arbejdsfunktion() {{
+            setArbejdsfunktion(kode);
+        }};
+    }
 }

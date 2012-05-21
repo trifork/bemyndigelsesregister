@@ -1,19 +1,19 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import com.trifork.dgws.DgwsRequestContext;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
-import com.trifork.dgws.util.SecurityHelper;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -22,10 +22,13 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 @Repository("bemyndigelsesService")
 @Endpoint
@@ -38,29 +41,22 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Inject
     BemyndigelseDao bemyndigelseDao;
     @Inject
-    ArbejdsfunktionDao arbejdsfunktionDao;
-    @Inject
-    StatusTypeDao statusTypeDao;
-    @Inject
-    RettighedDao rettighedDao;
-    @Inject
-    LinkedSystemDao linkedSystemDao;
-    @Inject
-    Unmarshaller unmarshaller;
-    @Inject
-    SecurityHelper securityHelper;
+    DgwsRequestContext dgwsRequestContext;
 
     public BemyndigelsesServiceImpl() {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.opretAnmodningOmBemyndigelser")
+    @Protected
     @Transactional
-    public @ResponsePayload OpretAnmodningOmBemyndigelseResponse opretAnmodningOmBemyndigelser(
-            @RequestPayload OpretAnmodningOmBemyndigelseRequest request, SoapHeader soapHeader) {
+    public @ResponsePayload OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
+            @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
+        String idCardCpr = dgwsRequestContext.getIdCardCpr();
+
         Collection<Bemyndigelse> createdBemyndigelser = new ArrayList<Bemyndigelse>();
 
-        for (OpretAnmodningOmBemyndigelseRequest.Anmodninger anmodning : request.getAnmodninger()) {
+        for (OpretAnmodningOmBemyndigelserRequest.Anmodning anmodning : request.getAnmodning()) {
+            verifyCprIn(idCardCpr, "IDCard CPR was different from BemyndigedeCpr", anmodning.getBemyndigedeCpr());
             logger.debug("Creating Bemyndigelse for anmodning=" + anmodning.toString());
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretAnmodningOmBemyndigelse(
                     anmodning.getBemyndigendeCpr(),
@@ -68,27 +64,31 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     anmodning.getBemyndigedeCvr(),
                     anmodning.getArbejdsfunktion(),
                     anmodning.getRettighed(),
-                    anmodning.getSystem()
-            );
+                    anmodning.getSystem(),
+                    null, null);
             logger.debug("Got bemyndigelse with kode=" + bemyndigelse.getKode());
             createdBemyndigelser.add(bemyndigelse);
         }
 
-        final OpretAnmodningOmBemyndigelseResponse response = new OpretAnmodningOmBemyndigelseResponse();
+        final OpretAnmodningOmBemyndigelserResponse response = new OpretAnmodningOmBemyndigelserResponse();
         for (Bemyndigelse bemyndigelse : createdBemyndigelser) {
-            response.getBemyndigelser().add(toJaxbType(bemyndigelse));
+            response.getBemyndigelse().add(toJaxbType(bemyndigelse));
         }
         return response;
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.godkendBemyndigelse")
+    @Protected
     @Transactional
     public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
-        final List<String> bemyndigelsesKoder = request.getBemyndigelsesKoder();
+        final List<String> bemyndigelsesKoder = request.getBemyndigelsesKode();
 
         Collection<Bemyndigelse> bemyndigelser = bemyndigelseManager.godkendBemyndigelser(bemyndigelsesKoder);
+
+        for (Bemyndigelse bemyndigelse : bemyndigelser) {
+            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
+        }
 
         final GodkendBemyndigelseResponse response = new GodkendBemyndigelseResponse();
         response.getBemyndigelser().addAll(CollectionUtils.collect(
@@ -104,21 +104,29 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.hentBemyndigelser")
+    @Protected
     public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
-        Collection<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
-        if (request.getBemyndigende() != null) {
-            foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigende());
+        List<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
+        String idCardCpr = dgwsRequestContext.getIdCardCpr();
+        if (request.getKode() != null) {
+            final Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(request.getKode());
+            foundBemyndigelser = singletonList(bemyndigelse);
+            verifyCprIn(idCardCpr, "IDCard CPR was not found in bemyndigelse", bemyndigelse.getBemyndigendeCpr(), bemyndigelse.getBemyndigedeCpr());
         }
-        else if (request.getBemyndigede() != null) {
-            foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigede());
+        else if (request.getBemyndigendeCpr() != null) {
+            verifyCprIn(idCardCpr, "IDCard CPR was not equal to BemyndigendeCpr", request.getBemyndigendeCpr());
+            foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigendeCpr());
+        }
+        else if (request.getBemyndigedeCpr() != null) {
+            verifyCprIn(idCardCpr, "IDCard CPR was not equal to BemyndigedeCpr", request.getBemyndigedeCpr());
+            foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigedeCpr());
         }
 
         final Collection<Bemyndigelse> finalFoundBemyndigelser = foundBemyndigelser;
 
         return new HentBemyndigelserResponse() {{
-            getBemyndigelser().addAll(CollectionUtils.collect(
+            getBemyndigelse().addAll(CollectionUtils.collect(
                     finalFoundBemyndigelser,
                     new Transformer<Bemyndigelse, dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
                         @Override
@@ -130,77 +138,102 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }};
     }
 
+    public void verifyCprIn(String idCardCpr, String errorMessage, String... cprs) {
+        for (String cpr : cprs) {
+            if (idCardCpr.equals(cpr)) {
+                return;
+            }
+        }
+        logger.error("IDCard cpr=" + idCardCpr + " was not found in[" + StringUtils.join(cprs, ",") + "]");
+        throw new IllegalAccessError(errorMessage);
+    }
+
     public static dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse toJaxbType(final Bemyndigelse bem) {
         return new dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse() {{
             setKode(bem.getKode());
-            setBemyndigende(bem.getBemyndigendeCpr());
-            setBemyndigede(bem.getBemyndigedeCpr());
+            setBemyndigendeCpr(bem.getBemyndigendeCpr());
+            setBemyndigedeCpr(bem.getBemyndigedeCpr());
             setBemyndigedeCvr(bem.getBemyndigedeCvr());
             setSystem(bem.getLinkedSystem().getSystem());
             setArbejdsfunktion(bem.getArbejdsfunktion().getArbejdsfunktion());
-            setRettighedskode(bem.getRettighed().getRettighedskode());
+            setRettighed(bem.getRettighed().getRettighedskode());
             setStatus(bem.getStatus().getStatus());
-            setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
+            if (bem.getGodkendelsesdato() != null) {
+                setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
+            }
             setGyldigFra(new XMLGregorianCalendarImpl(bem.getGyldigFra().toGregorianCalendar()));
             setGyldigTil(new XMLGregorianCalendarImpl(bem.getGyldigTil().toGregorianCalendar()));
         }};
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.opretGodkendtBemyndigelse")
+    @Protected
     @Transactional
-    public @ResponsePayload OpretGodkendtBemyndigelseResponse opretGodkendtBemyndigelse(
-            @RequestPayload final OpretGodkendtBemyndigelseRequest request, SoapHeader soapHeader) {
-        Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setBemyndigendeCpr(request.getBemyndigende());
-            setBemyndigedeCpr(request.getBemyndigede());
-            setBemyndigedeCvr(request.getBemyndigedeCVR());
-            setLinkedSystem(linkedSystemDao.findBySystem(request.getSystem()));
-            setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(request.getArbejdsfunktion()));
-            setRettighed(rettighedDao.findByRettighedskode(request.getRettighedskode()));
+    public @ResponsePayload OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
+            @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
+        Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
 
-            setKode(systemService.createUUIDString());
-            setGodkendelsesdato(systemService.getDateTime());
-        }};
+        final String idCardCpr = dgwsRequestContext.getIdCardCpr();
 
-        final OpretGodkendtBemyndigelseResponse response = new OpretGodkendtBemyndigelseResponse();
-        response.setGodkendtBemyndigelsesKode(bemyndigelse.getKode());
-        bemyndigelseDao.save(bemyndigelse);
+        for (final OpretGodkendteBemyndigelserRequest.Bemyndigelse bemyndigelseRequest : request.getBemyndigelse()) {
+            verifyCprIn(idCardCpr, "IDCard CPR was different from BemyndigendeCpr", bemyndigelseRequest.getBemyndigendeCpr());
+            final Bemyndigelse bemyndigelse = bemyndigelseManager.opretGodkendtBemyndigelse(
+                    bemyndigelseRequest.getBemyndigendeCpr(),
+                    bemyndigelseRequest.getBemyndigedeCpr(),
+                    bemyndigelseRequest.getBemyndigedeCvr(),
+                    bemyndigelseRequest.getArbejdsfunktion(),
+                    bemyndigelseRequest.getRettighed(),
+                    bemyndigelseRequest.getSystem(),
+                    nullableDateTime(bemyndigelseRequest.getGyldigFra()),
+                    nullableDateTime(bemyndigelseRequest.getGyldigTil())
+            );
+            bemyndigelser.add(bemyndigelse);
+        }
+
+        final OpretGodkendteBemyndigelserResponse response = new OpretGodkendteBemyndigelserResponse();
+        response.getBemyndigelse().addAll(CollectionUtils.collect(
+                bemyndigelser,
+                new Transformer<Bemyndigelse, dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse>() {
+                    @Override
+                    public dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse transform(Bemyndigelse bemyndigelse) {
+                        return toJaxbType(bemyndigelse);
+                    }
+                }
+        ));
         return response;
     }
 
     @Override
-    @Protected(whitelist = "BemyndigelsesService.sletBemyndigelser")
+    @Protected
     @Transactional
     public @ResponsePayload SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader) {
-
-        String cpr = securityHelper.getCpr(soapHeader);
 
         DateTime now = systemService.getDateTime();
 
         SletBemyndigelserResponse response = new SletBemyndigelserResponse();
 
-        for (String kode : request.getBemyndigelsesKoder()) {
-            Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(kode);
-
-            if (!bemyndigelse.getBemyndigendeCpr().equals(cpr)) {
-                logger.error("User has different Cpr=" + cpr + " than BemyndigendeCpr=" + bemyndigelse.getBemyndigendeCpr());
-                throw new IllegalAccessError("User has different CPR than BemyndigedeCpr for kode=" + bemyndigelse.getKode());
-            }
+        List<Bemyndigelse> bemyndigelser = bemyndigelseDao.findByKoder(request.getKode());
+        for (Bemyndigelse bemyndigelse : bemyndigelser) {
+            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
                 logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelseDao.save(bemyndigelse);
-                response.getSlettedeBemyndigelsesKoder().add(bemyndigelse.getKode());
+                response.getKode().add(bemyndigelse.getKode());
             }
             else {
                 logger.info("Bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
+
         }
 
         return response;
+    }
+
+    private DateTime nullableDateTime(XMLGregorianCalendar xmlDate) {
+        return xmlDate != null ? new DateTime(xmlDate.toGregorianCalendar()) : null;
     }
 }

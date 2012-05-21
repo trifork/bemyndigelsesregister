@@ -41,11 +41,8 @@
     </issueManagement>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://TODO.trifork.com</url>
+        <url>https://ci82.trifork.com/job/Bemyndigelsesregister-develop/</url>
     </ciManagement>
-    <distributionManagement>
-        <downloadUrl>https://TODO.trifork.com/downloads</downloadUrl>
-    </distributionManagement>
 
     <modules>
         <module>bemyndigelsesservice</module>
@@ -57,6 +54,17 @@
     <properties>
         <functionaltest.serverport>8085</functionaltest.serverport>
         <functionaltest.urlprefix>http://localhost:${functionaltest.serverport}</functionaltest.urlprefix>
+        <deployment.cargo.hostname>localhost</deployment.cargo.hostname>
+        <deployment.pingURL>http://${deployment.cargo.hostname}:8080/health</deployment.pingURL>
+        <deployment.serversettings>bms.localhost</deployment.serversettings> <!-- Add a server setting to your ~/.m2/settings.xml
+        <server>
+            <id>bms.localhost</id>
+            <configuration>
+                <cargo.remote.username>admin</cargo.remote.username>
+                <cargo.remote.password>SECRET</cargo.remote.password>
+            </configuration>
+        </server>
+        For more info, read http://docs.codehaus.org/display/CARGO/Maven2+Plugin+Reference+Guide#Maven2PluginReferenceGuide-settingsXML -->
     </properties>
 
     <profiles>
@@ -69,6 +77,13 @@
             </activation>
             <properties>
                 <functionaltest.serverport>${env.CONTAINERPORT}</functionaltest.serverport>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <deployment.cargo.hostname>test03.ddv.netic.dk</deployment.cargo.hostname>
+                <deployment.serversettings>bms.dev</deployment.serversettings>
             </properties>
         </profile>
     </profiles>
@@ -119,6 +134,21 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.9</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.16</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.6.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -172,6 +202,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>

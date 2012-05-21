@@ -7,10 +7,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
     @Inject
@@ -34,5 +33,93 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
         Bemyndigelse bemyndigelse = dao.findByKode(kode);
         assertEquals(new Long(1l), bemyndigelse.getId());
         assertEquals(kode, bemyndigelse.getKode());
+    }
+
+    @Test
+    public void willFindBemyndigelseWhenWhenPeriodWraps() throws Exception {
+        Bemyndigelse other = dao.findByKode("TestKode3");
+
+        final List<Bemyndigelse> found = dao.findByInPeriod(
+                "1010101013",
+                "1",
+                arbejdsfunktionDao.get(1),
+                rettighedDao.get(1),
+                linkedSystemDao.get(1),
+                other.getGyldigFra().minusYears(1),
+                other.getGyldigTil().plusYears(1)
+        );
+
+        assertEquals(1, found.size());
+        assertEquals("TestKode3", found.get(0).getKode());
+    }
+
+    @Test
+    public void willFindBemyndigelseWhenWhenPeriodWrapsGyldigFra() throws Exception {
+        Bemyndigelse other = dao.findByKode("TestKode3");
+
+        final List<Bemyndigelse> found = dao.findByInPeriod(
+                "1010101013",
+                "1",
+                arbejdsfunktionDao.get(1),
+                rettighedDao.get(1),
+                linkedSystemDao.get(1),
+                other.getGyldigFra().minusYears(1),
+                other.getGyldigFra().plusHours(1)
+        );
+
+        assertEquals(1, found.size());
+        assertEquals("TestKode3", found.get(0).getKode());
+    }
+
+    @Test
+    public void willFindBemyndigelseWhenWhenPeriodWrapsGyldigTil() throws Exception {
+        Bemyndigelse other = dao.findByKode("TestKode3");
+
+        final List<Bemyndigelse> found = dao.findByInPeriod(
+                "1010101013",
+                "1",
+                arbejdsfunktionDao.get(1),
+                rettighedDao.get(1),
+                linkedSystemDao.get(1),
+                other.getGyldigTil().minusHours(1),
+                other.getGyldigTil().plusYears(1)
+        );
+
+        assertEquals(1, found.size());
+        assertEquals("TestKode3", found.get(0).getKode());
+    }
+
+    @Test
+    public void willNotFindWhenPeriodIsBefore() throws Exception {
+        Bemyndigelse other = dao.findByKode("TestKode3");
+
+        final List<Bemyndigelse> found = dao.findByInPeriod(
+                "1010101013",
+                "1",
+                arbejdsfunktionDao.get(1),
+                rettighedDao.get(1),
+                linkedSystemDao.get(1),
+                other.getGyldigFra().minusYears(1),
+                other.getGyldigFra().minusHours(1)
+        );
+
+        assertEquals(0, found.size());
+    }
+
+    @Test
+    public void willNotFindWhenPeriodIsAfter() throws Exception {
+        Bemyndigelse other = dao.findByKode("TestKode3");
+
+        final List<Bemyndigelse> found = dao.findByInPeriod(
+                "1010101013",
+                "1",
+                arbejdsfunktionDao.get(1),
+                rettighedDao.get(1),
+                linkedSystemDao.get(1),
+                other.getGyldigTil().plusHours(1),
+                other.getGyldigTil().plusYears(1)
+        );
+
+        assertEquals(0, found.size());
     }
 }

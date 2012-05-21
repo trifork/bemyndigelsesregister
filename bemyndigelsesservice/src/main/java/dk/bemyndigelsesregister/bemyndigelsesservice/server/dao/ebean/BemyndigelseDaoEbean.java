@@ -1,6 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
@@ -25,17 +28,32 @@ public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements Be
     }
 
     @Override
-    public Collection<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder) {
+    public List<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder) {
         return query().where().in("kode", bemyndigelsesKoder).findList();
     }
 
     @Override
-    public Collection<Bemyndigelse> findByBemyndigendeCpr(String bemyndigendeCpr) {
+    public List<Bemyndigelse> findByInPeriod(String bemyndigedeCpr, String bemyndigedeCvr, Arbejdsfunktion arbejdsfunktion, Rettighed rettighed, LinkedSystem linkedSystem, DateTime gyldigFra, DateTime gyldigTil) {
+        return query().where()
+                .eq("bemyndigede_cpr", bemyndigedeCpr)
+                .eq("bemyndigede_cvr", bemyndigedeCvr)
+                .eq("arbejdsfunktion", arbejdsfunktion)
+                .eq("rettighed", rettighed)
+                .eq("linkedSystem", linkedSystem)
+                .and(
+                        expr().between("gyldigFra", gyldigFra, gyldigTil),
+                        expr().between("gyldigTil", gyldigFra, gyldigTil)
+                )
+                .findList();
+    }
+
+    @Override
+    public List<Bemyndigelse> findByBemyndigendeCpr(String bemyndigendeCpr) {
         return query().where().eq("bemyndigende_cpr", bemyndigendeCpr).findList();
     }
 
     @Override
-    public Collection<Bemyndigelse> findByBemyndigedeCpr(String bemyndigedeCpr) {
+    public List<Bemyndigelse> findByBemyndigedeCpr(String bemyndigedeCpr) {
         return query().where().eq("bemyndigede_cpr", bemyndigedeCpr).findList();
     }
 }

@@ -17,4 +17,9 @@ public class LinkedSystem extends DomainObject {
         return system;
     }
 
+    public static LinkedSystem createForTest(final String kode) {
+        return new LinkedSystem() {{
+            setSystem(kode);
+        }};
+    }
 }
