@@ -4,12 +4,12 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
 import com.trifork.dgws.DgwsRequestContext;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
-
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.lang.StringUtils;
@@ -42,6 +42,16 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Inject
     BemyndigelseDao bemyndigelseDao;
     @Inject
+    DomaeneDao domaeneDao;
+    @Inject
+    LinkedSystemDao linkedSystemDao;
+    @Inject
+    ArbejdsfunktionDao arbejdsfunktionDao;
+    @Inject
+    RettighedDao rettighedDao;
+    @Inject
+    DelegerbarRettighedDao delegerbarRettighedDao;
+    @Inject
     DgwsRequestContext dgwsRequestContext;
 
     public BemyndigelsesServiceImpl() {
@@ -50,7 +60,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
+    public
+    @ResponsePayload
+    OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
             @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
         String idCardCpr = dgwsRequestContext.getIdCardCpr();
 
@@ -81,7 +93,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
+    public
+    @ResponsePayload
+    GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
         final List<String> bemyndigelsesKoder = request.getBemyndigelsesKode();
 
@@ -106,7 +120,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @Protected
-    public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
+    public
+    @ResponsePayload
+    HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         List<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
         String idCardCpr = dgwsRequestContext.getIdCardCpr();
@@ -170,7 +186,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
+    public
+    @ResponsePayload
+    OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
             @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
 
@@ -207,7 +225,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload SletBemyndigelserResponse sletBemyndigelser(
+    public
+    @ResponsePayload
+    SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader) {
 
         DateTime now = systemService.getDateTime();
@@ -241,12 +261,81 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Transactional
     public IndlaesMetadataResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader) {
-        return null;
+        Domaene domaene = domaeneDao.findByKode(request.getDomaene());
+        LinkedSystem linkedSystem = linkedSystemDao.findBySystem(request.getSystem());
+
+        final List<Arbejdsfunktion> foundArbejdsfunktioner = arbejdsfunktionDao.findBy(domaene, linkedSystem);
+        logger.debug(String.format("Found %d bemyndigelser with domaene=%s and system=%s", foundArbejdsfunktioner.size(), domaene, linkedSystem));
+        final List<Rettighed> foundRettigheder = rettighedDao.findBy(domaene, linkedSystem);
+        final List<DelegerbarRettighed> foundDelegerbarRettigheder = delegerbarRettighedDao.findBy(domaene, linkedSystem);
+
+        return new HentMetadataResponse() {{
+            setArbejdsfunktioner(toArbejdsfunktionJaxbType(foundArbejdsfunktioner));
+            setRettigheder(toRettighedJaxbType(foundRettigheder));
+            setDelegerbarRettigheder(toDelegerbareRettighedJaxbType(foundDelegerbarRettigheder));
+        }};
     }
+
+    private Arbejdsfunktioner toArbejdsfunktionJaxbType(final List<Arbejdsfunktion> from) {
+        return new Arbejdsfunktioner() {{
+            getArbejdsfunktion().addAll(CollectionUtils.collect(
+                    from,
+                    new Transformer<dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion, Arbejdsfunktion>() {
+                        @Override
+                        public Arbejdsfunktion transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion that) {
+                            return new Arbejdsfunktion() {{
+                                this.setArbejdsfunktion(that.getArbejdsfunktion());
+                                this.setBeskrivelse(that.getBeskrivelse());
+                                this.setDomaene(that.getDomaene().getDomaene());
+                                this.setSystem(that.getLinkedSystem().getSystem());
+                            }};
+                        }
+                    }
+            ));
+        }};
+    }
+
+    private Rettigheder toRettighedJaxbType(final List<Rettighed> from) {
+        return new Rettigheder() {{
+            getRettighed().addAll(CollectionUtils.collect(
+                    from,
+                    new Transformer<dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed, Rettighed>() {
+                        @Override
+                        public Rettighed transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed that) {
+                            return new Rettighed() {{
+                                this.setBeskrivelse(that.getBeskrivelse());
+                                this.setDomaene(that.getDomaene().getDomaene());
+                                this.setRettighed(that.getRettighedskode());
+                                this.setSystem(that.getLinkedSystem().getSystem());
+                            }};
+                        }
+                    }
+            ));
+        }};
+    }
+
+    private DelegerbarRettigheder toDelegerbareRettighedJaxbType(final List<DelegerbarRettighed> from) {
+        return new DelegerbarRettigheder() {{
+            getDelegerbarRettighed().addAll(CollectionUtils.collect(
+                    from,
+                    new Transformer<dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed, DelegerbarRettighed>() {
+                        @Override
+                        public DelegerbarRettighed transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed that) {
+                            return new DelegerbarRettighed() {{
+                                this.setArbejdsfunktion(that.getArbejdsfunktion().getArbejdsfunktion());
+                                this.setDomaene(that.getDomaene().getDomaene());
+                                this.setRettighed(that.getKode());
+                                this.setSystem(that.getSystem().getSystem());
+                            }};
+                        }
+                    }
+            ));
+        }};
+    }
+
 }

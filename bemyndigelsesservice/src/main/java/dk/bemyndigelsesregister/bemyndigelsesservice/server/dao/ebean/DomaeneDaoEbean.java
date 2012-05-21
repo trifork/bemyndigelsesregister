@@ -9,4 +9,10 @@ public class DomaeneDaoEbean extends SupportDao<Domaene> implements DomaeneDao {
     public DomaeneDaoEbean() {
         super(Domaene.class);
     }
+
+    @Override
+    public Domaene findByKode(String domaeneKode) {
+        //TODO: implement
+        return null;
+    }
 }

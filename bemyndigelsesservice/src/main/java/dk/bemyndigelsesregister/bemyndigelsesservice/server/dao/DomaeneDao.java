@@ -6,4 +6,6 @@ public interface DomaeneDao {
     Domaene get(long id);
 
     void save(Domaene domaene);
+
+    Domaene findByKode(String domaeneKode);
 }

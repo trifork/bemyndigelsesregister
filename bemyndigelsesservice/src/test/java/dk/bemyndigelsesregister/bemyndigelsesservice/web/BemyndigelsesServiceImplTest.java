@@ -31,6 +31,11 @@ public class BemyndigelsesServiceImplTest {
 
     @Mock BemyndigelseManager bemyndigelseManager;
     @Mock BemyndigelseDao bemyndigelseDao;
+    @Mock DomaeneDao domaeneDao;
+    @Mock LinkedSystemDao linkedSystemDao;
+    @Mock ArbejdsfunktionDao arbejdsfunktionDao;
+    @Mock RettighedDao rettighedDao;
+    @Mock DelegerbarRettighedDao delegerbarRettighedDao;
     @Mock SystemService systemService;
     @Mock DgwsRequestContext dgwsRequestContext;
 
@@ -361,6 +366,46 @@ public class BemyndigelsesServiceImplTest {
         assertEquals(0, response.getKode().size());
         assertEquals(now.minusDays(1), bemyndigelse.getGyldigTil());
         verify(bemyndigelseDao, never()).save(bemyndigelse);
+    }
+
+    @Test
+    public void canGetMetadata() throws Exception {
+        final String domaeneKode = "Domaene";
+        final String systemKode = "System";
+        final HentMetadataRequest request = new HentMetadataRequest() {{
+            setDomaene(domaeneKode);
+            setSystem(systemKode);
+        }};
+
+        final Domaene domaene = new Domaene();
+        final LinkedSystem linkedSystem = new LinkedSystem();
+        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion() {{
+            this.setDomaene(domaene);
+            this.setLinkedSystem(linkedSystem);
+        }};
+        final Rettighed rettighed = new Rettighed() {{
+            this.setDomaene(domaene);
+            this.setLinkedSystem(linkedSystem);
+        }};
+        final DelegerbarRettighed delegerbarRettighed = new DelegerbarRettighed() {{
+            this.setDomaene(domaene);
+            this.setSystem(linkedSystem);
+            this.setArbejdsfunktion(arbejdsfunktion);
+        }};
+
+        when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
+
+        when(arbejdsfunktionDao.findBy(domaene, linkedSystem)).thenReturn(asList(arbejdsfunktion));
+        when(rettighedDao.findBy(domaene, linkedSystem)).thenReturn(asList(rettighed));
+        when(delegerbarRettighedDao.findBy(domaene, linkedSystem)).thenReturn(asList(delegerbarRettighed));
+
+        final HentMetadataResponse metadata = service.hentMetadata(request, soapHeader);
+
+        assertEquals("Arbejdsfunktion", 1, metadata.getArbejdsfunktioner().getArbejdsfunktion().size());
+        //TODO: check mapping: assertSame(arbejdsfunktion.getArbejdsfunktion(), metadata.getArbejdsfunktioner().getArbejdsfunktion().get(0).getArbejdsfunktion());
+        assertEquals("Rettighed", 1, metadata.getRettigheder().getRettighed().size());
+        assertEquals("DelegerbarRettighed", 1, metadata.getDelegerbarRettigheder().getDelegerbarRettighed().size());
     }
 
     public boolean allTrue(boolean... eval) {
