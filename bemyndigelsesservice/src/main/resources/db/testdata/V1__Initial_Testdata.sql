@@ -1,4 +1,4 @@
-INSERT INTO status_type (status, sidst_modificeret, sidst_modificeret_af) VALUES ('OK', NOW(), 'mwl');
+INSERT INTO status_type (kode, sidst_modificeret, sidst_modificeret_af) VALUES ('OK', NOW(), 'mwl');
 INSERT INTO linked_system(kode) VALUES ('Trifork test system');
 INSERT INTO domaene(kode) VALUES ('trifork');
 INSERT INTO arbejdsfunktion(kode, domaene_id, beskrivelse, linked_system_id) values ('Laege', 1, 'For unit test only', 1);

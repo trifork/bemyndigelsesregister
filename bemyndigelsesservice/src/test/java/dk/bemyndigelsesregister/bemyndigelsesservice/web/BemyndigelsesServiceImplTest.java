@@ -254,7 +254,7 @@ public class BemyndigelsesServiceImplTest {
         bemyndigelse.setRettighed(rettighed);
 
         final StatusType status = new StatusType();
-        status.setStatus(this.statusKode);
+        status.setKode(this.statusKode);
         bemyndigelse.setStatus(status);
 
         bemyndigelse.setGodkendelsesdato(godkendelsesdato);

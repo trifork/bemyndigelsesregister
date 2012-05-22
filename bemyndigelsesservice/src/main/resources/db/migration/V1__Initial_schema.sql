@@ -18,7 +18,7 @@ CREATE TABLE `linked_system` (
 
 CREATE TABLE `status_type` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
-  `status` VARCHAR(255) NOT NULL,
+  `kode` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
   
