@@ -119,6 +119,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public DgwsRequestContextDefault dgwsRequestContext() {
+        //TODO: dublicate of bean in dgws?
         return new DgwsRequestContextDefault();
     }
 

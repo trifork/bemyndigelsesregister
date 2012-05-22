@@ -15,6 +15,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -51,8 +52,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     RettighedDao rettighedDao;
     @Inject
     DelegerbarRettighedDao delegerbarRettighedDao;
+    @Qualifier("dgwsRequestContext")
     @Inject
     DgwsRequestContext dgwsRequestContext;
+    @Inject
+    ServiceTypeMapper typeMapper;
 
     public BemyndigelsesServiceImpl() {
     }
@@ -60,9 +64,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public
     @ResponsePayload
-    OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
+    public OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
             @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
         String idCardCpr = dgwsRequestContext.getIdCardCpr();
 
@@ -93,9 +96,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public
     @ResponsePayload
-    GodkendBemyndigelseResponse godkendBemyndigelse(
+    public GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
         final List<String> bemyndigelsesKoder = request.getBemyndigelsesKode();
 
@@ -120,9 +122,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @Protected
-    public
     @ResponsePayload
-    HentBemyndigelserResponse hentBemyndigelser(
+    public HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         List<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
         String idCardCpr = dgwsRequestContext.getIdCardCpr();
@@ -186,9 +187,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public
     @ResponsePayload
-    OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
+    public OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
             @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
 
@@ -225,9 +225,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public
     @ResponsePayload
-    SletBemyndigelserResponse sletBemyndigelser(
+    public SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader) {
 
         DateTime now = systemService.getDateTime();
@@ -270,72 +269,13 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         LinkedSystem linkedSystem = linkedSystemDao.findBySystem(request.getSystem());
 
         final List<Arbejdsfunktion> foundArbejdsfunktioner = arbejdsfunktionDao.findBy(domaene, linkedSystem);
-        logger.debug(String.format("Found %d bemyndigelser with domaene=%s and system=%s", foundArbejdsfunktioner.size(), domaene, linkedSystem));
         final List<Rettighed> foundRettigheder = rettighedDao.findBy(domaene, linkedSystem);
         final List<DelegerbarRettighed> foundDelegerbarRettigheder = delegerbarRettighedDao.findBy(domaene, linkedSystem);
 
         return new HentMetadataResponse() {{
-            setArbejdsfunktioner(toArbejdsfunktionJaxbType(foundArbejdsfunktioner));
-            setRettigheder(toRettighedJaxbType(foundRettigheder));
-            setDelegerbarRettigheder(toDelegerbareRettighedJaxbType(foundDelegerbarRettigheder));
+            setArbejdsfunktioner(typeMapper.toJaxbArbejdsfunktioner(foundArbejdsfunktioner));
+            setRettigheder(typeMapper.toJaxbRettigheder(foundRettigheder));
+            setDelegerbarRettigheder(typeMapper.toJaxbDelegerbarRettigheder(foundDelegerbarRettigheder));
         }};
     }
-
-    private Arbejdsfunktioner toArbejdsfunktionJaxbType(final List<Arbejdsfunktion> from) {
-        return new Arbejdsfunktioner() {{
-            getArbejdsfunktion().addAll(CollectionUtils.collect(
-                    from,
-                    new Transformer<dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion, Arbejdsfunktion>() {
-                        @Override
-                        public Arbejdsfunktion transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion that) {
-                            return new Arbejdsfunktion() {{
-                                this.setArbejdsfunktion(that.getArbejdsfunktion());
-                                this.setBeskrivelse(that.getBeskrivelse());
-                                this.setDomaene(that.getDomaene().getDomaene());
-                                this.setSystem(that.getLinkedSystem().getSystem());
-                            }};
-                        }
-                    }
-            ));
-        }};
-    }
-
-    private Rettigheder toRettighedJaxbType(final List<Rettighed> from) {
-        return new Rettigheder() {{
-            getRettighed().addAll(CollectionUtils.collect(
-                    from,
-                    new Transformer<dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed, Rettighed>() {
-                        @Override
-                        public Rettighed transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed that) {
-                            return new Rettighed() {{
-                                this.setBeskrivelse(that.getBeskrivelse());
-                                this.setDomaene(that.getDomaene().getDomaene());
-                                this.setRettighed(that.getRettighedskode());
-                                this.setSystem(that.getLinkedSystem().getSystem());
-                            }};
-                        }
-                    }
-            ));
-        }};
-    }
-
-    private DelegerbarRettigheder toDelegerbareRettighedJaxbType(final List<DelegerbarRettighed> from) {
-        return new DelegerbarRettigheder() {{
-            getDelegerbarRettighed().addAll(CollectionUtils.collect(
-                    from,
-                    new Transformer<dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed, DelegerbarRettighed>() {
-                        @Override
-                        public DelegerbarRettighed transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed that) {
-                            return new DelegerbarRettighed() {{
-                                this.setArbejdsfunktion(that.getArbejdsfunktion().getArbejdsfunktion());
-                                this.setDomaene(that.getDomaene().getDomaene());
-                                this.setRettighed(that.getKode());
-                                this.setSystem(that.getSystem().getSystem());
-                            }};
-                        }
-                    }
-            ));
-        }};
-    }
-
 }

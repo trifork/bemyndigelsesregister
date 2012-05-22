@@ -18,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
@@ -38,6 +40,7 @@ public class BemyndigelsesServiceImplTest {
     @Mock DelegerbarRettighedDao delegerbarRettighedDao;
     @Mock SystemService systemService;
     @Mock DgwsRequestContext dgwsRequestContext;
+    @Mock ServiceTypeMapper typeMapper;
 
     @Mock SoapHeader soapHeader;
 
@@ -379,33 +382,32 @@ public class BemyndigelsesServiceImplTest {
 
         final Domaene domaene = new Domaene();
         final LinkedSystem linkedSystem = new LinkedSystem();
-        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion() {{
-            this.setDomaene(domaene);
-            this.setLinkedSystem(linkedSystem);
-        }};
-        final Rettighed rettighed = new Rettighed() {{
-            this.setDomaene(domaene);
-            this.setLinkedSystem(linkedSystem);
-        }};
-        final DelegerbarRettighed delegerbarRettighed = new DelegerbarRettighed() {{
-            this.setDomaene(domaene);
-            this.setSystem(linkedSystem);
-            this.setArbejdsfunktion(arbejdsfunktion);
-        }};
+        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
+        final Rettighed rettighed = new Rettighed();
+        final DelegerbarRettighed delegerbarRettighed = new DelegerbarRettighed();
 
         when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
         when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
 
-        when(arbejdsfunktionDao.findBy(domaene, linkedSystem)).thenReturn(asList(arbejdsfunktion));
-        when(rettighedDao.findBy(domaene, linkedSystem)).thenReturn(asList(rettighed));
-        when(delegerbarRettighedDao.findBy(domaene, linkedSystem)).thenReturn(asList(delegerbarRettighed));
+        final List<Arbejdsfunktion> arbejdsfunktionList = asList(arbejdsfunktion);
+        final Arbejdsfunktioner jaxbArbejdsfunktioner = new Arbejdsfunktioner();
+        final List<Rettighed> rettighedList = asList(rettighed);
+        final Rettigheder jaxbRettigheder = new Rettigheder();
+        final List<DelegerbarRettighed> delegerbarRettighedList = asList(delegerbarRettighed);
+        final DelegerbarRettigheder jaxbDelegerbarRettigheder = new DelegerbarRettigheder();
+
+        when(arbejdsfunktionDao.findBy(domaene, linkedSystem)).thenReturn(arbejdsfunktionList);
+        when(rettighedDao.findBy(domaene, linkedSystem)).thenReturn(rettighedList);
+        when(delegerbarRettighedDao.findBy(domaene, linkedSystem)).thenReturn(delegerbarRettighedList);
+        when(typeMapper.toJaxbArbejdsfunktioner(arbejdsfunktionList)).thenReturn(jaxbArbejdsfunktioner);
+        when(typeMapper.toJaxbRettigheder(rettighedList)).thenReturn(jaxbRettigheder);
+        when(typeMapper.toJaxbDelegerbarRettigheder(delegerbarRettighedList)).thenReturn(jaxbDelegerbarRettigheder);
 
         final HentMetadataResponse metadata = service.hentMetadata(request, soapHeader);
 
-        assertEquals("Arbejdsfunktion", 1, metadata.getArbejdsfunktioner().getArbejdsfunktion().size());
-        //TODO: check mapping: assertSame(arbejdsfunktion.getArbejdsfunktion(), metadata.getArbejdsfunktioner().getArbejdsfunktion().get(0).getArbejdsfunktion());
-        assertEquals("Rettighed", 1, metadata.getRettigheder().getRettighed().size());
-        assertEquals("DelegerbarRettighed", 1, metadata.getDelegerbarRettigheder().getDelegerbarRettighed().size());
+        assertEquals(jaxbArbejdsfunktioner, metadata.getArbejdsfunktioner());
+        assertEquals(jaxbRettigheder, metadata.getRettigheder());
+        assertEquals(jaxbDelegerbarRettigheder, metadata.getDelegerbarRettigheder());
     }
 
     public boolean allTrue(boolean... eval) {
