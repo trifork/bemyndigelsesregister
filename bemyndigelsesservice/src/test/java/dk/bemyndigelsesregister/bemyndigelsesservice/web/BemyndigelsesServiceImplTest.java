@@ -52,6 +52,7 @@ public class BemyndigelsesServiceImplTest {
     final String bemyndigedeCvrText = "BemyndigedeCvr";
     final String arbejdsfunktionKode = "Arbejdsfunktion";
     final String rettighedKode = "Rettighedskode";
+    final String domaeneKode = "DomaeneKode";
     final String systemKode = "SystemKode";
     final String statusKode = "StatusKode";
 
@@ -408,6 +409,128 @@ public class BemyndigelsesServiceImplTest {
         assertEquals(jaxbArbejdsfunktioner, metadata.getArbejdsfunktioner());
         assertEquals(jaxbRettigheder, metadata.getRettigheder());
         assertEquals(jaxbDelegerbarRettigheder, metadata.getDelegerbarRettigheder());
+    }
+
+    @Test
+    public void canIndlaeseArbejdsfunktioner() throws Exception {
+        final IndlaesMetadataRequest request = new IndlaesMetadataRequest() {{
+            this.setArbejdsfunktioner(new Arbejdsfunktioner() {{
+                getArbejdsfunktion().add(new Arbejdsfunktion() {{
+                    this.setArbejdsfunktion("Arbejdsfunktion");
+                    this.setBeskrivelse("Beskrivelse");
+                    this.setDomaene(domaeneKode);
+                    this.setSystem(systemKode);
+                }});
+            }});
+        }};
+
+        final Domaene domaene = new Domaene();
+        final LinkedSystem linkedSystem = new LinkedSystem();
+        when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
+
+        assertNotNull(service.indlaesMetadata(request, soapHeader));
+
+        verify(arbejdsfunktionDao).save(argThat(new TypeSafeMatcher<Arbejdsfunktion>() {
+            @Override
+            public boolean matchesSafely(Arbejdsfunktion item) {
+                return allTrue(
+                        item.getArbejdsfunktion().equals("Arbejdsfunktion"),
+                        item.getBeskrivelse().equals("Beskrivelse"),
+                        item.getDomaene() == domaene,
+                        item.getLinkedSystem() == linkedSystem
+                );
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        }));
+    }
+
+    @Test
+    public void canIndlaeseRettigheder() throws Exception {
+        final IndlaesMetadataRequest request = new IndlaesMetadataRequest() {{
+            this.setRettigheder(new Rettigheder() {{
+                getRettighed().add(new Rettighed() {{
+                    this.setBeskrivelse("Beskrivelse");
+                    this.setDomaene(domaeneKode);
+                    this.setSystem(systemKode);
+                    this.setRettighed("Rettighed");
+                }});
+            }});
+        }};
+
+        final Domaene domaene = new Domaene();
+        final LinkedSystem linkedSystem = new LinkedSystem();
+        when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
+
+        assertNotNull(service.indlaesMetadata(request, soapHeader));
+
+        verify(rettighedDao).save(argThat(new TypeSafeMatcher<Rettighed>() {
+            @Override
+            public boolean matchesSafely(Rettighed item) {
+                return allTrue(
+                        item.getBeskrivelse().equals("Beskrivelse"),
+                        item.getDomaene() == domaene,
+                        item.getLinkedSystem() == linkedSystem,
+                        item.getRettighedskode().equals("Rettighed")
+                );
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        }));
+    }
+
+    @Test
+    public void canIndlaeseDelegeredeRettigheder() throws Exception {
+        final IndlaesMetadataRequest request = new IndlaesMetadataRequest() {{
+            this.setDelegerbarRettigheder(new DelegerbarRettigheder() {{
+                getDelegerbarRettighed().add(new DelegerbarRettighed() {{
+                    this.setArbejdsfunktion("Arbejdsfunktion");
+                    this.setDomaene(domaeneKode);
+                    this.setRettighed("Rettighed");
+                    this.setSystem(systemKode);
+                }});
+            }});
+        }};
+
+        final Domaene domaene = new Domaene();
+        final LinkedSystem linkedSystem = new LinkedSystem();
+        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
+        when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
+        when(arbejdsfunktionDao.findByArbejdsfunktion("Arbejdsfunktion")).thenReturn(arbejdsfunktion);
+
+        assertNotNull(service.indlaesMetadata(request, soapHeader));
+
+        verify(delegerbarRettighedDao).save(argThat(new TypeSafeMatcher<DelegerbarRettighed>() {
+            @Override
+            public boolean matchesSafely(DelegerbarRettighed item) {
+                return allTrue(
+                        item.getArbejdsfunktion() == arbejdsfunktion,
+                        item.getDomaene() == domaene,
+                        item.getKode().equals("Rettighed"),
+                        item.getSystem() == linkedSystem
+                );
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        }));
+    }
+
+    @Test
+    public void willAllowEmptyIndlaesMetadata() throws Exception {
+        assertNotNull(service.indlaesMetadata(new IndlaesMetadataRequest(), soapHeader));
+
+        verifyZeroInteractions(arbejdsfunktionDao);
+        verifyZeroInteractions(rettighedDao);
+        verifyZeroInteractions(delegerbarRettighedDao);
     }
 
     public boolean allTrue(boolean... eval) {

@@ -258,7 +258,43 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Transactional
     public IndlaesMetadataResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
-        return null;
+        if (request.getArbejdsfunktioner() != null) {
+            for (final Arbejdsfunktioner.Arbejdsfunktion jaxbArbejdsfunktion : request.getArbejdsfunktioner().getArbejdsfunktion()) {
+                logger.info("Adding arbejdsfunktion=" + jaxbArbejdsfunktion);
+                arbejdsfunktionDao.save(new Arbejdsfunktion() {{
+                    this.setArbejdsfunktion(jaxbArbejdsfunktion.getArbejdsfunktion());
+                    this.setBeskrivelse(jaxbArbejdsfunktion.getBeskrivelse());
+                    this.setDomaene(domaeneDao.findByKode(jaxbArbejdsfunktion.getDomaene()));
+                    this.setLinkedSystem(linkedSystemDao.findBySystem(jaxbArbejdsfunktion.getSystem()));
+                }});
+            }
+        }
+
+        if (request.getRettigheder() != null) {
+            for (final Rettigheder.Rettighed jaxbRettighed : request.getRettigheder().getRettighed()) {
+                logger.info("Adding rettighed=" + jaxbRettighed.toString());
+                rettighedDao.save(new Rettighed() {{
+                    this.setRettighedskode(jaxbRettighed.getRettighed());
+                    this.setBeskrivelse(jaxbRettighed.getBeskrivelse());
+                    this.setDomaene(domaeneDao.findByKode(jaxbRettighed.getDomaene()));
+                    this.setLinkedSystem(linkedSystemDao.findBySystem(jaxbRettighed.getSystem()));
+                }});
+            }
+        }
+
+        if (request.getDelegerbarRettigheder() != null) {
+            for (final DelegerbarRettigheder.DelegerbarRettighed jaxbDelegerbarRettighed : request.getDelegerbarRettigheder().getDelegerbarRettighed()) {
+                logger.info("Adding delegerbarRettighed=" + jaxbDelegerbarRettighed.toString());
+                delegerbarRettighedDao.save(new DelegerbarRettighed() {{
+                    this.setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(jaxbDelegerbarRettighed.getArbejdsfunktion()));
+                    this.setKode(jaxbDelegerbarRettighed.getRettighed());
+                    this.setSystem(linkedSystemDao.findBySystem(jaxbDelegerbarRettighed.getSystem()));
+                    this.setDomaene(domaeneDao.findByKode(jaxbDelegerbarRettighed.getDomaene()));
+                }});
+            }
+        }
+
+        return new IndlaesMetadataResponse();
     }
 
     @Override
