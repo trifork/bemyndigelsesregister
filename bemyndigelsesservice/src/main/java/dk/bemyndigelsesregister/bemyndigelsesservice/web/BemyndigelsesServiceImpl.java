@@ -15,7 +15,6 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -52,7 +51,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     RettighedDao rettighedDao;
     @Inject
     DelegerbarRettighedDao delegerbarRettighedDao;
-    @Qualifier("dgwsRequestContext")
     @Inject
     DgwsRequestContext dgwsRequestContext;
     @Inject
