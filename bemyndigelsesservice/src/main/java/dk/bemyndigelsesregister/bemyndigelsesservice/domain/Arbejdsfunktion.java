@@ -4,27 +4,17 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Arbejdsfunktion extends DomainObject {
+public class Arbejdsfunktion extends ExternalIdentifiedDomainObject {
     @OneToOne
     private Domaene domaene;
     @OneToOne
     private LinkedSystem LinkedSystem;
-    private String arbejdsfunktion;
     private String beskrivelse;
 
     public Arbejdsfunktion() {
     }
 
     //<editor-fold desc="GettersAndSetters">
-
-    public String getArbejdsfunktion() {
-        return arbejdsfunktion;
-    }
-
-    public void setArbejdsfunktion(String arbejdsfunktion) {
-        this.arbejdsfunktion = arbejdsfunktion;
-    }
-
     public String getBeskrivelse() {
         return beskrivelse;
     }
@@ -52,7 +42,7 @@ public class Arbejdsfunktion extends DomainObject {
 
     public static Arbejdsfunktion createForTest(final String kode) {
         return new Arbejdsfunktion() {{
-            setArbejdsfunktion(kode);
+            setKode(kode);
         }};
     }
 }

@@ -23,6 +23,6 @@ public class StatusTypeDaoEbeanTest extends DaoUnitTestSupport {
     public void canGetById() throws Exception {
         StatusType statusType = dao.get(1l);
         assertNotNull(statusType);
-        assertEquals("OK", statusType.getStatus());
+        assertEquals("OK", statusType.getKode());
     }
 }

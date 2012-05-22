@@ -54,9 +54,9 @@ public class BemyndigelseManagerImplTest {
     public void canCreateBemyndigelse() throws Exception {
         when(systemService.getDateTime()).thenReturn(now);
         when(systemService.createUUIDString()).thenReturn(kode);
-        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
-        when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(Rettighed.createForTest(rettighedKode));
-        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(LinkedSystem.createForTest(systemKode));
+        when(arbejdsfunktionDao.findByKode(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
+        when(rettighedDao.findByKode(rettighedKode)).thenReturn(Rettighed.createForTest(rettighedKode));
+        when(linkedSystemDao.findByKode(systemKode)).thenReturn(LinkedSystem.createForTest(systemKode));
 
         final Bemyndigelse bemyndigelse = manager.opretAnmodningOmBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
 
@@ -149,9 +149,9 @@ public class BemyndigelseManagerImplTest {
 
     @Test
     public void canCreateApprovedBemyndigelser() throws Exception {
-        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
-        when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(Rettighed.createForTest(rettighedKode));
-        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(LinkedSystem.createForTest(systemKode));
+        when(arbejdsfunktionDao.findByKode(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
+        when(rettighedDao.findByKode(rettighedKode)).thenReturn(Rettighed.createForTest(rettighedKode));
+        when(linkedSystemDao.findByKode(systemKode)).thenReturn(LinkedSystem.createForTest(systemKode));
         when(systemService.getDateTime()).thenReturn(now);
         when(systemService.createUUIDString()).thenReturn(kode);
 
@@ -170,9 +170,9 @@ public class BemyndigelseManagerImplTest {
             setKode("Existing");
         }};
 
-        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(arbejdsfunktion);
-        when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(rettighed);
-        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
+        when(arbejdsfunktionDao.findByKode(arbejdsfunktionKode)).thenReturn(arbejdsfunktion);
+        when(rettighedDao.findByKode(rettighedKode)).thenReturn(rettighed);
+        when(linkedSystemDao.findByKode(systemKode)).thenReturn(linkedSystem);
         when(systemService.getDateTime()).thenReturn(now);
         when(systemService.createUUIDString()).thenReturn(kode);
         when(bemyndigelseDao.findByInPeriod(bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktion, rettighed, linkedSystem, gyldigFra, gyldigTil)).thenReturn(singletonList(existingBemyndigelse));
@@ -203,9 +203,9 @@ public class BemyndigelseManagerImplTest {
         assertEquals(bemyndigendeCpr, bemyndigelse.getBemyndigendeCpr());
         assertEquals(bemyndigedeCpr, bemyndigelse.getBemyndigedeCpr());
         assertEquals(bemyndigedeCvr, bemyndigelse.getBemyndigedeCvr());
-        assertEquals(arbejdsfunktionKode, bemyndigelse.getArbejdsfunktion().getArbejdsfunktion());
+        assertEquals(arbejdsfunktionKode, bemyndigelse.getArbejdsfunktion().getKode());
         //TODO: Hvad med status?
-        assertEquals(rettighedKode, bemyndigelse.getRettighed().getRettighedskode());
-        assertEquals(systemKode, bemyndigelse.getLinkedSystem().getSystem());
+        assertEquals(rettighedKode, bemyndigelse.getRettighed().getKode());
+        assertEquals(systemKode, bemyndigelse.getLinkedSystem().getKode());
     }
 }

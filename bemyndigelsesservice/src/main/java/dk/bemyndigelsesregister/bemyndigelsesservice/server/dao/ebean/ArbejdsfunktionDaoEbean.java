@@ -20,11 +20,6 @@ public class ArbejdsfunktionDaoEbean extends SupportDao<Arbejdsfunktion> impleme
     }
 
     @Override
-    public Arbejdsfunktion findByArbejdsfunktion(String arbejdsfunktion) {
-        return query().where().eq("arbejdsfunktion", arbejdsfunktion).findUnique();
-    }
-
-    @Override
     public List<Arbejdsfunktion> findBy(Domaene domaene, LinkedSystem linkedSystem) {
         //TODO: implement
         return null;

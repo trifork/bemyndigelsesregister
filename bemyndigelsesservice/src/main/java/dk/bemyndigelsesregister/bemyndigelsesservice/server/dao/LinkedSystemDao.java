@@ -7,5 +7,5 @@ public interface LinkedSystemDao {
 
     void save(LinkedSystem linkedSystem);
 
-    LinkedSystem findBySystem(String linkedSystemKode);
+    LinkedSystem findByKode(String kode);
 }

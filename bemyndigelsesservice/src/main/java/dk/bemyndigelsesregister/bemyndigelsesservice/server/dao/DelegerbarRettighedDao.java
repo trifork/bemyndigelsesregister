@@ -11,7 +11,7 @@ public interface DelegerbarRettighedDao {
 
     void save(DelegerbarRettighed delegerbarRettighed);
 
-    DelegerbarRettighed findBy(String kode);
+    DelegerbarRettighed findByKode(String kode);
 
     List<DelegerbarRettighed> findBy(Domaene domaene, LinkedSystem linkedSystem);
 }

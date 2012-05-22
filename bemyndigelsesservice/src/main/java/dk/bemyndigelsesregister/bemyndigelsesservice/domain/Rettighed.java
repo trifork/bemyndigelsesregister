@@ -3,24 +3,15 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 import javax.persistence.Entity;
 
 @Entity
-public class Rettighed extends DomainObject {
+public class Rettighed extends ExternalIdentifiedDomainObject {
     private Domaene domaene;
     private LinkedSystem linkedSystem;
-    private String rettighedskode;
     private String beskrivelse;
 
     public Rettighed() {
     }
 
     //<editor-fold desc="GettersAndSetters">
-
-    public String getRettighedskode() {
-        return rettighedskode;
-    }
-
-    public void setRettighedskode(String rettighedskode) {
-        this.rettighedskode = rettighedskode;
-    }
 
     public String getBeskrivelse() {
         return beskrivelse;
@@ -50,7 +41,7 @@ public class Rettighed extends DomainObject {
 
     public static Rettighed createForTest(final String kode) {
         return new Rettighed() {{
-            setRettighedskode(kode);
+            setKode(kode);
         }};
     }
 }

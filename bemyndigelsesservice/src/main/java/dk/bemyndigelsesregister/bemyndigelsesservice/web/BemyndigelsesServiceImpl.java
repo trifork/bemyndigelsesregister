@@ -170,10 +170,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setBemyndigendeCpr(bem.getBemyndigendeCpr());
             setBemyndigedeCpr(bem.getBemyndigedeCpr());
             setBemyndigedeCvr(bem.getBemyndigedeCvr());
-            setSystem(bem.getLinkedSystem().getSystem());
-            setArbejdsfunktion(bem.getArbejdsfunktion().getArbejdsfunktion());
-            setRettighed(bem.getRettighed().getRettighedskode());
-            setStatus(bem.getStatus().getStatus());
+            setSystem(bem.getLinkedSystem().getKode());
+            setArbejdsfunktion(bem.getArbejdsfunktion().getKode());
+            setRettighed(bem.getRettighed().getKode());
+            setStatus(bem.getStatus().getKode());
             if (bem.getGodkendelsesdato() != null) {
                 setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
             }
@@ -262,10 +262,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             for (final Arbejdsfunktioner.Arbejdsfunktion jaxbArbejdsfunktion : request.getArbejdsfunktioner().getArbejdsfunktion()) {
                 logger.info("Adding arbejdsfunktion=" + jaxbArbejdsfunktion);
                 arbejdsfunktionDao.save(new Arbejdsfunktion() {{
-                    this.setArbejdsfunktion(jaxbArbejdsfunktion.getArbejdsfunktion());
+                    this.setKode(jaxbArbejdsfunktion.getArbejdsfunktion());
                     this.setBeskrivelse(jaxbArbejdsfunktion.getBeskrivelse());
                     this.setDomaene(domaeneDao.findByKode(jaxbArbejdsfunktion.getDomaene()));
-                    this.setLinkedSystem(linkedSystemDao.findBySystem(jaxbArbejdsfunktion.getSystem()));
+                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbArbejdsfunktion.getSystem()));
                 }});
             }
         }
@@ -274,10 +274,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             for (final Rettigheder.Rettighed jaxbRettighed : request.getRettigheder().getRettighed()) {
                 logger.info("Adding rettighed=" + jaxbRettighed.toString());
                 rettighedDao.save(new Rettighed() {{
-                    this.setRettighedskode(jaxbRettighed.getRettighed());
+                    this.setKode(jaxbRettighed.getRettighed());
                     this.setBeskrivelse(jaxbRettighed.getBeskrivelse());
                     this.setDomaene(domaeneDao.findByKode(jaxbRettighed.getDomaene()));
-                    this.setLinkedSystem(linkedSystemDao.findBySystem(jaxbRettighed.getSystem()));
+                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbRettighed.getSystem()));
                 }});
             }
         }
@@ -286,9 +286,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             for (final DelegerbarRettigheder.DelegerbarRettighed jaxbDelegerbarRettighed : request.getDelegerbarRettigheder().getDelegerbarRettighed()) {
                 logger.info("Adding delegerbarRettighed=" + jaxbDelegerbarRettighed.toString());
                 delegerbarRettighedDao.save(new DelegerbarRettighed() {{
-                    this.setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(jaxbDelegerbarRettighed.getArbejdsfunktion()));
+                    this.setArbejdsfunktion(arbejdsfunktionDao.findByKode(jaxbDelegerbarRettighed.getArbejdsfunktion()));
                     this.setKode(jaxbDelegerbarRettighed.getRettighed());
-                    this.setSystem(linkedSystemDao.findBySystem(jaxbDelegerbarRettighed.getSystem()));
+                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbDelegerbarRettighed.getSystem()));
                     this.setDomaene(domaeneDao.findByKode(jaxbDelegerbarRettighed.getDomaene()));
                 }});
             }
@@ -300,7 +300,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     public HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader) {
         Domaene domaene = domaeneDao.findByKode(request.getDomaene());
-        LinkedSystem linkedSystem = linkedSystemDao.findBySystem(request.getSystem());
+        LinkedSystem linkedSystem = linkedSystemDao.findByKode(request.getSystem());
 
         final List<Arbejdsfunktion> foundArbejdsfunktioner = arbejdsfunktionDao.findBy(domaene, linkedSystem);
         final List<Rettighed> foundRettigheder = rettighedDao.findBy(domaene, linkedSystem);

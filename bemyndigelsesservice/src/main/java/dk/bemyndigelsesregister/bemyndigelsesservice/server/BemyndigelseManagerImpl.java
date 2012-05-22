@@ -51,12 +51,12 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         bemyndigelse.setBemyndigedeCpr(bemyndigedeCpr);
         bemyndigelse.setBemyndigedeCvr(bemyndigedeCvr);
 
-        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode));
+        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByKode(arbejdsfunktionKode));
 
         bemyndigelse.setStatus(statusTypeDao.get(1)); //TODO:
 
-        bemyndigelse.setRettighed(rettighedDao.findByRettighedskode(rettighedKode));
-        bemyndigelse.setLinkedSystem(linkedSystemDao.findBySystem(systemKode));
+        bemyndigelse.setRettighed(rettighedDao.findByKode(rettighedKode));
+        bemyndigelse.setLinkedSystem(linkedSystemDao.findByKode(systemKode));
 
         final DateTime validFrom = defaultIfNull(gyldigFra, now);
         final DateTime validTo = defaultIfNull(gyldigTil, now.plusYears(100));

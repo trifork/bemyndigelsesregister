@@ -12,20 +12,20 @@ import static org.junit.Assert.*;
 public class ServiceTypeMapperImplTest {
     final ServiceTypeMapper typeMapper = new ServiceTypeMapperImpl();
     final Domaene testDomaene = new Domaene() {{
-        setDomaene("DomæneKode");
+        setKode("DomæneKode");
     }};
     final LinkedSystem testLinkedSystem = new LinkedSystem() {{
-        setSystem("LinkedSystemKode");
+        setKode("LinkedSystemKode");
     }};
     final Arbejdsfunktion testArbejdsfunktion = new Arbejdsfunktion() {{
-        setArbejdsfunktion("ArbejdsfunktionKode");
+        setKode("ArbejdsfunktionKode");
     }};
 
 
     @Test
     public void willMapToArbejdsfunktioner() throws Exception {
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion() {{
-            this.setArbejdsfunktion("Kode");
+            this.setKode("Kode");
             this.setBeskrivelse("Beskrivelse");
             this.setDomaene(testDomaene);
             this.setLinkedSystem(testLinkedSystem);
@@ -35,10 +35,10 @@ public class ServiceTypeMapperImplTest {
         assertEquals(1, jaxbArbejdsfunktioner.getArbejdsfunktion().size());
         final Arbejdsfunktioner.Arbejdsfunktion jaxbArbejdsfunktion = jaxbArbejdsfunktioner.getArbejdsfunktion().get(0);
 
-        assertEquals(arbejdsfunktion.getArbejdsfunktion(), jaxbArbejdsfunktion.getArbejdsfunktion());
+        assertEquals(arbejdsfunktion.getKode(), jaxbArbejdsfunktion.getArbejdsfunktion());
         assertEquals(arbejdsfunktion.getBeskrivelse(), jaxbArbejdsfunktion.getBeskrivelse());
-        assertEquals(arbejdsfunktion.getDomaene().getDomaene(), jaxbArbejdsfunktion.getDomaene());
-        assertEquals(arbejdsfunktion.getLinkedSystem().getSystem(), jaxbArbejdsfunktion.getSystem());
+        assertEquals(arbejdsfunktion.getDomaene().getKode(), jaxbArbejdsfunktion.getDomaene());
+        assertEquals(arbejdsfunktion.getLinkedSystem().getKode(), jaxbArbejdsfunktion.getSystem());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ServiceTypeMapperImplTest {
             this.setBeskrivelse("Beskrivelse");
             this.setDomaene(testDomaene);
             this.setLinkedSystem(testLinkedSystem);
-            this.setRettighedskode("Kode");
+            this.setKode("Kode");
         }};
 
         final Rettigheder jaxbRettigheder = typeMapper.toJaxbRettigheder(asList(rettighed));
@@ -56,9 +56,9 @@ public class ServiceTypeMapperImplTest {
         final Rettigheder.Rettighed jaxbRettighed = jaxbRettigheder.getRettighed().get(0);
 
         assertEquals(rettighed.getBeskrivelse(), jaxbRettighed.getBeskrivelse());
-        assertEquals(rettighed.getDomaene().getDomaene(), jaxbRettighed.getDomaene());
-        assertEquals(rettighed.getLinkedSystem().getSystem(), jaxbRettighed.getSystem());
-        assertEquals(rettighed.getRettighedskode(), jaxbRettighed.getRettighed());
+        assertEquals(rettighed.getDomaene().getKode(), jaxbRettighed.getDomaene());
+        assertEquals(rettighed.getLinkedSystem().getKode(), jaxbRettighed.getSystem());
+        assertEquals(rettighed.getKode(), jaxbRettighed.getRettighed());
     }
     @Test
     public void willMapToDelegerbarRettigheder() throws Exception {
@@ -66,7 +66,7 @@ public class ServiceTypeMapperImplTest {
             this.setArbejdsfunktion(testArbejdsfunktion);
             this.setDomaene(testDomaene);
             this.setKode("Kode");
-            this.setSystem(testLinkedSystem);
+            this.setLinkedSystem(testLinkedSystem);
         }};
 
         final DelegerbarRettigheder jaxbDelegerbarRettigheder = typeMapper.toJaxbDelegerbarRettigheder(asList(delegerbarRettighed));
@@ -74,10 +74,10 @@ public class ServiceTypeMapperImplTest {
         assertEquals(1, jaxbDelegerbarRettigheder.getDelegerbarRettighed().size());
         final DelegerbarRettigheder.DelegerbarRettighed jaxbRettighed = jaxbDelegerbarRettigheder.getDelegerbarRettighed().get(0);
 
-        assertEquals(delegerbarRettighed.getArbejdsfunktion().getArbejdsfunktion(), jaxbRettighed.getArbejdsfunktion());
-        assertEquals(delegerbarRettighed.getDomaene().getDomaene(), jaxbRettighed.getDomaene());
+        assertEquals(delegerbarRettighed.getArbejdsfunktion().getKode(), jaxbRettighed.getArbejdsfunktion());
+        assertEquals(delegerbarRettighed.getDomaene().getKode(), jaxbRettighed.getDomaene());
         assertEquals(delegerbarRettighed.getKode(), jaxbRettighed.getRettighed());
-        assertEquals(delegerbarRettighed.getSystem().getSystem(), jaxbRettighed.getSystem());
+        assertEquals(delegerbarRettighed.getLinkedSystem().getKode(), jaxbRettighed.getSystem());
     }
 
 
