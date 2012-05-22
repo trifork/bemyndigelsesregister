@@ -15,6 +15,11 @@ public class DelegerbarRettighedDaoEbean extends SupportDao<DelegerbarRettighed>
     }
 
     @Override
+    public DelegerbarRettighed findBy(String kode) {
+        return query().where().eq("rettighedskode", kode).findUnique();
+    }
+
+    @Override
     public List<DelegerbarRettighed> findBy(Domaene domaene, LinkedSystem linkedSystem) {
         return query().where().eq("domaene", domaene).eq("system", linkedSystem).findList();
     }
