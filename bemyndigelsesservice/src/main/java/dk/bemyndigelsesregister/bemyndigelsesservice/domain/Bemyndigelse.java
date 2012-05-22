@@ -8,8 +8,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Entity;
 
 @Entity
-public class Bemyndigelse extends DomainObject {
-    private String kode;
+public class Bemyndigelse extends ExternalIdentifiedDomainObject {
     private String bemyndigendeCpr;
     private String bemyndigedeCpr;
     private String bemyndigedeCvr;
@@ -31,14 +30,6 @@ public class Bemyndigelse extends DomainObject {
     }
 
     //<editor-fold desc="GettersAndSetters">
-    public String getKode() {
-        return kode;
-    }
-
-    public void setKode(String kode) {
-        this.kode = kode;
-    }
-
     public String getBemyndigendeCpr() {
         return bemyndigendeCpr;
     }
@@ -135,7 +126,7 @@ public class Bemyndigelse extends DomainObject {
         type.setBemyndigendeCpr(bemyndigendeCpr);
         type.setCreatedDate(null);
         type.setGodkendelsesdato(null);
-        type.setKode(kode);
+        type.setKode(getKode());
         type.setModifiedDate(null);
         type.setRettighed(rettighed.getRettighedskode());
         type.setSystem(linkedSystem.getSystem());
