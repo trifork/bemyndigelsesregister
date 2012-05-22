@@ -1,6 +1,10 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Domaene;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
+
+import java.util.List;
 
 public interface RettighedDao {
     Rettighed get(long id);
@@ -8,4 +12,6 @@ public interface RettighedDao {
     void save(Rettighed rettighed);
 
     Rettighed findByRettighedskode(String rettighedskode);
+
+    List<Rettighed> findBy(Domaene domaene, LinkedSystem linkedSystem);
 }

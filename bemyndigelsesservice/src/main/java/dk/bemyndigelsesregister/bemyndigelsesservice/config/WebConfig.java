@@ -1,6 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
-import com.trifork.dgws.DgwsRequestContextDefault;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -116,10 +115,4 @@ public class WebConfig extends WebMvcConfigurationSupport {
         interceptor.setValidateResponse(false);
         return interceptor;
     }
-
-    @Bean
-    public DgwsRequestContextDefault dgwsRequestContext() {
-        return new DgwsRequestContextDefault();
-    }
-
 }

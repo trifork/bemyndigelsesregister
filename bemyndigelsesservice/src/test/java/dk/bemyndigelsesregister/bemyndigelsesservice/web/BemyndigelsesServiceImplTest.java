@@ -18,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
@@ -31,8 +33,14 @@ public class BemyndigelsesServiceImplTest {
 
     @Mock BemyndigelseManager bemyndigelseManager;
     @Mock BemyndigelseDao bemyndigelseDao;
+    @Mock DomaeneDao domaeneDao;
+    @Mock LinkedSystemDao linkedSystemDao;
+    @Mock ArbejdsfunktionDao arbejdsfunktionDao;
+    @Mock RettighedDao rettighedDao;
+    @Mock DelegerbarRettighedDao delegerbarRettighedDao;
     @Mock SystemService systemService;
     @Mock DgwsRequestContext dgwsRequestContext;
+    @Mock ServiceTypeMapper typeMapper;
 
     @Mock SoapHeader soapHeader;
 
@@ -361,6 +369,45 @@ public class BemyndigelsesServiceImplTest {
         assertEquals(0, response.getKode().size());
         assertEquals(now.minusDays(1), bemyndigelse.getGyldigTil());
         verify(bemyndigelseDao, never()).save(bemyndigelse);
+    }
+
+    @Test
+    public void canGetMetadata() throws Exception {
+        final String domaeneKode = "Domaene";
+        final String systemKode = "System";
+        final HentMetadataRequest request = new HentMetadataRequest() {{
+            setDomaene(domaeneKode);
+            setSystem(systemKode);
+        }};
+
+        final Domaene domaene = new Domaene();
+        final LinkedSystem linkedSystem = new LinkedSystem();
+        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
+        final Rettighed rettighed = new Rettighed();
+        final DelegerbarRettighed delegerbarRettighed = new DelegerbarRettighed();
+
+        when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
+        when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
+
+        final List<Arbejdsfunktion> arbejdsfunktionList = asList(arbejdsfunktion);
+        final Arbejdsfunktioner jaxbArbejdsfunktioner = new Arbejdsfunktioner();
+        final List<Rettighed> rettighedList = asList(rettighed);
+        final Rettigheder jaxbRettigheder = new Rettigheder();
+        final List<DelegerbarRettighed> delegerbarRettighedList = asList(delegerbarRettighed);
+        final DelegerbarRettigheder jaxbDelegerbarRettigheder = new DelegerbarRettigheder();
+
+        when(arbejdsfunktionDao.findBy(domaene, linkedSystem)).thenReturn(arbejdsfunktionList);
+        when(rettighedDao.findBy(domaene, linkedSystem)).thenReturn(rettighedList);
+        when(delegerbarRettighedDao.findBy(domaene, linkedSystem)).thenReturn(delegerbarRettighedList);
+        when(typeMapper.toJaxbArbejdsfunktioner(arbejdsfunktionList)).thenReturn(jaxbArbejdsfunktioner);
+        when(typeMapper.toJaxbRettigheder(rettighedList)).thenReturn(jaxbRettigheder);
+        when(typeMapper.toJaxbDelegerbarRettigheder(delegerbarRettighedList)).thenReturn(jaxbDelegerbarRettigheder);
+
+        final HentMetadataResponse metadata = service.hentMetadata(request, soapHeader);
+
+        assertEquals(jaxbArbejdsfunktioner, metadata.getArbejdsfunktioner());
+        assertEquals(jaxbRettigheder, metadata.getRettigheder());
+        assertEquals(jaxbDelegerbarRettigheder, metadata.getDelegerbarRettigheder());
     }
 
     public boolean allTrue(boolean... eval) {

@@ -4,12 +4,12 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
 import com.trifork.dgws.DgwsRequestContext;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
-
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.lang.StringUtils;
@@ -42,7 +42,19 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Inject
     BemyndigelseDao bemyndigelseDao;
     @Inject
+    DomaeneDao domaeneDao;
+    @Inject
+    LinkedSystemDao linkedSystemDao;
+    @Inject
+    ArbejdsfunktionDao arbejdsfunktionDao;
+    @Inject
+    RettighedDao rettighedDao;
+    @Inject
+    DelegerbarRettighedDao delegerbarRettighedDao;
+    @Inject
     DgwsRequestContext dgwsRequestContext;
+    @Inject
+    ServiceTypeMapper typeMapper;
 
     public BemyndigelsesServiceImpl() {
     }
@@ -50,7 +62,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
+    @ResponsePayload
+    public OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
             @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
         String idCardCpr = dgwsRequestContext.getIdCardCpr();
 
@@ -81,7 +94,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload GodkendBemyndigelseResponse godkendBemyndigelse(
+    @ResponsePayload
+    public GodkendBemyndigelseResponse godkendBemyndigelse(
             @RequestPayload GodkendBemyndigelseRequest request, SoapHeader soapHeader) {
         final List<String> bemyndigelsesKoder = request.getBemyndigelsesKode();
 
@@ -106,7 +120,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @Protected
-    public @ResponsePayload HentBemyndigelserResponse hentBemyndigelser(
+    @ResponsePayload
+    public HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         List<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
         String idCardCpr = dgwsRequestContext.getIdCardCpr();
@@ -170,7 +185,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
+    @ResponsePayload
+    public OpretGodkendteBemyndigelserResponse opretGodkendtBemyndigelse(
             @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
 
@@ -207,7 +223,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Protected
     @Transactional
-    public @ResponsePayload SletBemyndigelserResponse sletBemyndigelser(
+    @ResponsePayload
+    public SletBemyndigelserResponse sletBemyndigelser(
             @RequestPayload SletBemyndigelserRequest request, SoapHeader soapHeader) {
 
         DateTime now = systemService.getDateTime();
@@ -239,8 +256,24 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    public HentBemyndigelserResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
-        // TODO Auto-generated method stub
+    @Transactional
+    public IndlaesMetadataResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
         return null;
+    }
+
+    @Override
+    public HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader) {
+        Domaene domaene = domaeneDao.findByKode(request.getDomaene());
+        LinkedSystem linkedSystem = linkedSystemDao.findBySystem(request.getSystem());
+
+        final List<Arbejdsfunktion> foundArbejdsfunktioner = arbejdsfunktionDao.findBy(domaene, linkedSystem);
+        final List<Rettighed> foundRettigheder = rettighedDao.findBy(domaene, linkedSystem);
+        final List<DelegerbarRettighed> foundDelegerbarRettigheder = delegerbarRettighedDao.findBy(domaene, linkedSystem);
+
+        return new HentMetadataResponse() {{
+            setArbejdsfunktioner(typeMapper.toJaxbArbejdsfunktioner(foundArbejdsfunktioner));
+            setRettigheder(typeMapper.toJaxbRettigheder(foundRettigheder));
+            setDelegerbarRettigheder(typeMapper.toJaxbDelegerbarRettigheder(foundDelegerbarRettigheder));
+        }};
     }
 }
