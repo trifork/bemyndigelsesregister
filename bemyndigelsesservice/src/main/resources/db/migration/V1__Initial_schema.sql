@@ -75,21 +75,22 @@ CREATE TABLE `rettighed` (
 
 CREATE TABLE `delegerbar_rettighed` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
+  `kode` VARCHAR(255) NOT NULL,
   `domaene_id` BIGINT NOT NULL,
   `linked_system_id` BIGINT NOT NULL,
-  `arbejdsfunktion` BIGINT NOT NULL,
-  `rettighedskode` BIGINT NOT NULL,
+  `arbejdsfunktion_id` BIGINT NOT NULL,
+  `rettighedskode_id` BIGINT NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
   
   CONSTRAINT `delegerbar_rettighed_type`
-      FOREIGN KEY (`rettighedskode` )
+      FOREIGN KEY (`rettighedskode_id` )
       REFERENCES `rettighed` (`id` )
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
 
   CONSTRAINT `delegerbar_arbejdsfunktion_type`
-      FOREIGN KEY (`arbejdsfunktion` )
+      FOREIGN KEY (`arbejdsfunktion_id` )
       REFERENCES `arbejdsfunktion` (`id` )
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
