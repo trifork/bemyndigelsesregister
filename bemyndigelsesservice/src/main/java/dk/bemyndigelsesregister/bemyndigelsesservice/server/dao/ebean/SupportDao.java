@@ -29,6 +29,10 @@ public abstract class SupportDao<T> {
         ebeanServer.save(entity);
     }
 
+    public T findByKode(String kode) {
+        return query().where().eq("kode", kode).findUnique();
+    }
+
     protected Query<T> query() {
         return ebeanServer.find(klass);
     }

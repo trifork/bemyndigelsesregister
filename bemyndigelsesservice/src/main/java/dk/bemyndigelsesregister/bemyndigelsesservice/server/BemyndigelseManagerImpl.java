@@ -51,7 +51,7 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         bemyndigelse.setBemyndigedeCpr(bemyndigedeCpr);
         bemyndigelse.setBemyndigedeCvr(bemyndigedeCvr);
 
-        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode));
+        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByKode(arbejdsfunktionKode));
 
         bemyndigelse.setStatus(statusTypeDao.get(1)); //TODO:
 

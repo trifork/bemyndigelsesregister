@@ -18,14 +18,14 @@ public class ServiceTypeMapperImplTest {
         setSystem("LinkedSystemKode");
     }};
     final Arbejdsfunktion testArbejdsfunktion = new Arbejdsfunktion() {{
-        setArbejdsfunktion("ArbejdsfunktionKode");
+        setKode("ArbejdsfunktionKode");
     }};
 
 
     @Test
     public void willMapToArbejdsfunktioner() throws Exception {
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion() {{
-            this.setArbejdsfunktion("Kode");
+            this.setKode("Kode");
             this.setBeskrivelse("Beskrivelse");
             this.setDomaene(testDomaene);
             this.setLinkedSystem(testLinkedSystem);
@@ -35,7 +35,7 @@ public class ServiceTypeMapperImplTest {
         assertEquals(1, jaxbArbejdsfunktioner.getArbejdsfunktion().size());
         final Arbejdsfunktioner.Arbejdsfunktion jaxbArbejdsfunktion = jaxbArbejdsfunktioner.getArbejdsfunktion().get(0);
 
-        assertEquals(arbejdsfunktion.getArbejdsfunktion(), jaxbArbejdsfunktion.getArbejdsfunktion());
+        assertEquals(arbejdsfunktion.getKode(), jaxbArbejdsfunktion.getArbejdsfunktion());
         assertEquals(arbejdsfunktion.getBeskrivelse(), jaxbArbejdsfunktion.getBeskrivelse());
         assertEquals(arbejdsfunktion.getDomaene().getDomaene(), jaxbArbejdsfunktion.getDomaene());
         assertEquals(arbejdsfunktion.getLinkedSystem().getSystem(), jaxbArbejdsfunktion.getSystem());
@@ -74,7 +74,7 @@ public class ServiceTypeMapperImplTest {
         assertEquals(1, jaxbDelegerbarRettigheder.getDelegerbarRettighed().size());
         final DelegerbarRettigheder.DelegerbarRettighed jaxbRettighed = jaxbDelegerbarRettigheder.getDelegerbarRettighed().get(0);
 
-        assertEquals(delegerbarRettighed.getArbejdsfunktion().getArbejdsfunktion(), jaxbRettighed.getArbejdsfunktion());
+        assertEquals(delegerbarRettighed.getArbejdsfunktion().getKode(), jaxbRettighed.getArbejdsfunktion());
         assertEquals(delegerbarRettighed.getDomaene().getDomaene(), jaxbRettighed.getDomaene());
         assertEquals(delegerbarRettighed.getKode(), jaxbRettighed.getRettighed());
         assertEquals(delegerbarRettighed.getSystem().getSystem(), jaxbRettighed.getSystem());

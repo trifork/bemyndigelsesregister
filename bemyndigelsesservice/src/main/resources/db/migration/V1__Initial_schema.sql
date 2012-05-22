@@ -29,7 +29,7 @@ CREATE TABLE `arbejdsfunktion` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `domaene_id` BIGINT NOT NULL,
   `linked_system_id` BIGINT NOT NULL,
-  `arbejdsfunktion` VARCHAR(255) NOT NULL,
+  `kode` VARCHAR(255) NOT NULL,
   `beskrivelse` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,

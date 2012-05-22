@@ -54,7 +54,7 @@ public class BemyndigelseManagerImplTest {
     public void canCreateBemyndigelse() throws Exception {
         when(systemService.getDateTime()).thenReturn(now);
         when(systemService.createUUIDString()).thenReturn(kode);
-        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
+        when(arbejdsfunktionDao.findByKode(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
         when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(Rettighed.createForTest(rettighedKode));
         when(linkedSystemDao.findBySystem(systemKode)).thenReturn(LinkedSystem.createForTest(systemKode));
 
@@ -149,7 +149,7 @@ public class BemyndigelseManagerImplTest {
 
     @Test
     public void canCreateApprovedBemyndigelser() throws Exception {
-        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
+        when(arbejdsfunktionDao.findByKode(arbejdsfunktionKode)).thenReturn(Arbejdsfunktion.createForTest(arbejdsfunktionKode));
         when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(Rettighed.createForTest(rettighedKode));
         when(linkedSystemDao.findBySystem(systemKode)).thenReturn(LinkedSystem.createForTest(systemKode));
         when(systemService.getDateTime()).thenReturn(now);
@@ -170,7 +170,7 @@ public class BemyndigelseManagerImplTest {
             setKode("Existing");
         }};
 
-        when(arbejdsfunktionDao.findByArbejdsfunktion(arbejdsfunktionKode)).thenReturn(arbejdsfunktion);
+        when(arbejdsfunktionDao.findByKode(arbejdsfunktionKode)).thenReturn(arbejdsfunktion);
         when(rettighedDao.findByRettighedskode(rettighedKode)).thenReturn(rettighed);
         when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
         when(systemService.getDateTime()).thenReturn(now);
@@ -203,7 +203,7 @@ public class BemyndigelseManagerImplTest {
         assertEquals(bemyndigendeCpr, bemyndigelse.getBemyndigendeCpr());
         assertEquals(bemyndigedeCpr, bemyndigelse.getBemyndigedeCpr());
         assertEquals(bemyndigedeCvr, bemyndigelse.getBemyndigedeCvr());
-        assertEquals(arbejdsfunktionKode, bemyndigelse.getArbejdsfunktion().getArbejdsfunktion());
+        assertEquals(arbejdsfunktionKode, bemyndigelse.getArbejdsfunktion().getKode());
         //TODO: Hvad med status?
         assertEquals(rettighedKode, bemyndigelse.getRettighed().getRettighedskode());
         assertEquals(systemKode, bemyndigelse.getLinkedSystem().getSystem());

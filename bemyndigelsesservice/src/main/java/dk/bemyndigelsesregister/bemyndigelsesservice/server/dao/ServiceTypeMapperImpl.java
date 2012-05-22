@@ -23,7 +23,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                         @Override
                         public Arbejdsfunktion transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion that) {
                             return new Arbejdsfunktion() {{
-                                this.setArbejdsfunktion(that.getArbejdsfunktion());
+                                this.setArbejdsfunktion(that.getKode());
                                 this.setBeskrivelse(that.getBeskrivelse());
                                 this.setDomaene(that.getDomaene().getDomaene());
                                 this.setSystem(that.getLinkedSystem().getSystem());
@@ -63,7 +63,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                         @Override
                         public DelegerbarRettighed transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed that) {
                             return new DelegerbarRettighed() {{
-                                this.setArbejdsfunktion(that.getArbejdsfunktion().getArbejdsfunktion());
+                                this.setArbejdsfunktion(that.getArbejdsfunktion().getKode());
                                 this.setDomaene(that.getDomaene().getDomaene());
                                 this.setRettighed(that.getKode());
                                 this.setSystem(that.getSystem().getSystem());

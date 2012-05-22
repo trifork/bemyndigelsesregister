@@ -246,7 +246,7 @@ public class BemyndigelsesServiceImplTest {
         bemyndigelse.setLinkedSystem(system);
 
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
-        arbejdsfunktion.setArbejdsfunktion(this.arbejdsfunktionKode);
+        arbejdsfunktion.setKode(this.arbejdsfunktionKode);
         bemyndigelse.setArbejdsfunktion(arbejdsfunktion);
 
         final Rettighed rettighed = new Rettighed();
@@ -435,7 +435,7 @@ public class BemyndigelsesServiceImplTest {
             @Override
             public boolean matchesSafely(Arbejdsfunktion item) {
                 return allTrue(
-                        item.getArbejdsfunktion().equals("Arbejdsfunktion"),
+                        item.getKode().equals("Arbejdsfunktion"),
                         item.getBeskrivelse().equals("Beskrivelse"),
                         item.getDomaene() == domaene,
                         item.getLinkedSystem() == linkedSystem
@@ -503,7 +503,7 @@ public class BemyndigelsesServiceImplTest {
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
         when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
         when(linkedSystemDao.findBySystem(systemKode)).thenReturn(linkedSystem);
-        when(arbejdsfunktionDao.findByArbejdsfunktion("Arbejdsfunktion")).thenReturn(arbejdsfunktion);
+        when(arbejdsfunktionDao.findByKode("Arbejdsfunktion")).thenReturn(arbejdsfunktion);
 
         assertNotNull(service.indlaesMetadata(request, soapHeader));
 
