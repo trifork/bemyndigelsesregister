@@ -26,7 +26,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                                 this.setArbejdsfunktion(that.getKode());
                                 this.setBeskrivelse(that.getBeskrivelse());
                                 this.setDomaene(that.getDomaene().getKode());
-                                this.setSystem(that.getLinkedSystem().getSystem());
+                                this.setSystem(that.getLinkedSystem().getKode());
                             }};
                         }
                     }
@@ -46,7 +46,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                                 this.setBeskrivelse(that.getBeskrivelse());
                                 this.setDomaene(that.getDomaene().getKode());
                                 this.setRettighed(that.getRettighedskode());
-                                this.setSystem(that.getLinkedSystem().getSystem());
+                                this.setSystem(that.getLinkedSystem().getKode());
                             }};
                         }
                     }
@@ -66,7 +66,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                                 this.setArbejdsfunktion(that.getArbejdsfunktion().getKode());
                                 this.setDomaene(that.getDomaene().getKode());
                                 this.setRettighed(that.getKode());
-                                this.setSystem(that.getSystem().getSystem());
+                                this.setSystem(that.getLinkedSystem().getKode());
                             }};
                         }
                     }

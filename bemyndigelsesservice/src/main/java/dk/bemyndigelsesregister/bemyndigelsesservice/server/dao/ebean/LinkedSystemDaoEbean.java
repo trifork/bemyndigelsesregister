@@ -10,9 +10,4 @@ public class LinkedSystemDaoEbean extends SupportDao<LinkedSystem> implements Li
     public LinkedSystemDaoEbean() {
         super(LinkedSystem.class);
     }
-
-    @Override
-    public LinkedSystem findBySystem(String system) {
-        return query().where().eq("system", system).findUnique();
-    }
 }

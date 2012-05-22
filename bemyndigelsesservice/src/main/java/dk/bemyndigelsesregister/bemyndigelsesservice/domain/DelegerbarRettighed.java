@@ -3,7 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 public class DelegerbarRettighed extends ExternalIdentifiedDomainObject {
     private Arbejdsfunktion arbejdsfunktion;
     private Domaene domaene;
-    private LinkedSystem system;
+    private LinkedSystem linkedSystem;
 
     public Arbejdsfunktion getArbejdsfunktion() {
         return arbejdsfunktion;
@@ -21,11 +21,11 @@ public class DelegerbarRettighed extends ExternalIdentifiedDomainObject {
         this.domaene = domaene;
     }
 
-    public LinkedSystem getSystem() {
-        return system;
+    public LinkedSystem getLinkedSystem() {
+        return linkedSystem;
     }
 
-    public void setSystem(LinkedSystem system) {
-        this.system = system;
+    public void setLinkedSystem(LinkedSystem linkedSystem) {
+        this.linkedSystem = linkedSystem;
     }
 }

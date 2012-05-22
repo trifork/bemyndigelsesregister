@@ -129,7 +129,7 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
         type.setKode(getKode());
         type.setModifiedDate(null);
         type.setRettighed(rettighed.getRettighedskode());
-        type.setSystem(linkedSystem.getSystem());
+        type.setSystem(linkedSystem.getKode());
         type.setValidFrom(null);
         type.setValidTo(null);
         return type;

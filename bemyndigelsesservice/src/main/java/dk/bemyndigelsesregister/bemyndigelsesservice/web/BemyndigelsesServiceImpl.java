@@ -170,7 +170,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setBemyndigendeCpr(bem.getBemyndigendeCpr());
             setBemyndigedeCpr(bem.getBemyndigedeCpr());
             setBemyndigedeCvr(bem.getBemyndigedeCvr());
-            setSystem(bem.getLinkedSystem().getSystem());
+            setSystem(bem.getLinkedSystem().getKode());
             setArbejdsfunktion(bem.getArbejdsfunktion().getKode());
             setRettighed(bem.getRettighed().getRettighedskode());
             setStatus(bem.getStatus().getStatus());
@@ -265,7 +265,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     this.setKode(jaxbArbejdsfunktion.getArbejdsfunktion());
                     this.setBeskrivelse(jaxbArbejdsfunktion.getBeskrivelse());
                     this.setDomaene(domaeneDao.findByKode(jaxbArbejdsfunktion.getDomaene()));
-                    this.setLinkedSystem(linkedSystemDao.findBySystem(jaxbArbejdsfunktion.getSystem()));
+                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbArbejdsfunktion.getSystem()));
                 }});
             }
         }
@@ -277,7 +277,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     this.setRettighedskode(jaxbRettighed.getRettighed());
                     this.setBeskrivelse(jaxbRettighed.getBeskrivelse());
                     this.setDomaene(domaeneDao.findByKode(jaxbRettighed.getDomaene()));
-                    this.setLinkedSystem(linkedSystemDao.findBySystem(jaxbRettighed.getSystem()));
+                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbRettighed.getSystem()));
                 }});
             }
         }
@@ -288,7 +288,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 delegerbarRettighedDao.save(new DelegerbarRettighed() {{
                     this.setArbejdsfunktion(arbejdsfunktionDao.findByKode(jaxbDelegerbarRettighed.getArbejdsfunktion()));
                     this.setKode(jaxbDelegerbarRettighed.getRettighed());
-                    this.setSystem(linkedSystemDao.findBySystem(jaxbDelegerbarRettighed.getSystem()));
+                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbDelegerbarRettighed.getSystem()));
                     this.setDomaene(domaeneDao.findByKode(jaxbDelegerbarRettighed.getDomaene()));
                 }});
             }
@@ -300,7 +300,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     public HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader) {
         Domaene domaene = domaeneDao.findByKode(request.getDomaene());
-        LinkedSystem linkedSystem = linkedSystemDao.findBySystem(request.getSystem());
+        LinkedSystem linkedSystem = linkedSystemDao.findByKode(request.getSystem());
 
         final List<Arbejdsfunktion> foundArbejdsfunktioner = arbejdsfunktionDao.findBy(domaene, linkedSystem);
         final List<Rettighed> foundRettigheder = rettighedDao.findBy(domaene, linkedSystem);

@@ -80,7 +80,7 @@ public class BemyndigelsesExportJobTest {
         bemyndigelse.setRettighed(rettighed);
 
         final LinkedSystem linkedSystem = new LinkedSystem();
-        linkedSystem.setSystem("TEST system");
+        linkedSystem.setKode("TEST system");
         bemyndigelse.setLinkedSystem(linkedSystem);
 
         return bemyndigelse;

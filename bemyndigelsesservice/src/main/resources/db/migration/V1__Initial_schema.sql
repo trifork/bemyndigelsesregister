@@ -9,7 +9,7 @@ CREATE TABLE `domaene` (
 
 CREATE TABLE `linked_system` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
-  `system` VARCHAR(255) NOT NULL,
+  `kode` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
 
