@@ -1,6 +1,6 @@
 CREATE TABLE `domaene` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
-  `domaene` VARCHAR(255) NOT NULL,
+  `kode` VARCHAR(255) NOT NULL,
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
 
