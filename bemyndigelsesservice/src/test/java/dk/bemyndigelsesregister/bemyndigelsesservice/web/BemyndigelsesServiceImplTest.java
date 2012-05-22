@@ -250,7 +250,7 @@ public class BemyndigelsesServiceImplTest {
         bemyndigelse.setArbejdsfunktion(arbejdsfunktion);
 
         final Rettighed rettighed = new Rettighed();
-        rettighed.setRettighedskode(this.rettighedKode);
+        rettighed.setKode(this.rettighedKode);
         bemyndigelse.setRettighed(rettighed);
 
         final StatusType status = new StatusType();
@@ -475,7 +475,7 @@ public class BemyndigelsesServiceImplTest {
                         item.getBeskrivelse().equals("Beskrivelse"),
                         item.getDomaene() == domaene,
                         item.getLinkedSystem() == linkedSystem,
-                        item.getRettighedskode().equals("Rettighed")
+                        item.getKode().equals("Rettighed")
                 );
             }
 

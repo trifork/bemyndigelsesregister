@@ -76,7 +76,7 @@ public class BemyndigelsesExportJobTest {
         bemyndigelse.setBemyndigedeCpr(bemyndigedeCpr);
 
         final Rettighed rettighed = new Rettighed();
-        rettighed.setRettighedskode("TEST rettighed");
+        rettighed.setKode("TEST rettighed");
         bemyndigelse.setRettighed(rettighed);
 
         final LinkedSystem linkedSystem = new LinkedSystem();

@@ -172,7 +172,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setBemyndigedeCvr(bem.getBemyndigedeCvr());
             setSystem(bem.getLinkedSystem().getKode());
             setArbejdsfunktion(bem.getArbejdsfunktion().getKode());
-            setRettighed(bem.getRettighed().getRettighedskode());
+            setRettighed(bem.getRettighed().getKode());
             setStatus(bem.getStatus().getStatus());
             if (bem.getGodkendelsesdato() != null) {
                 setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
@@ -274,7 +274,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             for (final Rettigheder.Rettighed jaxbRettighed : request.getRettigheder().getRettighed()) {
                 logger.info("Adding rettighed=" + jaxbRettighed.toString());
                 rettighedDao.save(new Rettighed() {{
-                    this.setRettighedskode(jaxbRettighed.getRettighed());
+                    this.setKode(jaxbRettighed.getRettighed());
                     this.setBeskrivelse(jaxbRettighed.getBeskrivelse());
                     this.setDomaene(domaeneDao.findByKode(jaxbRettighed.getDomaene()));
                     this.setLinkedSystem(linkedSystemDao.findByKode(jaxbRettighed.getSystem()));

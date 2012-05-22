@@ -45,7 +45,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                             return new Rettighed() {{
                                 this.setBeskrivelse(that.getBeskrivelse());
                                 this.setDomaene(that.getDomaene().getKode());
-                                this.setRettighed(that.getRettighedskode());
+                                this.setRettighed(that.getKode());
                                 this.setSystem(that.getLinkedSystem().getKode());
                             }};
                         }

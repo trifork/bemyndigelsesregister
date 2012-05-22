@@ -47,7 +47,7 @@ public class ServiceTypeMapperImplTest {
             this.setBeskrivelse("Beskrivelse");
             this.setDomaene(testDomaene);
             this.setLinkedSystem(testLinkedSystem);
-            this.setRettighedskode("Kode");
+            this.setKode("Kode");
         }};
 
         final Rettigheder jaxbRettigheder = typeMapper.toJaxbRettigheder(asList(rettighed));
@@ -58,7 +58,7 @@ public class ServiceTypeMapperImplTest {
         assertEquals(rettighed.getBeskrivelse(), jaxbRettighed.getBeskrivelse());
         assertEquals(rettighed.getDomaene().getKode(), jaxbRettighed.getDomaene());
         assertEquals(rettighed.getLinkedSystem().getKode(), jaxbRettighed.getSystem());
-        assertEquals(rettighed.getRettighedskode(), jaxbRettighed.getRettighed());
+        assertEquals(rettighed.getKode(), jaxbRettighed.getRettighed());
     }
     @Test
     public void willMapToDelegerbarRettigheder() throws Exception {

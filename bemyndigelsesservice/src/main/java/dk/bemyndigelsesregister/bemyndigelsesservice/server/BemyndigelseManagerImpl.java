@@ -55,7 +55,7 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
 
         bemyndigelse.setStatus(statusTypeDao.get(1)); //TODO:
 
-        bemyndigelse.setRettighed(rettighedDao.findByRettighedskode(rettighedKode));
+        bemyndigelse.setRettighed(rettighedDao.findByKode(rettighedKode));
         bemyndigelse.setLinkedSystem(linkedSystemDao.findByKode(systemKode));
 
         final DateTime validFrom = defaultIfNull(gyldigFra, now);
