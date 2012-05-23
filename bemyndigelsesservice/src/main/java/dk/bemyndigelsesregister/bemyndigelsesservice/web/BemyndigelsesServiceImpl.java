@@ -258,7 +258,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @Transactional
-    public IndlaesMetadataResponse indlaesMetadata(IndlaesMetadataRequest request, SoapHeader soapHeader) {
+    @ResponsePayload
+    public IndlaesMetadataResponse indlaesMetadata(@RequestPayload IndlaesMetadataRequest request, SoapHeader soapHeader) {
         if (request.getArbejdsfunktioner() != null) {
             for (final Arbejdsfunktioner.Arbejdsfunktion jaxbArbejdsfunktion : request.getArbejdsfunktioner().getArbejdsfunktion()) {
                 logger.info("Adding arbejdsfunktion=" + jaxbArbejdsfunktion);
@@ -299,7 +300,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    public HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader) {
+    @ResponsePayload
+    public HentMetadataResponse hentMetadata(@RequestPayload HentMetadataRequest request, SoapHeader soapHeader) {
         Domaene domaene = domaeneDao.findByKode(request.getDomaene());
         LinkedSystem linkedSystem = linkedSystemDao.findByKode(request.getSystem());
 
