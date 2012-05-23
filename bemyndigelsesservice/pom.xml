@@ -79,6 +79,11 @@
             <artifactId>MockFtpServer</artifactId>
             <version>2.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.schema</groupId>
+            <artifactId>XmlSchema</artifactId>
+            <version>1.4.7</version>
+        </dependency>
     </dependencies>
 
     <build>
