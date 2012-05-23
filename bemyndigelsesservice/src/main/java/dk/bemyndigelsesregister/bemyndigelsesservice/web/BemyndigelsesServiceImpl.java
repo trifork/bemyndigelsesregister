@@ -79,7 +79,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     anmodning.getArbejdsfunktion(),
                     anmodning.getRettighed(),
                     anmodning.getSystem(),
-                    null, null);
+                    nullableDateTime(anmodning.getGyldigFra()),
+                    nullableDateTime(anmodning.getGyldigTil()));
             logger.debug("Got bemyndigelse with kode=" + bemyndigelse.getKode());
             createdBemyndigelser.add(bemyndigelse);
         }
