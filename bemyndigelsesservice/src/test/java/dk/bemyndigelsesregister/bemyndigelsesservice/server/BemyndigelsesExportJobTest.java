@@ -95,8 +95,6 @@ public class BemyndigelsesExportJobTest {
                     System.out.println("Not same size");
                     return false;
                 }
-                //TODO: more precise assertion
-
                 return true;
             }
 
