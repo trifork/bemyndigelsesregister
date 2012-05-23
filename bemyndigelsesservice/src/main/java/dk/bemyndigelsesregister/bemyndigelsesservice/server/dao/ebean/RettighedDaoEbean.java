@@ -17,7 +17,6 @@ public class RettighedDaoEbean extends SupportDao<Rettighed> implements Rettighe
 
     @Override
     public List<Rettighed> findBy(Domaene domaene, LinkedSystem linkedSystem) {
-        //TODO: implement
-        return null;
+        return query().where().eq("domaene", domaene).eq("linked_system", linkedSystem).findList();
     }
 }
