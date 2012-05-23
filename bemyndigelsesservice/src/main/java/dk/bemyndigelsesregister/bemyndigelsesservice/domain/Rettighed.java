@@ -1,10 +1,13 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Rettighed extends ExternalIdentifiedDomainObject {
+    @OneToOne
     private Domaene domaene;
+    @OneToOne
     private LinkedSystem linkedSystem;
     private String beskrivelse;
 

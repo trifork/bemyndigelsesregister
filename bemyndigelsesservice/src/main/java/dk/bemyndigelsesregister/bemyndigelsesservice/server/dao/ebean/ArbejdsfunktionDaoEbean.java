@@ -21,7 +21,6 @@ public class ArbejdsfunktionDaoEbean extends SupportDao<Arbejdsfunktion> impleme
 
     @Override
     public List<Arbejdsfunktion> findBy(Domaene domaene, LinkedSystem linkedSystem) {
-        //TODO: implement
-        return null;
+        return query().where().eq("domaene", domaene).eq("linkedSystem", linkedSystem).findList();
     }
 }

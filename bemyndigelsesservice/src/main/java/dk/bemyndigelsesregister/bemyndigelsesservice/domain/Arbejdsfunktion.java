@@ -8,7 +8,7 @@ public class Arbejdsfunktion extends ExternalIdentifiedDomainObject {
     @OneToOne
     private Domaene domaene;
     @OneToOne
-    private LinkedSystem LinkedSystem;
+    private LinkedSystem linkedSystem;
     private String beskrivelse;
 
     public Arbejdsfunktion() {
@@ -32,11 +32,11 @@ public class Arbejdsfunktion extends ExternalIdentifiedDomainObject {
     }
 
     public void setLinkedSystem(LinkedSystem linkedSystem) {
-        this.LinkedSystem = linkedSystem;
+        this.linkedSystem = linkedSystem;
     }
 
     public LinkedSystem getLinkedSystem() {
-        return LinkedSystem;
+        return linkedSystem;
     }
     //</editor-fold>
 

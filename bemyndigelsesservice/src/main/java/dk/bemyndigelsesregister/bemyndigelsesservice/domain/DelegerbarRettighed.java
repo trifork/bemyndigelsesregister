@@ -1,9 +1,18 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
+@Entity
 public class DelegerbarRettighed extends ExternalIdentifiedDomainObject {
+    @OneToOne
     private Arbejdsfunktion arbejdsfunktion;
+    @OneToOne
     private Domaene domaene;
+    @OneToOne
     private LinkedSystem linkedSystem;
+
+    //TODO: Hvad med Rettighedkode_id?
 
     public Arbejdsfunktion getArbejdsfunktion() {
         return arbejdsfunktion;
