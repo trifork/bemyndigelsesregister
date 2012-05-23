@@ -16,6 +16,6 @@ public class DelegerbarRettighedDaoEbean extends SupportDao<DelegerbarRettighed>
 
     @Override
     public List<DelegerbarRettighed> findBy(Domaene domaene, LinkedSystem linkedSystem) {
-        return query().where().eq("domaene", domaene).eq("system", linkedSystem).findList();
+        return query().where().eq("domaene", domaene).eq("linkedSystem", linkedSystem).findList();
     }
 }
