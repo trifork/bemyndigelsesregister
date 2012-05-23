@@ -164,8 +164,8 @@
                             <xs:element name="Arbejdsfunktion" type="xs:string"/>
                             <xs:element name="Rettighed" type="xs:string"/>
                             <xs:element name="System" type="xs:string"/>
-                            <!-- TODO: xs:element name="GyldigFra" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
-                            <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0" maxOccurs="1"/-->
+                            <xs:element name="GyldigFra" type="xs:dateTime" minOccurs="0"/>
+                            <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0"/>
                         </xs:all>
                     </xs:complexType>
                 </xs:element>

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
@@ -23,6 +22,7 @@ import org.springframework.ws.transport.http.WsdlDefinitionHandlerAdapter;
 import org.springframework.ws.wsdl.WsdlDefinition;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
+import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -34,18 +34,29 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Inject
     ApplicationRootConfig applicationRootConfig;
 
-    @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //TODO: add *.xsd mapping, http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/mvc.html#mvc-config-static-resources
-    }
-
     @Bean
     public WsdlDefinition serviceDefinition() {
         final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
         bean.setSchema(schema1XsdSchema());
+        //bean.setSchemaCollection(schemaCollection());
         bean.setPortTypeName("BemyndigelsesService");
         bean.setLocationUri("http://localhost:8080/BemyndigelsesService");
         return bean;
+    }
+
+    @Bean
+    public CommonsXsdSchemaCollection schemaCollection() {
+        final Resource[] resources = {
+                new ClassPathResource("/schema/CPR_PersonCivilRegistrationIdentifier.xsd"),
+                new ClassPathResource("/schema/CVR_CVRnumberIdentifier.xsd"),
+                new ClassPathResource("/schema/bemyndigelsesservice.xsd"),
+        };
+        for (Resource resource : resources) {
+            if (!resource.exists()) {
+                throw new RuntimeException("Resource not found: " + resource.getDescription());
+            }
+        }
+        return new CommonsXsdSchemaCollection(resources);
     }
 
     @Bean
