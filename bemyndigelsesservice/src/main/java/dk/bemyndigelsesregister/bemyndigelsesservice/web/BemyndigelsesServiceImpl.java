@@ -259,6 +259,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Transactional
     @ResponsePayload
+    @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public IndlaesMetadataResponse indlaesMetadata(@RequestPayload IndlaesMetadataRequest request, SoapHeader soapHeader) {
         if (request.getArbejdsfunktioner() != null) {
             for (final Arbejdsfunktioner.Arbejdsfunktion jaxbArbejdsfunktion : request.getArbejdsfunktioner().getArbejdsfunktion()) {
@@ -301,6 +302,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @ResponsePayload
+    @Protected(whitelist = "bemyndigelsesservice.hentMetadata")
     public HentMetadataResponse hentMetadata(@RequestPayload HentMetadataRequest request, SoapHeader soapHeader) {
         Domaene domaene = domaeneDao.findByKode(request.getDomaene());
         LinkedSystem linkedSystem = linkedSystemDao.findByKode(request.getSystem());
