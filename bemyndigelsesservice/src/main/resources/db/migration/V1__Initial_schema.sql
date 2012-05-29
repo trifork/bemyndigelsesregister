@@ -184,3 +184,6 @@ CREATE TABLE `whitelist` (
 
   PRIMARY KEY(`id`)
 );
+
+INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('bemyndigelsesservice.indlaesMetadata', '1');
+INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('bemyndigelsesservice.hentMetadata', '1');
