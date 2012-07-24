@@ -48,6 +48,7 @@
         <module>integration-test</module>
         <module>shared-test</module>
         <module>shared</module>
+        <module>sdm-bemyndigelse</module>
     </modules>
 
     <properties>
