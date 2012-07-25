@@ -11,5 +11,12 @@
 
     <artifactId>sdm-bemyndigelse</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>dk.nsi.stamdata2</groupId>
+            <artifactId>sdm-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>
