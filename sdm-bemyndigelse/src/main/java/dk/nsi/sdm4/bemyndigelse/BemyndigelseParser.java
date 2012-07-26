@@ -11,7 +11,7 @@ import java.util.Collection;
 @Repository
 public class BemyndigelseParser extends SimpleParser<BemyndigelseRecord, Bemyndigelser, Bemyndigelse> {
     @Override
-    protected Collection<Bemyndigelse> getTypes(Bemyndigelser type) {
+    protected Collection<Bemyndigelse> getContainedEntitiesFrom(Bemyndigelser type) {
         return type.getBemyndigelseList();
     }
 
