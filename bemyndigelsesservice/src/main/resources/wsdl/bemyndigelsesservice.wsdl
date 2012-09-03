@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://nsi.dk/bemyndigelse/2012/05/01/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://nsi.dk/bemyndigelse/2012/05/01/" targetNamespace="http://nsi.dk/bemyndigelse/2012/05/01/">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bms="http://nsi.dk/bemyndigelse/2012/05/01/" xmlns:cpr="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" xmlns:cvr="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/" targetNamespace="http://nsi.dk/bemyndigelse/2012/05/01/" version="1.0">
+
+    <xs:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" schemaLocation="CPR_PersonCivilRegistrationIdentifier.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+
+    <xs:import namespace="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/" schemaLocation="CVR_CVRnumberIdentifier.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+
+    <xs:complexType name="Bemyndigelse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="Kode" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="System" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="Arbejdsfunktion" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="Rettighed" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="Status" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="Godkendelsesdato" type="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="Gyldig_fra" type="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="Gyldig_til" type="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Arbejdsfunktioner" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element maxOccurs="unbounded" name="Arbejdsfunktion" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element name="Domaene" type="bms:Domaene" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="System" type="bms:System" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="Arbejdsfunktion" type="bms:Arbejdsfunktion" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="Beskrivelse" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Rettigheder" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element maxOccurs="unbounded" name="Rettighed" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element name="Domaene" type="bms:Domaene" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="System" type="bms:System" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="Rettighed" type="bms:Rettighed" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="Beskrivelse" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DelegerbarRettigheder" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element maxOccurs="unbounded" name="DelegerbarRettighed" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element name="Domaene" type="bms:Domaene" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="System" type="bms:System" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="Arbejdsfunktion" type="bms:Arbejdsfunktion" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        <xs:element name="Rettighed" type="bms:Rettighed" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="Domaene" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+    </xs:simpleType>
+    <xs:simpleType name="System" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+    </xs:simpleType>
+    <xs:simpleType name="Arbejdsfunktion" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+    </xs:simpleType>
+    <xs:simpleType name="Rettighed" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+    </xs:simpleType>
+
+    <xs:element name="IndlaesMetadataRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element minOccurs="0" name="Arbejdsfunktioner" type="bms:Arbejdsfunktioner" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                <xs:element minOccurs="0" name="Rettigheder" type="bms:Rettigheder" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                <xs:element minOccurs="0" name="DelegerbarRettigheder" type="bms:DelegerbarRettigheder" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="IndlaesMetadataResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentMetadataRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="Domaene" type="bms:Domaene" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                <xs:element name="System" type="bms:System" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentMetadataResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element minOccurs="0" name="Arbejdsfunktioner" type="bms:Arbejdsfunktioner" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                <xs:element minOccurs="0" name="Rettigheder" type="bms:Rettigheder" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                <xs:element minOccurs="0" name="DelegerbarRettigheder" type="bms:DelegerbarRettigheder" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GodkendBemyndigelseRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="BemyndigelsesKode" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GodkendBemyndigelseResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" name="Bemyndigelser" type="bms:Bemyndigelse" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentBemyndigelserRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:choice xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                <xs:element name="Kode" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentBemyndigelserResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" name="Bemyndigelse" type="bms:Bemyndigelse" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretAnmodningOmBemyndigelserRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="Anmodning" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:all xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="Arbejdsfunktion" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="Rettighed" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="System" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element minOccurs="0" name="GyldigFra" type="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element minOccurs="0" name="GyldigTil" type="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretAnmodningOmBemyndigelserResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" name="Bemyndigelse" type="bms:Bemyndigelse" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretGodkendteBemyndigelserRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="Bemyndigelse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:all xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="System" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="Arbejdsfunktion" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="Rettighed" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element maxOccurs="1" minOccurs="0" name="GyldigFra" type="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element maxOccurs="1" minOccurs="0" name="GyldigTil" type="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretGodkendteBemyndigelserResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" name="Bemyndigelse" type="bms:Bemyndigelse" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SletBemyndigelserRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" name="Kode" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SletBemyndigelserResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" name="Kode" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GodkendBemyndigelseResponse">
+    <wsdl:part element="tns:GodkendBemyndigelseResponse" name="GodkendBemyndigelseResponse"/>
+  </wsdl:message>
+  <wsdl:message name="IndlaesMetadataResponse">
+    <wsdl:part element="tns:IndlaesMetadataResponse" name="IndlaesMetadataResponse"/>
+  </wsdl:message>
+  <wsdl:message name="HentMetadataRequest">
+    <wsdl:part element="tns:HentMetadataRequest" name="HentMetadataRequest"/>
+  </wsdl:message>
+  <wsdl:message name="HentBemyndigelserResponse">
+    <wsdl:part element="tns:HentBemyndigelserResponse" name="HentBemyndigelserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="HentBemyndigelserRequest">
+    <wsdl:part element="tns:HentBemyndigelserRequest" name="HentBemyndigelserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="OpretGodkendteBemyndigelserResponse">
+    <wsdl:part element="tns:OpretGodkendteBemyndigelserResponse" name="OpretGodkendteBemyndigelserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="OpretAnmodningOmBemyndigelserRequest">
+    <wsdl:part element="tns:OpretAnmodningOmBemyndigelserRequest" name="OpretAnmodningOmBemyndigelserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="OpretAnmodningOmBemyndigelserResponse">
+    <wsdl:part element="tns:OpretAnmodningOmBemyndigelserResponse" name="OpretAnmodningOmBemyndigelserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="OpretGodkendteBemyndigelserRequest">
+    <wsdl:part element="tns:OpretGodkendteBemyndigelserRequest" name="OpretGodkendteBemyndigelserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="SletBemyndigelserRequest">
+    <wsdl:part element="tns:SletBemyndigelserRequest" name="SletBemyndigelserRequest"/>
+  </wsdl:message>
+  <wsdl:message name="SletBemyndigelserResponse">
+    <wsdl:part element="tns:SletBemyndigelserResponse" name="SletBemyndigelserResponse"/>
+  </wsdl:message>
+  <wsdl:message name="GodkendBemyndigelseRequest">
+    <wsdl:part element="tns:GodkendBemyndigelseRequest" name="GodkendBemyndigelseRequest"/>
+  </wsdl:message>
+  <wsdl:message name="IndlaesMetadataRequest">
+    <wsdl:part element="tns:IndlaesMetadataRequest" name="IndlaesMetadataRequest"/>
+  </wsdl:message>
+  <wsdl:message name="HentMetadataResponse">
+    <wsdl:part element="tns:HentMetadataResponse" name="HentMetadataResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="BemyndigelsesService">
+    <wsdl:operation name="GodkendBemyndigelse">
+      <wsdl:input message="tns:GodkendBemyndigelseRequest" name="GodkendBemyndigelseRequest"/>
+      <wsdl:output message="tns:GodkendBemyndigelseResponse" name="GodkendBemyndigelseResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="IndlaesMetadata">
+      <wsdl:input message="tns:IndlaesMetadataRequest" name="IndlaesMetadataRequest"/>
+      <wsdl:output message="tns:IndlaesMetadataResponse" name="IndlaesMetadataResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="HentMetadata">
+      <wsdl:input message="tns:HentMetadataRequest" name="HentMetadataRequest"/>
+      <wsdl:output message="tns:HentMetadataResponse" name="HentMetadataResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="HentBemyndigelser">
+      <wsdl:input message="tns:HentBemyndigelserRequest" name="HentBemyndigelserRequest"/>
+      <wsdl:output message="tns:HentBemyndigelserResponse" name="HentBemyndigelserResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="OpretGodkendteBemyndigelser">
+      <wsdl:input message="tns:OpretGodkendteBemyndigelserRequest" name="OpretGodkendteBemyndigelserRequest"/>
+      <wsdl:output message="tns:OpretGodkendteBemyndigelserResponse" name="OpretGodkendteBemyndigelserResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="OpretAnmodningOmBemyndigelser">
+      <wsdl:input message="tns:OpretAnmodningOmBemyndigelserRequest" name="OpretAnmodningOmBemyndigelserRequest"/>
+      <wsdl:output message="tns:OpretAnmodningOmBemyndigelserResponse" name="OpretAnmodningOmBemyndigelserResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="SletBemyndigelser">
+      <wsdl:input message="tns:SletBemyndigelserRequest" name="SletBemyndigelserRequest"/>
+      <wsdl:output message="tns:SletBemyndigelserResponse" name="SletBemyndigelserResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BemyndigelsesServiceSoap11" type="tns:BemyndigelsesService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GodkendBemyndigelse">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="GodkendBemyndigelseRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GodkendBemyndigelseResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IndlaesMetadata">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="IndlaesMetadataRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="IndlaesMetadataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HentMetadata">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="HentMetadataRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="HentMetadataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HentBemyndigelser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="HentBemyndigelserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="HentBemyndigelserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpretGodkendteBemyndigelser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="OpretGodkendteBemyndigelserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="OpretGodkendteBemyndigelserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpretAnmodningOmBemyndigelser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="OpretAnmodningOmBemyndigelserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="OpretAnmodningOmBemyndigelserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SletBemyndigelser">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="SletBemyndigelserRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="SletBemyndigelserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BemyndigelsesServiceService">
+    <wsdl:port binding="tns:BemyndigelsesServiceSoap11" name="BemyndigelsesServiceSoap11">
+      <soap:address location="http://localhost:8080/BemyndigelsesService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

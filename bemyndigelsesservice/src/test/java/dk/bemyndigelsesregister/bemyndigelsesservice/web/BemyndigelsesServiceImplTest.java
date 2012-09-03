@@ -447,6 +447,7 @@ public class BemyndigelsesServiceImplTest {
             }
         }));
     }
+    
 
     @Test
     public void canIndlaeseRettigheder() throws Exception {

@@ -263,25 +263,38 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     public IndlaesMetadataResponse indlaesMetadata(@RequestPayload IndlaesMetadataRequest request, SoapHeader soapHeader) {
         if (request.getArbejdsfunktioner() != null) {
             for (final Arbejdsfunktioner.Arbejdsfunktion jaxbArbejdsfunktion : request.getArbejdsfunktioner().getArbejdsfunktion()) {
-                logger.info("Adding arbejdsfunktion=" + jaxbArbejdsfunktion);
-                arbejdsfunktionDao.save(new Arbejdsfunktion() {{
-                    this.setKode(jaxbArbejdsfunktion.getArbejdsfunktion());
-                    this.setBeskrivelse(jaxbArbejdsfunktion.getBeskrivelse());
-                    this.setDomaene(domaeneDao.findByKode(jaxbArbejdsfunktion.getDomaene()));
-                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbArbejdsfunktion.getSystem()));
-                }});
+                Arbejdsfunktion arbejdsfunktion = arbejdsfunktionDao.findByKode(jaxbArbejdsfunktion.getArbejdsfunktion());
+                if(arbejdsfunktion != null) {
+                    logger.info("Updating arbejdsfunktion=" + jaxbArbejdsfunktion);
+                } else {
+                    logger.info("Adding arbejdsfunktion=" + jaxbArbejdsfunktion);
+                    arbejdsfunktion = new Arbejdsfunktion();
+                }
+                arbejdsfunktion.setKode(jaxbArbejdsfunktion.getArbejdsfunktion());
+                arbejdsfunktion.setBeskrivelse(jaxbArbejdsfunktion.getBeskrivelse());
+                arbejdsfunktion.setDomaene(domaeneDao.findByKode(jaxbArbejdsfunktion.getDomaene()));
+                arbejdsfunktion.setLinkedSystem(linkedSystemDao.findByKode(jaxbArbejdsfunktion.getSystem()));
+                
+                arbejdsfunktionDao.save(arbejdsfunktion);
             }
         }
 
         if (request.getRettigheder() != null) {
             for (final Rettigheder.Rettighed jaxbRettighed : request.getRettigheder().getRettighed()) {
-                logger.info("Adding rettighed=" + jaxbRettighed.toString());
-                rettighedDao.save(new Rettighed() {{
-                    this.setKode(jaxbRettighed.getRettighed());
-                    this.setBeskrivelse(jaxbRettighed.getBeskrivelse());
-                    this.setDomaene(domaeneDao.findByKode(jaxbRettighed.getDomaene()));
-                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbRettighed.getSystem()));
-                }});
+                
+                Rettighed rettighed = rettighedDao.findByKode(jaxbRettighed.getRettighed());
+                if(rettighed != null) {
+                    logger.info("Updating rettighed=" + jaxbRettighed);
+                } else {
+                    logger.info("Adding rettighed=" + jaxbRettighed);
+                    rettighed = new Rettighed();
+                }
+                rettighed.setKode(jaxbRettighed.getRettighed());
+                rettighed.setBeskrivelse(jaxbRettighed.getBeskrivelse());
+                rettighed.setDomaene(domaeneDao.findByKode(jaxbRettighed.getDomaene()));
+                rettighed.setLinkedSystem(linkedSystemDao.findByKode(jaxbRettighed.getSystem()));
+                
+                rettighedDao.save(rettighed);
             }
         }
 
