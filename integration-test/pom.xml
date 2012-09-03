@@ -99,7 +99,7 @@
                                     <context>ROOT</context>
                                 </properties>
                                 <pingURL>${functionaltest.urlprefix}/health</pingURL>
-                                <pingTimeout>20000</pingTimeout>
+                                <pingTimeout>60000</pingTimeout>
                             </deployable>
                         </deployables>
                     </deployer>
