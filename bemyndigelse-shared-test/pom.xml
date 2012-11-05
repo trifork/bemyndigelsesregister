@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>shared-test</artifactId>
+    <artifactId>bemyndigelse-shared-test</artifactId>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

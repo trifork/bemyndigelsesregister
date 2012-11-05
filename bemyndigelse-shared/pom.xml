@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>shared</artifactId>
+    <artifactId>bemyndigelse-shared</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>shared-test</artifactId>
+            <artifactId>bemyndigelse-shared-test</artifactId>
             <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
@@ -33,11 +33,6 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
-        <!--dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
-        </dependency-->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>

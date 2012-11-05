@@ -45,9 +45,9 @@
 
     <modules>
         <module>bemyndigelsesservice</module>
-        <module>integration-test</module>
-        <module>shared-test</module>
-        <module>shared</module>
+        <module>bemyndigelse-integration-test</module>
+        <module>bemyndigelse-shared-test</module>
+        <module>bemyndigelse-shared</module>
     </modules>
 
     <properties>

@@ -21,12 +21,12 @@
         </dependency>
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>shared</artifactId>
+            <artifactId>bemyndigelse-shared</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>shared-test</artifactId>
+            <artifactId>bemyndigelse-shared-test</artifactId>
             <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
