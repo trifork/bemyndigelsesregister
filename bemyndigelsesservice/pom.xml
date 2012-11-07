@@ -149,6 +149,7 @@
                     </archive>
                 </configuration>
             </plugin>
+<!-- disabled - as it still executes during release:perform - even if it shouldnt             
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
@@ -191,6 +192,7 @@
                     </deployer>
                 </configuration>
             </plugin>
+-->            
         </plugins>
     </build>
 </project>
