@@ -30,9 +30,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/trifork/bemyndigelsesregister</url>
-        <connection>scm:git:git://github.com/trifork/bemyndigelsesregister.git</connection>
-        <developerConnection>scm:git:git://github.com/trifork/bemyndigelsesregister.git</developerConnection>
+        <url>scm:git:git@github.com:trifork/bemyndigelsesregister</url>
+        <connection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</connection>
+        <developerConnection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</developerConnection>
     </scm>
     <issueManagement>
         <system>JIRA</system>
@@ -42,6 +42,14 @@
         <system>Jenkins</system>
         <url>https://ci82.trifork.com/job/Bemyndigelsesregister-develop/</url>
     </ciManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>Trifork-Nexus-Public-Repository</id>
+            <name>Trifork Nexus Public Repository</name>
+            <url>https://nexus.trifork.com/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
 
     <modules>
         <module>bemyndigelsesservice</module>
