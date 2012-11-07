@@ -62,7 +62,7 @@
         <functionaltest.serverport>8085</functionaltest.serverport>
         <functionaltest.urlprefix>http://localhost:${functionaltest.serverport}</functionaltest.urlprefix>
         <deployment.cargo.hostname>localhost</deployment.cargo.hostname>
-        <deployment.pingURL>http://${deployment.cargo.hostname}:8080/health</deployment.pingURL>
+        <deployment.pingURL>http://${deployment.cargo.hostname}:8085/health</deployment.pingURL>
         <deployment.serversettings>bms.localhost</deployment.serversettings> <!-- Add a server setting to your ~/.m2/settings.xml
         <server>
             <id>bms.localhost</id>
