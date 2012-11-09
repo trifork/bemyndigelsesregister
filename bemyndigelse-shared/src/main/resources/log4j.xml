@@ -9,11 +9,11 @@
     </appender>
 
     <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="${catalina.base}/logs/debug.log"/>
+        <param name="File" value="${catalina.base}/logs/bemyndigelse.log"/>
         <param name="Append" value="true"/>
         <param name="ImmediateFlush" value="true"/>
         <param name="MaxFileSize" value="50MB"/>
-        <param name="MaxBackupIndex" value="2"/>
+        <param name="MaxBackupIndex" value="10"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{ISO8601} [%t][%X{uuid}] %-5p %c - %m%n"/>
         </layout>
@@ -25,17 +25,17 @@
 
     <!--Log incoming soap:envelope-->
     <logger name="org.springframework.ws.soap.server.endpoint.interceptor.SoapEnvelopeLoggingInterceptor">
-        <level value="DEBUG"/>
+        <level value="WARN"/>
     </logger>
     <logger name="org.springframework.ws">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
     <logger name="dk.bemyndigelsesregister">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
     <logger name="com.trifork">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
     <logger name="com.googlecode.flyway">
@@ -47,7 +47,7 @@
 
     <root>
         <level value="INFO"/>
-        <appender-ref ref="CONSOLE"/>
-        <!--appender-ref ref="FILE"/-->
+        <!-- appender-ref ref="CONSOLE"/-->
+        <appender-ref ref="FILE"/>
     </root>
 </log4j:configuration>

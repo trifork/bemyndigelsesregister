@@ -4,6 +4,8 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
 import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
 import com.googlecode.flyway.core.Flyway;
+
+import org.apache.bcel.verifier.statics.Pass1Verifier;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -18,6 +20,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
+
+import sun.security.util.Password;
 
 import javax.persistence.Entity;
 import javax.sql.DataSource;
@@ -39,11 +43,7 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     public static PropertyPlaceholderConfigurer configuration() {
         final PropertyPlaceholderConfigurer props = new PropertyPlaceholderConfigurer();
         props.setLocations(new Resource[]{
-                new ClassPathResource("default.properties"),
-                new ClassPathResource("bms." + getProperty("user.name") + ".properties"),
-                new ClassPathResource("jdbc.default.properties"),
-                new ClassPathResource("jdbc." + getProperty("user.name") + ".properties"),
-                new FileSystemResource(getProperty("user.home") + "/.bemyndigelsesservice/passwords.properties")
+                new FileSystemResource(getProperty("bemyndigelse.home"))
         });
         props.setIgnoreResourceNotFound(true);
         props.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);

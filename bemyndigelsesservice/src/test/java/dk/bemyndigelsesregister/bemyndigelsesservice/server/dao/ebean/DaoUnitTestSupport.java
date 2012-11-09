@@ -43,8 +43,8 @@ public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTest
         public PropertyPlaceholderConfigurer configuration() {
             final PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
             configurer.setLocations(new Resource[] {
-                    new ClassPathResource("default.properties"),
-                    new ClassPathResource("jdbc.unittest.properties")
+                    new ClassPathResource("bemyndigelse.properties"),
+                    new ClassPathResource("bemyndigelse.test.properties")
             });
             return configurer;
         }

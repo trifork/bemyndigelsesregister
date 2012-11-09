@@ -104,6 +104,7 @@
                     <configuration>
                         <properties>
                             <cargo.servlet.port>${functionaltest.serverport}</cargo.servlet.port>
+                            <cargo.jvmargs>-Dbemyndigelse.home=${project.parent.basedir}/bemyndigelse-shared/src/main/resources/bemyndigelse.properties -Dlog4j.configuration=file://${project.parent.basedir}/bemyndigelse-shared/src/main/resources/log4j.xml</cargo.jvmargs>
                         </properties>
                     </configuration>
                 </configuration>
