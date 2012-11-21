@@ -1,16 +1,21 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
-import com.avaje.ebean.config.ServerConfig;
-import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
-import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
-import com.googlecode.flyway.core.Flyway;
+import static java.lang.System.getProperty;
 
-import org.apache.bcel.verifier.statics.Pass1Verifier;
+import java.util.ArrayList;
+
+import javax.persistence.Entity;
+import javax.sql.DataSource;
+
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.*;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -21,13 +26,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-import sun.security.util.Password;
-
-import javax.persistence.Entity;
-import javax.sql.DataSource;
-import java.util.ArrayList;
-
-import static java.lang.System.getProperty;
+import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
+import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
+import com.googlecode.flyway.core.Flyway;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.shared.service", "dk.bemyndigelsesregister.bemyndigelsesservice.server"})

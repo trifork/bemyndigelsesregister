@@ -28,6 +28,7 @@ import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
@@ -43,7 +44,15 @@ public class WebConfig extends WebMvcConfigurationSupport {
         //bean.setSchemaCollection(schemaCollection()); //this will inline the defs from the schemas in the collections
         bean.setPortTypeName("BemyndigelsesService");
         bean.setLocationUri("http://localhost:8080/BemyndigelsesService");
-
+        Properties soapActions = new Properties();
+        soapActions.put("SletBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/SletBemyndigelser");
+        soapActions.put("OpretAnmodningOmBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/OpretAnmodningOmBemyndigelser");
+        soapActions.put("OpretGodkendteBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/OpretGodkendteBemyndigelser");
+        soapActions.put("HentBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/HentBemyndigelser");
+        soapActions.put("HentMetadata","http://nsi.dk/bemyndigelse/2012/05/01/HentMetadata");
+        soapActions.put("IndlaesMetadata","http://nsi.dk/bemyndigelse/2012/05/01/IndlaesMetadata");
+        soapActions.put("GodkendBemyndigelse","http://nsi.dk/bemyndigelse/2012/05/01/GodkendBemyndigelse");
+        bean.setSoapActions(soapActions);
         return bean;
     }
 
@@ -69,7 +78,9 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public WsdlDefinitionHandlerAdapter wsdlDefinitionHandlerAdapter() {
-        return new WsdlDefinitionHandlerAdapter();
+        WsdlDefinitionHandlerAdapter wsdlDefinitionHandlerAdapter = new WsdlDefinitionHandlerAdapter();
+        wsdlDefinitionHandlerAdapter.setTransformLocations(true);
+        return wsdlDefinitionHandlerAdapter;
     }
 
 
