@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.server.EndpointInterceptor;
 import org.springframework.ws.server.EndpointMapping;
@@ -38,9 +40,10 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public WsdlDefinition serviceDefinition() {
         final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
         bean.setSchema(schema1XsdSchema());
-        //bean.setSchemaCollection(schemaCollection());
+        //bean.setSchemaCollection(schemaCollection()); //this will inline the defs from the schemas in the collections
         bean.setPortTypeName("BemyndigelsesService");
         bean.setLocationUri("http://localhost:8080/BemyndigelsesService");
+
         return bean;
     }
 
@@ -69,10 +72,33 @@ public class WebConfig extends WebMvcConfigurationSupport {
         return new WsdlDefinitionHandlerAdapter();
     }
 
+
+    /**
+     * Serve XSD files as static resources - this will cause a SimpleUrlHandlerMapping for *.xsd to be created
+     * The order of this must be lower than the order for the RequestMappingHandlerMapping bean.
+     *
+     * @param registry
+     */
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.setOrder(0);
+        registry.addResourceHandler("*.xsd").addResourceLocations("classpath:/schema/");
+    }
+
+
+    @Bean
+    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
+        RequestMappingHandlerMapping handlerMapping = super.requestMappingHandlerMapping();
+        handlerMapping.setOrder(1);
+        handlerMapping.setInterceptors(getInterceptors());
+        return handlerMapping;
+    }
+
+
     @Bean
     public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
         final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
-        mapping.setOrder(1);
+        mapping.setOrder(2);
         final HashMap<String, Object> urlMap = new HashMap<String, Object>();
         urlMap.put("*.wsdl", serviceDefinition());
         mapping.setUrlMap(urlMap);
@@ -83,6 +109,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Bean
     public BeanNameUrlHandlerMapping beanNameHandlerMapping() {
         final BeanNameUrlHandlerMapping mapping = super.beanNameHandlerMapping();
+        mapping.setOrder(3);
         mapping.setDefaultHandler(soapMessageDispatcher());
         return mapping;
     }
