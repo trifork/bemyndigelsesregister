@@ -301,12 +301,12 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         if (request.getDelegerbarRettigheder() != null) {
             for (final DelegerbarRettigheder.DelegerbarRettighed jaxbDelegerbarRettighed : request.getDelegerbarRettigheder().getDelegerbarRettighed()) {
                 logger.info("Adding delegerbarRettighed=" + jaxbDelegerbarRettighed.toString());
-                delegerbarRettighedDao.save(new DelegerbarRettighed() {{
-                    this.setArbejdsfunktion(arbejdsfunktionDao.findByKode(jaxbDelegerbarRettighed.getArbejdsfunktion()));
-                    this.setKode(jaxbDelegerbarRettighed.getRettighed());
-                    this.setLinkedSystem(linkedSystemDao.findByKode(jaxbDelegerbarRettighed.getSystem()));
-                    this.setDomaene(domaeneDao.findByKode(jaxbDelegerbarRettighed.getDomaene()));
-                }});
+                DelegerbarRettighed delegerbarRettighed = new DelegerbarRettighed();
+                delegerbarRettighed.setArbejdsfunktion(arbejdsfunktionDao.findByKode(jaxbDelegerbarRettighed.getArbejdsfunktion()));
+                delegerbarRettighed.setKode(jaxbDelegerbarRettighed.getRettighed());
+                delegerbarRettighed.setLinkedSystem(linkedSystemDao.findByKode(jaxbDelegerbarRettighed.getSystem()));
+                delegerbarRettighed.setDomaene(domaeneDao.findByKode(jaxbDelegerbarRettighed.getDomaene()));
+                delegerbarRettighedDao.save(delegerbarRettighed);
             }
         }
 
