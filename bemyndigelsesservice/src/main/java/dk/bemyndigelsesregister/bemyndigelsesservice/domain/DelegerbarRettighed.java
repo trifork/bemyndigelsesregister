@@ -11,8 +11,19 @@ public class DelegerbarRettighed extends ExternalIdentifiedDomainObject {
     private Domaene domaene;
     @OneToOne
     private LinkedSystem linkedSystem;
-
     //TODO: Hvad med Rettighedkode_id?
+
+    @OneToOne
+    private Rettighed rettighedskode;
+
+
+    public Rettighed getRettighedskode() {
+        return rettighedskode;
+    }
+
+    public void setRettighedskode(Rettighed rettighedskode) {
+        this.rettighedskode = rettighedskode;
+    }
 
     public Arbejdsfunktion getArbejdsfunktion() {
         return arbejdsfunktion;
