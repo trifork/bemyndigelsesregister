@@ -304,6 +304,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 DelegerbarRettighed delegerbarRettighed = new DelegerbarRettighed();
                 delegerbarRettighed.setArbejdsfunktion(arbejdsfunktionDao.findByKode(jaxbDelegerbarRettighed.getArbejdsfunktion()));
                 delegerbarRettighed.setKode(jaxbDelegerbarRettighed.getRettighed());
+                delegerbarRettighed.setRettighedskode(rettighedDao.findByKode(jaxbDelegerbarRettighed.getRettighed()));
                 delegerbarRettighed.setLinkedSystem(linkedSystemDao.findByKode(jaxbDelegerbarRettighed.getSystem()));
                 delegerbarRettighed.setDomaene(domaeneDao.findByKode(jaxbDelegerbarRettighed.getDomaene()));
                 delegerbarRettighedDao.save(delegerbarRettighed);
