@@ -79,7 +79,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <argLine>-Dspring.profiles.active=test</argLine>
+                <argLine>-Dspring.profiles.active=test,-Dcatalina.base=${basedir}/target</argLine>
             </properties>
         </profile>
         <profile>
