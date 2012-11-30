@@ -3,7 +3,7 @@ Bemyndigelsesservice
 
 For at køre integrationstest skal Spring profilen "test" være aktiveret.
 
-Det er Maven Surefire pluginen som afvikler test. Disse test forkes for at få et rent environment, så Surefire benytter en speciel system property 'argLine' hvori man så angiver de properties der skal sættes som system properties. F.eks. -Dspring.profiles.active=test
+Det er Maven Surefire pluginen som afvikler test. Surefire forker testeksekveringen for at få et rent environment. Det betyder at Surefire ignorerer -Dproperty=value. I stedet benytter Surefire en speciel system property 'argLine' hvori man så angiver de properties der skal sættes som system properties. F.eks. -DargLine="-Dspring.profiles.active=test".
 
 Parent pom filen indeholder en Maven profil med id "test" som sætter denne argLine property automatisk, så man kan køre mvn clean package uden at angive andet.
 
