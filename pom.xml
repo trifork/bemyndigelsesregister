@@ -74,6 +74,15 @@
 
     <profiles>
         <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <argLine>-Dspring.profiles.active=test</argLine>
+            </properties>
+        </profile>
+        <profile>
             <id>ci</id>
             <activation>
                 <property>

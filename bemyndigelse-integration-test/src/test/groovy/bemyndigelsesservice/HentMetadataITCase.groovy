@@ -9,7 +9,7 @@ class HentMetadataITCase extends WebServiceSupport {
     public void willAllowWhitelistedSystemsToRead() throws Exception {
         def response = send("hentMetadata") {
             "bms:HentMetadataRequest" {
-                "Domaene"('trifork')
+                "Domaene"('trifork-test')
                 "System"('Trifork test system')
             }
         }

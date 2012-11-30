@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import com.googlecode.flyway.core.Flyway;
 import dk.bemyndigelsesregister.bemyndigelsesservice.config.ApplicationRootConfig;
+import dk.bemyndigelsesregister.bemyndigelsesservice.config.TestConfig;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import org.junit.After;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ import javax.servlet.ServletContext;
 import static org.mockito.Mockito.mock;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationRootConfig.class, DaoUnitTestSupport.MockContext.class})
+@ContextConfiguration(classes = {ApplicationRootConfig.class, DaoUnitTestSupport.MockContext.class, TestConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTests {
     @Inject

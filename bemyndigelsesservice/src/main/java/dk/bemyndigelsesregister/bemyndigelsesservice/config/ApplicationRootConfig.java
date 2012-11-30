@@ -10,12 +10,7 @@ import javax.sql.DataSource;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -57,17 +52,6 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         //TODO: when http://code.google.com/p/flyway/issues/detail?id=174 is finished, we want to use multiple paths for migration in test
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
-        return flyway;
-    }
-
-    @Bean(initMethod = "migrate")
-    @DependsOn("flyway")
-    public Flyway flywayTestData(DataSource dataSource) {
-        Flyway flyway = new Flyway();
-        flyway.setDisableInitCheck(true);
-        flyway.setDataSource(dataSource);
-        flyway.setBaseDir("db/testdata");
-        flyway.setTable("testschema_version");
         return flyway;
     }
 
