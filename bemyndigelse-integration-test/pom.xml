@@ -10,6 +10,7 @@
     <artifactId>bemyndigelse-integration-test</artifactId>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
@@ -37,10 +38,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.12</version>
+                <version>2.12.4</version>
                 <configuration>
-                    <systemPropertyVariables>
+                    <systemPropertyVariables combine.children="append">
                         <functionaltest.urlprefix>${functionaltest.urlprefix}</functionaltest.urlprefix>
+                        <argLine>${argLine}</argLine>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>
@@ -123,6 +125,18 @@
             <groupId>dk.bemyndigelsesregister</groupId>
             <artifactId>bemyndigelse-shared-test</artifactId>
             <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.18</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.flyway</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>1.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>

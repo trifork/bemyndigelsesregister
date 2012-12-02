@@ -6,9 +6,27 @@ import wslite.soap.SOAPClient
 import wslite.soap.SOAPResponse
 
 import static dk.bemyndigelsesregister.integrationtest.TestUtil.urlPrefix
+import com.googlecode.flyway.core.Flyway
+import org.springframework.jdbc.datasource.DriverManagerDataSource
 
 abstract class WebServiceSupport {
 
+    WebServiceSupport() {
+        Properties conf = new Properties();
+        conf.load(WebServiceSupport.class.getResourceAsStream("/bemyndigelse.properties"))
+        DriverManagerDataSource dataSource = new DriverManagerDataSource(
+                conf.getProperty("jdbc.url"),
+                conf.getProperty("jdbc.username"),
+                conf.getProperty("jdbc.password")
+        );
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+
+        Flyway flyway = new Flyway();
+        flyway.setDisableInitCheck(true);
+        flyway.setDataSource(dataSource);
+        flyway.setTable("integrationtest_version");
+        flyway.migrate()
+    }
 
     protected SOAPClient getClient() {
         println "Creating client for ${urlPrefix()}"
