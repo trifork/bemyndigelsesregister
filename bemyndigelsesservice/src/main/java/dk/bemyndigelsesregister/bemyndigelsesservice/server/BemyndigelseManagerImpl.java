@@ -66,6 +66,9 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         bemyndigelse.setGyldigFra(validFrom);
         bemyndigelse.setGyldigTil(validTo);
 
+        bemyndigelse.setSidstModificeret(now);
+        bemyndigelse.setSidstModificeretAf("Service");
+
         bemyndigelse.setVersionsid(1);
         return bemyndigelse;
     }
