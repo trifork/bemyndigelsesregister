@@ -17,7 +17,7 @@
 
     <groupId>dk.bemyndigelsesregister</groupId>
     <artifactId>bemyndigelsesregister</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
     <packaging>pom</packaging>
 
     <licenses>
@@ -31,7 +31,8 @@
         <url>scm:git:git@github.com:trifork/bemyndigelsesregister</url>
         <connection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</connection>
         <developerConnection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</developerConnection>
-    </scm>
+      <tag>bemyndigelsesregister-1.5</tag>
+  </scm>
     <issueManagement>
         <system>JIRA</system>
         <url>https://TODO.trifork.com/</url>
