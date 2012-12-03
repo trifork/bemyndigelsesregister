@@ -40,6 +40,7 @@ class ExportToFtpITCase {
         FileEntry uploadedFile = ftpServer.fileSystem.listFiles("/").find {FileSystemEntry entry ->
             entry.lastModified.after(startTime)
         }
+        assert uploadedFile != null
         def bemyndiglser = new XmlParser().parse(uploadedFile.createInputStream())
 
         println "bemyndiglser = $bemyndiglser"
