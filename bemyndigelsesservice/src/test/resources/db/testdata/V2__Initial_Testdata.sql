@@ -1,15 +1,15 @@
-INSERT INTO status_type (kode, sidst_modificeret, sidst_modificeret_af) VALUES ('OK', NOW(), 'mwl');
+REPLACE INTO status_type (kode, sidst_modificeret, sidst_modificeret_af) VALUES ('OK', NOW(), 'mwl');
 
-INSERT INTO linked_system(kode) VALUES ('Trifork test system');
+REPLACE INTO linked_system(kode) VALUES ('Trifork test system');
 
-INSERT INTO domaene(kode) VALUES ('trifork-test');
+REPLACE INTO domaene(kode) VALUES ('trifork-test');
 
-INSERT INTO arbejdsfunktion(kode, domaene_id, beskrivelse, linked_system_id) values ('Laege', 1, 'For unit test only', 1);
-INSERT INTO rettighed(kode, beskrivelse, domaene_id, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1, 1);
-INSERT INTO delegerbar_rettighed(kode, arbejdsfunktion_id, domaene_id, linked_system_id, rettighedskode_id) VALUES ('DR01', 1, 1, 1, 1);
+REPLACE INTO arbejdsfunktion(kode, domaene_id, beskrivelse, linked_system_id) values ('Laege', 1, 'For unit test only', 1);
+REPLACE INTO rettighed(kode, beskrivelse, domaene_id, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1, 1);
+REPLACE INTO delegerbar_rettighed(kode, arbejdsfunktion_id, domaene_id, linked_system_id, rettighedskode_id) VALUES ('DR01', 1, 1, 1, 1);
 
 ##Bemyndigelser
-INSERT INTO `bemyndigelse` (
+REPLACE INTO `bemyndigelse` (
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -40,7 +40,7 @@ INSERT INTO `bemyndigelse` (
         '2011-05-21 02:15:00',
         NULL);
 
-INSERT INTO `bemyndigelse` (
+REPLACE INTO `bemyndigelse` (
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -71,7 +71,7 @@ INSERT INTO `bemyndigelse` (
         '2011-05-22 02:15:00',
         NULL);
 
-INSERT INTO `bemyndigelse` (
+REPLACE INTO `bemyndigelse` (
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -102,7 +102,7 @@ INSERT INTO `bemyndigelse` (
         '2000-05-22 02:15:00',
         NULL);
 
-INSERT INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
+REPLACE INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
 
-INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '1');
-INSERT INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '2');
+REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '1');
+REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '2');
