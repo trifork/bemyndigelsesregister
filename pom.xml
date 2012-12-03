@@ -17,7 +17,7 @@
 
     <groupId>dk.bemyndigelsesregister</groupId>
     <artifactId>bemyndigelsesregister</artifactId>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <licenses>
@@ -75,7 +75,7 @@
 
     <profiles>
         <profile>
-            <id>test</id>
+            <id>default</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -179,7 +179,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <preparationGoals>clean flyway:clean verify</preparationGoals>
+                    <preparationGoals>clean verify</preparationGoals>
                 </configuration>
             </plugin>
             <plugin>
