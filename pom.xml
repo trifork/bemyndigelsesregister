@@ -206,7 +206,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <preparationGoals>clean verify</preparationGoals>
+                    <preparationGoals>clean flyway:clean verify</preparationGoals>
                 </configuration>
             </plugin>
             <plugin>
