@@ -1,13 +1,12 @@
 Bemyndigelsesservice
 ===
 
-For at køre integrationstest skal Spring profilen "test" være aktiveret.
+Build Release
+===
+To build version 1.6 e.g.:
+mvn -DreleaseVersion=1.6 -DdevelopmentVersion=1.7-SNAPSHOT -DautoVersionSubmodules=true -Dtag=bemyndigelsesregister-1.6 --batch-mode -Dresume=false release:prepare flyway:clean compile flyway:migrate release:perform
 
-Det er Maven Surefire pluginen som afvikler test. Surefire forker testeksekveringen for at få et rent environment. Det betyder at Surefire ignorerer -Dproperty=value. I stedet benytter Surefire en speciel system property 'argLine' hvori man så angiver de properties der skal sættes som system properties. F.eks. -DargLine="-Dspring.profiles.active=test".
-
-Parent pom filen indeholder en Maven profil med id "test" som sætter denne argLine property automatisk, så man kan køre mvn clean package uden at angive andet.
-
-Ønsker man at benytte "ci" - eller "dev" Maven-profilerne der også findes i parent pom'en skal man huske at angive "test" også f.eks. mvn -P ci,test clean package
+Husk at inkludere filen bemyndigelsesservice/src/main/resources/db/manual/trifork_data.sql når der releases til systemer der skal køre bemyndigelse for FMK eller DDV fra Trifork.
 
 Running with MySQL
 ===
@@ -20,3 +19,4 @@ GRANT ALL PRIVILEGES ON bemyndigelse.* TO 'bemyndigelse'@'localhost';
 CREATE DATABASE bemyndigelsetest;
 GRANT ALL PRIVILEGES ON bemyndigelsetest.* TO 'bemyndigelse'@'localhost';
 ```
+
