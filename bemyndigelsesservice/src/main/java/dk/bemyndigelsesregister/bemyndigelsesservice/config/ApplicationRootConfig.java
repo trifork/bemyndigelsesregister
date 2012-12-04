@@ -50,7 +50,6 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     @Bean(initMethod = "migrate")
     public Flyway flyway(DataSource dataSource) {
         Flyway flyway = new Flyway();
-        flyway.setLocations("db/migration", "db/testdata"); //db/testdata er nødvendig for at test og integration-test kan eksekveres. I den byggede WAR er db/testdata udeladt og vil ikke blive migreret ved opstart.
         flyway.setDataSource(dataSource);
         flyway.setCleanOnValidationError(false);
         return flyway;

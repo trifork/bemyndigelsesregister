@@ -102,13 +102,6 @@
                 <groupId>com.googlecode.flyway</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>2.0.2</version>
-                <configuration>
-                    <cleanOnValidationError>false</cleanOnValidationError>
-                    <locations>
-                        <location>db/migration</location>
-                        <location>db/testdata</location>
-                    </locations>
-                </configuration>
                 <executions>
                     <execution>
                         <id>clean</id>
@@ -116,6 +109,48 @@
                         <goals>
                             <goal>clean</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>migrate_before_loadtestdatatestdata</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.18</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>com.mysql.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost/bemyndigelse</url>
+                    <username>bemyndigelse</username>
+                    <password />
+                    <forceMojoExecution>true</forceMojoExecution>
+                    <skip>${maven.test.skip}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>loadtestdata</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>${basedir}/src/test/resources/db/testdata/Testdata.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -158,7 +193,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <packagingExcludes>WEB-INF/classes/db/testdata/V2__Testdata.sql</packagingExcludes>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -215,4 +249,5 @@
 -->            
         </plugins>
     </build>
+
 </project>
