@@ -21,10 +21,7 @@ import static org.mockito.Mockito.mock;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationRootConfig.class, DaoUnitTestSupport.MockContext.class})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTests {
-    @Inject
-    Flyway flyway;
 
     @Inject DomaeneDao domaeneDao;
     @Inject ArbejdsfunktionDao arbejdsfunktionDao;
@@ -50,8 +47,4 @@ public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTest
         }
     }
 
-    @After
-    public void tearDown() throws Exception {
-        flyway.clean();
-    }
 }
