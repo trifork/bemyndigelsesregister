@@ -117,13 +117,6 @@
                             <goal>clean</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>test</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>migrate</goal>
-                        </goals>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
