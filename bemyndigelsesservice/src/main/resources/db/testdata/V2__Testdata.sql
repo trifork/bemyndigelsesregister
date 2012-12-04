@@ -107,6 +107,7 @@ REPLACE INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den go
 REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '1');
 REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '2');
 
+/* Testdata for integration test */
 REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('bemyndigelsesservice.indlaesMetadata', '25520041');
 REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('bemyndigelsesservice.hentMetadata', '25520041');
 REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('', '25520041');

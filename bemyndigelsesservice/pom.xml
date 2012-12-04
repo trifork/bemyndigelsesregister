@@ -47,11 +47,11 @@
             <artifactId>flyway-core</artifactId>
             <version>2.0.2</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.2.8</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -99,71 +99,33 @@
 
         <plugins>
             <plugin>
-
                 <groupId>com.googlecode.flyway</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>2.0.2</version>
                 <configuration>
-                    <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost/bemyndigelse</url>
-                    <user>bemyndigelse</user>
-                    <password />
+                    <cleanOnValidationError>false</cleanOnValidationError>
                     <locations>
-                        <!-- Main schema -->
-                        <location>${basedir}/src/main/resources/db/migration</location>
-                        <!-- Test data for main schema (should be cleaned along with schema, migrate is performed by TestConfig) -->
-                        <location>${basedir}/src/test/resources/db/testdata</location>
+                        <location>db/migration</location>
+                        <location>db/testdata</location>
                     </locations>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.18</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <id>clean</id>
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>migrate</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-            <!-- test data -->
-            <!--plugin>
-                <groupId>com.googlecode.flyway</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost/bemyndigelse</url>
-                    <user>bemyndigelse</user>
-                    <password />
-                    <disableInitCheck>true</disableInitCheck>
-                    <baseDir>${basedir}/src/test/resources/db/testdata</baseDir>
-                    <table>testschema_version</table>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.18</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin-->
-
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
@@ -203,6 +165,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
+                    <packagingExcludes>db/testdata/V2__Testdata.sql</packagingExcludes>
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
