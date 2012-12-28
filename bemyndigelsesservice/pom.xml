@@ -132,7 +132,7 @@
                 </dependencies>
                 <configuration>
                     <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://localhost/bemyndigelse</url>
+                    <url>jdbc:mysql://127.0.0.1/bemyndigelse</url>
                     <username>bemyndigelse</username>
                     <password />
                     <forceMojoExecution>true</forceMojoExecution>

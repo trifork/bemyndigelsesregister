@@ -316,7 +316,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @ResponsePayload
-    @Protected(whitelist = "bemyndigelsesservice.hentMetadata")
+    // TODO Verify with Kjeld that there really is no reason 
+    // for hentMetadata to be protected.
+    //@Protected(whitelist = "bemyndigelsesservice.hentMetadata")
     public HentMetadataResponse hentMetadata(@RequestPayload HentMetadataRequest request, SoapHeader soapHeader) {
         Domaene domaene = domaeneDao.findByKode(request.getDomaene());
         LinkedSystem linkedSystem = linkedSystemDao.findByKode(request.getSystem());
