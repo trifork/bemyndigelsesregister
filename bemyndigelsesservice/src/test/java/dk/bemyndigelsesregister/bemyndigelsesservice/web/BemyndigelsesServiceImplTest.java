@@ -54,7 +54,7 @@ public class BemyndigelsesServiceImplTest {
     final String rettighedKode = "Rettighedskode";
     final String domaeneKode = "DomaeneKode";
     final String systemKode = "SystemKode";
-    final String statusKode = "StatusKode";
+    final Status status = Status.GODKENDT;
 
     @Test
     public void canCreateBemyndigelseAndmodning() throws Exception {
@@ -253,8 +253,6 @@ public class BemyndigelsesServiceImplTest {
         rettighed.setKode(this.rettighedKode);
         bemyndigelse.setRettighed(rettighed);
 
-        final StatusType status = new StatusType();
-        status.setKode(this.statusKode);
         bemyndigelse.setStatus(status);
 
         bemyndigelse.setGodkendelsesdato(godkendelsesdato);

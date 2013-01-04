@@ -1,5 +1,3 @@
-REPLACE INTO status_type (kode, sidst_modificeret, sidst_modificeret_af) VALUES ('OK', NOW(), 'mwl');
-
 REPLACE INTO linked_system(kode) VALUES ('Trifork test system');
 
 REPLACE INTO domaene(kode) VALUES ('trifork-test');
@@ -17,7 +15,7 @@ REPLACE INTO `bemyndigelse` (
         `linked_system_id`,
         `arbejdsfunktion_id`,
         `rettighed_id`,
-        `status_id`,
+        `status`,
         `godkendelsesdato`,
         `gyldig_fra`,
         `gyldig_til`,
@@ -32,7 +30,7 @@ REPLACE INTO `bemyndigelse` (
         1,
         1,
         1,
-        1,
+        'GODKENDT',
         '2011-05-21 02:15:00',
         '2011-05-21 23:59:59',
         '2011-05-21 02:15:00',
@@ -48,7 +46,7 @@ REPLACE INTO `bemyndigelse` (
         `linked_system_id`,
         `arbejdsfunktion_id`,
         `rettighed_id`,
-        `status_id`,
+        `status`,
         `godkendelsesdato`,
         `gyldig_fra`,
         `gyldig_til`,
@@ -63,7 +61,7 @@ REPLACE INTO `bemyndigelse` (
         1,
         1,
         1,
-        1,
+        'GODKENDT',
         '2011-05-22 02:15:00',
         '2011-05-22 02:15:00',
         '2011-05-22 02:15:00',
@@ -79,7 +77,7 @@ REPLACE INTO `bemyndigelse` (
         `linked_system_id`,
         `arbejdsfunktion_id`,
         `rettighed_id`,
-        `status_id`,
+        `status`,
         `godkendelsesdato`,
         `gyldig_fra`,
         `gyldig_til`,
@@ -94,7 +92,7 @@ REPLACE INTO `bemyndigelse` (
         1,
         1,
         1,
-        1,
+        'GODKENDT',
         '2000-05-22 00:00:00',
         '2000-05-22 23:59:59',
         '2000-05-22 00:00:00',

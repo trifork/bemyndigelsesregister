@@ -27,8 +27,6 @@ public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTest
     @Inject
     LinkedSystemDao linkedSystemDao;
     @Inject
-    StatusTypeDao statusTypeDao;
-    @Inject
     RettighedDao rettighedDao;
     @Inject
     DelegerbarRettighedDao delegerbarRettighedDao;

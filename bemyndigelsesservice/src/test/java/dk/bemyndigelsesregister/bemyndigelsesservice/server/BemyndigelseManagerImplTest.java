@@ -30,8 +30,6 @@ public class BemyndigelseManagerImplTest {
     @Mock
     RettighedDao rettighedDao;
     @Mock
-    StatusTypeDao statusTypeDao;
-    @Mock
     LinkedSystemDao linkedSystemDao;
 
     @InjectMocks

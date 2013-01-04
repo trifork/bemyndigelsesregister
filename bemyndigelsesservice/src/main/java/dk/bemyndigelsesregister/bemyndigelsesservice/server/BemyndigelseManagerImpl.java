@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
@@ -28,21 +29,18 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
     RettighedDao rettighedDao;
 
     @Inject
-    StatusTypeDao statusTypeDao;
-
-    @Inject
     LinkedSystemDao linkedSystemDao;
 
     @Override
     public Bemyndigelse opretAnmodningOmBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
-        final Bemyndigelse bemyndigelse = createBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, gyldigFra, gyldigTil);
+        final Bemyndigelse bemyndigelse = createBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, Status.BESTILT, systemKode, gyldigFra, gyldigTil);
 
         bemyndigelseDao.save(bemyndigelse);
 
         return bemyndigelse;
     }
 
-    private Bemyndigelse createBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
+    private Bemyndigelse createBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, Status status, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
         DateTime now = systemService.getDateTime();
 
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
@@ -53,7 +51,7 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
 
         bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByKode(arbejdsfunktionKode));
 
-        bemyndigelse.setStatus(statusTypeDao.get(1)); //TODO:
+        bemyndigelse.setStatus(status);
 
         bemyndigelse.setRettighed(rettighedDao.findByKode(rettighedKode));
         bemyndigelse.setLinkedSystem(linkedSystemDao.findByKode(systemKode));
@@ -98,14 +96,14 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
             existingBemyndigelse.setGyldigTil(bemyndigelse.getGyldigFra());
             bemyndigelseDao.save(existingBemyndigelse);
         }
-
+        bemyndigelse.setStatus(Status.GODKENDT);
         bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
         bemyndigelseDao.save(bemyndigelse);
     }
 
     @Override
     public Bemyndigelse opretGodkendtBemyndigelse(String bemyndigendeCpr, String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String systemKode, DateTime gyldigFra, DateTime gyldigTil) {
-        Bemyndigelse bemyndigelse = createBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, systemKode, gyldigFra, gyldigTil);
+        Bemyndigelse bemyndigelse = createBemyndigelse(bemyndigendeCpr, bemyndigedeCpr, bemyndigedeCvr, arbejdsfunktionKode, rettighedKode, Status.GODKENDT, systemKode, gyldigFra, gyldigTil);
 
         approveBemyndigelseAndShutdownConflicts(bemyndigelse);
 

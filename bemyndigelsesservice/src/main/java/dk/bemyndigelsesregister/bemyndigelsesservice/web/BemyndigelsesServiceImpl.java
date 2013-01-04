@@ -174,7 +174,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setSystem(bem.getLinkedSystem().getKode());
             setArbejdsfunktion(bem.getArbejdsfunktion().getKode());
             setRettighed(bem.getRettighed().getKode());
-            setStatus(bem.getStatus().getKode());
+            setStatus(bem.getStatus() == Status.GODKENDT ? "Godkendt" : "Bestilt");
             if (bem.getGodkendelsesdato() != null) {
                 setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
             }

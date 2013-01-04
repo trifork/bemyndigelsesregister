@@ -3,6 +3,8 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.joda.time.DateTime;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
 
 import javax.persistence.Entity;
@@ -18,8 +20,9 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
     private Arbejdsfunktion arbejdsfunktion;
     @OneToOne
     private Rettighed rettighed;
-    @OneToOne
-    private StatusType status;
+    
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     private DateTime godkendelsesdato;
     private DateTime gyldigFra;
@@ -70,11 +73,11 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
         this.rettighed = rettighed;
     }
 
-    public StatusType getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -126,6 +129,7 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
         type.setBemyndigendeCpr(bemyndigendeCpr);
         type.setCreatedDate(null);
         type.setGodkendelsesdato(null);
+        type.setStatus(status == Status.GODKENDT ? "Godkendt" : "Bestilt");
         type.setKode(getKode());
         type.setModifiedDate(null);
         type.setRettighed(rettighed.getKode());
