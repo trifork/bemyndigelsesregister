@@ -122,6 +122,11 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
     }
     //</editor-fold>
 
+    /**
+     * Bruges tilsyneladende kun til stamdata eksportering
+     * TODO hvorfor er så mange felter null?
+     * @return
+     */
     public Bemyndigelser.Bemyndigelse toBemyndigelseType() {
         Bemyndigelser.Bemyndigelse type = new Bemyndigelser.Bemyndigelse();
         type.setBemyndigedeCpr(bemyndigedeCpr);

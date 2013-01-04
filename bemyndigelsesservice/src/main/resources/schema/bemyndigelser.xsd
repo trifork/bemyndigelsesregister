@@ -9,7 +9,7 @@
                             <xs:element name="kode" type="xs:string"/>
                             <xs:element name="bemyndigende_cpr" type="xs:string"/>
                             <xs:element name="bemyndigede_cpr" type="xs:string"/>
-                            <xs:element name="bemyndigede_cvr" type="xs:string"/>
+                            <xs:element name="bemyndigede_cvr" type="xs:string" minOccurs="0"/>
                             <xs:element name="system" type="xs:string"/>
                             <xs:element name="status" type="xs:string"/>
                             <xs:element name="rettighed" type="xs:string"/>

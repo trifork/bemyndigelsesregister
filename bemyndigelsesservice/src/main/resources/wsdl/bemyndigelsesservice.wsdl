@@ -11,7 +11,7 @@
             <xs:element name="Kode" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
-            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema" minOccurs="0"/>
             <xs:element name="System" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
             <xs:element name="Arbejdsfunktion" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
             <xs:element name="Rettighed" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
@@ -155,7 +155,7 @@
                 <xs:element maxOccurs="unbounded" minOccurs="1" name="Anmodning" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                     <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
                         <xs:all xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema" minOccurs="0"/>
                             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
                             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
                             <xs:element name="Arbejdsfunktion" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
@@ -186,7 +186,7 @@
                         <xs:all xmlns:xs="http://www.w3.org/2001/XMLSchema">
                             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
                             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
-                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" xmlns:xs="http://www.w3.org/2001/XMLSchema" minOccurs="0"/>
                             <xs:element name="System" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
                             <xs:element name="Arbejdsfunktion" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
                             <xs:element name="Rettighed" type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>

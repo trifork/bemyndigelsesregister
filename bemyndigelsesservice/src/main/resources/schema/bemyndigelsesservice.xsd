@@ -14,7 +14,7 @@
             <xs:element name="Kode" type="xs:string"/>
             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
+            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
             <xs:element name="System" type="xs:string"/>
             <xs:element name="Arbejdsfunktion" type="xs:string"/>
             <xs:element name="Rettighed" type="xs:string"/>
@@ -158,7 +158,7 @@
                 <xs:element name="Anmodning" minOccurs="1" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:all>
-                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
                             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                             <xs:element name="Arbejdsfunktion" type="xs:string"/>
@@ -189,7 +189,7 @@
                         <xs:all>
                             <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                             <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType"/>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
                             <xs:element name="System" type="xs:string"/>
                             <xs:element name="Arbejdsfunktion" type="xs:string"/>
                             <xs:element name="Rettighed" type="xs:string"/>

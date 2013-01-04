@@ -75,6 +75,7 @@ public class BemyndigelsesExportJob {
 
         Bemyndigelser bemyndigelserType = new Bemyndigelser();
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
+        	// TODO send kun godkendte bemyndigelser???
             bemyndigelserType.getBemyndigelse().add(bemyndigelse.toBemyndigelseType());
         }
         bemyndigelserType.setAntalPost(BigInteger.valueOf(bemyndigelser.size()));
