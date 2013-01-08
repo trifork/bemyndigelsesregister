@@ -1,7 +1,13 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import com.trifork.dgws.CareProviderIdType;
 import com.trifork.dgws.DgwsRequestContext;
+import com.trifork.dgws.IdCardData;
+import com.trifork.dgws.IdCardSystemLog;
+import com.trifork.dgws.IdCardType;
+import com.trifork.dgws.IdCardUserLog;
+import com.trifork.dgws.WhitelistChecker;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
@@ -25,9 +31,12 @@ import org.springframework.ws.soap.SoapHeader;
 import javax.inject.Inject;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.singletonList;
 
@@ -55,6 +64,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     DgwsRequestContext dgwsRequestContext;
     @Inject
     ServiceTypeMapper typeMapper;
+    
+    @Inject WhitelistChecker whitelistChecker;
 
     public BemyndigelsesServiceImpl() {
     }
@@ -65,12 +76,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @ResponsePayload
     public OpretAnmodningOmBemyndigelserResponse opretAnmodningOmBemyndigelser(
             @RequestPayload OpretAnmodningOmBemyndigelserRequest request, SoapHeader soapHeader) {
-        String idCardCpr = dgwsRequestContext.getIdCardCpr();
 
         Collection<Bemyndigelse> createdBemyndigelser = new ArrayList<Bemyndigelse>();
 
         for (OpretAnmodningOmBemyndigelserRequest.Anmodning anmodning : request.getAnmodning()) {
-            verifyCprIn(idCardCpr, "IDCard CPR was different from BemyndigedeCpr", anmodning.getBemyndigedeCpr());
+        	authorizeOperationForCpr("opretAnmodningOmBemyndigelser", "IDCard CPR was different from BemyndigedeCpr", anmodning.getBemyndigedeCpr());
             logger.debug("Creating Bemyndigelse for anmodning=" + anmodning.toString());
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretAnmodningOmBemyndigelse(
                     anmodning.getBemyndigendeCpr(),
@@ -103,7 +113,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         Collection<Bemyndigelse> bemyndigelser = bemyndigelseManager.godkendBemyndigelser(bemyndigelsesKoder);
 
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
-            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
+        	authorizeOperationForCpr("godkendBemyndigelse", "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
         }
 
         final GodkendBemyndigelseResponse response = new GodkendBemyndigelseResponse();
@@ -125,18 +135,17 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     public HentBemyndigelserResponse hentBemyndigelser(
             @RequestPayload HentBemyndigelserRequest request, SoapHeader soapHeader) {
         List<Bemyndigelse> foundBemyndigelser = Collections.emptyList();
-        String idCardCpr = dgwsRequestContext.getIdCardCpr();
         if (request.getKode() != null) {
             final Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(request.getKode());
             foundBemyndigelser = singletonList(bemyndigelse);
-            verifyCprIn(idCardCpr, "IDCard CPR was not found in bemyndigelse", bemyndigelse.getBemyndigendeCpr(), bemyndigelse.getBemyndigedeCpr());
+            authorizeOperationForCpr("hentBemyndigelser", "IDCard CPR was not found in bemyndigelse", bemyndigelse.getBemyndigendeCpr(), bemyndigelse.getBemyndigedeCpr());
         }
         else if (request.getBemyndigendeCpr() != null) {
-            verifyCprIn(idCardCpr, "IDCard CPR was not equal to BemyndigendeCpr", request.getBemyndigendeCpr());
+            authorizeOperationForCpr("hentBemyndigelser", "IDCard CPR was not equal to BemyndigendeCpr", request.getBemyndigendeCpr());
             foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigendeCpr());
         }
         else if (request.getBemyndigedeCpr() != null) {
-            verifyCprIn(idCardCpr, "IDCard CPR was not equal to BemyndigedeCpr", request.getBemyndigedeCpr());
+            authorizeOperationForCpr("hentBemyndigelser", "IDCard CPR was not equal to BemyndigedeCpr", request.getBemyndigedeCpr());
             foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigedeCpr());
         }
 
@@ -154,15 +163,34 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             ));
         }};
     }
-
-    public void verifyCprIn(String idCardCpr, String errorMessage, String... cprs) {
-        for (String cpr : cprs) {
-            if (idCardCpr.equals(cpr)) {
-                return;
-            }
-        }
-        logger.error("IDCard cpr=" + idCardCpr + " was not found in[" + StringUtils.join(cprs, ",") + "]");
-        throw new IllegalAccessError(errorMessage);
+    
+    void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
+    	Set<String> authorizedCprSet = new HashSet<String>(Arrays.asList(authorizedCprs));
+    	IdCardData idCardData = dgwsRequestContext.getIdCardData();
+    	if(idCardData.getIdCardType() == IdCardType.SYSTEM) {
+    		IdCardSystemLog systemLog = dgwsRequestContext.getIdCardSystemLog();
+    		if(systemLog.getCareProviderIdType() != CareProviderIdType.CVR_NUMBER) {
+    	        throw new IllegalAccessError("Attempted to access operation using system id card, but the CareProviderIdType was not CVR, it was " + systemLog.getCareProviderIdType());
+    		}
+    		String cvr = systemLog.getCareProviderId();
+			if(!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
+    	        throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR " + cvr);
+    		}
+			return;
+    	}
+    	else if (idCardData.getIdCardType() == IdCardType.USER) {
+        	IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
+        	if(userLog != null && authorizedCprSet.contains(userLog.cpr)) {
+        		return;
+        	}
+        	else {
+        		logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: " +userLog.cpr);
+                throw new IllegalAccessError(errorMessage);
+        	}
+    	}
+    	else {
+    		throw new IllegalAccessError("Could not authorize ID card, it was neither a user or system id card");
+    	}
     }
 
     public static dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse toJaxbType(final Bemyndigelse bem) {
@@ -191,10 +219,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             @RequestPayload final OpretGodkendteBemyndigelserRequest request, SoapHeader soapHeader) {
         Collection<Bemyndigelse> bemyndigelser = new ArrayList<Bemyndigelse>();
 
-        final String idCardCpr = dgwsRequestContext.getIdCardCpr();
-
         for (final OpretGodkendteBemyndigelserRequest.Bemyndigelse bemyndigelseRequest : request.getBemyndigelse()) {
-            verifyCprIn(idCardCpr, "IDCard CPR was different from BemyndigendeCpr", bemyndigelseRequest.getBemyndigendeCpr());
+            authorizeOperationForCpr("opretGodkendtBemyndigelse", "IDCard CPR was different from BemyndigendeCpr", bemyndigelseRequest.getBemyndigendeCpr());
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretGodkendtBemyndigelse(
                     bemyndigelseRequest.getBemyndigendeCpr(),
                     bemyndigelseRequest.getBemyndigedeCpr(),
@@ -234,7 +260,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         List<Bemyndigelse> bemyndigelser = bemyndigelseDao.findByKoder(request.getKode());
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
-            verifyCprIn(dgwsRequestContext.getIdCardCpr(), "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
+            authorizeOperationForCpr("sletBemyndigelser", "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {

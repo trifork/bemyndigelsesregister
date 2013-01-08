@@ -30,6 +30,9 @@ public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTest
     RettighedDao rettighedDao;
     @Inject
     DelegerbarRettighedDao delegerbarRettighedDao;
+    
+    @Inject
+    WhitelistDao whitelistDao;
 
     public static class MockContext {
         @Bean

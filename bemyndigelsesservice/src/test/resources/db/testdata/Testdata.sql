@@ -102,10 +102,11 @@ REPLACE INTO `bemyndigelse` (
 
 REPLACE INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
 
-REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '1');
-REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('test', '2');
+REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'test', '1');
+REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'test', '2');
+REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('USER_CVR_CPR', 'test', 'CVR:1-CPR:2');
 
 /* Testdata for integration test */
-REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('bemyndigelsesservice.indlaesMetadata', '25520041');
-REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('bemyndigelsesservice.hentMetadata', '25520041');
-REPLACE INTO `whitelist` (`name`, `legal_cvr`) VALUES ('', '25520041');
+REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.indlaesMetadata', '25520041');
+REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.HentMetadata', '25520041');
+REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', '', '25520041');

@@ -1,7 +1,14 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import com.trifork.dgws.CareProviderIdType;
 import com.trifork.dgws.DgwsRequestContext;
+import com.trifork.dgws.IdCardData;
+import com.trifork.dgws.IdCardSystemLog;
+import com.trifork.dgws.IdCardType;
+import com.trifork.dgws.IdCardUserLog;
+import com.trifork.dgws.WhitelistChecker;
+
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
@@ -18,6 +25,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -41,6 +50,7 @@ public class BemyndigelsesServiceImplTest {
     @Mock SystemService systemService;
     @Mock DgwsRequestContext dgwsRequestContext;
     @Mock ServiceTypeMapper typeMapper;
+    @Mock WhitelistChecker whitelistChecker;
 
     @Mock SoapHeader soapHeader;
 
@@ -56,6 +66,16 @@ public class BemyndigelsesServiceImplTest {
     final String systemKode = "SystemKode";
     final Status status = Status.GODKENDT;
 
+    void setupDgwsRequestContextForSystem(String cvr) {
+    	when(dgwsRequestContext.getIdCardData()).thenReturn(new IdCardData(IdCardType.SYSTEM, 3));
+    	when(dgwsRequestContext.getIdCardSystemLog()).thenReturn(new IdCardSystemLog(null, CareProviderIdType.CVR_NUMBER, cvr, null));
+    }
+    
+    void setupDgwsRequestContextForUser(String cpr) {
+    	when(dgwsRequestContext.getIdCardData()).thenReturn(new IdCardData(IdCardType.USER, 4));
+    	when(dgwsRequestContext.getIdCardUserLog()).thenReturn(new IdCardUserLog(cpr, null,null, null, null,null, null));
+    }
+    
     @Test
     public void canCreateBemyndigelseAndmodning() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
@@ -63,7 +83,7 @@ public class BemyndigelsesServiceImplTest {
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
                 bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("BemyndigedeCpr");
+        setupDgwsRequestContextForUser("BemyndigedeCpr");
 
         OpretAnmodningOmBemyndigelserRequest request = new OpretAnmodningOmBemyndigelserRequest() {{
             getAnmodning().add(new Anmodning() {{
@@ -97,7 +117,7 @@ public class BemyndigelsesServiceImplTest {
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
                 bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+        setupDgwsRequestContextForUser("Evil CPR");
 
         OpretAnmodningOmBemyndigelserRequest request = new OpretAnmodningOmBemyndigelserRequest() {{
             getAnmodning().add(new Anmodning() {{
@@ -121,7 +141,7 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
 
         when(bemyndigelseManager.godkendBemyndigelser(singletonList(kodeText))).thenReturn(singletonList(bemyndigelse));
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigendeCprText);
+        setupDgwsRequestContextForUser(bemyndigendeCprText);
 
         final GodkendBemyndigelseResponse response = service.godkendBemyndigelse(request, soapHeader);
 
@@ -137,7 +157,7 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
 
         when(bemyndigelseManager.godkendBemyndigelser(singletonList(kodeText))).thenReturn(singletonList(bemyndigelse));
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+        setupDgwsRequestContextForUser("Evil CPR");
 
         service.godkendBemyndigelse(request, soapHeader);
     }
@@ -159,7 +179,7 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
 
         when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigendeCprText);
+        setupDgwsRequestContextForUser(bemyndigendeCprText);
 
         final OpretGodkendteBemyndigelserResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
 
@@ -183,7 +203,7 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
 
         when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil CPR");
+        setupDgwsRequestContextForUser("Evil CPR");
 
         service.opretGodkendtBemyndigelse(request, soapHeader);
     }
@@ -191,7 +211,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canGetBemyndigelserByBemyndigende() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Bemyndigende");
+        setupDgwsRequestContextForUser("Bemyndigende");
         when(bemyndigelseDao.findByBemyndigendeCpr("Bemyndigende")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -214,7 +234,7 @@ public class BemyndigelsesServiceImplTest {
     public void canGetBemyndigelserByKode() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now.minusDays(7));
         when(bemyndigelseDao.findByKode(kodeText)).thenReturn(bemyndigelse);
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn(bemyndigelse.getBemyndigendeCpr());
+        setupDgwsRequestContextForUser(bemyndigelse.getBemyndigendeCpr());
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
             setKode(kodeText);
@@ -266,7 +286,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canGetBemyndigelserByBemyndigede() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse("Bem1", now.minusDays(7));
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Bemyndigede");
+        setupDgwsRequestContextForUser("Bemyndigede");
         when(bemyndigelseDao.findByBemyndigedeCpr("Bemyndigede")).thenReturn(asList(bemyndigelse));
 
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
@@ -291,7 +311,7 @@ public class BemyndigelsesServiceImplTest {
         final HentBemyndigelserRequest request = new HentBemyndigelserRequest() {{
             setBemyndigendeCpr("Wrong CPR");
         }};
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("IDcard CPR");
+        setupDgwsRequestContextForUser("IDcard CPR");
 
         service.hentBemyndigelser(request, soapHeader);
     }
@@ -302,7 +322,7 @@ public class BemyndigelsesServiceImplTest {
             setKode(kodeText);
         }};
         when(bemyndigelseDao.findByKode(kodeText)).thenReturn(createBemyndigelse(kodeText, now));
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("IDcard CPR");
+        setupDgwsRequestContextForUser("IDcard CPR");
 
         service.hentBemyndigelser(request, soapHeader);
     }
@@ -316,7 +336,7 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("Cpr 1");
         }};
 
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
+        setupDgwsRequestContextForUser("Cpr 1");
         when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
@@ -338,7 +358,7 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("Cpr 1");
         }};
 
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Evil Cpr");
+        setupDgwsRequestContextForUser("Evil Cpr");
         when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
@@ -357,7 +377,7 @@ public class BemyndigelsesServiceImplTest {
             setBemyndigendeCpr("Cpr 1");
         }};
 
-        when(dgwsRequestContext.getIdCardCpr()).thenReturn("Cpr 1");
+        setupDgwsRequestContextForUser("Cpr 1");
         when(bemyndigelseDao.findByKoder(singletonList("TestKode1"))).thenReturn(singletonList(bemyndigelse));
         when(systemService.getDateTime()).thenReturn(now);
 
@@ -523,6 +543,35 @@ public class BemyndigelsesServiceImplTest {
         }));
     }
 
+    @Test
+    public void willAuthorizeWhitelistedSystemIdCard() {
+    	setupDgwsRequestContextForSystem("12345678");
+    	when(whitelistChecker.isSystemWhitelisted("hentBemyndigelser", "12345678")).thenReturn(true);
+    	service.authorizeOperationForCpr("hentBemyndigelser", "error message");
+    }
+    
+    @Test(expected = IllegalAccessError.class)
+    public void willDenyNonWhitelistedSystemIdCard() {
+    	setupDgwsRequestContextForSystem("12345678");
+    	when(whitelistChecker.isSystemWhitelisted("hentBemyndigelser", "12345678")).thenReturn(false);
+    	service.authorizeOperationForCpr("hentBemyndigelser", "error message");
+    }
+    
+    @Test
+    public void willDenyUserIdCardWhitelistedAsSystem() {
+    	setupDgwsRequestContextForUser("12345678");
+    	when(dgwsRequestContext.getIdCardSystemLog()).thenReturn(new IdCardSystemLog(null, CareProviderIdType.CVR_NUMBER, "12345678", null));
+    	when(whitelistChecker.isUserWhitelisted("hentBemyndigelser", "12345678", "1122334455")).thenReturn(false);
+    	try {
+    		service.authorizeOperationForCpr("hentBemyndigelser", "error message");
+    		fail();
+    	}
+    	catch (IllegalAccessError e) {
+    		// expected
+    	}
+    	verify(whitelistChecker, never()).isSystemWhitelisted(any(String.class), any(String.class));
+    }
+    
     @Test
     public void willAllowEmptyIndlaesMetadata() throws Exception {
         assertNotNull(service.indlaesMetadata(new IndlaesMetadataRequest(), soapHeader));
