@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.*;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -32,6 +34,7 @@ import com.googlecode.flyway.core.Flyway;
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationRootConfig implements TransactionManagementConfigurer {
+	static Logger logger = Logger.getLogger(ApplicationRootConfig.class);
     @Value("${jdbc.url}") String url;
     @Value("${jdbc.username}") String username;
     @Value("${jdbc.password}") String password;
@@ -39,9 +42,19 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     @Bean
     public static PropertyPlaceholderConfigurer configuration() {
         final PropertyPlaceholderConfigurer props = new PropertyPlaceholderConfigurer();
-        props.setLocations(new Resource[]{
-                new FileSystemResource(getProperty("bemyndigelse.home"))
-        });
+        String bemyndigelseHome = getProperty("bemyndigelse.home");
+        if(bemyndigelseHome != null) {
+            logger.info("Loading properties from " + bemyndigelseHome);
+    		props.setLocations(new Resource[]{
+                    new FileSystemResource(bemyndigelseHome)
+            });
+        }
+        else {
+        	logger.warn("bemyndigelse.home not set. Loading default configuration");
+        	props.setLocations(new Resource[] {
+        		new ClassPathResource("bemyndigelse.properties")	
+        	});
+        }
         props.setIgnoreResourceNotFound(true);
         props.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
         return props;
