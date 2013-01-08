@@ -24,19 +24,31 @@ import dk.sosi.seal.model.SystemIDCard;
 import dk.sosi.seal.model.UserIDCard;
 import dk.sosi.seal.model.UserInfo;
 import dk.sosi.seal.model.constants.SubjectIdentifierTypeValues;
+import dk.sosi.seal.pki.Federation;
 import dk.sosi.seal.pki.SOSIFederation;
+import dk.sosi.seal.pki.SOSITestFederation;
 import dk.sosi.seal.vault.ClasspathCredentialVault;
 import dk.sosi.seal.xml.XmlUtil;
 
 public class SOSIUtil {
 
     public static Document getIdCard() throws Exception {
-
+//    	FakeIdCardService idCardService = new FakeIdCardService();
+//    	
+//    	idCardService.setCommonName("Anita");
+//    	idCardService.setSurname("Testesen");
+//    	idCardService.setCpr("2006271866");
+//    	idCardService.setEmail("anita@trifork.com");
+//    	idCardService.setRole("Doctor");
+//    	idCardService.setOccupation("Doctor");
+//    	idCardService.setAuthorisationCode("000");
+//    	return idCardService.getIdCardDocument();
+    	
         Properties props = SignatureUtil.setupCryptoProviderForJVM();
         props.setProperty(SOSIFactory.PROPERTYNAME_SOSI_VALIDATE_ENHANCED, "false");
         props.setProperty(SOSIFactory.PROPERTYNAME_SOSI_VALIDATE, "false");
 
-        SOSIFederation federation = new SOSIFederation(props);
+        Federation federation = new SOSITestFederation(props);
         ClasspathCredentialVault vault = new ClasspathCredentialVault(props, "validMocesVault.jks", "Test1234");
         SOSIFactory factory = new SOSIFactory(federation, vault, props);
 
@@ -66,10 +78,8 @@ public class SOSIUtil {
 
         String xml = XmlUtil.node2String(stRequest.serialize2DOMDocument(), false, true);
         String resXml = sendRequest("http://pan.certifikat.dk/sts/services/SecurityTokenService", "", xml, false);
-
         SecurityTokenRequest res = factory.deserializeSecurityTokenRequest(resXml);
         IDCard idCard = res.getIDCard();
-
         Request sreq = factory.createNewRequest(false, null);
         sreq.setIDCard(idCard);
         Document reqdoc = sreq.serialize2DOMDocument();

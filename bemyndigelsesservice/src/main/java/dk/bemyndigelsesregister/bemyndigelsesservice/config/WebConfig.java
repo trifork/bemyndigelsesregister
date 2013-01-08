@@ -26,13 +26,15 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
+import com.trifork.dgws.annotations.EnableDgwsProtection;
+
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Properties;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
-@ImportResource({"classpath:/dk/trifork/dgws/dgws-protection.xml"})
+@EnableDgwsProtection(skipSOSI="${sosi.skipSosi}", test="${sosi.test}")
 public class WebConfig extends WebMvcConfigurationSupport {
     @Inject
     ApplicationRootConfig applicationRootConfig;
