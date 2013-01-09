@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.trifork.dgws</groupId>
             <artifactId>dgws-spring</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
