@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
@@ -75,10 +76,11 @@ public class BemyndigelsesExportJob {
 
         Bemyndigelser bemyndigelserType = new Bemyndigelser();
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
-        	// TODO send kun godkendte bemyndigelser???
-            bemyndigelserType.getBemyndigelse().add(bemyndigelse.toBemyndigelseType());
+        	if(bemyndigelse.getStatus() == Status.GODKENDT) {
+                bemyndigelserType.getBemyndigelse().add(bemyndigelse.toBemyndigelseType());
+            }
         }
-        bemyndigelserType.setAntalPost(BigInteger.valueOf(bemyndigelser.size()));
+        bemyndigelserType.setAntalPost(BigInteger.valueOf(bemyndigelserType.getBemyndigelse().size()));
         bemyndigelserType.setDato(startTime.toString("yyyyMMdd"));
         bemyndigelserType.setTimeStamp(startTime.toString("HHmmssSSS"));
         bemyndigelserType.setVersion(nspSchemaVersion);

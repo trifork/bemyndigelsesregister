@@ -2,15 +2,27 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
 
 import javax.persistence.Entity;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 @Entity
 public class Bemyndigelse extends ExternalIdentifiedDomainObject {
+    private static DatatypeFactory datatypeFactory;
+    static {
+        try {
+            datatypeFactory= DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
     private String bemyndigendeCpr;
     private String bemyndigedeCpr;
     private String bemyndigedeCvr;
@@ -132,15 +144,20 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
         type.setBemyndigedeCpr(bemyndigedeCpr);
         type.setBemyndigedeCvr(bemyndigedeCvr);
         type.setBemyndigendeCpr(bemyndigendeCpr);
+        // TODO perhaps there should be a field for this in the DB?
         type.setCreatedDate(null);
-        type.setGodkendelsesdato(null);
+        type.setGodkendelsesdato(toXmlGregorianCalendar(godkendelsesdato));
         type.setStatus(status == Status.GODKENDT ? "Godkendt" : "Bestilt");
         type.setKode(getKode());
-        type.setModifiedDate(null);
+        type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
         type.setRettighed(rettighed.getKode());
         type.setSystem(linkedSystem.getKode());
-        type.setValidFrom(null);
-        type.setValidTo(null);
+        type.setValidFrom(toXmlGregorianCalendar(gyldigFra));
+        type.setValidTo(toXmlGregorianCalendar(gyldigTil));
         return type;
+    }
+
+    private XMLGregorianCalendar toXmlGregorianCalendar(DateTime dateTime) {
+        return datatypeFactory.newXMLGregorianCalendar(new DateTime(dateTime, DateTimeZone.UTC).toGregorianCalendar());
     }
 }

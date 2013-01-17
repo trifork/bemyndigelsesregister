@@ -21,6 +21,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -205,10 +206,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setRettighed(bem.getRettighed().getKode());
             setStatus(bem.getStatus() == Status.GODKENDT ? "Godkendt" : "Bestilt");
             if (bem.getGodkendelsesdato() != null) {
-                setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().toGregorianCalendar()));
+                setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().withZone(DateTimeZone.UTC).toGregorianCalendar()));
             }
-            setGyldigFra(new XMLGregorianCalendarImpl(bem.getGyldigFra().toGregorianCalendar()));
-            setGyldigTil(new XMLGregorianCalendarImpl(bem.getGyldigTil().toGregorianCalendar()));
+            setGyldigFra(new XMLGregorianCalendarImpl(bem.getGyldigFra().withZone(DateTimeZone.UTC).toGregorianCalendar()));
+            setGyldigTil(new XMLGregorianCalendarImpl(bem.getGyldigTil().withZone(DateTimeZone.UTC).toGregorianCalendar()));
         }};
     }
 
@@ -281,7 +282,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     private DateTime nullableDateTime(XMLGregorianCalendar xmlDate) {
-        return xmlDate != null ? new DateTime(xmlDate.toGregorianCalendar()) : null;
+        return xmlDate != null ? new DateTime(xmlDate.toGregorianCalendar(), DateTimeZone.UTC) : null;
     }
 
     @Override

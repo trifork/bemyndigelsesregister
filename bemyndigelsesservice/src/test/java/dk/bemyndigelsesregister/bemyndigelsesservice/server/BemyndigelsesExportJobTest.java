@@ -1,9 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.BemyndigelseDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
@@ -73,6 +70,7 @@ public class BemyndigelsesExportJobTest {
     private Bemyndigelse createBemyndigelse(String bemyndigedeCpr) {
         final Bemyndigelse bemyndigelse = new Bemyndigelse();
 
+        bemyndigelse.setStatus(Status.GODKENDT);
         bemyndigelse.setBemyndigedeCpr(bemyndigedeCpr);
 
         final Rettighed rettighed = new Rettighed();
