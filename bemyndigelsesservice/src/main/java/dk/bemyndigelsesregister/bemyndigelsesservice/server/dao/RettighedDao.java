@@ -11,7 +11,7 @@ public interface RettighedDao {
 
     void save(Rettighed rettighed);
 
-    Rettighed findByKode(String kode);
+    Rettighed findByKode(LinkedSystem linkedSystem, String kode);
 
-    List<Rettighed> findBy(Domaene domaene, LinkedSystem linkedSystem);
+    List<Rettighed> findBy(LinkedSystem linkedSystem);
 }

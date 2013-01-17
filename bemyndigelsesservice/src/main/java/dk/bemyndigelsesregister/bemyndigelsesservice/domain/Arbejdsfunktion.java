@@ -1,13 +1,12 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Arbejdsfunktion extends ExternalIdentifiedDomainObject {
-    @OneToOne
-    private Domaene domaene;
-    @OneToOne
+    @ManyToOne
     private LinkedSystem linkedSystem;
     private String beskrivelse;
 
@@ -21,14 +20,6 @@ public class Arbejdsfunktion extends ExternalIdentifiedDomainObject {
 
     public void setBeskrivelse(String beskrivelse) {
         this.beskrivelse = beskrivelse;
-    }
-
-    public void setDomaene(Domaene domaene) {
-        this.domaene = domaene;
-    }
-
-    public Domaene getDomaene() {
-        return domaene;
     }
 
     public void setLinkedSystem(LinkedSystem linkedSystem) {

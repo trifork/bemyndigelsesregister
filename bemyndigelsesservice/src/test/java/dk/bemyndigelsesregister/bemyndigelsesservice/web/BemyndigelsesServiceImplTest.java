@@ -81,7 +81,7 @@ public class BemyndigelsesServiceImplTest {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
 
         when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
-                bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
+                systemKode, bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
         setupDgwsRequestContextForUser("BemyndigedeCpr");
 
@@ -98,7 +98,7 @@ public class BemyndigelsesServiceImplTest {
 
         final OpretAnmodningOmBemyndigelserResponse response = service.opretAnmodningOmBemyndigelser(request, soapHeader);
 
-        verify(bemyndigelseManager).opretAnmodningOmBemyndigelse(bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
+        verify(bemyndigelseManager).opretAnmodningOmBemyndigelse(systemKode, bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode, null, null);
 
         assertEquals(1, response.getBemyndigelse().size());
         final dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse responseBemyndigelse = response.getBemyndigelse().get(0);
@@ -114,7 +114,7 @@ public class BemyndigelsesServiceImplTest {
     public void canNotCreateBemyndigelseAndmodningForAnotherCpr() throws Exception {
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, null);
 
-        when(bemyndigelseManager.opretAnmodningOmBemyndigelse(
+        when(bemyndigelseManager.opretAnmodningOmBemyndigelse(systemKode,
                 bemyndigendeCprText, bemyndigedeCprText, bemyndigedeCvrText, arbejdsfunktionKode, rettighedKode, systemKode,
                 null, null)).thenReturn(bemyndigelse);
         setupDgwsRequestContextForUser("Evil CPR");
@@ -178,7 +178,7 @@ public class BemyndigelsesServiceImplTest {
 
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
 
-        when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
+        when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(systemKode), eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
         setupDgwsRequestContextForUser(bemyndigendeCprText);
 
         final OpretGodkendteBemyndigelserResponse response = service.opretGodkendtBemyndigelse(request, soapHeader);
@@ -202,7 +202,7 @@ public class BemyndigelsesServiceImplTest {
         }};
         final Bemyndigelse bemyndigelse = createBemyndigelse(kodeText, now);
 
-        when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
+        when(bemyndigelseManager.opretGodkendtBemyndigelse(eq(systemKode), eq(bemyndigendeCprText), eq(bemyndigedeCprText), eq(bemyndigedeCvrText), eq(arbejdsfunktionKode), eq(rettighedKode), eq(systemKode), any(DateTime.class), isNull(DateTime.class))).thenReturn(bemyndigelse);
         setupDgwsRequestContextForUser("Evil CPR");
 
         service.opretGodkendtBemyndigelse(request, soapHeader);
@@ -415,9 +415,9 @@ public class BemyndigelsesServiceImplTest {
         final List<DelegerbarRettighed> delegerbarRettighedList = asList(delegerbarRettighed);
         final DelegerbarRettigheder jaxbDelegerbarRettigheder = new DelegerbarRettigheder();
 
-        when(arbejdsfunktionDao.findBy(domaene, linkedSystem)).thenReturn(arbejdsfunktionList);
-        when(rettighedDao.findBy(domaene, linkedSystem)).thenReturn(rettighedList);
-        when(delegerbarRettighedDao.findBy(domaene, linkedSystem)).thenReturn(delegerbarRettighedList);
+        when(arbejdsfunktionDao.findBy(linkedSystem)).thenReturn(arbejdsfunktionList);
+        when(rettighedDao.findBy(linkedSystem)).thenReturn(rettighedList);
+        when(delegerbarRettighedDao.findBy(linkedSystem)).thenReturn(delegerbarRettighedList);
         when(typeMapper.toJaxbArbejdsfunktioner(arbejdsfunktionList)).thenReturn(jaxbArbejdsfunktioner);
         when(typeMapper.toJaxbRettigheder(rettighedList)).thenReturn(jaxbRettigheder);
         when(typeMapper.toJaxbDelegerbarRettigheder(delegerbarRettighedList)).thenReturn(jaxbDelegerbarRettigheder);
@@ -455,7 +455,6 @@ public class BemyndigelsesServiceImplTest {
                 return allTrue(
                         item.getKode().equals("Arbejdsfunktion"),
                         item.getBeskrivelse().equals("Beskrivelse"),
-                        item.getDomaene() == domaene,
                         item.getLinkedSystem() == linkedSystem
                 );
             }
@@ -492,7 +491,6 @@ public class BemyndigelsesServiceImplTest {
             public boolean matchesSafely(Rettighed item) {
                 return allTrue(
                         item.getBeskrivelse().equals("Beskrivelse"),
-                        item.getDomaene() == domaene,
                         item.getLinkedSystem() == linkedSystem,
                         item.getKode().equals("Rettighed")
                 );
@@ -522,7 +520,7 @@ public class BemyndigelsesServiceImplTest {
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
         when(domaeneDao.findByKode(domaeneKode)).thenReturn(domaene);
         when(linkedSystemDao.findByKode(systemKode)).thenReturn(linkedSystem);
-        when(arbejdsfunktionDao.findByKode("Arbejdsfunktion")).thenReturn(arbejdsfunktion);
+        when(arbejdsfunktionDao.findByKode(linkedSystem, "Arbejdsfunktion")).thenReturn(arbejdsfunktion);
 
         assertNotNull(service.indlaesMetadata(request, soapHeader));
 
@@ -530,10 +528,7 @@ public class BemyndigelsesServiceImplTest {
             @Override
             public boolean matchesSafely(DelegerbarRettighed item) {
                 return allTrue(
-                        item.getArbejdsfunktion() == arbejdsfunktion,
-                        item.getDomaene() == domaene,
-                        item.getKode().equals("Rettighed"),
-                        item.getLinkedSystem() == linkedSystem
+                        item.getArbejdsfunktion() == arbejdsfunktion
                 );
             }
 

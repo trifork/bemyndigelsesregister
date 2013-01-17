@@ -1,10 +1,10 @@
-REPLACE INTO linked_system(kode) VALUES ('Trifork test system');
-
 REPLACE INTO domaene(kode) VALUES ('trifork-test');
 
-REPLACE INTO arbejdsfunktion(kode, domaene_id, beskrivelse, linked_system_id) values ('Laege', 1, 'For unit test only', 1);
-REPLACE INTO rettighed(kode, beskrivelse, domaene_id, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1, 1);
-REPLACE INTO delegerbar_rettighed(kode, arbejdsfunktion_id, domaene_id, linked_system_id, rettighedskode_id) VALUES ('DR01', 1, 1, 1, 1);
+REPLACE INTO linked_system(domaene_id, kode) VALUES (1, 'Trifork test system');
+
+REPLACE INTO arbejdsfunktion(kode, beskrivelse, linked_system_id) values ('Laege', 'For unit test only', 1);
+REPLACE INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1);
+REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES (1, 1);
 
 ##Bemyndigelser
 REPLACE INTO `bemyndigelse` (

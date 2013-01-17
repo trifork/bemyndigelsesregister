@@ -11,9 +11,7 @@ public interface ArbejdsfunktionDao {
 
     void save(Arbejdsfunktion arbejdsfunktion);
 
-    List<Arbejdsfunktion> findBy(Domaene domaene);
+    Arbejdsfunktion findByKode(LinkedSystem linkedSystem, String kode);
 
-    Arbejdsfunktion findByKode(String kode);
-
-    List<Arbejdsfunktion> findBy(Domaene domaene, LinkedSystem linkedSystem);
+    List<Arbejdsfunktion> findBy(LinkedSystem linkedSystem);
 }

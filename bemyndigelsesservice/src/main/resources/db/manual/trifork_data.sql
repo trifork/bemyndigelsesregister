@@ -2,9 +2,9 @@
 REPLACE INTO domaene (kode, sidst_modificeret, sidst_modificeret_af) VALUES ('Trifork', '2012-11-30 10:00:00', 'frj@trifork.com');
 
 /* Opret default systemer */
-REPLACE INTO linked_system (kode, sidst_modificeret, sidst_modificeret_af) VALUES ('DDV', '2012-11-30 10:00:00', 'frj@trifork.com');
+REPLACE INTO linked_system (domaene_id, kode, sidst_modificeret, sidst_modificeret_af) VALUES (1, 'DDV', '2012-11-30 10:00:00', 'frj@trifork.com');
 
-REPLACE INTO linked_system (kode, sidst_modificeret, sidst_modificeret_af) VALUES ('FMK', '2012-11-30 10:00:00', 'frj@trifork.com');
+REPLACE INTO linked_system (domaene_id, kode, sidst_modificeret, sidst_modificeret_af) VALUES (1, 'FMK', '2012-11-30 10:00:00', 'frj@trifork.com');
 
 
 /* Whitelist 25520041 - dette cvr kan hente metadata, indlaese metadata og oprette bemyndigelser (OGSAA godkendte bemyndigelser) */

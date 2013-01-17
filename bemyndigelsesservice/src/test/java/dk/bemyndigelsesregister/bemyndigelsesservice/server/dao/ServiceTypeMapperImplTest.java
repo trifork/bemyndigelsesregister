@@ -16,9 +16,16 @@ public class ServiceTypeMapperImplTest {
     }};
     final LinkedSystem testLinkedSystem = new LinkedSystem() {{
         setKode("LinkedSystemKode");
+        setDomaene(testDomaene);
     }};
     final Arbejdsfunktion testArbejdsfunktion = new Arbejdsfunktion() {{
         setKode("ArbejdsfunktionKode");
+        setLinkedSystem(testLinkedSystem);
+    }};
+
+    final Rettighed testRettighed = new Rettighed() {{
+        setKode("RettighedKode");
+        setLinkedSystem(testLinkedSystem);
     }};
 
 
@@ -27,7 +34,6 @@ public class ServiceTypeMapperImplTest {
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion() {{
             this.setKode("Kode");
             this.setBeskrivelse("Beskrivelse");
-            this.setDomaene(testDomaene);
             this.setLinkedSystem(testLinkedSystem);
         }};
         final Arbejdsfunktioner jaxbArbejdsfunktioner = typeMapper.toJaxbArbejdsfunktioner(asList(arbejdsfunktion));
@@ -37,7 +43,7 @@ public class ServiceTypeMapperImplTest {
 
         assertEquals(arbejdsfunktion.getKode(), jaxbArbejdsfunktion.getArbejdsfunktion());
         assertEquals(arbejdsfunktion.getBeskrivelse(), jaxbArbejdsfunktion.getBeskrivelse());
-        assertEquals(arbejdsfunktion.getDomaene().getKode(), jaxbArbejdsfunktion.getDomaene());
+        assertEquals(arbejdsfunktion.getLinkedSystem().getDomaene().getKode(), jaxbArbejdsfunktion.getDomaene());
         assertEquals(arbejdsfunktion.getLinkedSystem().getKode(), jaxbArbejdsfunktion.getSystem());
     }
 
@@ -45,7 +51,6 @@ public class ServiceTypeMapperImplTest {
     public void willMapToRettigheder() throws Exception {
         final Rettighed rettighed = new Rettighed() {{
             this.setBeskrivelse("Beskrivelse");
-            this.setDomaene(testDomaene);
             this.setLinkedSystem(testLinkedSystem);
             this.setKode("Kode");
         }};
@@ -56,7 +61,7 @@ public class ServiceTypeMapperImplTest {
         final Rettigheder.Rettighed jaxbRettighed = jaxbRettigheder.getRettighed().get(0);
 
         assertEquals(rettighed.getBeskrivelse(), jaxbRettighed.getBeskrivelse());
-        assertEquals(rettighed.getDomaene().getKode(), jaxbRettighed.getDomaene());
+        assertEquals(rettighed.getLinkedSystem().getDomaene().getKode(), jaxbRettighed.getDomaene());
         assertEquals(rettighed.getLinkedSystem().getKode(), jaxbRettighed.getSystem());
         assertEquals(rettighed.getKode(), jaxbRettighed.getRettighed());
     }
@@ -64,9 +69,7 @@ public class ServiceTypeMapperImplTest {
     public void willMapToDelegerbarRettigheder() throws Exception {
         final DelegerbarRettighed delegerbarRettighed = new DelegerbarRettighed() {{
             this.setArbejdsfunktion(testArbejdsfunktion);
-            this.setDomaene(testDomaene);
-            this.setKode("Kode");
-            this.setLinkedSystem(testLinkedSystem);
+            this.setRettighedskode(testRettighed);
         }};
 
         final DelegerbarRettigheder jaxbDelegerbarRettigheder = typeMapper.toJaxbDelegerbarRettigheder(asList(delegerbarRettighed));
@@ -75,9 +78,9 @@ public class ServiceTypeMapperImplTest {
         final DelegerbarRettigheder.DelegerbarRettighed jaxbRettighed = jaxbDelegerbarRettigheder.getDelegerbarRettighed().get(0);
 
         assertEquals(delegerbarRettighed.getArbejdsfunktion().getKode(), jaxbRettighed.getArbejdsfunktion());
-        assertEquals(delegerbarRettighed.getDomaene().getKode(), jaxbRettighed.getDomaene());
-        assertEquals(delegerbarRettighed.getKode(), jaxbRettighed.getRettighed());
-        assertEquals(delegerbarRettighed.getLinkedSystem().getKode(), jaxbRettighed.getSystem());
+        assertEquals(delegerbarRettighed.getArbejdsfunktion().getLinkedSystem().getDomaene().getKode(), jaxbRettighed.getDomaene());
+        assertEquals(delegerbarRettighed.getRettighedskode().getKode(), jaxbRettighed.getRettighed());
+        assertEquals(delegerbarRettighed.getArbejdsfunktion().getLinkedSystem().getKode(), jaxbRettighed.getSystem());
     }
 
 

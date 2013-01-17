@@ -25,7 +25,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                             return new Arbejdsfunktion() {{
                                 this.setArbejdsfunktion(that.getKode());
                                 this.setBeskrivelse(that.getBeskrivelse());
-                                this.setDomaene(that.getDomaene().getKode());
+                                this.setDomaene(that.getLinkedSystem().getDomaene().getKode());
                                 this.setSystem(that.getLinkedSystem().getKode());
                             }};
                         }
@@ -44,7 +44,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                         public Rettighed transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed that) {
                             return new Rettighed() {{
                                 this.setBeskrivelse(that.getBeskrivelse());
-                                this.setDomaene(that.getDomaene().getKode());
+                                this.setDomaene(that.getLinkedSystem().getDomaene().getKode());
                                 this.setRettighed(that.getKode());
                                 this.setSystem(that.getLinkedSystem().getKode());
                             }};
@@ -64,9 +64,9 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
                         public DelegerbarRettighed transform(final dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed that) {
                             return new DelegerbarRettighed() {{
                                 this.setArbejdsfunktion(that.getArbejdsfunktion().getKode());
-                                this.setDomaene(that.getDomaene().getKode());
-                                this.setRettighed(that.getKode());
-                                this.setSystem(that.getLinkedSystem().getKode());
+                                this.setDomaene(that.getArbejdsfunktion().getLinkedSystem().getDomaene().getKode());
+                                this.setRettighed(that.getRettighedskode().getKode());
+                                this.setSystem(that.getArbejdsfunktion().getLinkedSystem().getKode());
                             }};
                         }
                     }

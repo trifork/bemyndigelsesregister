@@ -10,9 +10,8 @@ import static org.junit.Assert.*;
 public class RettighedDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
-    public void canFindRettighedByDomaeneAndSystem() throws Exception {
+    public void canFindRettighedBySystem() throws Exception {
         final List<Rettighed> rettigheder = rettighedDao.findBy(
-                domaeneDao.get(1),
                 linkedSystemDao.get(1)
         );
 

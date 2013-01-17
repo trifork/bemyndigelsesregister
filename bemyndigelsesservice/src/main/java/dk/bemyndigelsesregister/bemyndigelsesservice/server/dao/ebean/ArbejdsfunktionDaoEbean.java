@@ -15,12 +15,12 @@ public class ArbejdsfunktionDaoEbean extends SupportDao<Arbejdsfunktion> impleme
     }
 
     @Override
-    public List<Arbejdsfunktion> findBy(Domaene domaene) {
-        return query().where().eq("domaene", domaene).findList();
+    public Arbejdsfunktion findByKode(LinkedSystem linkedSystem, String kode) {
+        return query().where().eq("linkedSystem", linkedSystem).eq("kode", kode).findUnique();
     }
 
     @Override
-    public List<Arbejdsfunktion> findBy(Domaene domaene, LinkedSystem linkedSystem) {
-        return query().where().eq("domaene", domaene).eq("linkedSystem", linkedSystem).findList();
+    public List<Arbejdsfunktion> findBy(LinkedSystem linkedSystem) {
+        return query().where().eq("linkedSystem", linkedSystem).findList();
     }
 }

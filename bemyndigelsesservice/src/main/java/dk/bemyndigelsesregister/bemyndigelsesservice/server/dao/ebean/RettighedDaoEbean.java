@@ -16,7 +16,12 @@ public class RettighedDaoEbean extends SupportDao<Rettighed> implements Rettighe
     }
 
     @Override
-    public List<Rettighed> findBy(Domaene domaene, LinkedSystem linkedSystem) {
-        return query().where().eq("domaene", domaene).eq("linkedSystem", linkedSystem).findList();
+    public Rettighed findByKode(LinkedSystem linkedSystem, String kode) {
+        return query().where().eq("linkedSystem", linkedSystem).eq("kode", kode).findUnique();
+    }
+
+    @Override
+    public List<Rettighed> findBy(LinkedSystem linkedSystem) {
+        return query().where().eq("linkedSystem", linkedSystem).findList();
     }
 }

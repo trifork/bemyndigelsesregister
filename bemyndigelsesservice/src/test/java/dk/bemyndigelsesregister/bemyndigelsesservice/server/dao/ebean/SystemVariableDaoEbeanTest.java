@@ -25,5 +25,8 @@ public class SystemVariableDaoEbeanTest extends DaoUnitTestSupport {
         systemVariableDao.save(sv);
 
         assertEquals("Den Rigtigt Gode Test", systemVariableDao.getByName("testVariable").getValue());
+        sv.setValue("den gode test");
+        systemVariableDao.save(sv);
+        assertEquals("den gode test", systemVariableDao.getByName("testVariable").getValue());
     }
 }
