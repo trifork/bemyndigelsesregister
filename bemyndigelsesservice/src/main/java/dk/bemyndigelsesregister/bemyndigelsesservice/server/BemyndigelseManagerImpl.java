@@ -96,9 +96,11 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         for (Bemyndigelse existingBemyndigelse : existingBemyndigelser) {
             logger.info("Shutting down Bemyndigelse with kode=" + existingBemyndigelse.getKode());
             existingBemyndigelse.setGyldigTil(bemyndigelse.getGyldigFra());
+            existingBemyndigelse.setSidstModificeret(systemService.getDateTime());
             bemyndigelseDao.save(existingBemyndigelse);
         }
         bemyndigelse.setStatus(Status.GODKENDT);
+        bemyndigelse.setSidstModificeret(systemService.getDateTime());
         bemyndigelse.setGodkendelsesdato(systemService.getDateTime());
         bemyndigelseDao.save(bemyndigelse);
     }
