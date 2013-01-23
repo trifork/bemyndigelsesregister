@@ -1,3 +1,5 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
 REPLACE INTO domaene(kode) VALUES ('trifork-test');
 
 REPLACE INTO linked_system(domaene_id, kode) VALUES (1, 'Trifork test system');
@@ -110,3 +112,5 @@ REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('USER_CV
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.indlaesMetadata', '25520041');
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.HentMetadata', '25520041');
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', '', '25520041');
+
+SET FOREIGN_KEY_CHECKS = 1;
