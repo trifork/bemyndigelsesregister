@@ -82,6 +82,21 @@
             <artifactId>xmlschema-core</artifactId>
             <version>2.0.3</version>
         </dependency>
+
+        <!-- Support for SFTP protocol -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.49</version>
+        </dependency>
+        <!-- in-memory sshd/sftp-server for test purposes -->
+        <dependency>
+            <groupId>org.apache.sshd</groupId>
+            <artifactId>sshd-core</artifactId>
+            <version>0.8.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

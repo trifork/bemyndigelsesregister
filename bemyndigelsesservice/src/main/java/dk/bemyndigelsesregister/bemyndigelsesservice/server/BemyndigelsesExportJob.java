@@ -34,7 +34,7 @@ public class BemyndigelsesExportJob {
     @Inject
     SystemService systemService;
 
-    @Inject
+    @Inject @Named("nspManagerSftp")
     NspManager nspManager;
 
     @Value("${nsp.schema.version}")
