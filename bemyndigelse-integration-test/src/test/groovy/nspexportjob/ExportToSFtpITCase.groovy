@@ -36,6 +36,7 @@ class ExportToSFtpITCase {
         URLConnection urlConnection = new URL(urlPrefix() + "/op/export").openConnection()
         assertEquals "DONE", IOUtils.toString(urlConnection.inputStream)
 
+        //TODO: verificer at filen findes "server side" efter upload
 /*        FileEntry uploadedFile = ftpServer.fileSystem.listFiles("/").find { FileSystemEntry entry ->
             entry.lastModified.after(startTime)
         }

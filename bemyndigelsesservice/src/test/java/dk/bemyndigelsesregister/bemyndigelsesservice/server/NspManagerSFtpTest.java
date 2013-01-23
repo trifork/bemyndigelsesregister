@@ -72,7 +72,7 @@ public class NspManagerSFtpTest {
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);
 
         nspManager.send(bemyndigelser, startTime);
-
+        //TODO: Check at filen findes "server side" efter upload
 //        assertTrue(ftpServer.getFileSystem().exists("/" + filename));
 
 //        assertEquals(fileBody, IOUtils.toString(((FileEntry) ftpServer.getFileSystem().getEntry("/" + filename)).createInputStream()));
