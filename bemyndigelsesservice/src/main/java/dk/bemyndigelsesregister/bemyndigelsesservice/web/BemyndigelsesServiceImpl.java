@@ -269,6 +269,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             if (validTo.isAfter(now)) {
                 logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
+                bemyndigelse.setSidstModificeret(now);
                 bemyndigelseDao.save(bemyndigelse);
                 response.getKode().add(bemyndigelse.getKode());
             }
