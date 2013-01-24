@@ -150,6 +150,7 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
         type.setStatus(status == Status.GODKENDT ? "Godkendt" : "Bestilt");
         type.setKode(getKode());
         type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
+        type.setArbejdsfunktion(arbejdsfunktion.getKode());
         type.setRettighed(rettighed.getKode());
         type.setSystem(linkedSystem.getKode());
         type.setValidFrom(toXmlGregorianCalendar(gyldigFra));

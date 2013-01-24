@@ -7,6 +7,7 @@
     <bemyndigede_cvr>11223344</bemyndigede_cvr>
     <system>system</system>
     <status>status</status>
+    <arbejdsfunktion>Læge</arbejdsfunktion>
     <rettighed>rettighed</rettighed>
     <godkendelsesdato>2001-12-31T12:00:00</godkendelsesdato>
     <CreatedDate>2001-12-31T12:00:01</CreatedDate>
@@ -21,6 +22,7 @@
     <bemyndigede_cvr>11223345</bemyndigede_cvr>
     <system>system2</system>
     <status>status2</status>
+    <arbejdsfunktion>Læge</arbejdsfunktion>
     <rettighed>rettighed2</rettighed>
     <godkendelsesdato>2001-12-30T12:00:00</godkendelsesdato>
     <CreatedDate>2001-12-30T12:00:01</CreatedDate>
