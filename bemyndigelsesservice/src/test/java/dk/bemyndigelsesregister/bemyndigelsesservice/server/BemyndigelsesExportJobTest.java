@@ -77,6 +77,10 @@ public class BemyndigelsesExportJobTest {
         rettighed.setKode("TEST rettighed");
         bemyndigelse.setRettighed(rettighed);
 
+        final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
+        arbejdsfunktion.setKode("Test arbejdsfunktion");
+        bemyndigelse.setArbejdsfunktion(arbejdsfunktion);
+
         final LinkedSystem linkedSystem = new LinkedSystem();
         linkedSystem.setKode("TEST system");
         bemyndigelse.setLinkedSystem(linkedSystem);
