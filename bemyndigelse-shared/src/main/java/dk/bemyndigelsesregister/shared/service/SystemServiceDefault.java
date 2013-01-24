@@ -104,7 +104,7 @@ public class SystemServiceDefault implements SystemService {
     public File writeToTempDir(String filename, String data) {
         final File file = new File(tempDirLocation, filename);
         try {
-            FileUtils.writeStringToFile(file, data);
+            FileUtils.writeStringToFile(file, data, "UTF-8");
         } catch (IOException e) {
             throw new RuntimeException("Could not write to file=" + file.getAbsolutePath(), e);
         }
