@@ -43,7 +43,7 @@ public class BemyndigelsesExportJobTest {
         final SystemVariable lastRunSV = new SystemVariable("lastRun", lastRun);
         when(systemVariableDao.getByName("lastRun")).thenReturn(lastRunSV);
         when(systemService.getDateTime()).thenReturn(startTime);
-        when(bemyndigelseDao.findBySidstModificeretGreaterThan(lastRun)).thenReturn(bemyndigelser);
+        when(bemyndigelseDao.findBySidstModificeretGreaterThanOrEquals(lastRun)).thenReturn(bemyndigelser);
 
         job.startExport();
 
@@ -84,6 +84,9 @@ public class BemyndigelsesExportJobTest {
         final LinkedSystem linkedSystem = new LinkedSystem();
         linkedSystem.setKode("TEST system");
         bemyndigelse.setLinkedSystem(linkedSystem);
+
+        bemyndigelse.setSidstModificeret(new DateTime());
+        bemyndigelse.setSidstModificeretAf("Test");
 
         return bemyndigelse;
     }

@@ -18,8 +18,8 @@ public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements Be
     }
 
     @Override
-    public List<Bemyndigelse> findBySidstModificeretGreaterThan(DateTime sidstModificeret) {
-        return query().where().gt("sidst_modificeret", sidstModificeret).findList();
+    public List<Bemyndigelse> findBySidstModificeretGreaterThanOrEquals(DateTime sidstModificeret) {
+        return query().where().ge("sidst_modificeret", sidstModificeret).findList();
     }
 
     @Override

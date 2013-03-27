@@ -10,7 +10,6 @@ import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.oxm.Marshaller;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +45,7 @@ public class BemyndigelsesExportJob {
     public void startExport() throws IOException {
         SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         final DateTime startTime = systemService.getDateTime();
-        doExport(startTime, bemyndigelseDao.findBySidstModificeretGreaterThan(lastRun.getDateTimeValue()));
+        doExport(startTime, bemyndigelseDao.findBySidstModificeretGreaterThanOrEquals(lastRun.getDateTimeValue()));
 
         updateLastRun(lastRun, startTime);
     }

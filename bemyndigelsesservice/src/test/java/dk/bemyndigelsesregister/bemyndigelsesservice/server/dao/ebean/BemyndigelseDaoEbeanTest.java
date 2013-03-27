@@ -21,7 +21,7 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
     @Test
     public void willFindOnlyBemyndigelserModifiedSince() throws Exception {
         final DateTime startTime = new DateTime(2011, 5, 22, 0, 0);
-        final List<Bemyndigelse> bemyndigelser = dao.findBySidstModificeretGreaterThan(startTime);
+        final List<Bemyndigelse> bemyndigelser = dao.findBySidstModificeretGreaterThanOrEquals(startTime);
         assertEquals(1, bemyndigelser.size());
         assertEquals("TestKode2", bemyndigelser.get(0).getKode());
     }
