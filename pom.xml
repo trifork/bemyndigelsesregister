@@ -62,15 +62,8 @@
         <functionaltest.urlprefix>http://localhost:${functionaltest.serverport}</functionaltest.urlprefix>
         <deployment.cargo.hostname>localhost</deployment.cargo.hostname>
         <deployment.pingURL>http://${deployment.cargo.hostname}:8085/health</deployment.pingURL>
-        <deployment.serversettings>bms.localhost</deployment.serversettings> <!-- Add a server setting to your ~/.m2/settings.xml
-        <server>
-            <id>bms.localhost</id>
-            <configuration>
-                <cargo.remote.username>admin</cargo.remote.username>
-                <cargo.remote.password>SECRET</cargo.remote.password>
-            </configuration>
-        </server>
-        For more info, read http://docs.codehaus.org/display/CARGO/Maven2+Plugin+Reference+Guide#Maven2PluginReferenceGuide-settingsXML -->
+        <deployment.serversettings>bms.localhost</deployment.serversettings>
+        <spring.version>3.2.4.RELEASE</spring.version>
     </properties>
 
     <profiles>
@@ -108,52 +101,52 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-oxm</artifactId>
-                <version>3.2.0.RELEASE</version>
+                <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -175,6 +168,12 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>1.6.4</version>
             </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
