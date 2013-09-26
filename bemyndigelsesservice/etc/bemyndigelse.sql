@@ -1,0 +1,13 @@
+UPDATE rettighed SET beskrivelse = 'Sundhedsfagligt opslag' WHERE kode = 'SundhedsfagligOpslag';
+UPDATE rettighed SET beskrivelse = 'Opret, ret eller seponer lægemiddelordination' WHERE kode = 'Lægemiddelordination';
+UPDATE rettighed SET beskrivelse = 'Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)' WHERE kode = 'Effektuering';
+UPDATE rettighed SET beskrivelse = 'Sæt/fjern privatmarkering' WHERE kode = 'Privatmarkering';
+UPDATE rettighed SET beskrivelse = 'Vis privatmarkeret med værdispring' WHERE kode = 'VisPrivatmarkeretVærdispring';
+UPDATE rettighed SET beskrivelse = 'Vis privatmarkeret med samtykke' WHERE kode = 'VisPrivatmarkeretSamtykke';
+UPDATE rettighed SET beskrivelse = 'Suspender/frigiv medicinkort' WHERE kode = 'Suspendering';
+UPDATE rettighed SET beskrivelse = 'Sæt markering for medicinafstemning' WHERE kode = 'Afstemning';
+UPDATE rettighed SET beskrivelse = 'Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)' WHERE kode = 'LøsRecept';
+UPDATE rettighed SET beskrivelse = 'Bestil udlevering eller ny recept' WHERE kode = 'BestilEffektuering';
+UPDATE rettighed SET beskrivelse = 'Opretning tilknytning til en enhed (F.eks. tilknytning til hjemmepleje)' WHERE kode = 'Tilknytning';
+UPDATE rettighed SET beskrivelse = 'Opret, ret eller slet vaccinationer' WHERE kode = 'VaccinationVedligehold';
+UPDATE rettighed SET beskrivelse = 'Opret, ret eller slet anbefalede vaccinationer' WHERE kode = 'VaccinationVedligeholdAnbefalet';
