@@ -26,5 +26,5 @@ public interface BemyndigelseDao {
 
     List<Bemyndigelse> findByKoder(Collection<String> bemyndigelsesKoder);
 
-    List<Bemyndigelse> findByInPeriod(String bemyndigedeCpr, String bemyndigedeCvr, Arbejdsfunktion arbejdsfunktion, Rettighed rettighed, LinkedSystem linkedSystem, DateTime gyldigFra, DateTime gyldigTil);
+    List<Bemyndigelse> findByInPeriod(String bemyndigedeCpr, String bemyndigedeCvr, String arbejdsfunktionKode, String rettighedKode, String linkedSystemKode, DateTime gyldigFra, DateTime gyldigTil);
 }

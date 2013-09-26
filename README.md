@@ -15,9 +15,9 @@ Running with MySQL
 ```
 CREATE USER 'bemyndigelse'@'localhost' IDENTIFIED BY '';
 CREATE DATABASE bemyndigelse;
-GRANT ALL PRIVILEGES ON bemyndigelse.* TO 'bemyndigelse'@'localhost';
+GRANT ALL PRIVILEGES ON bemyndigelse.* TO 'bemyndigelse'@'%';
 
 CREATE DATABASE bemyndigelsetest;
-GRANT ALL PRIVILEGES ON bemyndigelsetest.* TO 'bemyndigelse'@'localhost';
+GRANT ALL PRIVILEGES ON bemyndigelsetest.* TO 'bemyndigelse'@'%';
 ```
 

@@ -201,9 +201,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setBemyndigendeCpr(bem.getBemyndigendeCpr());
             setBemyndigedeCpr(bem.getBemyndigedeCpr());
             setBemyndigedeCvr(bem.getBemyndigedeCvr());
-            setSystem(bem.getLinkedSystem().getKode());
-            setArbejdsfunktion(bem.getArbejdsfunktion().getKode());
-            setRettighed(bem.getRettighed().getKode());
+            setSystem(bem.getLinkedSystemKode());
+            setArbejdsfunktion(bem.getArbejdsfunktionKode());
+            setRettighed(bem.getRettighedKode());
             setStatus(bem.getStatus() == Status.GODKENDT ? "Godkendt" : "Bestilt");
             if (bem.getGodkendelsesdato() != null) {
                 setGodkendelsesdato(new XMLGregorianCalendarImpl(bem.getGodkendelsesdato().withZone(DateTimeZone.UTC).toGregorianCalendar()));

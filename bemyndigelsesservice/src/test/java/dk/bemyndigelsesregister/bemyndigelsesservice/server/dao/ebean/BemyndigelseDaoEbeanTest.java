@@ -42,9 +42,9 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
         final List<Bemyndigelse> found = dao.findByInPeriod(
                 "1010101013",
                 "1",
-                arbejdsfunktionDao.get(1),
-                rettighedDao.get(1),
-                linkedSystemDao.get(1),
+                arbejdsfunktionDao.get(1).getKode(),
+                rettighedDao.get(1).getKode(),
+                linkedSystemDao.get(1).getKode(),
                 other.getGyldigFra().minusYears(1),
                 other.getGyldigTil().plusYears(1)
         );
@@ -60,9 +60,9 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
         final List<Bemyndigelse> found = dao.findByInPeriod(
                 "1010101013",
                 "1",
-                arbejdsfunktionDao.get(1),
-                rettighedDao.get(1),
-                linkedSystemDao.get(1),
+                arbejdsfunktionDao.get(1).getKode(),
+                rettighedDao.get(1).getKode(),
+                linkedSystemDao.get(1).getKode(),
                 other.getGyldigFra().minusYears(1),
                 other.getGyldigFra().plusHours(1)
         );
@@ -78,9 +78,9 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
         final List<Bemyndigelse> found = dao.findByInPeriod(
                 "1010101013",
                 "1",
-                arbejdsfunktionDao.get(1),
-                rettighedDao.get(1),
-                linkedSystemDao.get(1),
+                arbejdsfunktionDao.get(1).getKode(),
+                rettighedDao.get(1).getKode(),
+                linkedSystemDao.get(1).getKode(),
                 other.getGyldigTil().minusHours(1),
                 other.getGyldigTil().plusYears(1)
         );
@@ -96,9 +96,9 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
         final List<Bemyndigelse> found = dao.findByInPeriod(
                 "1010101013",
                 "1",
-                arbejdsfunktionDao.get(1),
-                rettighedDao.get(1),
-                linkedSystemDao.get(1),
+                arbejdsfunktionDao.get(1).getKode(),
+                rettighedDao.get(1).getKode(),
+                linkedSystemDao.get(1).getKode(),
                 other.getGyldigFra().minusYears(1),
                 other.getGyldigFra().minusHours(1)
         );
@@ -113,9 +113,9 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
         final List<Bemyndigelse> found = dao.findByInPeriod(
                 "1010101013",
                 "1",
-                arbejdsfunktionDao.get(1),
-                rettighedDao.get(1),
-                linkedSystemDao.get(1),
+                arbejdsfunktionDao.get(1).getKode(),
+                rettighedDao.get(1).getKode(),
+                linkedSystemDao.get(1).getKode(),
                 other.getGyldigTil().plusHours(1),
                 other.getGyldigTil().plusYears(1)
         );

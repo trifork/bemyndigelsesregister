@@ -51,12 +51,12 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         bemyndigelse.setBemyndigedeCpr(bemyndigedeCpr);
         bemyndigelse.setBemyndigedeCvr(bemyndigedeCvr);
 
-        bemyndigelse.setArbejdsfunktion(arbejdsfunktionDao.findByKode(linkedSystem, arbejdsfunktionKode));
+        bemyndigelse.setArbejdsfunktionKode(arbejdsfunktionDao.findByKode(linkedSystem, arbejdsfunktionKode).getKode());
 
         bemyndigelse.setStatus(status);
 
-        bemyndigelse.setRettighed(rettighedDao.findByKode(linkedSystem, rettighedKode));
-        bemyndigelse.setLinkedSystem(linkedSystemDao.findByKode(systemKode));
+        bemyndigelse.setRettighedKode(rettighedDao.findByKode(linkedSystem, rettighedKode).getKode());
+        bemyndigelse.setLinkedSystemKode(linkedSystemDao.findByKode(systemKode).getKode());
 
         final DateTime validFrom = defaultIfNull(gyldigFra, now);
         final DateTime validTo = defaultIfNull(gyldigTil, now.plusYears(100));
@@ -87,9 +87,9 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
         final Collection<Bemyndigelse> existingBemyndigelser = bemyndigelseDao.findByInPeriod(
                 bemyndigelse.getBemyndigedeCpr(),
                 bemyndigelse.getBemyndigedeCvr(),
-                bemyndigelse.getArbejdsfunktion(),
-                bemyndigelse.getRettighed(),
-                bemyndigelse.getLinkedSystem(),
+                bemyndigelse.getArbejdsfunktionKode(),
+                bemyndigelse.getRettighedKode(),
+                bemyndigelse.getLinkedSystemKode(),
                 bemyndigelse.getGyldigFra(),
                 bemyndigelse.getGyldigTil()
         );

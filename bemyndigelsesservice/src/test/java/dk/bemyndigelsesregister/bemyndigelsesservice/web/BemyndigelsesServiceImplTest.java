@@ -263,15 +263,15 @@ public class BemyndigelsesServiceImplTest {
 
         final LinkedSystem system = new LinkedSystem();
         system.setKode(this.systemKode);
-        bemyndigelse.setLinkedSystem(system);
+        bemyndigelse.setLinkedSystemKode(system.getKode());
 
         final Arbejdsfunktion arbejdsfunktion = new Arbejdsfunktion();
         arbejdsfunktion.setKode(this.arbejdsfunktionKode);
-        bemyndigelse.setArbejdsfunktion(arbejdsfunktion);
+        bemyndigelse.setArbejdsfunktionKode(arbejdsfunktion.getKode());
 
         final Rettighed rettighed = new Rettighed();
         rettighed.setKode(this.rettighedKode);
-        bemyndigelse.setRettighed(rettighed);
+        bemyndigelse.setRettighedKode(rettighed.getKode());
 
         bemyndigelse.setStatus(status);
 

@@ -26,12 +26,9 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
     private String bemyndigendeCpr;
     private String bemyndigedeCpr;
     private String bemyndigedeCvr;
-    @OneToOne
-    private LinkedSystem linkedSystem;
-    @OneToOne
-    private Arbejdsfunktion arbejdsfunktion;
-    @OneToOne
-    private Rettighed rettighed;
+    private String linkedSystemKode;
+    private String arbejdsfunktionKode;
+    private String rettighedKode;
     
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -67,22 +64,6 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
 
     public void setBemyndigedeCvr(String bemyndigedeCvr) {
         this.bemyndigedeCvr = bemyndigedeCvr;
-    }
-
-    public Arbejdsfunktion getArbejdsfunktion() {
-        return arbejdsfunktion;
-    }
-
-    public void setArbejdsfunktion(Arbejdsfunktion arbejdsfunktion) {
-        this.arbejdsfunktion = arbejdsfunktion;
-    }
-
-    public Rettighed getRettighed() {
-        return rettighed;
-    }
-
-    public void setRettighed(Rettighed rettighed) {
-        this.rettighed = rettighed;
     }
 
     public Status getStatus() {
@@ -125,12 +106,28 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
         this.versionsid = versionsid;
     }
 
-    public void setLinkedSystem(LinkedSystem linkedSystem) {
-        this.linkedSystem = linkedSystem;
+    public String getLinkedSystemKode() {
+        return linkedSystemKode;
     }
 
-    public LinkedSystem getLinkedSystem() {
-        return linkedSystem;
+    public void setLinkedSystemKode(String linkedSystemKode) {
+        this.linkedSystemKode = linkedSystemKode;
+    }
+
+    public String getArbejdsfunktionKode() {
+        return arbejdsfunktionKode;
+    }
+
+    public void setArbejdsfunktionKode(String arbejdsfunktionKode) {
+        this.arbejdsfunktionKode = arbejdsfunktionKode;
+    }
+
+    public String getRettighedKode() {
+        return rettighedKode;
+    }
+
+    public void setRettighedKode(String rettighedKode) {
+        this.rettighedKode = rettighedKode;
     }
     //</editor-fold>
 
@@ -150,9 +147,9 @@ public class Bemyndigelse extends ExternalIdentifiedDomainObject {
         type.setStatus(status == Status.GODKENDT ? "Godkendt" : "Bestilt");
         type.setKode(getKode());
         type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
-        type.setArbejdsfunktion(arbejdsfunktion.getKode());
-        type.setRettighed(rettighed.getKode());
-        type.setSystem(linkedSystem.getKode());
+        type.setArbejdsfunktion(arbejdsfunktionKode);
+        type.setRettighed(rettighedKode);
+        type.setSystem(linkedSystemKode);
         type.setValidFrom(toXmlGregorianCalendar(gyldigFra));
         type.setValidTo(toXmlGregorianCalendar(gyldigTil));
         return type;

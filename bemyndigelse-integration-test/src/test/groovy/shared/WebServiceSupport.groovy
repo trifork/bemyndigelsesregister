@@ -11,6 +11,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource
 
 abstract class WebServiceSupport {
 
+    SOSIUtil sosiUtil = new SOSIUtil();
+
+    protected SOSIUtil getSosiUtil() {
+        return sosiUtil;
+    }
+
     WebServiceSupport() {
         Properties conf = new Properties();
         conf.load(WebServiceSupport.class.getResourceAsStream("/bemyndigelse.properties"))
@@ -51,7 +57,7 @@ abstract class WebServiceSupport {
             envelopeAttributes 'xmlns:bms': 'http://nsi.dk/bemyndigelse/2012/05/01/',
                     'xmlns:sosi': "http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
             header {
-                NodeList header = SOSIUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
+                NodeList header = sosiUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
                 for (int i = 0; i < header.item(0).childNodes.length; i++) {
                     String headerItem = header.item(0).childNodes.item(i) as String
                     assert headerItem
