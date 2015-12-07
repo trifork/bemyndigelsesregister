@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://nsi.dk/bemyndigelse/2012/05/01/"
+           xmlns:cpr="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/"
+           xmlns:cvr="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/"
+           xmlns:bms="http://nsi.dk/bemyndigelse/2012/05/01/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" schemaLocation="CPR_PersonCivilRegistrationIdentifier.xsd"/>
+
+    <xs:import namespace="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/" schemaLocation="CVR_CVRnumberIdentifier.xsd"/>
+
+    <xs:complexType name="Bemyndigelse">
+        <xs:sequence>
+            <xs:element name="Kode" type="xs:string"/>
+            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
+            <xs:element name="System" type="xs:string"/>
+            <xs:element name="Arbejdsfunktion" type="xs:string"/>
+            <xs:element name="Rettighed" type="xs:string"/>
+            <xs:element name="Status" type="xs:string"/>
+            <xs:element name="Godkendelsesdato" type="xs:dateTime"/>
+            <xs:element name="Gyldig_fra" type="xs:dateTime"/>
+            <xs:element name="Gyldig_til" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Arbejdsfunktioner">
+        <xs:sequence>
+            <xs:element name="Arbejdsfunktion" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Domaene" type="bms:Domaene"/>
+                        <xs:element name="System" type="bms:System"/>
+                        <xs:element name="Arbejdsfunktion" type="bms:Arbejdsfunktion"/>
+                        <xs:element name="Beskrivelse" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Rettigheder">
+        <xs:sequence>
+            <xs:element name="Rettighed" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Domaene" type="bms:Domaene"/>
+                        <xs:element name="System" type="bms:System"/>
+                        <xs:element name="Rettighed" type="bms:Rettighed"/>
+                        <xs:element name="Beskrivelse" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DelegerbarRettigheder">
+        <xs:sequence>
+            <xs:element name="DelegerbarRettighed" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Domaene" type="bms:Domaene"/>
+                        <xs:element name="System" type="bms:System"/>
+                        <xs:element name="Arbejdsfunktion" type="bms:Arbejdsfunktion"/>
+                        <xs:element name="Rettighed" type="bms:Rettighed"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="Domaene">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="System">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="Arbejdsfunktion">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="Rettighed">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:element name="IndlaesMetadataRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Arbejdsfunktioner" type="bms:Arbejdsfunktioner" minOccurs="0"/>
+                <xs:element name="Rettigheder" type="bms:Rettigheder" minOccurs="0"/>
+                <xs:element name="DelegerbarRettigheder" type="bms:DelegerbarRettigheder" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="IndlaesMetadataResponse">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentMetadataRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Domaene" type="bms:Domaene"/>
+                <xs:element name="System" type="bms:System"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentMetadataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Arbejdsfunktioner" type="bms:Arbejdsfunktioner" minOccurs="0"/>
+                <xs:element name="Rettigheder" type="bms:Rettigheder" minOccurs="0"/>
+                <xs:element name="DelegerbarRettigheder" type="bms:DelegerbarRettigheder" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GodkendBemyndigelseRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="BemyndigelsesKode" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GodkendBemyndigelseResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigelser" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentBemyndigelserRequest">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="Kode" type="xs:string"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="HentBemyndigelserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigelse" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretAnmodningOmBemyndigelserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Anmodning" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
+                            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="Arbejdsfunktion" type="xs:string"/>
+                            <xs:element name="Rettighed" type="xs:string"/>
+                            <xs:element name="System" type="xs:string"/>
+                            <xs:element name="GyldigFra" type="xs:dateTime" minOccurs="0"/>
+                            <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretAnmodningOmBemyndigelserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigelse" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretGodkendteBemyndigelserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigelse" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
+                            <xs:element name="System" type="xs:string"/>
+                            <xs:element name="Arbejdsfunktion" type="xs:string"/>
+                            <xs:element name="Rettighed" type="xs:string"/>
+                            <xs:element name="GyldigFra" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="GyldigTil" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="OpretGodkendteBemyndigelserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Bemyndigelse" type="bms:Bemyndigelse" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SletBemyndigelserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Kode" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SletBemyndigelserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Kode" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+
