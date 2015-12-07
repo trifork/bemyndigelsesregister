@@ -15,11 +15,11 @@ import java.util.concurrent.*;
  * 
  * @author Brian Goetz and Tim Peierls
  */
-public class Memoizer<A, V> implements dk.medicinkortet.notproduktion.validateWikiExamples.xmlvalidator.Computable<A, V> {
+public class Memoizer<A, V> implements Computable<A, V> {
 	private final ConcurrentMap<A, Future<V>> cache = new ConcurrentHashMap<A, Future<V>>();
-	private final dk.medicinkortet.notproduktion.validateWikiExamples.xmlvalidator.Computable<A, V> c;
+	private final Computable<A, V> c;
 
-	public Memoizer(dk.medicinkortet.notproduktion.validateWikiExamples.xmlvalidator.Computable<A, V> c) {
+	public Memoizer(Computable<A, V> c) {
 		this.c = c;
 	}
 

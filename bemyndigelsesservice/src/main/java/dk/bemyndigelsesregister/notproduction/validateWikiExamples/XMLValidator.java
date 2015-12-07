@@ -1,6 +1,6 @@
 package dk.bemyndigelsesregister.notproduction.validateWikiExamples;
 
-import dk.medicinkortet.notproduktion.validateWikiExamples.xmlvalidator.SchemaValidator;
+import dk.bemyndigelsesregister.notproduction.validateWikiExamples.xmlvalidator.SchemaValidator;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;

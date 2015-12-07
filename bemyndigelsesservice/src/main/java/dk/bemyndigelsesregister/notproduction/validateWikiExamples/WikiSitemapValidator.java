@@ -1,4 +1,5 @@
-package dk.medicinkortet.notproduktion.validateWikiExamples;
+package dk.bemyndigelsesregister.notproduction.validateWikiExamples;
+
 
 import org.apache.commons.io.IOUtils;
 
