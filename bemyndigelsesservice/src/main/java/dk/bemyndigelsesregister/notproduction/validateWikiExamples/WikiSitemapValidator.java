@@ -17,7 +17,11 @@ import java.util.regex.Pattern;
  *   java ValidatePagesFromSitemap <sitemapURL> [<namespace>]
  *
  * Example:
- *   java ValidatePagesFromSitemap http://wiki.fmk.netic.dk/doku.php?id=fmk:1.4.6:fmk_1.4.6_snitflade&do=index http://www.dkma.dk/medicinecard/xml.schema/2015/06/01
+ *   java ValidatePagesFromSitemap http://wiki.fmk.netic.dk/doku.php?id=fmk:bem:2.0:bem_2.0_snitflade&do=index http://nsi.dk/bemyndigelse/2016/01/01/
+ *
+ *   java -cp .:/Users/krs/.m2/repository/xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.jar:/Users/krs/.m2/repository/log4j/log4j/1.2.16/log4j-1.2.16.jar:/Users/krs/.m2/repository/xerces/xercesImpl/2.11.0/xercesImpl-2.11.0.jar:/Users/krs/.m2/repository/commons-io/commons-io/1.3.2/commons-io-1.3.2.jar dk.bemyndigelsesregister.notproduction.validateWikiExamples.WikiSitemapValidator http://wiki.fmk.netic.dk/doku.php?id=fmk:bem:2.0:bem_2.0_snitflade&do=index http://nsi.dk/bemyndigelse/2016/01/01/
+
+ *   http://wiki.fmk.netic.dk/doku.php?id=fmk:1.4.6:fmk_1.4.6_snitflade&do=index http://www.dkma.dk/medicinecard/xml.schema/2015/06/01
  */
 public class WikiSitemapValidator {
 
