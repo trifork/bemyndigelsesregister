@@ -3,7 +3,7 @@
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://nsi.dk/bemyndigelse/2016/01/01/"
                   targetNamespace="http://nsi.dk/bemyndigelse/2016/01/01/">
     <wsdl:types>
-        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bms="http://nsi.dk/bemyndigelse/2012/05/01/"
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:bms="http://nsi.dk/bemyndigelse/2016/01/01/"
                    xmlns:cpr="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/"
                    xmlns:cvr="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/"
                    targetNamespace="http://nsi.dk/bemyndigelse/2016/01/01/" version="2.0">
@@ -172,7 +172,7 @@
             <xs:element name="OpretBemyndigelserRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
                     <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                        <xs:element maxOccurs="unbounded" minOccurs="1" name="Bemyndigelse"
+                        <xs:element maxOccurs="10" minOccurs="1" name="Oprettelse"
                                     xmlns:xs="http://www.w3.org/2001/XMLSchema">
                             <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
                                 <xs:all xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -186,8 +186,15 @@
                                                 xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
                                     <xs:element name="Arbejdsfunktion" type="xs:string"
                                                 xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
-                                    <xs:element maxOccurs="unbounded" minOccurs="1" name="Rettighed" type="xs:string"
-                                                xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                                    <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Rettigheder">
+                                        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                                            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                                                <xs:element maxOccurs="unbounded" minOccurs="1" name="Rettighed"
+                                                            type="xs:string"
+                                                            xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
                                     <xs:element maxOccurs="1" minOccurs="0" name="GyldigFra" type="xs:dateTime"
                                                 xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
                                     <xs:element maxOccurs="1" minOccurs="0" name="GyldigTil" type="xs:dateTime"

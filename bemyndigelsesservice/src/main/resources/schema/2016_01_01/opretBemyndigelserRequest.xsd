@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema version="2.0" targetNamespace="http://nsi.dk/bemyndigelse/2016/01/01/"  elementFormDefault="qualified" attributeFormDefault="unqualified"
+           xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
+           xmlns:cpr="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/"
+           xmlns:cvr="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/"
+           xmlns="http://www.w3.org/2001/XMLSchema">
+
+    <import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/"
+               schemaLocation="../CPR_PersonCivilRegistrationIdentifier.xsd"/>
+
+    <import namespace="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/"
+               schemaLocation="../CVR_CVRnumberIdentifier.xsd"/>
+
+    <element name="OpretBemyndigelserRequest" type="bms20160101:OpretBemyndigelserRequestType">
+        <annotation>
+            <documentation xml:lang="en-GB">A request which creates a number of authorisations for a person to use a
+                system on behalf of another person
+            </documentation>
+            <documentation xml:lang="da-DK">En forespørgsel der opretter et antal rettigheder, så en person kan bruge
+                et system på vegne af en anden person
+            </documentation>
+        </annotation>
+    </element>
+    <complexType name="OpretBemyndigelserRequestType">
+        <sequence>
+            <element maxOccurs="10" minOccurs="1" name="Oprettelse">
+                <complexType>
+                    <all>
+                        <element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                        <element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                        <element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
+                        <element name="System" type="string"/>
+                        <element name="Arbejdsfunktion" type="string"/>
+                        <element name="Rettigheder">
+                            <complexType>
+                                <sequence>
+                                    <element maxOccurs="unbounded" minOccurs="1" name="Rettighed" type="string"/>
+                                </sequence>
+                            </complexType>
+                        </element>
+                        <element maxOccurs="1" minOccurs="0" name="GyldigFra" type="dateTime"/>
+                        <element maxOccurs="1" minOccurs="0" name="GyldigTil" type="dateTime"/>
+                    </all>
+                </complexType>
+            </element>
+        </sequence>
+    </complexType>
+</schema>
