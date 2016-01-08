@@ -134,8 +134,8 @@
     <xs:element name="HentMetadataRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Domaene" type="xs:string"/>
-                <xs:element name="System" type="xs:string"/>
+                <xs:element name="Domaene" type="bms20160101:Domaene"/>
+                <xs:element name="System" type="bms20160101:System"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -202,7 +202,7 @@
     <xs:element name="HentBemyndigelserResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Bemyndigelse" type="bms20160101:Bemyndigelse" maxOccurs="unbounded"/>
+                <xs:element name="Bemyndigelse" type="bms20160101:Bemyndigelse" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
