@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bms20160101:OpretBemyndigelserRequest
+        xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
+    <Oprettelse>
+        <BemyndigendeCpr>2005511871</BemyndigendeCpr>
+        <BemyndigedeCpr>0304838140</BemyndigedeCpr>
+        <BemyndigedeCvr>20921897</BemyndigedeCvr>
+        <System>FMK</System>
+        <Arbejdsfunktion>Læge</Arbejdsfunktion>
+        <Status>Oprettet</Status>
+        <RettighedNavne>
+            <RettighedNavn>SundhedsfagligtOpslag</RettighedNavn>
+        </RettighedNavne>
+        <GyldigFra>2016-02-01T00:00:00Z</GyldigFra>
+        <GyldigTil>2017-01-31T00:00:00Z</GyldigTil>
+    </Oprettelse>
+    <Oprettelse>
+        <BemyndigendeCpr>2005511871</BemyndigendeCpr>
+        <BemyndigedeCpr>0304838140</BemyndigedeCpr>
+        <System>DDV</System>
+        <Arbejdsfunktion>Læge</Arbejdsfunktion>
+        <Status>Oprettet</Status>
+        <RettighedNavne>
+            <RettighedNavn>VaccinationVedligehold</RettighedNavn>
+            <RettighedNavn>VaccinationVedligeholdAnbefalet</RettighedNavn>
+        </RettighedNavne>
+        <GyldigTil>2017-01-31T00:00:00Z</GyldigTil>
+    </Oprettelse>
+    <Oprettelse>
+        <BemyndigendeCpr>2005511871</BemyndigendeCpr>
+        <BemyndigedeCpr>0304838140</BemyndigedeCpr>
+        <System>TAS</System>
+        <Arbejdsfunktion>Læge</Arbejdsfunktion>
+        <Status>Oprettet</Status>
+        <RettighedNavne>
+            <RettighedNavn>*</RettighedNavn>
+        </RettighedNavne>
+    </Oprettelse>
+</bms20160101:OpretBemyndigelserRequest>

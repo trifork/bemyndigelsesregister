@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nsi.dk/bemyndigelser/2012/04/">
-    <xs:element name="Bemyndigelser">
+     <xs:element name="Bemyndigelser">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="Bemyndigelse" minOccurs="1" maxOccurs="unbounded">
