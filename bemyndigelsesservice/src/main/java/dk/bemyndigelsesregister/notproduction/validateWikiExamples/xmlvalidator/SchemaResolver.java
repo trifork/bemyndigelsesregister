@@ -17,8 +17,8 @@ class SchemaResolver implements LSResourceResolver {
 				||  namespaceURI == "http://dk.acure.pem.security") { //test call from medicin-it
 			return null;
 		}
-		if (baseURI == null || !baseURI.endsWith("index.xsd")) {
-			systemId = "index.xsd";
+		if (baseURI == null ) {
+			systemId = "OpretBemyndigelserRequest.xsd";
 		} else if (systemId == null) {
 			return null;
 		}

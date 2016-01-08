@@ -64,10 +64,10 @@ public class XMLValidator {
             xml = IOUtils.toString(in);
         }
 
-        xml = insertNamespace(xml);
+        xml = insertNamespace(xml); // used in FMK to generalize code snippets for several service versions
 
-        if (xml.contains("2014/06/01")) {
-            System.out.println("    WARNING: XML uses draft 1.4.6 namespace (http://www.dkma.dk/medicinecard/xml.schema/2014/06/01)");
+        if (xml.contains("2016/01/01")) {
+            System.out.println("    WARNING: XML uses draft 2.0 namespace (http://www.nsi/bemyndigelser/2016/01/01)");
         }
 
         
@@ -83,7 +83,7 @@ public class XMLValidator {
         return result;
     }
 
-    private static Pattern firstElementPattern = Pattern.compile("^\\s*<\\s*([A-Za-z]+)([^/>]*)(/?)>");
+    private static Pattern firstElementPattern = Pattern.compile("^\\s*<\\s*([A-Za-z0-9]+:?[A-Za-z0-9]*)([^/>]*)(/?)>");
 
     private String insertNamespace(String xml) {
 
@@ -95,7 +95,7 @@ public class XMLValidator {
             String endtag = m.group(3);
 
             if (postfix.trim().isEmpty()) {
-                String newElement = "<" + elementName + " xmlns=\"" + assumedNamespace + "\" " + endtag + ">";
+                String newElement = "<" + elementName + " " + assumedNamespace + endtag + ">";
                 String newXml = newElement + xml.substring(matchString.length());
                 //System.out.println("    Replaced '" + matchString + "' with '" + newElement + "'");
                 return newXml;
