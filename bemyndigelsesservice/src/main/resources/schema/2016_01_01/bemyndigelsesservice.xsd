@@ -8,172 +8,210 @@
     <xs:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/" schemaLocation="../CPR_PersonCivilRegistrationIdentifier.xsd"/>
     <xs:import namespace="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/" schemaLocation="../CVR_CVRnumberIdentifier.xsd"/>
 
-    <xs:complexType name="Bemyndigelse">
+    <xs:complexType name="Delegation">
         <xs:sequence>
-            <xs:element name="BemyndigelseKode" type="bms20160101:BemyndigelseKode"/>
-            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
+            <xs:element name="DelegationId" type="bms20160101:DelegationId"/>
+            <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+            <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+            <xs:element name="DelegateeCvr" type="cvr:CVRnumberIdentifierType"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" minOccurs="0"/>
             <xs:element name="System" type="bms20160101:System"/>
-            <xs:element name="SystemLangtNavn" type="bms20160101:SystemLangtNavn"/>
-            <xs:element name="Arbejdsfunktion" type="bms20160101:Arbejdsfunktion"/>
-            <xs:element name="Status" type="bms20160101:Status"/>
-            <xs:element name="RettighedNavnBeskrivelse" maxOccurs="unbounded">
+            <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
+            <xs:element name="Role" type="bms20160101:Role"/>
+            <xs:element name="RoleDescription" type="bms20160101:RoleDescription"/>
+            <xs:element name="State" type="bms20160101:State"/>
+            <xs:element name="PermissionNameDescription" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="RettighedNavn" type="bms20160101:RettighedNavn"/>
-                        <xs:element name="RettighedBeskrivelse" type="bms20160101:RettighedBeskrivelse"/>
+                        <xs:element name="Permission" type="bms20160101:Permission"/>
+                        <xs:element name="PermissionDescription" type="bms20160101:PermissionDescription"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="Oprettelsesdato" type="xs:dateTime"/>
-            <xs:element name="Gyldig_fra" type="xs:dateTime"/>
-            <xs:element name="Gyldig_til" type="xs:dateTime"/>
+            <xs:element name="Created" type="bms20160101:CreatedDateTime"/>
+            <xs:element name="EffectiveFrom" type="bms20160101:EffectiveFromDateTime"/>
+            <xs:element name="EffectiveTo" type="bms20160101:EffectiveToDateTime"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="Arbejdsfunktioner">
-        <xs:sequence>
-            <xs:element name="Arbejdsfunktion" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Domaene" type="bms20160101:Domaene"/>
-                        <xs:element name="System" type="bms20160101:System"/>
-                        <xs:element name="ArbejdsfunktionNavn" type="bms20160101:ArbejdsfunktionNavn"/>
-                        <xs:element name="ArbejdsfunktionBeskrivelse" type="bms20160101:ArbejdsfunktionBeskrivelse"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="Rettigheder">
-        <xs:sequence>
-            <xs:element name="Rettighed" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Domaene" type="bms20160101:Domaene"/>
-                        <xs:element name="System" type="bms20160101:System"/>
-                        <xs:element name="RettighedNavn" type="bms20160101:RettighedNavn"/>
-                        <xs:element name="RettighedBeskrivelse" type="bms20160101:RettighedBeskrivelse"/>
+    <xs:complexType name="Roles" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element maxOccurs="unbounded" name="RoleWithDescription"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element name="Role" type="bms20160101:Role"/>
+                        <xs:element name="RoleDescription" type="bms20160101:RoleDescription"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="DelegerbareRettigheder">
-        <xs:sequence>
-            <xs:element name="DelegerbarRettighed" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Domaene" type="bms20160101:Domaene"/>
-                        <xs:element name="System" type="bms20160101:System"/>
-                        <xs:element name="Arbejdsfunktion" type="bms20160101:Arbejdsfunktion"/>
-                        <xs:element name="RettighedNavn" type="bms20160101:RettighedNavn"/>
+    <xs:complexType name="Permissions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element maxOccurs="unbounded" name="PermissionWithDescription" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element name="Permission" type="bms20160101:Permission"/>
+                        <xs:element name="PermissionDescription" type="bms20160101:PermissionDescription"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:simpleType name="BemyndigelseKode">
-        <xs:restriction base="xs:string"/>
+    <xs:complexType name="DelegatablePermissions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element maxOccurs="unbounded" name="DelegatablePermission"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element name="Role" type="bms20160101:Role"/>
+                        <xs:element name="Permission" type="bms20160101:Permission"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:simpleType name="DelegationId" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="40"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="Domaene">
-        <xs:restriction base="xs:string"/>
+    <xs:simpleType name="Domain" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="40"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="System">
-        <xs:restriction base="xs:string"/>
+    <xs:simpleType name="System" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="10"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="SystemLangtNavn">
-        <xs:restriction base="xs:string"/>
+    <xs:simpleType name="SystemLongName" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="100"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="Arbejdsfunktion">
-        <xs:restriction base="xs:string"/>
+    <xs:simpleType name="Role" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="40"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="RettighedNavn">
-        <xs:restriction base="xs:string"/>
+    <xs:simpleType name="RoleDescription" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="100"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="RettighedBeskrivelse">
-        <xs:restriction base="xs:string"/>
+    <xs:simpleType name="Permission" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="40"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="ArbejdsfunktionNavn">
-        <xs:restriction base="xs:string"/>
+    <xs:simpleType name="PermissionDescription" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="100"/>
+        </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="ArbejdsfunktionBeskrivelse">
-        <xs:restriction base="xs:string"/>
-    </xs:simpleType>
-    <xs:simpleType name="Status">
-        <xs:restriction base="xs:string">
+    <xs:simpleType name="State" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:enumeration value="Anmodet"/>
             <xs:enumeration value="Oprettet"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:simpleType name="CreatedDateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:dateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minInclusive value="2000-01-01T00:00:00Z"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EffectiveFromDateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:dateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minInclusive value="2000-01-01T00:00:00Z"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EffectiveToDateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:dateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:minInclusive value="2000-01-01T00:00:00Z"/>
+        </xs:restriction>
+    </xs:simpleType>
 
-
-    <xs:element name="IndlaesMetadataRequest">
+    <xs:element name="PutMetadataRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Domaene" type="bms20160101:Domaene"/>
+                <xs:element name="Domain" type="bms20160101:Domain"/>
                 <xs:element name="System" type="bms20160101:System"/>
-                <xs:element name="SystemLangtNavn" type="bms20160101:SystemLangtNavn"/>
-                <xs:element name="Arbejdsfunktioner" type="bms20160101:Arbejdsfunktioner"/>
-                <xs:element name="Rettigheder" type="bms20160101:Rettigheder" minOccurs="0"/>
-                <xs:element name="DelegerbareRettigheder" type="bms20160101:DelegerbareRettigheder" minOccurs="0"/>
+                <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
+                <xs:element name="Roles" type="bms20160101:Roles"/>
+                <xs:element name="Permissions" type="bms20160101:Permissions" minOccurs="0"/>
+                <xs:element name="DelegatablePermissions" type="bms20160101:DelegatablePermissions" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="IndlaesMetadataResponse">
-        <xs:complexType>
+
+    <xs:element name="PutMetadataResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:sequence/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="HentMetadataRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Domaene" type="bms20160101:Domaene"/>
+    <xs:element name="GetMetadataRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="Domain" type="bms20160101:Domain"/>
                 <xs:element name="System" type="bms20160101:System"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="HentMetadataResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Domaene" type="bms20160101:Domaene"/>
+    <xs:element name="GetMetadataResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="Domain" type="bms20160101:Domain"/>
                 <xs:element name="System" type="bms20160101:System"/>
-                <xs:element name="SystemLangtNavn" type="bms20160101:SystemLangtNavn"/>
-                <xs:element name="Arbejdsfunktioner" type="bms20160101:Arbejdsfunktioner" minOccurs="0"/>
-                <xs:element name="Rettigheder" type="bms20160101:Rettigheder" minOccurs="0"/>
-                <xs:element name="DelegerbarRettigheder" type="bms20160101:DelegerbareRettigheder" minOccurs="0"/>
+                <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
+                <xs:element minOccurs="0" name="Roles" type="bms20160101:Roles"/>
+                <xs:element minOccurs="0" name="Permissions" type="bms20160101:Permissions"/>
+                <xs:element minOccurs="0" name="DelegatablePermissions" type="bms20160101:DelegatablePermissions"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="OpretBemyndigelserRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="10" minOccurs="1" name="Oprettelse">
-                    <xs:complexType>
-                        <xs:all>
-                            <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                            <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                            <xs:element name="BemyndigedeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
+    <xs:element name="CreateDelegationsRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="10" minOccurs="1" name="Create"
+                            xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:all xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                            <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="DelegateeCvr" type="cvr:CVRnumberIdentifierType"
+                                        xmlns:xs="http://www.w3.org/2001/XMLSchema" minOccurs="0"/>
                             <xs:element name="System" type="bms20160101:System"/>
-                            <xs:element name="Arbejdsfunktion" type="bms20160101:Arbejdsfunktion"/>
-                            <xs:element name="Status" type="bms20160101:Status"/>
-                            <xs:element name="RettighedNavne">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element maxOccurs="unbounded" minOccurs="1" name="RettighedNavn" type="bms20160101:RettighedNavn"/>
+                            <xs:element name="Role" type="bms20160101:Role"/>
+                            <xs:element name="State" type="bms20160101:State"/>
+                            <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ListOfPermissions">
+                                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                                        <xs:element minOccurs="1" maxOccurs="unbounded" name="Permission"
+                                                    type="bms20160101:Permission"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
-                            <xs:element maxOccurs="1" minOccurs="0" name="GyldigFra" type="xs:dateTime"/>
-                            <xs:element maxOccurs="1" minOccurs="0" name="GyldigTil" type="xs:dateTime"/>
+                            <xs:element maxOccurs="1" minOccurs="0" name="EffectiveFrom" type="bms20160101:EffectiveFromDateTime"/>
+                            <xs:element maxOccurs="1" minOccurs="0" name="EffectiveTo" type="bms20160101:EffectiveToDateTime"/>
                         </xs:all>
                     </xs:complexType>
                 </xs:element>
@@ -181,47 +219,47 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="OpretBemyndigelserResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Bemyndigelse" type="bms20160101:Bemyndigelse" maxOccurs="unbounded"/>
+    <xs:element name="CreateDelegationsResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element maxOccurs="unbounded" name="Delegation" type="bms20160101:Delegation"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="HentBemyndigelserRequest">
-        <xs:complexType>
-            <xs:choice>
-                <xs:element name="BemyndigendeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="BemyndigedeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="BemyndigelseKode" type="bms20160101:BemyndigelseKode"/>
+    <xs:element name="GetDelegationsRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:choice xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="DelegationId" type="bms20160101:DelegationId"/>
             </xs:choice>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="HentBemyndigelserResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Bemyndigelse" type="bms20160101:Bemyndigelse" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element name="GetDelegationsResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element minOccurs="0"  maxOccurs="unbounded" name="Delegation" type="bms20160101:Delegation"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="SletBemyndigelserRequest">
+    <xs:element name="DeleteDelegationsRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="BemyndigelseKode" type="bms20160101:BemyndigelseKode" maxOccurs="unbounded"/>
-                <xs:element name="Slettedato" type="xs:dateTime"/>
+                <xs:element name="DelegationId" type="bms20160101:DelegationId" maxOccurs="unbounded"/>
+                <xs:element name="DeletionDate" type="bms20160101:EffectiveToDateTime"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="SletBemyndigelserResponse">
+    <xs:element name="DeleteDelegationsResponse">
         <xs:complexType>
             <xs:sequence>
-                    <xs:element name="BemyndigelseKode" type="bms20160101:BemyndigelseKode" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="DelegationId" type="bms20160101:DelegationId" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
 </xs:schema>
-

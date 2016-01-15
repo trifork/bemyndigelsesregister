@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bms20160101:SletBemyndigelserResponse
+<bms20160101:DeleteDelegationsRequest
         xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
-    <BemyndigelseKode>DB83CA88-2B84-4ADE-908F-596F9ABE366C</BemyndigelseKode>
-    <BemyndigelseKode>2079412A-FC09-4072-A5DA-039B80357369</BemyndigelseKode>
-</bms20160101:SletBemyndigelserResponse>
-
-
+    <DelegationId>DB83CA88-2B84-4ADE-908F-596F9ABE366C</DelegationId>
+    <DelegationId>2079412A-FC09-4072-A5DA-039B80357369</DelegationId>
+    <DeletionDate>2016-03-31T23:59:59Z</DeletionDate>
+</bms20160101:DeleteDelegationsRequest>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bms20160101:GetDelegationsRequest
+        xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/wsdl/bemyndigelsesservice_2016_01_01.wsdl">
+    <DelegateeCpr>0304838140</DelegateeCpr>
+</bms20160101:GetDelegationsRequest>

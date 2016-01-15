@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bms20160101:HentMetadataRequest
-        xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
-    <Domaene>SST</Domaene>
-    <System>TAS</System>
-</bms20160101:HentMetadataRequest>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bms20160101:CreateDelegationsRequest
+        xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
+    <Create>
+        <DelegatorCpr>1206879196</DelegatorCpr>
+        <DelegateeCpr>0304838140</DelegateeCpr>
+        <System>TAS</System>
+        <Role>Tandlæge</Role>
+        <State>Anmodet</State>
+        <ListOfPermissions>
+            <Permission>*</Permission>
+        </ListOfPermissions>
+    </Create>
+</bms20160101:CreateDelegationsRequest>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bms20160101:CreateDelegationsResponse
+        xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
+    <Delegation>
+        <DelegationId>9DD1BC7E-76AF-43BC-9C2C-ABAE4257E64F</DelegationId>
+        <DelegatorCpr>2005511871</DelegatorCpr>
+        <DelegateeCpr>0304838140</DelegateeCpr>
+        <DelegateeCvr>20921897</DelegateeCvr>
+        <System>FMK</System>
+        <SystemLongName>Fælles Medicinkort</SystemLongName>
+        <Role>Læge</Role>
+        <RoleDescription>Autoriseret læge</RoleDescription>
+        <State>Oprettet</State>
+        <PermissionNameDescription>
+            <Permission>SundhedsfagligOpslag</Permission>
+            <PermissionDescription>Sundhedsfagligt opslag</PermissionDescription>
+        </PermissionNameDescription>
+        <Created>2016-01-04T10:10:00Z</Created>
+        <EffectiveFrom>2016-02-01T00:00:00Z</EffectiveFrom>
+        <EffectiveTo>2017-01-31T00:00:00Z</EffectiveTo>
+    </Delegation>
+    <Delegation>
+        <DelegationId>DB83CA88-2B84-4ADE-908F-596F9ABE366C</DelegationId>
+        <DelegatorCpr>2005511871</DelegatorCpr>
+        <DelegateeCpr>0304838140</DelegateeCpr>
+        <System>DDV</System>
+        <SystemLongName>Vaccinationsregistret</SystemLongName>
+        <Role>Læge</Role>
+        <RoleDescription>Autoriseret læge</RoleDescription>
+        <State>Oprettet</State>
+        <PermissionNameDescription>
+            <Permission>VaccinationVedligehold</Permission>
+            <PermissionDescription>Opret, ret eller slet vaccinationer</PermissionDescription>
+        </PermissionNameDescription>
+        <PermissionNameDescription>
+            <Permission>VaccinationVedligeholdAnbefalet</Permission>
+            <PermissionDescription>Opret, ret eller slet anbefalede vaccinationer</PermissionDescription>
+        </PermissionNameDescription>
+        <Created>2016-01-04T10:10:00Z</Created>
+        <EffectiveFrom>2016-01-04T10:10:00Z</EffectiveFrom>
+        <EffectiveTo>2017-01-31T00:00:00Z</EffectiveTo>
+    </Delegation>
+    <Delegation>
+        <DelegationId>2079412A-FC09-4072-A5DA-039B80357369</DelegationId>
+        <DelegatorCpr>1206879196</DelegatorCpr>
+        <DelegateeCpr>0304838140</DelegateeCpr>
+        <System>TAS</System>
+        <SystemLongName>Tilskudsansøgningsservicen</SystemLongName>
+        <Role>Læge</Role>
+        <RoleDescription>Autoriseret tandlæge</RoleDescription>
+        <State>Anmodet</State>
+        <PermissionNameDescription>
+            <Permission>*</Permission>
+            <PermissionDescription>Alle nuværende og fremtidige delegerbare rettigheder</PermissionDescription>
+        </PermissionNameDescription>
+        <Created>2016-02-03T13:14:00Z</Created>
+        <EffectiveFrom>2016-02-03T13:14:00Z</EffectiveFrom>
+        <EffectiveTo>2017-02-03T10:10:00Z</EffectiveTo>
+    </Delegation>
+</bms20160101:CreateDelegationsResponse>
