@@ -106,7 +106,7 @@
                     <configuration>
                         <properties>
                             <cargo.servlet.port>${functionaltest.serverport}</cargo.servlet.port>
-                            <cargo.jvmargs>-Dbemyndigelse.home=${project.parent.basedir}/bemyndigelse-shared/src/main/resources/bemyndigelse.properties -Dlog4j.configuration=file://${project.parent.basedir}/bemyndigelse-shared/src/main/resources/log4j.xml</cargo.jvmargs>
+                            <cargo.jvmargs>-Dbemyndigelse.home=${project.parent.basedir}/bemyndigelse-shared/src/main/resources/bemyndigelse.properties -Dlog4j.configuration=${project.parent.basedir}/bemyndigelse-shared/src/main/resources/log4j.xml</cargo.jvmargs>
                         </properties>
                     </configuration>
                 </configuration>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>3.1.1.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

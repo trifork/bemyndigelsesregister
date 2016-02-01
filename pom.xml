@@ -63,7 +63,7 @@
         <deployment.cargo.hostname>localhost</deployment.cargo.hostname>
         <deployment.pingURL>http://${deployment.cargo.hostname}:8085/health</deployment.pingURL>
         <deployment.serversettings>bms.localhost</deployment.serversettings>
-        <spring.version>3.2.4.RELEASE</spring.version>
+        <spring.version>4.2.4.RELEASE</spring.version>
     </properties>
 
     <profiles>
