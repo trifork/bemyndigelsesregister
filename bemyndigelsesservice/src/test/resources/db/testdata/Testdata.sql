@@ -10,7 +10,6 @@ REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES 
 
 ##Bemyndigelser
 REPLACE INTO `bemyndigelse` (
-        `id`,
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -26,7 +25,6 @@ REPLACE INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
-		1,
         'TestKode1',
         '1010101010',
         '1010101012',
@@ -43,7 +41,6 @@ REPLACE INTO `bemyndigelse` (
         NULL);
 
 REPLACE INTO `bemyndigelse` (
-        `id`,
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -59,7 +56,6 @@ REPLACE INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
-		2,
         'TestKode2',
         '1010101010',
         '1010101012',
@@ -76,7 +72,6 @@ REPLACE INTO `bemyndigelse` (
         NULL);
 
 REPLACE INTO `bemyndigelse` (
-        `id`,
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -92,7 +87,6 @@ REPLACE INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
-		3,
         'TestKode3',
         '1010101012',
         '1010101013',
@@ -108,9 +102,102 @@ REPLACE INTO `bemyndigelse` (
         '2000-05-22 02:15:00',
         NULL);
 
-REPLACE INTO `bemyndigelse_rettighed` (`bemyndigelse_id`, `rettighed_kode`) VALUES (1, 'R01');
-REPLACE INTO `bemyndigelse_rettighed` (`bemyndigelse_id`, `rettighed_kode`) VALUES (2, 'R01');
-REPLACE INTO `bemyndigelse_rettighed` (`bemyndigelse_id`, `rettighed_kode`) VALUES (3, 'R01');
+REPLACE INTO `bemyndigelse20` (
+  `id`,
+  `kode`,
+  `bemyndigende_cpr`,
+  `bemyndigede_cpr`,
+  `bemyndigede_cvr`,
+  `linked_system_kode`,
+  `arbejdsfunktion_kode`,
+  `status`,
+  `godkendelsesdato`,
+  `gyldig_fra`,
+  `gyldig_til`,
+  `versionsid`,
+  `sidst_modificeret`,
+  `sidst_modificeret_af`)
+VALUES (
+  1,
+  'TestKode1',
+  '1010101010',
+  '1010101012',
+  '1',
+  'triforktest',
+  'Laege',
+  'GODKENDT',
+  '2011-05-21 02:15:00',
+  '2011-05-21 23:59:59',
+  '2011-05-21 02:15:00',
+  0,
+  '2011-05-21 02:15:00',
+  NULL);
+
+REPLACE INTO `bemyndigelse20` (
+  `id`,
+  `kode`,
+  `bemyndigende_cpr`,
+  `bemyndigede_cpr`,
+  `bemyndigede_cvr`,
+  `linked_system_kode`,
+  `arbejdsfunktion_kode`,
+  `status`,
+  `godkendelsesdato`,
+  `gyldig_fra`,
+  `gyldig_til`,
+  `versionsid`,
+  `sidst_modificeret`,
+  `sidst_modificeret_af`)
+VALUES (
+  2,
+  'TestKode2',
+  '1010101010',
+  '1010101012',
+  '1',
+  'triforktest',
+  'Laege',
+  'GODKENDT',
+  '2011-05-22 02:15:00',
+  '2011-05-22 02:15:00',
+  '2011-05-22 02:15:00',
+  0,
+  '2011-05-22 02:15:00',
+  NULL);
+
+REPLACE INTO `bemyndigelse20` (
+  `id`,
+  `kode`,
+  `bemyndigende_cpr`,
+  `bemyndigede_cpr`,
+  `bemyndigede_cvr`,
+  `linked_system_kode`,
+  `arbejdsfunktion_kode`,
+  `status`,
+  `godkendelsesdato`,
+  `gyldig_fra`,
+  `gyldig_til`,
+  `versionsid`,
+  `sidst_modificeret`,
+  `sidst_modificeret_af`)
+VALUES (
+  3,
+  'TestKode3',
+  '1010101012',
+  '1010101013',
+  '1',
+  'triforktest',
+  'Laege',
+  'GODKENDT',
+  '2000-05-22 00:00:00',
+  '2000-05-22 23:59:59',
+  '2000-05-22 00:00:00',
+  0,
+  '2000-05-22 02:15:00',
+  NULL);
+
+REPLACE INTO `bemyndigelse20_rettighed` (id, `bemyndigelse20_id`, `rettighed_kode`) VALUES (42, 1, 'R01');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (2, 'R01');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (3, 'R01');
 
 REPLACE INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
 
