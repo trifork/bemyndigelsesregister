@@ -2,7 +2,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 REPLACE INTO domaene(kode) VALUES ('trifork-test');
 
-REPLACE INTO linked_system(domaene_id, kode) VALUES (1, 'Trifork test system');
+REPLACE INTO linked_system(domaene_id, kode, beskrivelse) VALUES (1, 'triforktest', 'Trifork test system');
 
 REPLACE INTO arbejdsfunktion(kode, beskrivelse, linked_system_id) values ('Laege', 'For unit test only', 1);
 REPLACE INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1);
@@ -10,6 +10,7 @@ REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES 
 
 ##Bemyndigelser
 REPLACE INTO `bemyndigelse` (
+        `id`,
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -25,11 +26,12 @@ REPLACE INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
+		1,
         'TestKode1',
         '1010101010',
         '1010101012',
         '1',
-        'Trifork test system',
+        'triforktest',
         'Laege',
         'R01',
         'GODKENDT',
@@ -41,6 +43,7 @@ REPLACE INTO `bemyndigelse` (
         NULL);
 
 REPLACE INTO `bemyndigelse` (
+        `id`,
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -56,11 +59,12 @@ REPLACE INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
+		2,
         'TestKode2',
         '1010101010',
         '1010101012',
         '1',
-        'Trifork test system',
+        'triforktest',
         'Laege',
         'R01',
         'GODKENDT',
@@ -72,6 +76,7 @@ REPLACE INTO `bemyndigelse` (
         NULL);
 
 REPLACE INTO `bemyndigelse` (
+        `id`,
         `kode`,
         `bemyndigende_cpr`,
         `bemyndigede_cpr`,
@@ -87,11 +92,12 @@ REPLACE INTO `bemyndigelse` (
         `sidst_modificeret`,
         `sidst_modificeret_af`)
   VALUES (
+		3,
         'TestKode3',
         '1010101012',
         '1010101013',
         '1',
-        'Trifork test system',
+        'triforktest',
         'Laege',
         'R01',
         'GODKENDT',
@@ -101,6 +107,10 @@ REPLACE INTO `bemyndigelse` (
         0,
         '2000-05-22 02:15:00',
         NULL);
+
+REPLACE INTO `bemyndigelse_rettighed` (`bemyndigelse_id`, `rettighed_kode`) VALUES (1, 'R01');
+REPLACE INTO `bemyndigelse_rettighed` (`bemyndigelse_id`, `rettighed_kode`) VALUES (2, 'R01');
+REPLACE INTO `bemyndigelse_rettighed` (`bemyndigelse_id`, `rettighed_kode`) VALUES (3, 'R01');
 
 REPLACE INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
 
