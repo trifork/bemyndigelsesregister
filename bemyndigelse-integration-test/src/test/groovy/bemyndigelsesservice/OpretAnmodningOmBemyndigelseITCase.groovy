@@ -18,7 +18,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                     "BemyndigedeCvr"('20000000')
                     "Arbejdsfunktion"("Laege")
                     "Rettighed"("R01")
-                    "System"("Trifork test system")
+                    "System"("triforktest")
                 }
             }
         }
@@ -35,7 +35,7 @@ class OpretAnmodningOmBemyndigelseITCase extends WebServiceSupport {
                         "BemyndigedeCvr"('20000000')
                         "Arbejdsfunktion"("Laege")
                         "Rettighed"("R01")
-                        "System"("Trifork test system")
+                        "System"("triforktest")
                     }
                 }
             }

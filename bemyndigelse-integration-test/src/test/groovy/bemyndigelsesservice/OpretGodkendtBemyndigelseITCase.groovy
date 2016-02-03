@@ -13,7 +13,7 @@ class OpretGodkendtBemyndigelseITCase extends WebServiceSupport {
                     "BemyndigendeCpr"('2006271866')
                     "BemyndigedeCpr"('1010101010')
                     "BemyndigedeCvr"('10101010')
-                    "System"('Trifork test system')
+                    "System"('triforktest')
                     "Arbejdsfunktion"('Laege')
                     "Rettighed"('R01')
                 }
