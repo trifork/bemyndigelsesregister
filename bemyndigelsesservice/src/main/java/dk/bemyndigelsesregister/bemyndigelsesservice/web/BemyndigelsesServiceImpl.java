@@ -21,7 +21,6 @@ import dk.nsi.bemyndigelse._2012._05._01.*;
 import dk.nsi.bemyndigelse._2016._01._01.*;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -275,14 +274,14 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
-                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode());
+                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelse.setSidstModificeret(now);
                 bemyndigelseDao.save(bemyndigelse);
                 response.getKode().add(bemyndigelse.getKode());
             }
             else {
-                logger.info("Bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
+                logger.info("Bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
 
         }

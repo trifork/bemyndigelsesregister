@@ -8,17 +8,17 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class DomainObject {
     @Id
-    private Long internalId;
+    private Long id;
     protected DateTime sidstModificeret;
     protected String sidstModificeretAf;
 
     //<editor-fold desc="GettersAndSetters">
-    public Long getInternalId() {
-        return internalId;
+    public Long getId() {
+        return id;
     }
 
-    public void setInternalId(Long internalId) {
-        this.internalId = internalId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public DateTime getSidstModificeret() {

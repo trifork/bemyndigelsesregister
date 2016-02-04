@@ -11,9 +11,9 @@ public class DelegatingSystem extends ExternalIdentifiedDomainObject {
     @ManyToOne
     private Domain domain;
 
-    public static DelegatingSystem createForTest(final String id) {
+    public static DelegatingSystem createForTest(final String uuid) {
         return new DelegatingSystem() {{
-            setId(id);
+            setUUID(uuid);
         }};
     }
 

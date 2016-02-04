@@ -183,9 +183,9 @@ public class Delegation extends ExternalIdentifiedDomainObject {
             type.setStatus(state == State.OPRETTET ? "Godkendt" : "Bestilt");
             type.setKode(getKode());
             type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
-            type.setArbejdsfunktion(role.getId());
+            type.setArbejdsfunktion(role.getUUID());
             type.setRettighed(permission.getPermissionId());
-            type.setSystem(delegatingSystem.getId());
+            type.setSystem(delegatingSystem.getUUID());
             type.setValidFrom(toXmlGregorianCalendar(effectiveFrom));
             type.setValidTo(toXmlGregorianCalendar(effectiveTo));
         }
@@ -203,9 +203,9 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         } else {
             type.setState(dk.nsi.bemyndigelse._2016._01._01.State.ANMODET);
         }
-        type.setDelegationId(getId());
+        type.setDelegationId(getUUID());
         dk.nsi.bemyndigelse._2016._01._01.Role xmlRole = new dk.nsi.bemyndigelse._2016._01._01.Role();
-        xmlRole.setRoleId(role.getId());
+        xmlRole.setRoleId(role.getUUID());
         xmlRole.setRoleDescription(role.getDescription());
         type.setRole(xmlRole);
         List<Bemyndigelser.Bemyndigelse> delegation = new LinkedList<>();
@@ -216,7 +216,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
             xmlPermission.setPermissionDescription("// TODO implementer at hente permissions fra id");
         }
         dk.nsi.bemyndigelse._2016._01._01.System xmlSystem = new dk.nsi.bemyndigelse._2016._01._01.System();
-        xmlSystem.setSystemId(delegatingSystem.getId());
+        xmlSystem.setSystemId(delegatingSystem.getUUID());
         xmlSystem.setSystemLongName("TODO implementer langt navn");
         type.setSystem(xmlSystem);
         type.setEffectiveFrom(toXmlGregorianCalendar(effectiveFrom));

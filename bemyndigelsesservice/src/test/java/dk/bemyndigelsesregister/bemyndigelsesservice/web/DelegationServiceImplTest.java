@@ -1,23 +1,18 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import com.trifork.dgws.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Role;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.DomainDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2012._05._01.*;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
-import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.junit.internal.matchers.TypeSafeMatcher;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
 import static org.junit.internal.matchers.IsCollectionContaining.hasItem;
 import static org.mockito.Mockito.*;
@@ -135,11 +129,11 @@ public class DelegationServiceImplTest {
         delegation.setDelegateeCvr(delegateeCvrText);
 
         final DelegatingSystem system = new DelegatingSystem();
-        system.setId(this.systemId);
+        system.setUUID(this.systemId);
         delegation.setDelegatingSystem(system);
 
         final Role role = new Role();
-        role.setId(this.roleId);
+        role.setUUID(this.roleId);
         role.setDescription(this.roleDescription);
         delegation.setRole(role);
 

@@ -38,9 +38,9 @@ public class Permission extends ExternalIdentifiedDomainObject {
 
     //</editor-fold>
 
-    public static Permission createForTest(final String id) {
+    public static Permission createForTest(final String uuid) {
         return new Permission() {{
-            setId(id);
+            setUUID(uuid);
         }};
     }
 }

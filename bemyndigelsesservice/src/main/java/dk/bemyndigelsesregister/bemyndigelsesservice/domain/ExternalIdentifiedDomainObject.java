@@ -5,7 +5,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class ExternalIdentifiedDomainObject extends DomainObject {
     private String kode;
-    private String id;
+    private String uuid;
 
     public String getKode() {
         return kode;
@@ -15,11 +15,11 @@ public abstract class ExternalIdentifiedDomainObject extends DomainObject {
         this.kode = kode;
     }
 
-    public String getId() {
-        return id;
+    public String getUUID() {
+        return uuid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUUID(String id) {
+        this.uuid = id;
     }
 }

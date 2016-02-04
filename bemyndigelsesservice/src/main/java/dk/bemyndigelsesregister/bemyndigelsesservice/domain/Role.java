@@ -30,9 +30,9 @@ public class Role extends ExternalIdentifiedDomainObject {
     }
     //</editor-fold>
 
-    public static Role createForTest(final String id) {
+    public static Role createForTest(final String uuid) {
         return new Role() {{
-            setId(id);
+            setUUID(uuid);
         }};
     }
 

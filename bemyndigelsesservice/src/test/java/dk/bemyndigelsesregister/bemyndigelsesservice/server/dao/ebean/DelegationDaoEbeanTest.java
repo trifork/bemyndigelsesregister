@@ -44,7 +44,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             d.setDelegatingSystem(systemDao.get(1));
             d.setState(State.OPRETTET);
             d.setDelegatingSystem(new DelegatingSystem() {{
-                setId("Spas");
+                setUUID("Spas");
             }});
 
             DelegationPermission permission = new DelegationPermission();

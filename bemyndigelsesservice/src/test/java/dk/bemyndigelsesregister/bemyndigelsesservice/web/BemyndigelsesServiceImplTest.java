@@ -25,8 +25,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -330,7 +328,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canDeleteBemyndigelse() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setInternalId(1l);
+            setId(1l);
             setKode("TestKode1");
             setGyldigTil(now.plusYears(1));
             setBemyndigendeCpr("Cpr 1");
@@ -352,7 +350,7 @@ public class BemyndigelsesServiceImplTest {
     @Test(expected = IllegalAccessError.class)
     public void canNotDeleteBemyndigelseWithAnotherCpr() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setInternalId(1l);
+            setId(1l);
             setKode("TestKode1");
             setGyldigTil(now.plusYears(1));
             setBemyndigendeCpr("Cpr 1");
@@ -371,7 +369,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void willNotDeleteBemyndigelseWithPastGyldigTil() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setInternalId(1l);
+            setId(1l);
             setKode("TestKode1");
             setGyldigTil(now.minusDays(1));
             setBemyndigendeCpr("Cpr 1");
