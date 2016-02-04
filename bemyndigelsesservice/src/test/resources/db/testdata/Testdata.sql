@@ -5,7 +5,10 @@ REPLACE INTO domaene(kode) VALUES ('trifork-test');
 REPLACE INTO linked_system(domaene_id, kode, beskrivelse) VALUES (1, 'triforktest', 'Trifork test system');
 
 REPLACE INTO arbejdsfunktion(kode, beskrivelse, linked_system_id) values ('Laege', 'For unit test only', 1);
+
 REPLACE INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1);
+REPLACE INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R02', 'Testrettighed2', 1);
+
 REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES (1, 1);
 
 ##Bemyndigelser
@@ -195,7 +198,7 @@ VALUES (
   '2000-05-22 02:15:00',
   NULL);
 
-REPLACE INTO `bemyndigelse20_rettighed` (id, `bemyndigelse20_id`, `rettighed_kode`) VALUES (42, 1, 'R01');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (1, 'R01');
 REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (2, 'R01');
 REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (3, 'R01');
 

@@ -61,7 +61,7 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
 
             assertEquals("Efter oprettelse forventes at antal bemyndigelser er steget med 1", n + 1, dao.list().size());
         } finally {
-            ebeanServer.rollbackTransaction();
+            ebeanServer.endTransaction();;
         }
     }
 
@@ -77,7 +77,7 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
             bemyndigelse = dao.get(1);
             assertTrue("Tekst \"" + bemyndigelse.getSidstModificeretAf() + "\" skal starte med \"TestCase was here\"", bemyndigelse.getSidstModificeretAf().startsWith("TestCase was here"));
         } finally {
-            ebeanServer.rollbackTransaction();
+            ebeanServer.endTransaction();
         }
     }
 

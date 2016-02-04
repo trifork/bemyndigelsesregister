@@ -15,7 +15,8 @@ public class RettighedDaoEbeanTest extends DaoUnitTestSupport {
                 linkedSystemDao.get(1)
         );
 
-        assertEquals(1, rettigheder.size());
+        assertEquals(2, rettigheder.size());
         assertEquals("R01", rettigheder.get(0).getKode());
+        assertEquals("R02", rettigheder.get(1).getKode());
     }
 }

@@ -122,11 +122,6 @@ public class Bemyndigelse20 extends ExternalIdentifiedDomainObject {
 
     @Override
     public String toString() {
-        Set<Bemyndigelse20Rettighed> rettigheder = this.getRettigheder();
-        for (Bemyndigelse20Rettighed r : rettigheder)
-            System.out.println(r.getRettighedKode());
-
-
         return "Bemyndigelse20{" +
                 "bemyndigendeCpr='" + bemyndigendeCpr + '\'' +
                 ", bemyndigedeCpr='" + bemyndigedeCpr + '\'' +
