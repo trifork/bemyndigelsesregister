@@ -24,7 +24,7 @@ public class MessageRetransmissionDaoEbeanTest extends DaoUnitTestSupport {
         String messageID = UUID.randomUUID().toString();
         MessageRetransmission messageRetransmission = new MessageRetransmission(messageID, "TEST", "V2");
         dao.save(messageRetransmission);
-        assertNotNull(messageRetransmission.getId());
+        assertNotNull(messageRetransmission.getInternalId());
         dao.save(new MessageRetransmission(messageID, "TEST", "V1"));
 
         MessageRetransmission foundMessageRetransmission = dao.getByMessageIDAndImplementationBuild(messageID, "V2");

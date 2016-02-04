@@ -1,6 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Domaene;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.RettighedDao;

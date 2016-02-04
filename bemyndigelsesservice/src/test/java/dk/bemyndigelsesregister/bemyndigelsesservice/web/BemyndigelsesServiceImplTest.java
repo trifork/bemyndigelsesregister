@@ -330,7 +330,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void canDeleteBemyndigelse() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setId(1l);
+            setInternalId(1l);
             setKode("TestKode1");
             setGyldigTil(now.plusYears(1));
             setBemyndigendeCpr("Cpr 1");
@@ -352,7 +352,7 @@ public class BemyndigelsesServiceImplTest {
     @Test(expected = IllegalAccessError.class)
     public void canNotDeleteBemyndigelseWithAnotherCpr() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setId(1l);
+            setInternalId(1l);
             setKode("TestKode1");
             setGyldigTil(now.plusYears(1));
             setBemyndigendeCpr("Cpr 1");
@@ -371,7 +371,7 @@ public class BemyndigelsesServiceImplTest {
     @Test
     public void willNotDeleteBemyndigelseWithPastGyldigTil() throws Exception {
         Bemyndigelse bemyndigelse = new Bemyndigelse() {{
-            setId(1l);
+            setInternalId(1l);
             setKode("TestKode1");
             setGyldigTil(now.minusDays(1));
             setBemyndigendeCpr("Cpr 1");

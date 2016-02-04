@@ -1,16 +1,23 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.RoleDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.nsi.bemyndigelse._2016._01._01.Delegation;
+import dk.nsi.bemyndigelse._2016._01._01.Permission;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
@@ -28,6 +35,9 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
 
     @Inject
     RettighedDao rettighedDao;
+
+    @Inject
+    PermissionDao permissionDao;
 
     @Inject
     LinkedSystemDao linkedSystemDao;

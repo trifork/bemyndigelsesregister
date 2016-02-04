@@ -33,6 +33,10 @@ public abstract class SupportDao<T> {
         return query().where().eq("kode", kode).findUnique();
     }
 
+    public T findById(String id) {
+        return query().where().eq("kode", id).findUnique();
+    }
+
     protected Query<T> query() {
         return ebeanServer.find(klass);
     }

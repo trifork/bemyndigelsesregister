@@ -18,17 +18,17 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     }
 
     @Override
-    public List<Delegation> findByBemyndigendeCpr(String bemyndigendeCpr) {
-        return query().where().eq("bemyndigende_cpr", bemyndigendeCpr).findList();
+    public List<Delegation> findByDelegatorCpr(String delegatorCpr) {
+        return query().where().eq("bemyndigende_cpr", delegatorCpr).findList();
     }
 
     @Override
-    public List<Delegation> findByBemyndigedeCpr(String bemyndigedeCpr) {
-        return query().where().eq("bemyndigede_cpr", bemyndigedeCpr).findList();
+    public List<Delegation> findByDelegateeCpr(String delegateeCpr) {
+        return query().where().eq("bemyndigede_cpr", delegateeCpr).findList();
     }
 
     @Override
-    public List<Delegation> findByKoder(Collection<String> bemyndigelsesKoder) {
-        return query().where().in("kode", bemyndigelsesKoder).findList();
+    public List<Delegation> findByIds(Collection<String> delegationIds) {
+        return query().where().in("kode", delegationIds).findList();
     }
 }
