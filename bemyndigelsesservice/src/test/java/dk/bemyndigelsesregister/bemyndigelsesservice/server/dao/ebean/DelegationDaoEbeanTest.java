@@ -1,14 +1,19 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import com.avaje.ebean.EbeanServer;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -42,23 +47,24 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             d.setEffectiveFrom(new DateTime(System.currentTimeMillis()));
             d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
             d.setDelegatingSystem(systemDao.get(1));
-            d.setState(State.OPRETTET);
+            d.setState(State.GODKENDT);
             d.setDelegatingSystem(new DelegatingSystem() {{
-                setUUID("Spas");
+                setDomainId("Spas");
             }});
 
             DelegationPermission permission = new DelegationPermission();
             permission.setDelegation(d);
             permission.setPermissionId(delegationPermissionDao.get(1).getPermissionId());
 
-            Set<DelegationPermission> permissions = d.getPermissions();
+            Set<DelegationPermission> permissions = d.getDelegationPermissions();
             permissions.add(permission);
 
             dao.save(d);
 
             assertEquals("Efter oprettelse forventes at antal bemyndigelser er steget med 1", n + 1, dao.list().size());
         } finally {
-            ebeanServer.endTransaction();;
+            ebeanServer.endTransaction();
+            ;
         }
     }
 
@@ -107,7 +113,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindByKoder() throws Exception {
-        final List<Delegation> bemyndigelser = dao.findByIds(Arrays.asList("TestKode1", "TestKode3"));
+        final List<Delegation> bemyndigelser = dao.findByDomainIds(Arrays.asList("TestKode1", "TestKode3"));
 
         assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
 

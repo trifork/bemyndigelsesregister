@@ -1,13 +1,11 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
-import dk.nsi.bemyndigelse._2016._01._01.*;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="delegerbarRettighed")
+@Table(name = "delegerbarRettighed")
 public class DelegatablePermission extends DomainObject {
     @ManyToOne
     private Role role;
@@ -15,11 +13,11 @@ public class DelegatablePermission extends DomainObject {
     @ManyToOne
     private Permission permissionId;
 
-    public Permission getPermission() {
+    public Permission getPermissionId() {
         return permissionId;
     }
 
-    public void setPermission(Permission permissionId) {
+    public void setPermissionId(Permission permissionId) {
         this.permissionId = permissionId;
     }
 

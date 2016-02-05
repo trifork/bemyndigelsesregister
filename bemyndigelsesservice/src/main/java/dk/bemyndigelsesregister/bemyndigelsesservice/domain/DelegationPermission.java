@@ -7,13 +7,13 @@ import javax.persistence.*;
  * Created by obj on 02-02-2016.
  */
 @Entity
-@Table(name="bemyndigelse20_rettighed")
+@Table(name = "bemyndigelse20_rettighed")
 public class DelegationPermission extends DomainObject {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bemyndigelse20_id")
     private Delegation delegation;
 
-    @Column(name="rettighedKode")
+    @Column(name = "rettighed_kode")
     private String permissionId;
 
     public DelegationPermission() {

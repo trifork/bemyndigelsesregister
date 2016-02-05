@@ -38,7 +38,7 @@ public class DelegationManagerImpl implements DelegationManager {
     PermissionDao permissionDao;
 
     @Inject
-    LinkedSystemDao linkedSystemDao;
+    SystemDao systemDao;
 
     @Override
     public Delegation createDelegation(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
@@ -113,15 +113,14 @@ public class DelegationManagerImpl implements DelegationManager {
             throw new IllegalArgumentException("EffectiveFrom=" + validFrom + " must be before effectiveTo=" + validTo);
         }
 
-        DelegatingSystem delegatingSystem = null; // linkedSystemDao.findByKode(system); TODO OBJ: Kari, mangler der en delegatingSystemDao, eller hvad?
         final Delegation delegation = new Delegation();
         delegation.setKode(systemService.createUUIDString());
-        delegation.setDelegatingSystem(delegatingSystem);
+        delegation.setDelegatingSystem(systemDao.findByDomainId(system));
         delegation.setDelegatorCpr(delegatorCpr);
         delegation.setDelegateeCpr(delegateeCpr);
         delegation.setDelegateeCvr(delegateeCvr);
 
-        delegation.setRole(roleDao.findById(system, role));
+        delegation.setRole(roleDao.findByDomainId(system, role));
         delegation.setState(state);
 
         if (permissions != null && !permissions.isEmpty()) {
@@ -130,7 +129,7 @@ public class DelegationManagerImpl implements DelegationManager {
             for (String permission : permissionCodeSet) {
                 DelegationPermission dp = new DelegationPermission();
                 dp.setDelegation(delegation);
-                dp.setPermissionId(permissionDao.findById(delegatingSystem, permission).getKode());
+                dp.setPermissionId(permissionDao.findByDomainId(system, permission).getKode());
 
                 permissionSet.add(dp);
             }

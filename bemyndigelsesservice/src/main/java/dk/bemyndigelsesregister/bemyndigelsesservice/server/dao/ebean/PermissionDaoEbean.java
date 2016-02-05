@@ -1,6 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.PermissionDao;
 import org.springframework.stereotype.Repository;
 
@@ -14,12 +14,12 @@ public class PermissionDaoEbean extends SupportDao<Permission> implements Permis
     }
 
     @Override
-    public Permission findById(DelegatingSystem delegatingSystem, String id) {
-        return query().where().eq("linkedSystem", delegatingSystem).eq("kode", id).findUnique();
+    public Permission findByDomainId(String delegatingSystemId, String id) {
+        return query().where().eq("linkedSystem", delegatingSystemId).eq("kode", id).findUnique();
     }
 
     @Override
-    public List<Permission> findBy(DelegatingSystem delegatingSystem) {
-        return query().where().eq("linkedSystem", delegatingSystem).findList();
+    public List<Permission> findBySystem(String delegatingSystemId) {
+        return query().where().eq("linkedSystem", delegatingSystemId).findList();
     }
 }

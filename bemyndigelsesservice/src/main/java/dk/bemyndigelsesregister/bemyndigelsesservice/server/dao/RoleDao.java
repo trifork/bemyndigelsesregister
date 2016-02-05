@@ -9,7 +9,7 @@ public interface RoleDao {
 
     void save(Role role);
 
-    Role findById(String systemid, String id);
+    Role findByDomainId(String systemid, String id);
 
-    List<Role> findBySystem(System system);
+    List<Role> findBySystem(String systemId);
 }

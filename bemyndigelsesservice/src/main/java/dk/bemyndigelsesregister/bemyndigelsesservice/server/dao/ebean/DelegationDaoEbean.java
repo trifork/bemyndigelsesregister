@@ -2,7 +2,6 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
@@ -52,5 +51,10 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     @Override
     public List<Delegation> findByIds(Collection<String> delegationIds) {
         return query().where().in("kode", delegationIds).findList();
+    }
+
+    @Override
+    public List<Delegation> findByDomainIds(Collection<String> domainIds) {
+        return query().where().in("kode", domainIds).findList();
     }
 }

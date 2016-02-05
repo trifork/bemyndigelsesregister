@@ -1,25 +1,18 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
-import com.trifork.dgws.CareProviderIdType;
-import com.trifork.dgws.DgwsRequestContext;
-import com.trifork.dgws.IdCardData;
-import com.trifork.dgws.IdCardSystemLog;
-import com.trifork.dgws.IdCardType;
-import com.trifork.dgws.IdCardUserLog;
-import com.trifork.dgws.WhitelistChecker;
+import com.trifork.dgws.*;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
-import dk.nsi.bemyndigelse._2016._01._01.*;
+import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
+import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
@@ -66,8 +59,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     DgwsRequestContext dgwsRequestContext;
     @Inject
     ServiceTypeMapper typeMapper;
-    
-    @Inject WhitelistChecker whitelistChecker;
+
+    @Inject
+    WhitelistChecker whitelistChecker;
 
     public BemyndigelsesServiceImpl() {
     }
@@ -82,7 +76,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         Collection<Bemyndigelse> createdBemyndigelser = new ArrayList<Bemyndigelse>();
 
         for (OpretAnmodningOmBemyndigelserRequest.Anmodning anmodning : request.getAnmodning()) {
-        	authorizeOperationForCpr("opretAnmodningOmBemyndigelser", "IDCard CPR was different from BemyndigedeCpr", anmodning.getBemyndigedeCpr());
+            authorizeOperationForCpr("opretAnmodningOmBemyndigelser", "IDCard CPR was different from BemyndigedeCpr", anmodning.getBemyndigedeCpr());
             logger.debug("Creating Bemyndigelse for anmodning=" + anmodning.toString());
             final Bemyndigelse bemyndigelse = bemyndigelseManager.opretAnmodningOmBemyndigelse(
                     anmodning.getSystem(),
@@ -116,7 +110,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         Collection<Bemyndigelse> bemyndigelser = bemyndigelseManager.godkendBemyndigelser(bemyndigelsesKoder);
 
         for (Bemyndigelse bemyndigelse : bemyndigelser) {
-        	authorizeOperationForCpr("godkendBemyndigelse", "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
+            authorizeOperationForCpr("godkendBemyndigelse", "IDCard CPR var forskelligt fra BemyndigendeCPR på bemyndigelse med koden " + bemyndigelse.getKode(), bemyndigelse.getBemyndigendeCpr());
         }
 
         final GodkendBemyndigelseResponse response = new GodkendBemyndigelseResponse();
@@ -142,12 +136,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             final Bemyndigelse bemyndigelse = bemyndigelseDao.findByKode(request.getKode());
             foundBemyndigelser = singletonList(bemyndigelse);
             authorizeOperationForCpr("hentBemyndigelser", "IDCard CPR was not found in bemyndigelse", bemyndigelse.getBemyndigendeCpr(), bemyndigelse.getBemyndigedeCpr());
-        }
-        else if (request.getBemyndigendeCpr() != null) {
+        } else if (request.getBemyndigendeCpr() != null) {
             authorizeOperationForCpr("hentBemyndigelser", "IDCard CPR was not equal to BemyndigendeCpr", request.getBemyndigendeCpr());
             foundBemyndigelser = bemyndigelseDao.findByBemyndigendeCpr(request.getBemyndigendeCpr());
-        }
-        else if (request.getBemyndigedeCpr() != null) {
+        } else if (request.getBemyndigedeCpr() != null) {
             authorizeOperationForCpr("hentBemyndigelser", "IDCard CPR was not equal to BemyndigedeCpr", request.getBemyndigedeCpr());
             foundBemyndigelser = bemyndigelseDao.findByBemyndigedeCpr(request.getBemyndigedeCpr());
         }
@@ -167,34 +159,31 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }};
     }
 
-    //TODO KRS check that createDelegation check that state is "Anmodet"
+    //TODO KRS check that createDelegation check that state is "BESTILT"
     void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
-    	Set<String> authorizedCprSet = new HashSet<String>(Arrays.asList(authorizedCprs));
-    	IdCardData idCardData = dgwsRequestContext.getIdCardData();
-    	if(idCardData.getIdCardType() == IdCardType.SYSTEM) {
-    		IdCardSystemLog systemLog = dgwsRequestContext.getIdCardSystemLog();
-    		if(systemLog.getCareProviderIdType() != CareProviderIdType.CVR_NUMBER) {
-    	        throw new IllegalAccessError("Attempted to access operation using system id card, but the CareProviderIdType was not CVR, it was " + systemLog.getCareProviderIdType());
-    		}
-    		String cvr = systemLog.getCareProviderId();
-			if(!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
-    	        throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR " + cvr);
-    		}
-			return;
-    	}
-    	else if (idCardData.getIdCardType() == IdCardType.USER) {
-        	IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
-        	if(userLog != null && authorizedCprSet.contains(userLog.cpr)) {
-        		return;
-        	}
-        	else {
-        		logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: " +userLog.cpr);
+        Set<String> authorizedCprSet = new HashSet<String>(Arrays.asList(authorizedCprs));
+        IdCardData idCardData = dgwsRequestContext.getIdCardData();
+        if (idCardData.getIdCardType() == IdCardType.SYSTEM) {
+            IdCardSystemLog systemLog = dgwsRequestContext.getIdCardSystemLog();
+            if (systemLog.getCareProviderIdType() != CareProviderIdType.CVR_NUMBER) {
+                throw new IllegalAccessError("Attempted to access operation using system id card, but the CareProviderIdType was not CVR, it was " + systemLog.getCareProviderIdType());
+            }
+            String cvr = systemLog.getCareProviderId();
+            if (!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
+                throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR " + cvr);
+            }
+            return;
+        } else if (idCardData.getIdCardType() == IdCardType.USER) {
+            IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
+            if (userLog != null && authorizedCprSet.contains(userLog.cpr)) {
+                return;
+            } else {
+                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: " + userLog.cpr);
                 throw new IllegalAccessError(errorMessage);
-        	}
-    	}
-    	else {
-    		throw new IllegalAccessError("Could not authorize ID card, it was neither a user or system id card");
-    	}
+            }
+        } else {
+            throw new IllegalAccessError("Could not authorize ID card, it was neither a user or system id card");
+        }
     }
 
     public static dk.nsi.bemyndigelse._2012._05._01.Bemyndigelse toJaxbType(final Bemyndigelse bem) {
@@ -269,14 +258,13 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
-                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode());
+                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getDomainId() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelse.setSidstModificeret(now);
                 bemyndigelseDao.save(bemyndigelse);
                 response.getKode().add(bemyndigelse.getKode());
-            }
-            else {
-                logger.info("Bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
+            } else {
+                logger.info("Bemyndigelse with id=" + bemyndigelse.getDomainId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
 
         }
@@ -298,7 +286,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 Domaene domaene = domaeneDao.findByKode(jaxbArbejdsfunktion.getDomaene());
                 LinkedSystem linkedSystem = linkedSystemDao.findByKode(jaxbArbejdsfunktion.getSystem());
                 Arbejdsfunktion arbejdsfunktion = arbejdsfunktionDao.findByKode(linkedSystem, jaxbArbejdsfunktion.getArbejdsfunktion());
-                if(arbejdsfunktion != null) {
+                if (arbejdsfunktion != null) {
                     logger.info("Updating arbejdsfunktion=" + jaxbArbejdsfunktion);
                 } else {
                     logger.info("Adding arbejdsfunktion=" + jaxbArbejdsfunktion);
@@ -307,7 +295,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 arbejdsfunktion.setKode(jaxbArbejdsfunktion.getArbejdsfunktion());
                 arbejdsfunktion.setBeskrivelse(jaxbArbejdsfunktion.getBeskrivelse());
                 arbejdsfunktion.setLinkedSystem(linkedSystem);
-                
+
                 arbejdsfunktionDao.save(arbejdsfunktion);
             }
         }
@@ -317,7 +305,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 LinkedSystem linkedSystem = linkedSystemDao.findByKode(jaxbRettighed.getSystem());
 
                 Rettighed rettighed = rettighedDao.findByKode(linkedSystem, jaxbRettighed.getRettighed());
-                if(rettighed != null) {
+                if (rettighed != null) {
                     logger.info("Updating rettighed=" + jaxbRettighed);
                 } else {
                     logger.info("Adding rettighed=" + jaxbRettighed);
@@ -326,7 +314,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 rettighed.setKode(jaxbRettighed.getRettighed());
                 rettighed.setBeskrivelse(jaxbRettighed.getBeskrivelse());
                 rettighed.setLinkedSystem(linkedSystem);
-                
+
                 rettighedDao.save(rettighed);
             }
         }
@@ -375,7 +363,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             // TODO KRS can also be done by delegatee
             authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
             logger.debug("Creating Delegation: " + createDelegation.toString());
-
             final Delegation delegation = delegationManager.createDelegation(
                     createDelegation.getSystemId(),
                     createDelegation.getDelegatorCpr(),
@@ -386,10 +373,9 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));
+            logger.debug("Got delegation with domain id = " + delegation.getDomainId());
 
-            logger.debug("Got bemyndigelse with kode=" + delegation.getKode());
             delegations.add(delegation);
-
         }
 
         final CreateDelegationsResponse response = new CreateDelegationsResponse();

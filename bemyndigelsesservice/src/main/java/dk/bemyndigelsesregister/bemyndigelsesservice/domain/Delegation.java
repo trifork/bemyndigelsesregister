@@ -11,7 +11,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * BEM 2.0 bemyndigelse
@@ -19,42 +18,48 @@ import java.util.TreeSet;
  */
 
 @Entity
-@Table(name="bemyndigelse20")
+@Table(name = "bemyndigelse20")
 public class Delegation extends ExternalIdentifiedDomainObject {
     private static DatatypeFactory datatypeFactory;
+
     static {
         try {
-            datatypeFactory= DatatypeFactory.newInstance();
+            datatypeFactory = DatatypeFactory.newInstance();
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }
     }
-    protected String delegationId;
+
+    @Column(name = "bemyndigende_cpr")
     protected String delegatorCpr;
+    @Column(name = "bemyndigede_cpr")
     protected String delegateeCpr;
+    @Column(name = "bemyndigede_cvr")
     protected String delegateeCvr;
+
+
+    @ManyToOne
+    @JoinColumn(name = "linked_system_kode")
     protected DelegatingSystem delegatingSystem;
+    @Column(name = "arbejdsfunktion_kode")
     protected Role role;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     protected State state;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @Column(name = "rettighed_kode")
     protected Set<DelegationPermission> delegationPermissions;
+    @Column(name = "godkendelsesdato")
     protected DateTime created;
+    @Column(name = "gyldig_fra")
     protected DateTime effectiveFrom;
+    @Column(name = "gyldig_til")
     protected DateTime effectiveTo;
     private int versionsid;
 
     public Delegation() {
-    }
-
-    public String getDelegationId() {
-        return delegationId;
-    }
-
-    public void setDelegationId(String value) {
-        this.delegationId = value;
     }
 
     public String getDelegatorCpr() {
@@ -76,15 +81,15 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     public String getDelegateeCvr() {
         return delegateeCvr;
     }
-    
+
     public void setDelegateeCvr(String value) {
         this.delegateeCvr = value;
     }
-    
+
     public DelegatingSystem getDelegatingSystem() {
         return delegatingSystem;
     }
-    
+
     public void setDelegatingSystem(DelegatingSystem value) {
         this.delegatingSystem = value;
     }
@@ -92,24 +97,17 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     public Role getRole() {
         return role;
     }
-    
+
     public void setRole(Role value) {
         this.role = value;
     }
-    
+
     public State getState() {
         return state;
     }
 
     public void setState(State value) {
         this.state = value;
-    }
-
-    public Set<DelegationPermission> getPermissions() {
-        if (delegationPermissions == null) {
-            delegationPermissions = new TreeSet<>();
-        }
-        return this.delegationPermissions;
     }
 
     public DateTime getCreated() {
@@ -154,7 +152,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
 
     @Override
     public String toString() {
-        Set<DelegationPermission> permissions = this.getPermissions();
+        Set<DelegationPermission> permissions = this.getDelegationPermissions();
         for (DelegationPermission permission : permissions)
             java.lang.System.out.println(permission.getPermissionId());
 
@@ -176,6 +174,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     /**
      * Bruges tilsyneladende kun til stamdata eksportering
      * TODO hvorfor er så mange felter null?
+     *
      * @return
      */
     public List<Bemyndigelser.Bemyndigelse> toBemyndigelseType() {
@@ -186,13 +185,13 @@ public class Delegation extends ExternalIdentifiedDomainObject {
             type.setBemyndigedeCvr(delegateeCpr);
             type.setBemyndigendeCpr(delegateeCvr);
             type.setCreatedDate(toXmlGregorianCalendar(created));
-            type.setGodkendelsesdato(state==State.OPRETTET ? toXmlGregorianCalendar(created) : null);
-            type.setStatus(state == State.OPRETTET ? "Godkendt" : "Bestilt");
+            type.setGodkendelsesdato(state == State.GODKENDT ? toXmlGregorianCalendar(created) : null);
+            type.setStatus(state == State.GODKENDT ? "Godkendt" : "Bestilt");
             type.setKode(getKode());
             type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
-            type.setArbejdsfunktion(role.getUUID());
+            type.setArbejdsfunktion(role.getDomainId());
             type.setRettighed(permission.getPermissionId());
-            type.setSystem(delegatingSystem.getUUID());
+            type.setSystem(delegatingSystem.getDomainId());
             type.setValidFrom(toXmlGregorianCalendar(effectiveFrom));
             type.setValidTo(toXmlGregorianCalendar(effectiveTo));
         }
@@ -205,15 +204,10 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         type.setDelegatorCpr(delegateeCpr);
         type.setDelegateeCvr(delegateeCvr);
         type.setCreated(toXmlGregorianCalendar(created));
-        if (state == State.OPRETTET) {
-            type.setState(dk.nsi.bemyndigelse._2016._01._01.State.OPRETTET);
-        } else {
-            type.setState(dk.nsi.bemyndigelse._2016._01._01.State.ANMODET);
-        }
-        type.setDelegationId(getUUID());
-
+        type.setState(state == State.GODKENDT ? dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT : dk.nsi.bemyndigelse._2016._01._01.State.BESTILT);
+        type.setDelegationId(getDomainId());
         dk.nsi.bemyndigelse._2016._01._01.Role xmlRole = new dk.nsi.bemyndigelse._2016._01._01.Role();
-        xmlRole.setRoleId(role.getUUID());
+        xmlRole.setRoleId(role.getDomainId());
         xmlRole.setRoleDescription(role.getDescription());
         type.setRole(xmlRole);
         List<Bemyndigelser.Bemyndigelse> delegation = new LinkedList<>();
@@ -224,7 +218,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
             xmlPermission.setPermissionDescription("// TODO implementer at hente permissions fra id");
         }
         dk.nsi.bemyndigelse._2016._01._01.System xmlSystem = new dk.nsi.bemyndigelse._2016._01._01.System();
-        xmlSystem.setSystemId(delegatingSystem.getUUID());
+        xmlSystem.setSystemId(delegatingSystem.getDomainId());
         xmlSystem.setSystemLongName("TODO implementer langt navn");
 
         type.setSystem(xmlSystem);
@@ -237,5 +231,4 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     private XMLGregorianCalendar toXmlGregorianCalendar(DateTime dateTime) {
         return datatypeFactory.newXMLGregorianCalendar(new DateTime(dateTime, DateTimeZone.UTC).toGregorianCalendar());
     }
-
 }

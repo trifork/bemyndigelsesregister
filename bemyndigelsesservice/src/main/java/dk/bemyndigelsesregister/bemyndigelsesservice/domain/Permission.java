@@ -6,19 +6,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="rettighed")
+@Table(name = "rettighed")
 public class Permission extends ExternalIdentifiedDomainObject {
     @ManyToOne
-    @Column(name="linkedSystem")
+    @Column(name = "linkedSystem")
     private DelegatingSystem delegatingSystem;
 
-    @Column(name="beskrivelse")
+    @Column(name = "beskrivelse")
     private String description;
 
     public Permission() {
     }
-
-    //<editor-fold desc="GettersAndSetters">
 
     public String getDescription() {
         return description;
@@ -28,19 +26,17 @@ public class Permission extends ExternalIdentifiedDomainObject {
         this.description = description;
     }
 
-    public void setSystem(DelegatingSystem delegatingSystem) {
+    public void setDelegatingSystem(DelegatingSystem delegatingSystem) {
         this.delegatingSystem = delegatingSystem;
     }
 
-    public DelegatingSystem getSystem() {
+    public DelegatingSystem getDelegatingSystem() {
         return delegatingSystem;
     }
 
-    //</editor-fold>
-
-    public static Permission createForTest(final String uuid) {
+    public static Permission createForTest(final String domainId) {
         return new Permission() {{
-            setUUID(uuid);
+            setDomainId(domainId);
         }};
     }
 }
