@@ -16,6 +16,6 @@ public class DomainDaoEbean extends SupportDao<Domain> implements DomainDao {
 
     @Override
     public Domain findById(String domainId) {
-        return null;
+        return null; // TODO OBJ fix
     }
 }

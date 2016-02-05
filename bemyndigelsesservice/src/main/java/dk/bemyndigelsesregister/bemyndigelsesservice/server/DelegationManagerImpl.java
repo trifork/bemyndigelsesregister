@@ -123,10 +123,6 @@ public class DelegationManagerImpl implements DelegationManager {
 
         delegation.setRole(roleDao.findById(system, role));
         delegation.setState(state);
-        /*
-        if(state == Status.GODKENDT)
-             // bemyndigelse.setGodkendelsesdato(now); TODO OBJ - Kari: den hedder nu created
-*/
 
         if (permissions != null && !permissions.isEmpty()) {
             Set<String> permissionCodeSet = new HashSet<>(permissions); // ensures uniqueness
@@ -144,6 +140,7 @@ public class DelegationManagerImpl implements DelegationManager {
         delegation.setEffectiveFrom(validFrom);
         delegation.setEffectiveTo(validTo);
 
+        delegation.setCreated(now);
         delegation.setSidstModificeret(now);
         delegation.setSidstModificeretAf("Service");
         delegation.setVersionsid(1);

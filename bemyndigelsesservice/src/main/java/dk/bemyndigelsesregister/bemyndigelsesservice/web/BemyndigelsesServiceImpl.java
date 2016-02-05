@@ -383,7 +383,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getDelegateeCvr(),
                     createDelegation.getRoleId(),
                     State.valueOf(createDelegation.getState().value()),
-                    new LinkedList<String>(), // createDelegation.getListOfPermissionIds(), TODO OBJ Fix
+                    createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));
 
