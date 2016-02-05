@@ -40,6 +40,8 @@ public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTest
     PermissionDao permissionDao;
     @Inject
     DelegationPermissionDao delegationPermissionDao;
+    @Inject
+    DelegatingSystemDao delegatingSystemDao;
 
     @Inject
     WhitelistDao whitelistDao;

@@ -89,20 +89,20 @@ public class DelegationManagerImpl implements DelegationManager {
     @Override
     public String deleteDelegation(String delegationId, DateTime deletionDate) {
         // find existing delegation
-        Delegation bemyndigelse = delegationDao.findById(delegationId);
+        Delegation delegation = delegationDao.findById(delegationId);
 
         // validate arguments
-        if (deletionDate.isBefore(bemyndigelse.getEffectiveFrom()))
-            throw new IllegalArgumentException("deletionDate=" + deletionDate + " must be after EffectiveFrom=" + bemyndigelse.getEffectiveFrom());
+        if (deletionDate.isBefore(delegation.getEffectiveFrom()))
+            throw new IllegalArgumentException("deletionDate=" + deletionDate + " must be after EffectiveFrom=" + delegation.getEffectiveFrom());
 
         // update delegation
-        bemyndigelse.setEffectiveTo(deletionDate);
-        bemyndigelse.setSidstModificeret(systemService.getDateTime());
-        bemyndigelse.setSidstModificeretAf("Service");
-        bemyndigelse.setVersionsid(bemyndigelse.getVersionsid() + 1);
+        delegation.setEffectiveTo(deletionDate);
+        delegation.setSidstModificeret(systemService.getDateTime());
+        delegation.setSidstModificeretAf("Service");
+        delegation.setVersionsid(delegation.getVersionsid() + 1);
 
-        delegationDao.save(bemyndigelse);
-        return bemyndigelse.getKode();
+        delegationDao.save(delegation);
+        return delegation.getDomainId();
     }
 
     private Delegation createDelegationObject(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
@@ -113,14 +113,15 @@ public class DelegationManagerImpl implements DelegationManager {
             throw new IllegalArgumentException("EffectiveFrom=" + validFrom + " must be before effectiveTo=" + validTo);
         }
 
+        DelegatingSystem delegatingSystem = systemDao.findByDomainId(system);
         final Delegation delegation = new Delegation();
-        delegation.setKode(systemService.createUUIDString());
-        delegation.setDelegatingSystem(systemDao.findByDomainId(system));
+        delegation.setDomainId(systemService.createUUIDString());
+        delegation.setDelegatingSystem(delegatingSystem);
         delegation.setDelegatorCpr(delegatorCpr);
         delegation.setDelegateeCpr(delegateeCpr);
         delegation.setDelegateeCvr(delegateeCvr);
 
-        delegation.setRole(roleDao.findByDomainId(system, role));
+        delegation.setRole(roleDao.findByDomainId(delegatingSystem.getId(), role));
         delegation.setState(state);
 
         if (permissions != null && !permissions.isEmpty()) {
@@ -129,7 +130,7 @@ public class DelegationManagerImpl implements DelegationManager {
             for (String permission : permissionCodeSet) {
                 DelegationPermission dp = new DelegationPermission();
                 dp.setDelegation(delegation);
-                dp.setPermissionId(permissionDao.findByDomainId(system, permission).getKode());
+                dp.setPermissionId(permissionDao.findByDomainId(system, permission).getDomainId());
 
                 permissionSet.add(dp);
             }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class ArbejdsfunktionDaoEbean extends SupportDao<Arbejdsfunktion> implements ArbejdsfunktionDao {
+public class ArbejdsfunktionDaoEbean extends SupportDao10<Arbejdsfunktion> implements ArbejdsfunktionDao {
     public ArbejdsfunktionDaoEbean() {
         super(Arbejdsfunktion.class);
     }

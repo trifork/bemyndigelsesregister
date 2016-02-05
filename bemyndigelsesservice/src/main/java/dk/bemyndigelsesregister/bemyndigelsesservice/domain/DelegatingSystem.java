@@ -1,8 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "linked_system")
@@ -11,6 +9,7 @@ public class DelegatingSystem extends ExternalIdentifiedDomainObject {
     }
 
     @ManyToOne
+    @JoinColumn(name = "domaene_id")
     private Domain domain;
 
     public static DelegatingSystem createForTest(final String domainId) {

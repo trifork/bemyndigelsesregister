@@ -5,7 +5,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DomaeneDao;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DomaeneDaoEbean extends SupportDao<Domaene> implements DomaeneDao {
+public class DomaeneDaoEbean extends SupportDao10<Domaene> implements DomaeneDao {
     public DomaeneDaoEbean() {
         super(Domaene.class);
     }

@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class LinkedSystem extends ExternalIdentifiedDomainObject {
+public class LinkedSystem extends ExternalIdentifiedDomainObject10 {
     public LinkedSystem() {
     }
 

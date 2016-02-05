@@ -54,7 +54,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             // create delegation valid from dato2
             manager.createDelegation(systemKode, delegatorCpr, delegateeCpr, delegateeCvr, roleCode, State.BESTILT, Arrays.asList(permissionCode1, permissionCode2), dato2, null);
 
-            delegation = manager.getDelegation(delegation.getKode()); // reload first delegation
+            delegation = manager.getDelegation(delegation.getDomainId()); // reload first delegation
 
             assertEquals("Først oprettede bemyndigelse skal være afsluttet på samme tidspunkt som sidst oprettede bemyndigelse starter når perioder overlapper", dato2, delegation.getEffectiveTo());
         } finally {
@@ -73,7 +73,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             // create delegation valid from before the first
             manager.createDelegation(systemKode, delegatorCpr, delegateeCpr, delegateeCvr, roleCode, State.BESTILT, Arrays.asList(permissionCode1, permissionCode2), dato0, null);
 
-            delegation = manager.getDelegation(delegation.getKode()); // reload first delegation
+            delegation = manager.getDelegation(delegation.getDomainId()); // reload first delegation
 
             assertEquals("Først oprettede bemyndigelse skal være afsluttet på samme tidspunkt som den starter", dato1, delegation.getEffectiveTo());
         } finally {
@@ -87,7 +87,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             ebeanServer.beginTransaction();
 
             Delegation delegation = manager.createDelegation(systemKode, delegatorCpr, delegateeCpr, delegateeCvr, roleCode, State.BESTILT, Arrays.asList(permissionCode1, permissionCode2), dato1, null);
-            String uuid = manager.deleteDelegation(delegation.getKode(), dato2);
+            String uuid = manager.deleteDelegation(delegation.getDomainId(), dato2);
             delegation = manager.getDelegation(uuid); // reload delegation
 
             assertEquals("Bemyndigelse skal være afsluttet", dato2, delegation.getEffectiveTo());
@@ -102,7 +102,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             ebeanServer.beginTransaction();
 
             Delegation delegation = manager.createDelegation(systemKode, delegatorCpr, delegateeCpr, delegateeCvr, roleCode, State.BESTILT, Arrays.asList(permissionCode1, permissionCode2), dato1, null);
-            manager.deleteDelegation(delegation.getKode(), dato0); // should fail before date0 is before date1
+            manager.deleteDelegation(delegation.getDomainId(), dato0); // should fail before date0 is before date1
         } finally {
             ebeanServer.endTransaction();
         }

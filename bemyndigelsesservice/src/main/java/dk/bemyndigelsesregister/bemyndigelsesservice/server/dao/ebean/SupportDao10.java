@@ -7,13 +7,16 @@ import com.avaje.ebean.Query;
 import javax.inject.Inject;
 import java.util.List;
 
-public abstract class SupportDao<T> {
+/**
+ * Created by obj on 05-02-2016.
+ */
+public abstract  class SupportDao10<T> {
     @Inject
     EbeanServer ebeanServer;
 
     protected final Class<T> klass;
 
-    protected SupportDao(Class klass) {
+    protected SupportDao10(Class klass) {
         this.klass = klass;
     }
 
@@ -29,8 +32,8 @@ public abstract class SupportDao<T> {
         ebeanServer.save(entity);
     }
 
-    public T findByDomainId(String domainId) {
-        return query().where().eq("domainId", domainId).findUnique();
+    public T findByKode(String kode) {
+        return query().where().eq("kode", kode).findUnique();
     }
 
     protected Query<T> query() {

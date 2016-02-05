@@ -14,7 +14,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 @Entity
-public class Bemyndigelse extends ExternalIdentifiedDomainObject {
+public class Bemyndigelse extends ExternalIdentifiedDomainObject10 {
     private static DatatypeFactory datatypeFactory;
     static {
         try {

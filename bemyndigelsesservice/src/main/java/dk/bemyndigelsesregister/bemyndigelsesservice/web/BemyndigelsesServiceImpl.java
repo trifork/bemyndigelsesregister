@@ -258,13 +258,13 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
-                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getDomainId() + " and kode=" + bemyndigelse.getKode());
+                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getKode() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelse.setSidstModificeret(now);
                 bemyndigelseDao.save(bemyndigelse);
                 response.getKode().add(bemyndigelse.getKode());
             } else {
-                logger.info("Bemyndigelse with id=" + bemyndigelse.getDomainId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
+                logger.info("Bemyndigelse with id=" + bemyndigelse.getKode() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
 
         }

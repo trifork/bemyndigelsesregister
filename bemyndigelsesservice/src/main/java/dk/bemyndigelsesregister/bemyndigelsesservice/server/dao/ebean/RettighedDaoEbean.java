@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class RettighedDaoEbean extends SupportDao<Rettighed> implements RettighedDao {
+public class RettighedDaoEbean extends SupportDao10<Rettighed> implements RettighedDao {
 
     public RettighedDaoEbean() {
         super(Rettighed.class);

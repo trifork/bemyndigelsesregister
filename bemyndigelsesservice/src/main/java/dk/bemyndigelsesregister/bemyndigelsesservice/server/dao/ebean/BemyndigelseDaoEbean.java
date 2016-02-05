@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public class BemyndigelseDaoEbean extends SupportDao<Bemyndigelse> implements BemyndigelseDao {
+public class BemyndigelseDaoEbean extends SupportDao10<Bemyndigelse> implements BemyndigelseDao {
     public BemyndigelseDaoEbean() {
         super(Bemyndigelse.class);
     }

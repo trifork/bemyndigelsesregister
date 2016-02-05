@@ -33,7 +33,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     String jdbcUrl;
 
     @Test
-    public void testOpretBemyndigelser() throws Exception {
+    public void testCreateDelegation() throws Exception {
         try {
             ebeanServer.beginTransaction();
 
@@ -61,7 +61,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
             dao.save(d);
 
-            assertEquals("Efter oprettelse forventes at antal bemyndigelser er steget med 1", n + 1, dao.list().size());
+            assertEquals("After save the no. of delegations should increase by one", n + 1, dao.list().size());
         } finally {
             ebeanServer.endTransaction();
             ;
@@ -69,54 +69,54 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testRetBemyndigelser() throws Exception {
+    public void testUpdateDelegation() throws Exception {
         try {
             ebeanServer.beginTransaction();
 
-            Delegation bemyndigelse = dao.get(1);
-            bemyndigelse.setSidstModificeretAf("TestCase was here: " + System.currentTimeMillis());
-            dao.save(bemyndigelse);
+            Delegation delegation = dao.get(1);
+            delegation.setSidstModificeretAf("TestCase was here: " + System.currentTimeMillis());
+            dao.save(delegation);
 
-            bemyndigelse = dao.get(1);
-            assertTrue("Tekst \"" + bemyndigelse.getSidstModificeretAf() + "\" skal starte med \"TestCase was here\"", bemyndigelse.getSidstModificeretAf().startsWith("TestCase was here"));
+            delegation = dao.get(1);
+            assertTrue("Text \"" + delegation.getSidstModificeretAf() + "\" should start with \"TestCase was here\"", delegation.getSidstModificeretAf().startsWith("TestCase was here"));
         } finally {
             ebeanServer.endTransaction();
         }
     }
 
     @Test
-    public void testListBemyndigelser() throws Exception {
-        final List<Delegation> bemyndigelser = dao.list();
+    public void testListDelegations() throws Exception {
+        final List<Delegation> delegations = dao.list();
 
-        assertEquals("Antal bemyndigelser afviger fra det forventede", 3, bemyndigelser.size());
+        assertEquals("Unexpected no. of delegations found", 3, delegations.size());
 
-        System.out.println(bemyndigelser);
+        System.out.println(delegations);
     }
 
     @Test
-    public void testFindByBemyndigende() throws Exception {
-        final List<Delegation> bemyndigelser = dao.findByDelegatorCpr("1010101010");
+    public void testFindByDelegator() throws Exception {
+        final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010");
 
-        assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
+        assertEquals("Unexpected no. of delegations found", 2, delegations.size());
 
-        System.out.println(bemyndigelser);
+        System.out.println(delegations);
     }
 
     @Test
-    public void testFindByBemyndigede() throws Exception {
-        final List<Delegation> bemyndigelser = dao.findByDelegateeCpr("1010101012");
+    public void testFindByDelegatee() throws Exception {
+        final List<Delegation> delegations = dao.findByDelegateeCpr("1010101012");
 
-        assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
+        assertEquals("Unexpected no. of delegations found", 2, delegations.size());
 
-        System.out.println(bemyndigelser);
+        System.out.println(delegations);
     }
 
     @Test
-    public void testFindByKoder() throws Exception {
-        final List<Delegation> bemyndigelser = dao.findByDomainIds(Arrays.asList("TestKode1", "TestKode3"));
+    public void testFindByDomainIds() throws Exception {
+        final List<Delegation> delegations = dao.findByDomainIds(Arrays.asList("TestKode1", "TestKode3"));
 
-        assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
+        assertEquals("Unexpected no. of delegations found", 2, delegations.size());
 
-        System.out.println(bemyndigelser);
+        System.out.println(delegations);
     }
 }

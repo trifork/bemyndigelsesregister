@@ -5,7 +5,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Arbejdsfunktion extends ExternalIdentifiedDomainObject {
+public class Arbejdsfunktion extends ExternalIdentifiedDomainObject10 {
     @ManyToOne
     private LinkedSystem linkedSystem;
     private String beskrivelse;

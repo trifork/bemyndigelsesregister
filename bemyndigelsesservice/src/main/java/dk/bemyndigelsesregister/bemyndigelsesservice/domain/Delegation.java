@@ -39,9 +39,11 @@ public class Delegation extends ExternalIdentifiedDomainObject {
 
 
     @ManyToOne
-    @JoinColumn(name = "linked_system_kode")
+    @JoinColumn(name = "linked_system_kode", referencedColumnName = "kode")
     protected DelegatingSystem delegatingSystem;
-    @Column(name = "arbejdsfunktion_kode")
+
+    @ManyToOne
+    @JoinColumn(name = "arbejdsfunktion_kode", referencedColumnName = "kode")
     protected Role role;
 
     @Enumerated(EnumType.STRING)
@@ -51,12 +53,16 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     @OneToMany(cascade = CascadeType.ALL)
     @Column(name = "rettighed_kode")
     protected Set<DelegationPermission> delegationPermissions;
+
     @Column(name = "godkendelsesdato")
     protected DateTime created;
+
     @Column(name = "gyldig_fra")
     protected DateTime effectiveFrom;
+
     @Column(name = "gyldig_til")
     protected DateTime effectiveTo;
+
     private int versionsid;
 
     public Delegation() {
@@ -187,7 +193,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
             type.setCreatedDate(toXmlGregorianCalendar(created));
             type.setGodkendelsesdato(state == State.GODKENDT ? toXmlGregorianCalendar(created) : null);
             type.setStatus(state == State.GODKENDT ? "Godkendt" : "Bestilt");
-            type.setKode(getKode());
+            type.setKode(getDomainId());
             type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
             type.setArbejdsfunktion(role.getDomainId());
             type.setRettighed(permission.getPermissionId());
