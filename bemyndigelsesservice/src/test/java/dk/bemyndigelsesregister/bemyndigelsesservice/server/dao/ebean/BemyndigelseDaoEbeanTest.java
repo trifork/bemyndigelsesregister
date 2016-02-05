@@ -31,7 +31,7 @@ public class BemyndigelseDaoEbeanTest extends DaoUnitTestSupport {
         final String kode = "TestKode1";
 
         Bemyndigelse bemyndigelse = dao.findByKode(kode);
-        assertEquals(new Long(1l), bemyndigelse.getId());
+        assertEquals(new Long(1l), bemyndigelse.getUUID());
         assertEquals(kode, bemyndigelse.getKode());
     }
 

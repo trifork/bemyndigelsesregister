@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.config.ApplicationRootConfig;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -30,7 +31,17 @@ public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTest
     RettighedDao rettighedDao;
     @Inject
     DelegerbarRettighedDao delegerbarRettighedDao;
-    
+    @Inject
+    DomainDao domainDao;
+    @Inject
+    RoleDao roleDao;
+    @Inject
+    SystemDao systemDao;
+    @Inject
+    PermissionDao permissionDao;
+    @Inject
+    DelegationPermissionDao delegationPermissionDao;
+
     @Inject
     WhitelistDao whitelistDao;
 

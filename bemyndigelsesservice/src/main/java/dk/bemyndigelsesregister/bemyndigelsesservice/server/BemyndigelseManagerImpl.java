@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
@@ -28,6 +30,9 @@ public class BemyndigelseManagerImpl implements BemyndigelseManager {
 
     @Inject
     RettighedDao rettighedDao;
+
+    @Inject
+    PermissionDao permissionDao;
 
     @Inject
     LinkedSystemDao linkedSystemDao;

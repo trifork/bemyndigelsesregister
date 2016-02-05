@@ -12,13 +12,16 @@ import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
+import dk.nsi.bemyndigelse._2016._01._01.*;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -31,13 +34,7 @@ import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.singletonList;
 
@@ -50,7 +47,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Inject
     BemyndigelseManager bemyndigelseManager;
     @Inject
+    DelegationManager delegationManager;
+    @Inject
     BemyndigelseDao bemyndigelseDao;
+    @Inject
+    DelegationDao delegationDao;
     @Inject
     DomaeneDao domaeneDao;
     @Inject
@@ -165,7 +166,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             ));
         }};
     }
-    
+
+    //TODO KRS check that createDelegation check that state is "Anmodet"
     void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
     	Set<String> authorizedCprSet = new HashSet<String>(Arrays.asList(authorizedCprs));
     	IdCardData idCardData = dgwsRequestContext.getIdCardData();
@@ -267,14 +269,14 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
-                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode());
+                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelse.setSidstModificeret(now);
                 bemyndigelseDao.save(bemyndigelse);
                 response.getKode().add(bemyndigelse.getKode());
             }
             else {
-                logger.info("Bemyndigelse with id=" + bemyndigelse.getId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
+                logger.info("Bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
 
         }
@@ -360,5 +362,40 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             setRettigheder(typeMapper.toJaxbRettigheder(foundRettigheder));
             setDelegerbarRettigheder(typeMapper.toJaxbDelegerbarRettigheder(foundDelegerbarRettigheder));
         }};
+    }
+
+    @Override
+    @Protected
+    @Transactional
+    @ResponsePayload
+    public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
+        Collection<Delegation> delegations = new ArrayList();
+
+        for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
+            // TODO KRS can also be done by delegatee
+            authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
+            logger.debug("Creating Delegation: " + createDelegation.toString());
+
+            final Delegation delegation = delegationManager.createDelegation(
+                    createDelegation.getSystemId(),
+                    createDelegation.getDelegatorCpr(),
+                    createDelegation.getDelegateeCpr(),
+                    createDelegation.getDelegateeCvr(),
+                    createDelegation.getRoleId(),
+                    State.valueOf(createDelegation.getState().value()),
+                    new LinkedList<String>(), // createDelegation.getListOfPermissionIds(), TODO OBJ Fix
+                    nullableDateTime(createDelegation.getEffectiveFrom()),
+                    nullableDateTime(createDelegation.getEffectiveTo()));
+
+            logger.debug("Got bemyndigelse with kode=" + delegation.getKode());
+            delegations.add(delegation);
+
+        }
+
+        final CreateDelegationsResponse response = new CreateDelegationsResponse();
+        for (Delegation delegation : delegations) {
+            response.getDelegation().add(delegation.toDelegationType());
+        }
+        return response;
     }
 }

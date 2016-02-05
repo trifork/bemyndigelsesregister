@@ -1,11 +1,8 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.validation.AssertTrue;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse20;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse20Rettighed;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.Bemyndigelse20Dao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,9 +17,9 @@ import static org.junit.Assert.assertTrue;
  * BEM 2.0 rettighed til bemyndigelse
  * Created by obj on 02-02-2016.
  */
-public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
+public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     @Inject
-    Bemyndigelse20Dao dao;
+    DelegationDao dao;
 
     @Inject
     EbeanServer ebeanServer;
@@ -37,27 +34,27 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
 
             int n = dao.list().size();
 
-            Bemyndigelse20 b = new Bemyndigelse20();
-            b.setArbejdsfunktionKode(arbejdsfunktionDao.get(1).getKode());
-            b.setBemyndigendeCpr("0101010AB1");
-            b.setBemyndigedeCpr("0202020AB2");
-            b.setBemyndigedeCvr("12345678");
-            b.setGyldigFra(new DateTime(System.currentTimeMillis()));
-            b.setGyldigTil(new DateTime(System.currentTimeMillis() + 20000000));
-            b.setLinkedSystemKode(linkedSystemDao.get(1).getKode());
-            b.setStatus(Status.BESTILT);
-            b.setKode("Spas");
+            Delegation d = new Delegation();
+            d.setRole(roleDao.get(1));
+            d.setDelegatorCpr("0101010AB1");
+            d.setDelegateeCpr("0202020AB2");
+            d.setDelegateeCvr("12345678");
+            d.setEffectiveFrom(new DateTime(System.currentTimeMillis()));
+            d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
+            d.setDelegatingSystem(systemDao.get(1));
+            d.setState(State.OPRETTET);
+            d.setDelegatingSystem(new DelegatingSystem() {{
+                setUUID("Spas");
+            }});
 
-            Bemyndigelse20Rettighed rettighed = new Bemyndigelse20Rettighed();
-            rettighed.setBemyndigelse(b);
-            rettighed.setRettighedKode(rettighedDao.get(1).getKode());
+            DelegationPermission permission = new DelegationPermission();
+            permission.setDelegation(d);
+            permission.setPermissionId(delegationPermissionDao.get(1).getPermissionId());
 
+            Set<DelegationPermission> permissions = d.getPermissions();
+            permissions.add(permission);
 
-            Set<Bemyndigelse20Rettighed> rettigheder = new HashSet<>();
-            rettigheder.add(rettighed);
-            b.setRettigheder(rettigheder);
-
-            dao.save(b);
+            dao.save(d);
 
             assertEquals("Efter oprettelse forventes at antal bemyndigelser er steget med 1", n + 1, dao.list().size());
         } finally {
@@ -70,7 +67,7 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
         try {
             ebeanServer.beginTransaction();
 
-            Bemyndigelse20 bemyndigelse = dao.get(1);
+            Delegation bemyndigelse = dao.get(1);
             bemyndigelse.setSidstModificeretAf("TestCase was here: " + System.currentTimeMillis());
             dao.save(bemyndigelse);
 
@@ -83,7 +80,7 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testListBemyndigelser() throws Exception {
-        final List<Bemyndigelse20> bemyndigelser = dao.list();
+        final List<Delegation> bemyndigelser = dao.list();
 
         assertEquals("Antal bemyndigelser afviger fra det forventede", 3, bemyndigelser.size());
 
@@ -92,7 +89,7 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindByBemyndigende() throws Exception {
-        final List<Bemyndigelse20> bemyndigelser = dao.findByBemyndigendeCpr("1010101010");
+        final List<Delegation> bemyndigelser = dao.findByDelegatorCpr("1010101010");
 
         assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
 
@@ -101,7 +98,7 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindByBemyndigede() throws Exception {
-        final List<Bemyndigelse20> bemyndigelser = dao.findByBemyndigedeCpr("1010101012");
+        final List<Delegation> bemyndigelser = dao.findByDelegateeCpr("1010101012");
 
         assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
 
@@ -110,7 +107,7 @@ public class Bemyndigelse20DaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindByKoder() throws Exception {
-        final List<Bemyndigelse20> bemyndigelser = dao.findByKoder(Arrays.asList("TestKode1", "TestKode3"));
+        final List<Delegation> bemyndigelser = dao.findByIds(Arrays.asList("TestKode1", "TestKode3"));
 
         assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
 

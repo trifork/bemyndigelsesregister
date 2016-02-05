@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse20;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import org.joda.time.DateTime;
 
@@ -10,10 +11,10 @@ import java.util.List;
  * BEM 2.0 bemyndigelse
  * Created by obj on 02-02-2016.
  */
-public interface Bemyndigelse20Manager {
+public interface DelegationManager {
     /**
-     * OpretBemyndigelser kan både anvendes til at oprette godkendte og ikke-godkendte bemyndigelser.
-     * OpretBemyndigelser overskriver en eksisterende bemyndigelse med samme nøgle, da der ikke kan
+     * CreateDelegation kan både anvendes til at oprette godkendte og ikke-godkendte bemyndigelser.
+     * Metoden overskriver en eksisterende bemyndigelse med samme nøgle, da der ikke kan
      * eksistere mere end én bemyndigelse på et bestemt tidspunkt med samme nøgle. Sletningen foregår
      * ved at sætte slutdato til det aktuelle tidspunkt. Hvis man kalder OpretBemyndigelser med status
      * Accepteret, og der er en eksisterende bemyndigelse med status Anmodet og ellers identiske værdier i
@@ -30,9 +31,7 @@ public interface Bemyndigelse20Manager {
      * @param effectiveTo   Gyldigheds tildato
      * @return Data for bemyndigelse
      */
-    Bemyndigelse20 createDelegation(
-            String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, Status state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo);
-
+    Delegation createDelegation(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo);
 
     /**
      * Henter bemyndigelser uddelegeret af en person
@@ -40,7 +39,7 @@ public interface Bemyndigelse20Manager {
      * @param cpr cprnr på delegerende person
      * @return liste af bemyndigelser
      */
-    List<Bemyndigelse20> getDelegationsByDelegatorCpr(String cpr);
+    List<Delegation> getDelegationsByDelegatorCpr(String cpr);
 
     /**
      * Henter bemyndigelser uddelegeret til en person
@@ -48,7 +47,7 @@ public interface Bemyndigelse20Manager {
      * @param cpr cprnr på person
      * @return liste af bemyndigelser
      */
-    List<Bemyndigelse20> getDelegationsByDelegateeCpr(String cpr);
+    List<Delegation> getDelegationsByDelegateeCpr(String cpr);
 
     /**
      * Henter bemyndigelser fra kode/uuid
@@ -56,7 +55,7 @@ public interface Bemyndigelse20Manager {
      * @param delegationId cprnr på delegerende person
      * @return Bemyndigelse
      */
-    Bemyndigelse20 getDelegation(String delegationId);
+    Delegation getDelegation(String delegationId);
 
     /**
      * deleteDelegation sletter bemyndigelsen med den angivne nøgle.
