@@ -5,7 +5,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.SystemDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -65,23 +65,23 @@ public class DelegationManagerImpl implements DelegationManager {
 
 
     @Override
-    public Delegation createDelegations(String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleId, String state, String systemId, List<String> permissionIds, DateTime effectiveFrom, DateTime effectiveTo) {
-        DelegatingSystem delegatingSystem = systemDao.findById(systemId);
+    public Delegation createDelegation(String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleId, String state, String systemId, List<String> permissionIds, DateTime effectiveFrom, DateTime effectiveTo) {
+        DelegatingSystem delegatingSystem = systemDao.findByDomainId(systemId);
         DateTime now = systemService.getDateTime();
 
         final Delegation delegation = new Delegation();
-        delegation.setDelegationId(systemService.createUUIDString());
+        delegation.setDomainId(systemService.createUUIDString());
         delegation.setDelegatorCpr(delegatorCpr);
         delegation.setDelegateeCpr(delegateeCpr);
         delegation.setDelegateeCpr(delegateeCvr);
-        delegation.setRole(roleDao.findById(systemId, roleId));
+        delegation.setRole(roleDao.findByDomainId(systemId, roleId));
         delegation.setState(State.valueOf(state.toUpperCase()));
         delegation.setDelegatingSystem(delegatingSystem);
-        Set<DelegationPermission> permissions = delegation.getPermissions();
+        Set<DelegationPermission> permissions = delegation.getDelegationPermissions();
         for (String permissionId : permissionIds) {
             DelegationPermission permission = new DelegationPermission();
             permission.setPermissionId(permissionId);
-            // TODO? permission.setDelegation(delegation);
+            permissions.add(permission);
         }
         final DateTime validFrom = defaultIfNull(effectiveFrom, now);
         final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));

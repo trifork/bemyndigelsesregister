@@ -20,5 +20,5 @@ public interface DelegationDao {
 
     List<Delegation> findByDelegateeCpr(String delegateeCpr);
 
-    List<Delegation> findByIds(Collection<String> delegationIds);
+    List<Delegation> findByDomainIds(Collection<String> domainIds);
 }

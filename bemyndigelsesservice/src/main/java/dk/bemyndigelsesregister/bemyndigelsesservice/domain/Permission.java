@@ -28,19 +28,19 @@ public class Permission extends ExternalIdentifiedDomainObject {
         this.description = description;
     }
 
-    public void setSystem(DelegatingSystem delegatingSystem) {
+    public void setDelegatingSystem(DelegatingSystem delegatingSystem) {
         this.delegatingSystem = delegatingSystem;
     }
 
-    public DelegatingSystem getSystem() {
+    public DelegatingSystem getDelegatingSystem() {
         return delegatingSystem;
     }
 
     //</editor-fold>
 
-    public static Permission createForTest(final String uuid) {
+    public static Permission createForTest(final String domainId) {
         return new Permission() {{
-            setUUID(uuid);
+            setDomainId(domainId);
         }};
     }
 }

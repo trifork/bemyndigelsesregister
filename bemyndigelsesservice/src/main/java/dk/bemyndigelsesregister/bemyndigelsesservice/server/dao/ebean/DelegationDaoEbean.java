@@ -28,7 +28,7 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     }
 
     @Override
-    public List<Delegation> findByIds(Collection<String> delegationIds) {
-        return query().where().in("kode", delegationIds).findList();
+    public List<Delegation> findByDomainIds(Collection<String> domainIds) {
+        return query().where().in("kode", domainIds).findList();
     }
 }

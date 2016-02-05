@@ -172,7 +172,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }};
     }
 
-    //TODO KRS check that createDelegation check that state is "Anmodet"
+    //TODO KRS check that createDelegation check that state is "BESTILT"
     void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
     	Set<String> authorizedCprSet = new HashSet<String>(Arrays.asList(authorizedCprs));
     	IdCardData idCardData = dgwsRequestContext.getIdCardData();
@@ -274,14 +274,14 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
             DateTime validTo = bemyndigelse.getGyldigTil();
             if (validTo.isAfter(now)) {
-                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode());
+                logger.info("Deleting bemyndigelse with id=" + bemyndigelse.getDomainId() + " and kode=" + bemyndigelse.getKode());
                 bemyndigelse.setGyldigTil(now);
                 bemyndigelse.setSidstModificeret(now);
                 bemyndigelseDao.save(bemyndigelse);
                 response.getKode().add(bemyndigelse.getKode());
             }
             else {
-                logger.info("Bemyndigelse with id=" + bemyndigelse.getUUID() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
+                logger.info("Bemyndigelse with id=" + bemyndigelse.getDomainId() + " and kode=" + bemyndigelse.getKode() + " was already deleted");
             }
 
         }
@@ -380,7 +380,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             // TODO KRS can also be done by delegatee
             authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
             logger.debug("Creating Delegation: " + createDelegation.toString());
-            final Delegation delegation = delegationManager.createDelegations(
+            final Delegation delegation = delegationManager.createDelegation(
                     createDelegation.getDelegatorCpr(),
                     createDelegation.getDelegateeCpr(),
                     createDelegation.getDelegateeCvr(),
@@ -390,7 +390,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));
-            logger.debug("Got bemyndigelse with kode=" + delegation.getKode());
+            logger.debug("Got delegation with domain id = " + delegation.getDomainId());
             delegations.add(delegation);
         }
 

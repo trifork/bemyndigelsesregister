@@ -13,7 +13,7 @@ public class DelegationPermission extends DomainObject {
     @JoinColumn(name = "bemyndigelse20_id")
     private Delegation delegation;
 
-    @Column(name="rettighedKode")
+    @Column(name="rettighed_kode")
     private String permissionId;
 
     public DelegationPermission() {

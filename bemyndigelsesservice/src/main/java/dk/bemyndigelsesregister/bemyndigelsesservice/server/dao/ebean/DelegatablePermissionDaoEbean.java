@@ -1,10 +1,8 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatablePermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationPermissionDao;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegerbarRettighedDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatablePermissionDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +14,7 @@ public class DelegatablePermissionDaoEbean extends SupportDao<DelegatablePermiss
     }
 
     @Override
-    public List<DelegatablePermission> findBy(LinkedSystem linkedSystem) {
-        return query().fetch("arbejdsfunktion").where().eq("arbejdsfunktion.linkedSystem", linkedSystem).findList();
+    public List<DelegatablePermission> findBySystem(String delegatingSystemId) {
+        return query().fetch("arbejdsfunktion").where().eq("arbejdsfunktion.linkedSystem", delegatingSystemId).findList();
     }
 }

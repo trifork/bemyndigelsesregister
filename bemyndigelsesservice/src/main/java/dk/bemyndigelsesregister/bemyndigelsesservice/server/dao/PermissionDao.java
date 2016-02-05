@@ -9,7 +9,7 @@ public interface PermissionDao {
 
     void save(Permission permission);
 
-    Permission findById(DelegatingSystem delegatingSystem, String id);
+    Permission findByDomainId(String delegatingSystemId, String domainId);
 
-    List<Permission> findBy(DelegatingSystem delegatingSystem);
+    List<Permission> findBySystem(String delegatingSystemId);
 }

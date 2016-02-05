@@ -33,8 +33,8 @@ public abstract class SupportDao<T> {
         return query().where().eq("kode", kode).findUnique();
     }
 
-    public T findByUUID(String id) {
-        return query().where().eq("kode", id).findUnique();
+    public T findByDomainId(String domainId) {
+        return query().where().eq("kode", domainId).findUnique();
     }
 
     protected Query<T> query() {

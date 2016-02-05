@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Role;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.RoleDao;
 import org.springframework.stereotype.Repository;
@@ -13,12 +14,12 @@ public class RoleDaoEbean extends SupportDao<Role> implements RoleDao {
     }
 
     @Override
-    public Role findById(String systemid, String id) {
-        return query().where().eq("linkedSystem", systemid).eq("kode", id).findUnique();
+    public Role findByDomainId(String delegatingSystemid, String id) {
+        return query().where().eq("linkedSystem", delegatingSystemid).eq("kode", id).findUnique();
     }
 
     @Override
-    public List<Role> findBySystem(System system) {
-        return query().where().eq("linkedSystem", system).findList();
+    public List<Role> findBySystem(String delegatingSystemId) {
+        return query().where().eq("linkedSystem", delegatingSystemId).findList();
     }
 }

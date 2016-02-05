@@ -42,16 +42,16 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             d.setEffectiveFrom(new DateTime(System.currentTimeMillis()));
             d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
             d.setDelegatingSystem(systemDao.get(1));
-            d.setState(State.OPRETTET);
+            d.setState(State.GODKENDT);
             d.setDelegatingSystem(new DelegatingSystem() {{
-                setUUID("Spas");
+                setDomainId("Spas");
             }});
 
             DelegationPermission permission = new DelegationPermission();
             permission.setDelegation(d);
             permission.setPermissionId(delegationPermissionDao.get(1).getPermissionId());
 
-            Set<DelegationPermission> permissions = d.getPermissions();
+            Set<DelegationPermission> permissions = d.getDelegationPermissions();
             permissions.add(permission);
 
             dao.save(d);
@@ -107,7 +107,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindByKoder() throws Exception {
-        final List<Delegation> bemyndigelser = dao.findByIds(Arrays.asList("TestKode1", "TestKode3"));
+        final List<Delegation> bemyndigelser = dao.findByDomainIds(Arrays.asList("TestKode1", "TestKode3"));
 
         assertEquals("Antal bemyndigelser afviger fra det forventede", 2, bemyndigelser.size());
 

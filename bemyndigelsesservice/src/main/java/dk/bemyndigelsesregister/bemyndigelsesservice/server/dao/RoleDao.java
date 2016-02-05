@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Role;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface RoleDao {
 
     void save(Role role);
 
-    Role findById(String systemid, String id);
+    Role findByDomainId(String systemid, String id);
 
-    List<Role> findBySystem(System system);
+    List<Role> findBySystem(String systemId);
 }

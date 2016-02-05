@@ -2,8 +2,10 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="linked_system")
 public class DelegatingSystem extends ExternalIdentifiedDomainObject {
     public DelegatingSystem() {
     }
@@ -11,17 +13,17 @@ public class DelegatingSystem extends ExternalIdentifiedDomainObject {
     @ManyToOne
     private Domain domain;
 
-    public static DelegatingSystem createForTest(final String uuid) {
+    public static DelegatingSystem createForTest(final String domainId) {
         return new DelegatingSystem() {{
-            setUUID(uuid);
+            setDomainId(domainId);
         }};
     }
 
-    public Domain getDomaene() {
+    public Domain getDomain() {
         return domain;
     }
 
-    public void setDomaene(Domaene domaene) {
+    public void setDomain(Domain domain) {
         this.domain = domain;
     }
 }

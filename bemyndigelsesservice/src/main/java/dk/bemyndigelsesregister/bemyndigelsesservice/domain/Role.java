@@ -1,12 +1,17 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="arbejdsfunktion")
 public class Role extends ExternalIdentifiedDomainObject {
     @ManyToOne
+    @Column(name = "linked_system_id")
     private DelegatingSystem delegatingSystem;
+    @Column(name = "beskrivelse")
     private String description;
 
     public Role() {
@@ -30,9 +35,9 @@ public class Role extends ExternalIdentifiedDomainObject {
     }
     //</editor-fold>
 
-    public static Role createForTest(final String uuid) {
+    public static Role createForTest(final String domainId) {
         return new Role() {{
-            setUUID(uuid);
+            setDomainId(domainId);
         }};
     }
 

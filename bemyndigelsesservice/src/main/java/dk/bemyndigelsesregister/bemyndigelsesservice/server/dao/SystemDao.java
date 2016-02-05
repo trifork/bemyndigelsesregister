@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
+package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 
@@ -7,5 +7,5 @@ public interface SystemDao {
 
     void save(DelegatingSystem systemystem);
 
-    DelegatingSystem findById(String id);
+    DelegatingSystem findByDomainId(String domainId);
 }

@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface DelegationManager {
 
-    Delegation createDelegations(String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleId, String state, String systemId, List<String> permissionIds, DateTime effectiveFrom, DateTime effectiveTo);
+    Delegation createDelegation(String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleId, String state, String systemId, List<String> permissionIds, DateTime effectiveFrom, DateTime effectiveTo);
 
 }

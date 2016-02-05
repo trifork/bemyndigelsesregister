@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
+package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Domain;
 
@@ -7,5 +7,5 @@ public interface DomainDao {
 
     void save(Domain domain);
 
-    Domain findById(String domainId);
+    Domain findByDomainId(String domainId);
 }

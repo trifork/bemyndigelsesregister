@@ -15,11 +15,11 @@ public class DelegatablePermission extends DomainObject {
     @ManyToOne
     private Permission permissionId;
 
-    public Permission getPermission() {
+    public Permission getPermissionId() {
         return permissionId;
     }
 
-    public void setPermission(Permission permissionId) {
+    public void setPermissionId(Permission permissionId) {
         this.permissionId = permissionId;
     }
 

@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
+package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatablePermission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegerbarRettighed;
@@ -11,5 +11,5 @@ public interface DelegatablePermissionDao {
 
     void save(DelegatablePermission delegatablePermission);
 
-    List<DelegatablePermission> findBy(LinkedSystem linkedSystem);
+    List<DelegatablePermission> findBySystem(String delegatingSystemId);
 }
