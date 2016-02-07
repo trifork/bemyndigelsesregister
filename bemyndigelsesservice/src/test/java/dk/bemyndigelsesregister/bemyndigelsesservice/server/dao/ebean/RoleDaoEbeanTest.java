@@ -20,9 +20,19 @@ public class RoleDaoEbeanTest extends DaoUnitTestSupport {
         DelegatingSystem system = delegatingSystemDao.findByDomainId("triforktest");
         String domainId = "Laege";
 
-        List<Role> roles = roleDao.findBySystem(system.getId());
-        System.out.println(roles);
-//        assertEquals("findByDomainId should return a domain object with correct domainId", domainId, role.getDomainId());
+        Role role = roleDao.findByDomainId(system.getId(), domainId);
+        System.out.println(role);
+        assertEquals("findByDomainId should return an object with correct domainId", domainId, role.getDomainId());
     }
 
+    @Test
+    public void testFindRoleBySystem() throws Exception {
+        System.setProperty("ebean.debug.sql", "true");
+
+        DelegatingSystem system = delegatingSystemDao.findByDomainId("triforktest");
+
+        List<Role> roles = roleDao.findBySystem(system.getId());
+        System.out.println(roles);
+        assertFalse("findByDomainId should return a non-empty list of objects", roles.isEmpty());
+    }
 }

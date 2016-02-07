@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -82,6 +83,14 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
         } finally {
             ebeanServer.endTransaction();
         }
+    }
+
+    @Test
+    public void testGetDelegation() throws Exception {
+        Delegation delegation = dao.get(1);
+        System.out.println(delegation);
+        assertNotNull(delegation);
+
     }
 
     @Test

@@ -14,11 +14,11 @@ public class RoleDaoEbean extends SupportDao<Role> implements RoleDao {
 
     @Override
     public Role findByDomainId(Long delegatingSystemid, String id) {
-        return query().where().eq("delegatingSystem", delegatingSystemid).eq("domainId", id).findUnique();
+        return query().where().eq("delegatingSystem.id", delegatingSystemid).eq("domainId", id).findUnique();
     }
 
     @Override
     public List<Role> findBySystem(Long delegatingSystemId) {
-        return query().where().eq("delegatingSystem", delegatingSystemId).findList();
+        return query().where().eq("delegatingSystem.id", delegatingSystemId).findList();
     }
 }
