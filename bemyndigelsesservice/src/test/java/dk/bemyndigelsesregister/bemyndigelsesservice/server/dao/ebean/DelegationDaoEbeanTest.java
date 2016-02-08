@@ -50,18 +50,62 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             d.setRole(roleDao.get(1).getDomainId());
             d.setState(State.GODKENDT);
 
+            Set<DelegationPermission> permissions = new HashSet<>();
+
             Permission p = permissionDao.get(1);
             DelegationPermission permission = new DelegationPermission();
             permission.setDelegation(d);
             permission.setPermissionId(p.getDomainId());
-
-            Set<DelegationPermission> permissions = new HashSet<>();
             permissions.add(permission);
+
             d.setDelegationPermissions(permissions);
 
             dao.save(d);
 
             assertEquals("After save the no. of delegations should increase by one", n + 1, dao.list().size());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testCreateDelegationWithTwoPermissions() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            int n = dao.list().size();
+
+            Delegation d = new Delegation();
+            d.setDomainId("test");
+            d.setDelegatorCpr("0101010AB1");
+            d.setDelegateeCpr("0202020AB2");
+            d.setDelegateeCvr("12345678");
+            d.setEffectiveFrom(new DateTime(System.currentTimeMillis()));
+            d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
+            d.setDelegatingSystem(systemDao.get(1).getDomainId());
+            d.setRole(roleDao.get(1).getDomainId());
+            d.setState(State.GODKENDT);
+
+            Set<DelegationPermission> permissions = new HashSet<>();
+
+            Permission p = permissionDao.get(1);
+            DelegationPermission permission = new DelegationPermission();
+            permission.setDelegation(d);
+            permission.setPermissionId(p.getDomainId());
+            permissions.add(permission);
+
+            Permission p2 = permissionDao.get(2);
+            DelegationPermission permission2 = new DelegationPermission();
+            permission2.setDelegation(d);
+            permission2.setPermissionId(p2.getDomainId());
+            permissions.add(permission2);
+
+            d.setDelegationPermissions(permissions);
+
+            dao.save(d);
+
+            Delegation retrievedDelegation = dao.findById("test");
+            assertEquals("Delegation should contain the right number of permissions", 2, retrievedDelegation.getDelegationPermissions().size());
         } finally {
             ebeanServer.endTransaction();
         }

@@ -14,7 +14,7 @@ import java.util.List;
 public interface DelegationDao {
     Delegation get(long id);
 
-    void save(Delegation bemyndigelse);
+    void save(Delegation delegation);
 
     List<Delegation> list();
 
