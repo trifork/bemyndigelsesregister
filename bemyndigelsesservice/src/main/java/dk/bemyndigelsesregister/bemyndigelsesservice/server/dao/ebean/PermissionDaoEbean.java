@@ -15,11 +15,11 @@ public class PermissionDaoEbean extends SupportDao<Permission> implements Permis
 
     @Override
     public Permission findByDomainId(String delegatingSystemId, String id) {
-        return query().where().eq("linkedSystem", delegatingSystemId).eq("kode", id).findUnique();
+        return query().where().eq("delegatingSystem.domainId", delegatingSystemId).eq("domainId", id).findUnique();
     }
 
     @Override
     public List<Permission> findBySystem(String delegatingSystemId) {
-        return query().where().eq("linkedSystem", delegatingSystemId).findList();
+        return query().where().eq("delegatingSystem.domainId", delegatingSystemId).findList();
     }
 }

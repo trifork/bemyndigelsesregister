@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -131,27 +132,20 @@ public class DelegationServiceImplTest {
         delegation.setDelegatorCpr(delegatorCprText);
         delegation.setDelegateeCpr(delegateeCprText);
         delegation.setDelegateeCvr(delegateeCvrText);
+        delegation.setDelegatingSystem(this.systemId);
+        delegation.setRole(this.roleId);
 
-        final DelegatingSystem system = new DelegatingSystem();
-        system.setDomainId(this.systemId);
-        delegation.setDelegatingSystem(system);
-
-        final Role role = new Role();
-        role.setDomainId(this.roleId);
-        role.setDescription(this.roleDescription);
-        delegation.setRole(role);
-
-        Set<DelegationPermission> permissionList = delegation.getDelegationPermissions();
+        Set<DelegationPermission> permissionList = new HashSet<>();
         for (String permissionId : permissionIds) {
             final DelegationPermission permission = new DelegationPermission();
+            permission.setDelegation(delegation);
             permission.setPermissionId(permissionId);
             permissionList.add(permission);
         }
+        delegation.setDelegationPermissions(permissionList);
 
         delegation.setState(this.state);
-
         delegation.setCreated(creationDate);
-
         delegation.setEffectiveFrom(now.minusDays(1));
         delegation.setEffectiveTo(now.plusDays(1));
 

@@ -369,7 +369,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getDelegateeCpr(),
                     createDelegation.getDelegateeCvr(),
                     createDelegation.getRoleId(),
-                    State.valueOf(createDelegation.getState().value()),
+                    State.GODKENDT, // valueOf(createDelegation.getState().value()), TODO: Dette fungerede ikke, createDelegation.getState() returnerer null
                     createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));

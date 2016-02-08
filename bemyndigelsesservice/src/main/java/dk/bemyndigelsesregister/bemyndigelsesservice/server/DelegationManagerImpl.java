@@ -3,7 +3,6 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
@@ -51,24 +50,24 @@ public class DelegationManagerImpl implements DelegationManager {
         logger.debug("Finder eksisterende bemyndigelser for system=" + system + ", delegatorCpr=" + delegateeCpr + ", delegateeCpr=" + delegateeCpr + ", delegateeCvr=" + delegateeCvr + ", role=" + role + ", state=" + state + "validFrom=" + validFrom + ", validTo=" + validTo);
         List<Delegation> existingDelegations = delegationDao.findByInPeriod(system, delegatorCpr, delegateeCpr, delegateeCvr, role, state, validFrom, validTo);
         if (existingDelegations != null) {
-            for (Delegation bemyndigelse : existingDelegations) {
-                DateTime end = bemyndigelse.getEffectiveFrom().isAfter(validFrom) ? bemyndigelse.getEffectiveFrom() : validFrom;
-                logger.debug("  Afslutter eksisterende bemyndigelse gyldig " + bemyndigelse.getEffectiveFrom() + " - " + bemyndigelse.getEffectiveTo() + " til tidspunkt + " + end);
+            for (Delegation delegation : existingDelegations) {
+                DateTime end = delegation.getEffectiveFrom().isAfter(validFrom) ? delegation.getEffectiveFrom() : validFrom;
+                logger.debug("  Afslutter eksisterende bemyndigelse gyldig " + delegation.getEffectiveFrom() + " - " + delegation.getEffectiveTo() + " til tidspunkt + " + end);
 
                 // update delegation
-                bemyndigelse.setEffectiveTo(end);
-                bemyndigelse.setSidstModificeret(now);
-                bemyndigelse.setSidstModificeretAf("Service");
-                bemyndigelse.setVersionsid(bemyndigelse.getVersionsid() + 1);
-                delegationDao.save(bemyndigelse);
+                delegation.setEffectiveTo(end);
+                delegation.setSidstModificeret(now);
+                delegation.setSidstModificeretAf("Service");
+                delegation.setVersionsid(delegation.getVersionsid() + 1);
+                delegationDao.save(delegation);
             }
         }
 
-        Delegation bemyndigelse = createDelegationObject(system, delegatorCpr, delegateeCpr, delegateeCvr, role, state, permissions, validFrom, validTo);
-        logger.debug("Opretter bemyndigelse" + bemyndigelse);
-        delegationDao.save(bemyndigelse);
+        Delegation delegation = createDelegationObject(system, delegatorCpr, delegateeCpr, delegateeCvr, role, state, permissions, validFrom, validTo);
+        logger.debug("Creating delegation " + delegation);
+        delegationDao.save(delegation);
 
-        return bemyndigelse;
+        return delegation;
     }
 
     @Override
@@ -113,15 +112,14 @@ public class DelegationManagerImpl implements DelegationManager {
             throw new IllegalArgumentException("EffectiveFrom=" + validFrom + " must be before effectiveTo=" + validTo);
         }
 
-        DelegatingSystem delegatingSystem = systemDao.findByDomainId(system);
         final Delegation delegation = new Delegation();
         delegation.setDomainId(systemService.createUUIDString());
-        delegation.setDelegatingSystem(delegatingSystem);
+        delegation.setDelegatingSystem(system);
         delegation.setDelegatorCpr(delegatorCpr);
         delegation.setDelegateeCpr(delegateeCpr);
         delegation.setDelegateeCvr(delegateeCvr);
 
-        delegation.setRole(roleDao.findByDomainId(delegatingSystem.getId(), role));
+        delegation.setRole(role);
         delegation.setState(state);
 
         if (permissions != null && !permissions.isEmpty()) {

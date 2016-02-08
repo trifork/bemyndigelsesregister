@@ -21,12 +21,12 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
 
     @Override
     public List<Delegation> findByDelegatorCpr(String delegatorCpr) {
-        return query().where().eq("bemyndigende_cpr", delegatorCpr).findList();
+        return query().where().eq("delegatorCpr", delegatorCpr).findList();
     }
 
     @Override
     public List<Delegation> findByDelegateeCpr(String delegateeCpr) {
-        return query().where().eq("bemyndigede_cpr", delegateeCpr).findList();
+        return query().where().eq("delegateeCpr", delegateeCpr).findList();
     }
 
     @Override
@@ -37,24 +37,24 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     @Override
     public List<Delegation> findByInPeriod(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, DateTime effectiveFrom, DateTime effectiveTo) {
         return query().where()
-                .eq("linkedSystemKode", system)
-                .eq("bemyndigendeCpr", delegatorCpr)
-                .eq("bemyndigedeCpr", delegateeCpr)
-                .eq("bemyndigedeCvr", delegateeCvr)
-                .eq("arbejdsfunktionKode", role)
-                .eq("status", state).and(
-                        expr().le("gyldigFra", effectiveTo),
-                        expr().gt("gyldigTil", effectiveFrom)
+                .eq("delegatingSystem", system)
+                .eq("delegatorCpr", delegatorCpr)
+                .eq("delegateeCpr", delegateeCpr)
+                .eq("delegateeCvr", delegateeCvr)
+                .eq("role", role)
+                .eq("state", state).and(
+                        expr().le("effectiveFrom", effectiveTo),
+                        expr().gt("effectiveTo", effectiveFrom)
                 ).findList();
     }
 
     @Override
     public List<Delegation> findByIds(Collection<String> delegationIds) {
-        return query().where().in("kode", delegationIds).findList();
+        return query().where().in("domainId", delegationIds).findList();
     }
 
     @Override
     public List<Delegation> findByDomainIds(Collection<String> domainIds) {
-        return query().where().in("kode", domainIds).findList();
+        return query().where().in("domainId", domainIds).findList();
     }
 }

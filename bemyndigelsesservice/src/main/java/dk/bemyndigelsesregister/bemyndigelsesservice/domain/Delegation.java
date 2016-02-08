@@ -37,14 +37,11 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     @Column(name = "bemyndigede_cvr")
     protected String delegateeCvr;
 
+    @Column(name = "linked_system_kode")
+    protected String delegatingSystem;
 
-    @ManyToOne
-    @JoinColumn(name = "linked_system_kode", referencedColumnName = "kode")
-    protected DelegatingSystem delegatingSystem;
-
-    @ManyToOne
-    @JoinColumn(name = "arbejdsfunktion_kode", referencedColumnName = "kode")
-    protected Role role;
+    @Column(name = "arbejdsfunktion_kode")
+    protected String role;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -68,7 +65,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     }
 
     public String getDelegatorCpr() {
-        return delegateeCpr;
+        return delegatorCpr;
     }
 
     public void setDelegatorCpr(String value) {
@@ -91,20 +88,20 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         this.delegateeCvr = value;
     }
 
-    public DelegatingSystem getDelegatingSystem() {
+    public String getDelegatingSystem() {
         return delegatingSystem;
     }
 
-    public void setDelegatingSystem(DelegatingSystem value) {
-        this.delegatingSystem = value;
+    public void setDelegatingSystem(String delegatingSystem) {
+        this.delegatingSystem = delegatingSystem;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role value) {
-        this.role = value;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public State getState() {
@@ -157,21 +154,17 @@ public class Delegation extends ExternalIdentifiedDomainObject {
 
     @Override
     public String toString() {
-        Set<DelegationPermission> permissions = this.getDelegationPermissions();
-        for (DelegationPermission permission : permissions)
-            java.lang.System.out.println(permission.getPermissionId());
-
-        return "Bemyndigelse20{" +
-                "bemyndigendeCpr='" + delegatorCpr + '\'' +
-                ", bemyndigendeCvr='" + delegateeCpr + '\'' +
-                ", bemyndigedeCvr='" + delegateeCvr + '\'' +
-                ", system='" + delegatingSystem + '\'' +
-                ", arbejdsfunktion='" + role + '\'' +
-                ", rettigheder=" + permissions +
-                ", status=" + state +
-                ", godkendelsesdato=" + created +
-                ", gyldigFra=" + effectiveFrom +
-                ", gyldigTil=" + effectiveTo +
+        return "Delegation{" +
+                "delegatorCpr='" + delegatorCpr + '\'' +
+                ", delegateeCpr='" + delegateeCpr + '\'' +
+                ", delegateeCvr='" + delegateeCvr + '\'' +
+                ", delegatingSystem='" + delegatingSystem + '\'' +
+                ", role='" + role + '\'' +
+                ", state=" + state +
+                ", delegationPermissions=" + delegationPermissions +
+                ", created=" + created +
+                ", effectiveFrom=" + effectiveFrom +
+                ", effectiveTo=" + effectiveTo +
                 ", versionsid=" + versionsid +
                 '}';
     }
@@ -194,9 +187,9 @@ public class Delegation extends ExternalIdentifiedDomainObject {
             type.setStatus(state == State.GODKENDT ? "Godkendt" : "Bestilt");
             type.setKode(getDomainId());
             type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
-            type.setArbejdsfunktion(role.getDomainId());
+            type.setArbejdsfunktion(role);
             type.setRettighed(permission.getPermissionId());
-            type.setSystem(delegatingSystem.getDomainId());
+            type.setSystem(delegatingSystem);
             type.setValidFrom(toXmlGregorianCalendar(effectiveFrom));
             type.setValidTo(toXmlGregorianCalendar(effectiveTo));
         }
@@ -212,8 +205,8 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         type.setState(state == State.GODKENDT ? dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT : dk.nsi.bemyndigelse._2016._01._01.State.BESTILT);
         type.setDelegationId(getDomainId());
         dk.nsi.bemyndigelse._2016._01._01.Role xmlRole = new dk.nsi.bemyndigelse._2016._01._01.Role();
-        xmlRole.setRoleId(role.getDomainId());
-        xmlRole.setRoleDescription(role.getDescription());
+        xmlRole.setRoleId(role);
+//        xmlRole.setRoleDescription(role.getDescription()); TODO OBJ fix
         type.setRole(xmlRole);
         List<Bemyndigelser.Bemyndigelse> delegation = new LinkedList<>();
         for (DelegationPermission permission : delegationPermissions) {
@@ -223,7 +216,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
             xmlPermission.setPermissionDescription("// TODO implementer at hente permissions fra id");
         }
         dk.nsi.bemyndigelse._2016._01._01.System xmlSystem = new dk.nsi.bemyndigelse._2016._01._01.System();
-        xmlSystem.setSystemId(delegatingSystem.getDomainId());
+        xmlSystem.setSystemId(delegatingSystem);
         xmlSystem.setSystemLongName("TODO implementer langt navn");
 
         type.setSystem(xmlSystem);
