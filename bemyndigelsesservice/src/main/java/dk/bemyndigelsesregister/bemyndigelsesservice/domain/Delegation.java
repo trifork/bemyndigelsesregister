@@ -199,7 +199,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     public dk.nsi.bemyndigelse._2016._01._01.Delegation toDelegationType() {
         dk.nsi.bemyndigelse._2016._01._01.Delegation type = new dk.nsi.bemyndigelse._2016._01._01.Delegation();
         type.setDelegatorCpr(delegatorCpr);
-        type.setDelegatorCpr(delegateeCpr);
+        type.setDelegateeCpr(delegateeCpr);
         type.setDelegateeCvr(delegateeCvr);
         type.setCreated(toXmlGregorianCalendar(created));
         type.setState(state == State.GODKENDT ? dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT : dk.nsi.bemyndigelse._2016._01._01.State.BESTILT);
