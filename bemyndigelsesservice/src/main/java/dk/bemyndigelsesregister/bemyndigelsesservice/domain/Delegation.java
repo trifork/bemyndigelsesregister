@@ -47,8 +47,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     @Column(name = "status")
     protected State state;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Column(name = "bemyndigelse20_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "delegation")
     protected Set<DelegationPermission> delegationPermissions;
 
     @Column(name = "godkendelsesdato")
