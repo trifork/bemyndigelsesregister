@@ -13,6 +13,8 @@ import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
+import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsRequest;
+import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsResponse;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
@@ -379,6 +381,45 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }
 
         final CreateDelegationsResponse response = new CreateDelegationsResponse();
+        for (Delegation delegation : delegations) {
+            response.getDelegation().add(typeMapper.toDelegationType(delegation));
+        }
+        return response;
+    }
+
+    @Override
+    @Protected
+    @Transactional
+    @ResponsePayload
+    public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
+        Collection<Delegation> delegations = new ArrayList();
+
+        String delegatorCpr = request.getDelegatorCpr();
+        String delegateeCpr = request.getDelegateeCpr();
+        String delegationId = request.getDelegationId();
+
+        if ((delegatorCpr != null ? 1 : 0) + (delegateeCpr != null ? 1 : 0) + (delegationId != null ? 1 : 0) != 1) {
+            throw new IllegalArgumentException("A single argument must be supplied, i.e. exactly one of delegatorCpr, delegateeCpr or delegationId must not be null");
+        }
+
+        if (delegatorCpr != null) {
+            List<Delegation> list = delegationManager.getDelegationsByDelegatorCpr(delegatorCpr);
+            if (list != null) {
+                delegations.addAll(list);
+            }
+        } else if (delegateeCpr != null) {
+            List<Delegation> list = delegationManager.getDelegationsByDelegateeCpr(delegateeCpr);
+            if (list != null) {
+                delegations.addAll(list);
+            }
+        } else {
+            Delegation d = delegationManager.getDelegation(delegationId);
+            if (d != null) {
+                delegations.add(d);
+            }
+        }
+
+        final GetDelegationsResponse response = new GetDelegationsResponse();
         for (Delegation delegation : delegations) {
             response.getDelegation().add(typeMapper.toDelegationType(delegation));
         }

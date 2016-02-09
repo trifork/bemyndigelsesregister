@@ -1,8 +1,12 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice;
 
+import com.trifork.dgws.annotations.Protected;
 import dk.nsi.bemyndigelse._2012._05._01.*;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
+import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsRequest;
+import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsResponse;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -53,11 +57,14 @@ public interface BemyndigelsesService {
     @Action("http://nsi.dk/bemyndigelse/2012/05/01/hentMetadata")
     HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader);
 
-
     @PayloadRoot(localPart = "CreateDelegationsRequest", namespace = "http://nsi.dk/bemyndigelse/2016/01/01/")
     @Action("http://nsi.dk/bemyndigelse/2016/01/01/createDelegation")
     @ResponsePayload
     CreateDelegationsResponse createDelegations(
             @RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader);
 
+    @PayloadRoot(localPart = "GetDelegationsRequest", namespace = "http://nsi.dk/bemyndigelse/2016/01/01/")
+    @Action("http://nsi.dk/bemyndigelse/2016/01/01/getDelegations")
+    @ResponsePayload
+    GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader);
 }

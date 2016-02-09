@@ -10,6 +10,8 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
 import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
+import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsRequest;
+import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsResponse;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,11 +20,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -139,16 +142,65 @@ public class DelegationServiceImplTest {
         return delegation;
     }
 
+    @Test
+    public void canGetDelegationsByDelegatorCpr() throws Exception {
+        final Delegation delegation = createDelegation(domainIdText, null);
 
-    public boolean allTrue(boolean... eval) {
-        int a = 0;
-        for (boolean b : eval) {
-            if (!b) {
-                System.out.println("Arg " + a + " was not true");
-                return false;
-            }
-            a++;
-        }
-        return true;
+        when(delegationManager.getDelegationsByDelegatorCpr(delegatorCprText)).thenReturn(Arrays.asList(delegation));
+        setupDgwsRequestContextForUser("BemyndigendeCpr");
+
+        GetDelegationsRequest request = new GetDelegationsRequest() {{
+            setDelegatorCpr(delegatorCprText);
+        }};
+        final GetDelegationsResponse response = service.getDelegations(request, soapHeader);
+
+        verify(delegationManager).getDelegationsByDelegatorCpr(delegatorCprText);
+
+        assertEquals(1, response.getDelegation().size());
+    }
+
+    @Test
+    public void canGetDelegationsByDelegateeCpr() throws Exception {
+        final Delegation delegation = createDelegation(domainIdText, null);
+
+        when(delegationManager.getDelegationsByDelegateeCpr(delegateeCprText)).thenReturn(Arrays.asList(delegation));
+        setupDgwsRequestContextForUser("BemyndigedeCpr");
+
+        GetDelegationsRequest request = new GetDelegationsRequest() {{
+            setDelegateeCpr(delegateeCprText);
+        }};
+        final GetDelegationsResponse response = service.getDelegations(request, soapHeader);
+
+        verify(delegationManager).getDelegationsByDelegateeCpr(delegateeCprText);
+
+        assertEquals(1, response.getDelegation().size());
+    }
+
+    @Test
+    public void canGetDelegationsById() throws Exception {
+        final Delegation delegation = createDelegation(domainIdText, null);
+
+        when(delegationManager.getDelegation(domainIdText)).thenReturn(delegation);
+        setupDgwsRequestContextForUser("domainId");
+
+        GetDelegationsRequest request = new GetDelegationsRequest() {{
+            setDelegationId(domainIdText);
+        }};
+        final GetDelegationsResponse response = service.getDelegations(request, soapHeader);
+
+        verify(delegationManager).getDelegation(domainIdText);
+
+        assertEquals(1, response.getDelegation().size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void canGetDelegationsByBadArguments() throws Exception {
+        setupDgwsRequestContextForUser("BemyndigendeCpr");
+
+        GetDelegationsRequest request = new GetDelegationsRequest() {{
+            setDelegatorCpr(delegatorCprText);
+            setDelegateeCpr(delegateeCprText);
+        }};
+        service.getDelegations(request, soapHeader);
     }
 }
