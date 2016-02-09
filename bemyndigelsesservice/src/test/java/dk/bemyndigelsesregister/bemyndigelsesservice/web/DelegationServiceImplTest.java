@@ -21,6 +21,8 @@ import org.springframework.ws.soap.SoapHeader;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -92,9 +94,9 @@ public class DelegationServiceImplTest {
                 setDelegateeCpr(delegateeCprText);
                 setDelegateeCvr(delegateeCvrText);
                 setRoleId(DelegationServiceImplTest.this.roleId);
-                setListOfPermissionIds(new ListOfPermissionIds() {{
-                    getPermissionId().addAll(permissionIds);
-                }});
+                ListOfPermissionIds pIds = new ListOfPermissionIds();
+                pIds.getPermissionId().addAll(permissionIds);
+                setListOfPermissionIds(pIds);
                 setState(dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT);
             }});
         }};
@@ -109,8 +111,10 @@ public class DelegationServiceImplTest {
         assertEquals(delegatorCprText, responseDelegation.getDelegatorCpr());
         assertEquals(delegateeCprText, responseDelegation.getDelegateeCpr());
         assertEquals(roleId, responseDelegation.getRole().getRoleId());
-//        assertEquals(permissionId1, responseDelegation.getPermission().get(0).getPermissionId()); TODO OBJ fix - responseDelegation.getPermission() returnerer null
-//        assertEquals(permissionId2, responseDelegation.getPermission().get(1).getPermissionId());
+        assertNotNull(responseDelegation.getPermission());
+        assertEquals(2, responseDelegation.getPermission().size());
+        assertTrue("Delegation should contain permission", responseDelegation.getPermission().get(0).getPermissionId().equals(permissionId1) || responseDelegation.getPermission().get(0).getPermissionId().equals(permissionId2));
+        assertTrue("Delegation should contain permission", responseDelegation.getPermission().get(1).getPermissionId().equals(permissionId1) || responseDelegation.getPermission().get(0).getPermissionId().equals(permissionId2));
         assertEquals(systemId, responseDelegation.getSystem().getSystemId());
     }
 

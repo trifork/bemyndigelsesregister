@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import dk.nsi.bemyndigelse._2016._01._01.*;
 import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -208,12 +210,13 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         xmlRole.setRoleId(role);
 //        xmlRole.setRoleDescription(role.getDescription()); TODO OBJ fix
         type.setRole(xmlRole);
-        List<Bemyndigelser.Bemyndigelse> delegation = new LinkedList<>();
+        List<dk.nsi.bemyndigelse._2016._01._01.Permission> permissions = type.getPermission();
         for (DelegationPermission permission : delegationPermissions) {
             dk.nsi.bemyndigelse._2016._01._01.Permission xmlPermission = new dk.nsi.bemyndigelse._2016._01._01.Permission();
             xmlPermission.setPermissionId(permission.getPermissionId());
             // TODO KRS fix getting permissions from permissionId in delegationPermissions
             xmlPermission.setPermissionDescription("// TODO implementer at hente permissions fra id");
+            permissions.add(xmlPermission);
         }
         dk.nsi.bemyndigelse._2016._01._01.System xmlSystem = new dk.nsi.bemyndigelse._2016._01._01.System();
         xmlSystem.setSystemId(delegatingSystem);
