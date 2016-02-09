@@ -198,37 +198,6 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         return bemyndigelser;
     }
 
-    public dk.nsi.bemyndigelse._2016._01._01.Delegation toDelegationType() {
-        dk.nsi.bemyndigelse._2016._01._01.Delegation type = new dk.nsi.bemyndigelse._2016._01._01.Delegation();
-        type.setDelegatorCpr(delegatorCpr);
-        type.setDelegateeCpr(delegateeCpr);
-        type.setDelegateeCvr(delegateeCvr);
-        type.setCreated(toXmlGregorianCalendar(created));
-        type.setState(state == State.GODKENDT ? dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT : dk.nsi.bemyndigelse._2016._01._01.State.BESTILT);
-        type.setDelegationId(getDomainId());
-        dk.nsi.bemyndigelse._2016._01._01.Role xmlRole = new dk.nsi.bemyndigelse._2016._01._01.Role();
-        xmlRole.setRoleId(role);
-//        xmlRole.setRoleDescription(role.getDescription()); TODO OBJ fix
-        type.setRole(xmlRole);
-        List<dk.nsi.bemyndigelse._2016._01._01.Permission> permissions = type.getPermission();
-        for (DelegationPermission permission : delegationPermissions) {
-            dk.nsi.bemyndigelse._2016._01._01.Permission xmlPermission = new dk.nsi.bemyndigelse._2016._01._01.Permission();
-            xmlPermission.setPermissionId(permission.getPermissionId());
-            // TODO KRS fix getting permissions from permissionId in delegationPermissions
-            xmlPermission.setPermissionDescription("// TODO implementer at hente permissions fra id");
-            permissions.add(xmlPermission);
-        }
-        dk.nsi.bemyndigelse._2016._01._01.System xmlSystem = new dk.nsi.bemyndigelse._2016._01._01.System();
-        xmlSystem.setSystemId(delegatingSystem);
-        xmlSystem.setSystemLongName("TODO implementer langt navn");
-
-        type.setSystem(xmlSystem);
-
-        type.setEffectiveFrom(toXmlGregorianCalendar(effectiveFrom));
-        type.setEffectiveTo(toXmlGregorianCalendar(effectiveTo));
-        return type;
-    }
-
     private XMLGregorianCalendar toXmlGregorianCalendar(DateTime dateTime) {
         return datatypeFactory.newXMLGregorianCalendar(new DateTime(dateTime, DateTimeZone.UTC).toGregorianCalendar());
     }

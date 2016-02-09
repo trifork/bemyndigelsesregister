@@ -369,7 +369,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getDelegateeCpr(),
                     createDelegation.getDelegateeCvr(),
                     createDelegation.getRoleId(),
-                    State.GODKENDT, // valueOf(createDelegation.getState().value()), TODO: Dette fungerede ikke, createDelegation.getState() returnerer null
+                    State.GODKENDT, // valueOf(createDelegation.getState().value()), TODO OBJ Dette fungerede ikke, createDelegation.getState() returnerer null
                     createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));
@@ -380,7 +380,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         final CreateDelegationsResponse response = new CreateDelegationsResponse();
         for (Delegation delegation : delegations) {
-            response.getDelegation().add(delegation.toDelegationType());
+            response.getDelegation().add(typeMapper.toDelegationType(delegation));
         }
         return response;
     }

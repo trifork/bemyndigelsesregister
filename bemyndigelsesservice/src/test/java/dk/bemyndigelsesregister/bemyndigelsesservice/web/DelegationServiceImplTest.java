@@ -94,6 +94,7 @@ public class DelegationServiceImplTest {
                 setDelegateeCpr(delegateeCprText);
                 setDelegateeCvr(delegateeCvrText);
                 setRoleId(DelegationServiceImplTest.this.roleId);
+
                 ListOfPermissionIds pIds = new ListOfPermissionIds();
                 pIds.getPermissionId().addAll(permissionIds);
                 setListOfPermissionIds(pIds);
@@ -106,16 +107,7 @@ public class DelegationServiceImplTest {
         verify(delegationManager).createDelegation(systemId, delegatorCprText, delegateeCprText, delegateeCvrText, roleId, state, permissionIds, null, null);
 
         assertEquals(1, response.getDelegation().size());
-        final dk.nsi.bemyndigelse._2016._01._01.Delegation responseDelegation = response.getDelegation().get(0);
-        assertEquals(domainIdText, responseDelegation.getDelegationId());
-        assertEquals(delegatorCprText, responseDelegation.getDelegatorCpr());
-        assertEquals(delegateeCprText, responseDelegation.getDelegateeCpr());
-        assertEquals(roleId, responseDelegation.getRole().getRoleId());
-        assertNotNull(responseDelegation.getPermission());
-        assertEquals(2, responseDelegation.getPermission().size());
-        assertTrue("Delegation should contain permission", responseDelegation.getPermission().get(0).getPermissionId().equals(permissionId1) || responseDelegation.getPermission().get(0).getPermissionId().equals(permissionId2));
-        assertTrue("Delegation should contain permission", responseDelegation.getPermission().get(1).getPermissionId().equals(permissionId1) || responseDelegation.getPermission().get(0).getPermissionId().equals(permissionId2));
-        assertEquals(systemId, responseDelegation.getSystem().getSystemId());
+        verify(typeMapper).toDelegationType(delegation);
     }
 
 
