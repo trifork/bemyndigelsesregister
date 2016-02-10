@@ -2,10 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice;
 
 import com.trifork.dgws.annotations.Protected;
 import dk.nsi.bemyndigelse._2012._05._01.*;
-import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
-import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
-import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsRequest;
-import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsResponse;
+import dk.nsi.bemyndigelse._2016._01._01.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -67,4 +64,9 @@ public interface BemyndigelsesService {
     @Action("http://nsi.dk/bemyndigelse/2016/01/01/getDelegations")
     @ResponsePayload
     GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader);
+
+    @PayloadRoot(localPart = "DeleteDelegationsRequest", namespace = "http://nsi.dk/bemyndigelse/2016/01/01/")
+    @Action("http://nsi.dk/bemyndigelse/2016/01/01/deleteDelegations")
+    @ResponsePayload
+    DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader);
 }

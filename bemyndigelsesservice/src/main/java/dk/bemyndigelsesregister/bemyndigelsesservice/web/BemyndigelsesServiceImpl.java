@@ -6,15 +6,14 @@ import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
-import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
-import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
-import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsRequest;
-import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsResponse;
+import dk.nsi.bemyndigelse._2016._01._01.*;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
@@ -398,10 +397,12 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         String delegateeCpr = request.getDelegateeCpr();
         String delegationId = request.getDelegationId();
 
+        // check arguments
         if ((delegatorCpr != null ? 1 : 0) + (delegateeCpr != null ? 1 : 0) + (delegationId != null ? 1 : 0) != 1) {
             throw new IllegalArgumentException("A single argument must be supplied, i.e. exactly one of delegatorCpr, delegateeCpr or delegationId must not be null");
         }
 
+        // invoke correct method on manager
         if (delegatorCpr != null) {
             List<Delegation> list = delegationManager.getDelegationsByDelegatorCpr(delegatorCpr);
             if (list != null) {
@@ -419,10 +420,40 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             }
         }
 
+        // return result
         final GetDelegationsResponse response = new GetDelegationsResponse();
         for (Delegation delegation : delegations) {
             response.getDelegation().add(typeMapper.toDelegationType(delegation));
         }
+        return response;
+    }
+
+    @Override
+    @Protected
+    @Transactional
+    @ResponsePayload
+    public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
+        List<String> delegationIds = request.getDelegationId();
+        XMLGregorianCalendar xmlDate = request.getDeletionDate();
+        DateTime deletionDate = xmlDate == null ? null : new DateTime(xmlDate.toGregorianCalendar().getTimeInMillis());
+
+        // check arguments
+        if (delegationIds == null || delegationIds.isEmpty())
+            throw new IllegalArgumentException("List of delegationIds must not be empty");
+        if (deletionDate == null)
+            throw new IllegalArgumentException("DeletionDate must be specified");
+        if (deletionDate.isAfterNow())
+            throw new IllegalArgumentException("DeletionDate cannot be a future date");
+
+        // invoke manager
+        List<String> result = new LinkedList<>();
+        for (String delegationId : delegationIds) {
+            result.add(delegationManager.deleteDelegation(delegationId, deletionDate));
+        }
+
+        // return result
+        final DeleteDelegationsResponse response = new DeleteDelegationsResponse();
+        response.getDelegationId().addAll(result);
         return response;
     }
 }

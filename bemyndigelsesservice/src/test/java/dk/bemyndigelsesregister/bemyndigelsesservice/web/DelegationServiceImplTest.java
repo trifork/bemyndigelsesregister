@@ -8,11 +8,9 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsRequest;
-import dk.nsi.bemyndigelse._2016._01._01.CreateDelegationsResponse;
-import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsRequest;
-import dk.nsi.bemyndigelse._2016._01._01.GetDelegationsResponse;
+import dk.nsi.bemyndigelse._2016._01._01.*;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +18,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -59,6 +60,16 @@ public class DelegationServiceImplTest {
 
     @Mock
     SoapHeader soapHeader;
+
+    private static DatatypeFactory datatypeFactory;
+
+    static {
+        try {
+            datatypeFactory = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private final DateTime now = new DateTime();
 
@@ -202,5 +213,28 @@ public class DelegationServiceImplTest {
             setDelegateeCpr(delegateeCprText);
         }};
         service.getDelegations(request, soapHeader);
+    }
+
+
+    @Test
+    public void canDeleteDelegations() throws Exception {
+        when(delegationManager.deleteDelegation(domainIdText, now)).thenReturn(domainIdText);
+        setupDgwsRequestContextForUser("BemyndigendeCpr");
+
+        DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
+            getDelegationId().add(domainIdText);
+            setDeletionDate(toXmlGregorianCalendar(now));
+        }};
+        final DeleteDelegationsResponse response = service.deleteDelegations(request, soapHeader);
+
+        verify(delegationManager).deleteDelegation(domainIdText, now);
+
+        assertEquals(1, response.getDelegationId().size());
+    }
+
+    private XMLGregorianCalendar toXmlGregorianCalendar(DateTime dateTime) {
+        if (dateTime == null)
+            return null;
+        return datatypeFactory.newXMLGregorianCalendar(new DateTime(dateTime, DateTimeZone.UTC).toGregorianCalendar());
     }
 }
