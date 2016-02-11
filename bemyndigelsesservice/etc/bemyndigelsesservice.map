@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <jar name="bemyndigelsesservice.war">
 	<dir path="" from="../src/main/webapp" />
-	<dir path="WEB-INF/classes" from="../target/bemyndigelsesservice-1.8-SNAPSHOT/WEB-INF/classes" />
-	<dir path="WEB-INF/lib" from="../target/bemyndigelsesservice-1.8-SNAPSHOT/WEB-INF/lib" />
+	<dir path="WEB-INF/classes" from="../target/bemyndigelsesservice-1.16-SNAPSHOT/WEB-INF/classes" />
+	<dir path="WEB-INF/lib" from="../target/bemyndigelsesservice-1.16-SNAPSHOT/WEB-INF/lib" />
 </jar>
