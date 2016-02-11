@@ -17,7 +17,7 @@ public class RoleDaoEbeanTest extends DaoUnitTestSupport {
     public void testFindRoleByDomainId() throws Exception {
         System.setProperty("ebean.debug.sql", "true");
 
-        DelegatingSystem system = delegatingSystemDao.findByDomainId("triforktest");
+        DelegatingSystem system = delegatingSystemDao.findByDomainId("testsys");
         String domainId = "Laege";
 
         Role role = roleDao.findByDomainId(system.getId(), domainId);
@@ -29,7 +29,7 @@ public class RoleDaoEbeanTest extends DaoUnitTestSupport {
     public void testFindRoleBySystem() throws Exception {
         System.setProperty("ebean.debug.sql", "true");
 
-        DelegatingSystem system = delegatingSystemDao.findByDomainId("triforktest");
+        DelegatingSystem system = delegatingSystemDao.findByDomainId("testsys");
 
         List<Role> roles = roleDao.findBySystem(system.getId());
         System.out.println(roles);

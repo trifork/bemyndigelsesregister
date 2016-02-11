@@ -32,7 +32,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     final String roleCode = "Laege";
     final String permissionCode1 = "R01";
     final String permissionCode2 = "R02";
-    final String systemKode = "triforktest";
+    final String systemKode = "testsys";
     final LinkedSystem linkedSystem = LinkedSystem.createForTest(systemKode);
 
     {

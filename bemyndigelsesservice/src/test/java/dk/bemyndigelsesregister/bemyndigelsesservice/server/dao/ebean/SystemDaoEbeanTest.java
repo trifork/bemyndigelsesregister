@@ -17,7 +17,7 @@ public class SystemDaoEbeanTest extends DaoUnitTestSupport {
     public void testFindSystemByDomainId() throws Exception {
         System.setProperty("ebean.debug.sql", "true");
 
-        String domainId = "triforktest";
+        String domainId = "testsys";
         DelegatingSystem system = delegatingSystemDao.findByDomainId(domainId);
 
         System.out.println(system);

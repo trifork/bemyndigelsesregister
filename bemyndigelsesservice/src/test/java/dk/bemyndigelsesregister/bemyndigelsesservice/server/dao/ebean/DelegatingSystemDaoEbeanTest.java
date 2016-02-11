@@ -19,7 +19,7 @@ public class DelegatingSystemDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindDelegatingSystemByDomainId() {
-        String kode = "triforktest";
+        String kode = "testsys";
 
         DelegatingSystem system = delegatingSystemDao.findByDomainId(kode);
         System.out.println(system);

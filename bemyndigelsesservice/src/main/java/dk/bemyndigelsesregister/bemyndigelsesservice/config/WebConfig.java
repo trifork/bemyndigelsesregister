@@ -54,6 +54,9 @@ public class WebConfig extends WebMvcConfigurationSupport {
         soapActions.put("HentMetadata","http://nsi.dk/bemyndigelse/2012/05/01/HentMetadata");
         soapActions.put("IndlaesMetadata","http://nsi.dk/bemyndigelse/2012/05/01/IndlaesMetadata");
         soapActions.put("GodkendBemyndigelse","http://nsi.dk/bemyndigelse/2012/05/01/GodkendBemyndigelse");
+
+//        soapActions.put("CreateDelegations","http://nsi.dk/bemyndigelse/2016/01/01/CreateDelegations");
+
         bean.setSoapActions(soapActions);
         return bean;
     }
@@ -64,6 +67,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
                 new ClassPathResource("/schema/CPR_PersonCivilRegistrationIdentifier.xsd"),
                 new ClassPathResource("/schema/CVR_CVRnumberIdentifier.xsd"),
                 new ClassPathResource("/schema/bemyndigelsesservice.xsd"),
+                new ClassPathResource("/schema/2016_01_01/bemyndigelsesservice.xsd")
         };
         for (Resource resource : resources) {
             if (!resource.exists()) {
@@ -75,7 +79,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @Bean
     public SimpleXsdSchema schema1XsdSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("schema/bemyndigelsesservice.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("schema/2016_01_01/bemyndigelsesservice.xsd"));
     }
 
     @Bean
@@ -160,7 +164,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public EndpointInterceptor payloadValidationEndpointInterceptor() {
         final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
         interceptor.setSchemas(new Resource[]{
-                new ClassPathResource("schema/bemyndigelsesservice.xsd"),
+                new ClassPathResource("schema/2016_01_01/bemyndigelsesservice.xsd"),
         });
         interceptor.setValidateRequest(true);
         interceptor.setValidateResponse(false);

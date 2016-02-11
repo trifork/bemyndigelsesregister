@@ -126,11 +126,13 @@ public class DelegationManagerImpl implements DelegationManager {
             Set<String> permissionCodeSet = new HashSet<>(permissions); // ensures uniqueness
             Set<DelegationPermission> permissionSet = new HashSet<>();
             for (String permission : permissionCodeSet) {
+                Permission p = permissionDao.findByDomainId(system, permission);
+                if(p == null)
+                    throw new IllegalArgumentException("No permission " + permission + " exists for " + system);
+
                 DelegationPermission dp = new DelegationPermission();
                 dp.setDelegation(delegation);
-                // TODO KRS handle non-existing permissions - error or just don't make them?
-                dp.setPermissionId(permissionDao.findByDomainId(system, permission).getDomainId());
-
+                dp.setPermissionId(p.getDomainId());
                 permissionSet.add(dp);
             }
             delegation.setDelegationPermissions(permissionSet);

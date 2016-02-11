@@ -2,7 +2,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 REPLACE INTO domaene(kode) VALUES ('trifork-test');
 
-REPLACE INTO linked_system(domaene_id, kode, beskrivelse) VALUES (1, 'triforktest', 'Trifork test system');
+REPLACE INTO linked_system(domaene_id, kode, beskrivelse) VALUES (1, 'testsys', 'Trifork test system');
 
 REPLACE INTO arbejdsfunktion(kode, beskrivelse, linked_system_id) values ('Laege', 'For unit test only', 1);
 
@@ -32,7 +32,7 @@ REPLACE INTO `bemyndigelse` (
         '1010101010',
         '1010101012',
         '1',
-        'triforktest',
+        'testsys',
         'Laege',
         'R01',
         'GODKENDT',
@@ -63,7 +63,7 @@ REPLACE INTO `bemyndigelse` (
         '1010101010',
         '1010101012',
         '1',
-        'triforktest',
+        'testsys',
         'Laege',
         'R01',
         'GODKENDT',
@@ -94,7 +94,7 @@ REPLACE INTO `bemyndigelse` (
         '1010101012',
         '1010101013',
         '1',
-        'triforktest',
+        'testsys',
         'Laege',
         'R01',
         'GODKENDT',
@@ -126,7 +126,7 @@ VALUES (
   '1010101010',
   '1010101012',
   '1',
-  'triforktest',
+  'testsys',
   'Laege',
   'GODKENDT',
   '2011-05-21 02:15:00',
@@ -157,7 +157,7 @@ VALUES (
   '1010101010',
   '1010101012',
   '1',
-  'triforktest',
+  'testsys',
   'Laege',
   'GODKENDT',
   '2011-05-22 02:15:00',
@@ -188,7 +188,7 @@ VALUES (
   '1010101012',
   '1010101013',
   '1',
-  'triforktest',
+  'testsys',
   'Laege',
   'GODKENDT',
   '2000-05-22 00:00:00',
