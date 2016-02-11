@@ -160,7 +160,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
 
         dk.nsi.bemyndigelse._2016._01._01.System xmlSystem = objectFactory.createSystem();
         xmlSystem.setSystemId(ds.getDomainId());
-        xmlSystem.setSystemLongName(ds.getDomainId()); // TODO OBJ Implement system long name
+        xmlSystem.setSystemLongName(ds.getDescription());
 
         return xmlSystem;
     }

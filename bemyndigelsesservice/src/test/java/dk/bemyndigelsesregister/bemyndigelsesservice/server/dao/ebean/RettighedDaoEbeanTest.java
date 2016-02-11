@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import org.junit.Test;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class RettighedDaoEbeanTest extends DaoUnitTestSupport {
         );
 
         assertEquals(2, rettigheder.size());
-        assertEquals("R01", rettigheder.get(0).getKode());
-        assertEquals("R02", rettigheder.get(1).getKode());
+        assertEquals(TestData.permissionCode1, rettigheder.get(0).getKode());
+        assertEquals(TestData.permissionCode2, rettigheder.get(1).getKode());
     }
 }

@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Arbejdsfunktion;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import org.junit.Test;
 
 import java.util.List;
@@ -15,6 +16,6 @@ public class ArbejdsfunktionDaoEbeanTest extends DaoUnitTestSupport {
                 linkedSystemDao.get(1)
         );
         assertEquals(1, arbejdsfunktioner.size());
-        assertEquals("Laege", arbejdsfunktioner.get(0).getKode());
+        assertEquals(TestData.roleCode, arbejdsfunktioner.get(0).getKode());
     }
 }

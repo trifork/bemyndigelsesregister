@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Rettighed;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,7 +18,11 @@ public class PermissionDaoEbeanTest extends DaoUnitTestSupport {
         List<Permission> permissions = permissionDao.findBySystem(delegatingSystemDao.get(1).getDomainId());
 
         assertEquals(2, permissions.size());
-        assertEquals("R01", permissions.get(0).getDomainId());
-        assertEquals("R02", permissions.get(1).getDomainId());
+
+        assertEquals(TestData.permissionCode1, permissions.get(0).getDomainId());
+        assertEquals(TestData.permissionDescription1, permissions.get(0).getDescription());
+
+        assertEquals(TestData.permissionCode2, permissions.get(1).getDomainId());
+        assertEquals(TestData.permissionDescription2, permissions.get(1).getDescription());
     }
 }

@@ -335,6 +335,7 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+
         <wsdl:operation name="GetDelegations_2016_01_01">
             <soap:operation soapAction="http://nsi.dk/bemyndigelse/2016/01/01#GetDelegations"/>
             <wsdl:input name="GetDelegationsRequest_2016_01_01">

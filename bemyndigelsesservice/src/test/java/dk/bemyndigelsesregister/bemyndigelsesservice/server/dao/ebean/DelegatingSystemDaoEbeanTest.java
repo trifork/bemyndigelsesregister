@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,15 +15,20 @@ public class DelegatingSystemDaoEbeanTest extends DaoUnitTestSupport {
     public void testFindDelegatingSystem() {
         DelegatingSystem system = delegatingSystemDao.get(1);
         System.out.println(system);
+
         assertNotNull(system);
+        assertEquals("DelegatingSystem should contain correct code", TestData.systemCode, system.getDomainId());
+        assertEquals("DelegatingSystem should contain correct description", TestData.systemDescription, system.getDescription());
     }
 
     @Test
     public void testFindDelegatingSystemByDomainId() {
-        String kode = "testsys";
 
-        DelegatingSystem system = delegatingSystemDao.findByDomainId(kode);
+        DelegatingSystem system = delegatingSystemDao.findByDomainId(TestData.systemCode);
         System.out.println(system);
-        assertEquals("DelegatingSystem should contain correct code", kode, system.getDomainId());
+
+        assertNotNull(system);
+        assertEquals("DelegatingSystem should contain correct code", TestData.systemCode, system.getDomainId());
+        assertEquals("DelegatingSystem should contain correct description", TestData.systemDescription, system.getDescription());
     }
 }
