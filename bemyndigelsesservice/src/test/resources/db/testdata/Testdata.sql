@@ -198,9 +198,42 @@ VALUES (
   '2000-05-22 02:15:00',
   NULL);
 
+REPLACE INTO `bemyndigelse20` (
+  `id`,
+  `kode`,
+  `bemyndigende_cpr`,
+  `bemyndigede_cpr`,
+  `bemyndigede_cvr`,
+  `linked_system_kode`,
+  `arbejdsfunktion_kode`,
+  `status`,
+  `godkendelsesdato`,
+  `gyldig_fra`,
+  `gyldig_til`,
+  `versionsid`,
+  `sidst_modificeret`,
+  `sidst_modificeret_af`)
+VALUES (
+  4,
+  'TestKode4',
+  '2006271866',
+  '1010101013',
+  '1',
+  'testsys',
+  'Laege',
+  'GODKENDT',
+  '2000-05-22 00:00:00',
+  '2000-05-22 23:59:59',
+  '2100-05-22 00:00:00',
+  0,
+  '2000-05-22 02:15:00',
+  NULL);
+
 REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (1, 'R01');
 REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (2, 'R01');
 REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (3, 'R01');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (4, 'R01');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (4, 'R02');
 
 REPLACE INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
 

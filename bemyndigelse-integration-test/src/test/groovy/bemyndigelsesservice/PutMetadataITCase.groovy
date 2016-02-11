@@ -2,9 +2,9 @@ package bemyndigelsesservice
 
 import org.junit.Ignore
 import org.junit.Test
-import shared.WebServiceSupport10
+import shared.WebServiceSupport
 
-class HentMetadataITCase extends WebServiceSupport10 {
+class PutMetadataITCase extends WebServiceSupport {
 
     @Ignore
     @Test
@@ -12,7 +12,7 @@ class HentMetadataITCase extends WebServiceSupport10 {
         def response = send("hentMetadata") {
             "bms:HentMetadataRequest" {
                 "Domaene"('trifork-test')
-                "System"('Trifork test system')
+                "System"('testsys')
             }
         }
         assert response

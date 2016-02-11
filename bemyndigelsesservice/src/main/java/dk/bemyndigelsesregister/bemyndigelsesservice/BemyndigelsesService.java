@@ -55,7 +55,7 @@ public interface BemyndigelsesService {
     HentMetadataResponse hentMetadata(HentMetadataRequest request, SoapHeader soapHeader);
 
     @PayloadRoot(localPart = "CreateDelegationsRequest", namespace = "http://nsi.dk/bemyndigelse/2016/01/01/")
-    @Action("http://nsi.dk/bemyndigelse/2016/01/01/createDelegation")
+    @Action("http://nsi.dk/bemyndigelse/2016/01/01/createDelegations")
     @ResponsePayload
     CreateDelegationsResponse createDelegations(
             @RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader);

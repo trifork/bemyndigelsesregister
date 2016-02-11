@@ -54,9 +54,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
         soapActions.put("HentMetadata","http://nsi.dk/bemyndigelse/2012/05/01/HentMetadata");
         soapActions.put("IndlaesMetadata","http://nsi.dk/bemyndigelse/2012/05/01/IndlaesMetadata");
         soapActions.put("GodkendBemyndigelse","http://nsi.dk/bemyndigelse/2012/05/01/GodkendBemyndigelse");
-
-//        soapActions.put("CreateDelegations","http://nsi.dk/bemyndigelse/2016/01/01/CreateDelegations");
-
+        soapActions.put("GetDelegations","http://nsi.dk/bemyndigelse/2016/01/01/GetDelegations");
+        soapActions.put("CreateDelegations","http://nsi.dk/bemyndigelse/2016/01/01/CreateDelegations");
+        soapActions.put("DeleteDelegations","http://nsi.dk/bemyndigelse/2016/01/01/DeleteDelegations");
+        soapActions.put("GetMetadata","http://nsi.dk/bemyndigelse/2016/01/01/GetMetadata");
+        soapActions.put("PutMetadata","http://nsi.dk/bemyndigelse/2016/01/01/PutMetadata");
         bean.setSoapActions(soapActions);
         return bean;
     }

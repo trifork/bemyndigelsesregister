@@ -2,17 +2,17 @@ package bemyndigelsesservice
 
 import org.junit.Ignore
 import org.junit.Test
-import shared.WebServiceSupport10
+import shared.WebServiceSupport
 
-class HentMetadataITCase extends WebServiceSupport10 {
+class GetMetadataITCase extends WebServiceSupport {
 
     @Ignore
     @Test
     public void willAllowWhitelistedSystemsToRead() throws Exception {
-        def response = send("hentMetadata") {
-            "bms:HentMetadataRequest" {
-                "Domaene"('trifork-test')
-                "System"('Trifork test system')
+        def response = send("GetMetadata") {
+            "bms:GetMetadataRequest" {
+                "Domain"('trifork-test')
+                "System"('testsys')
             }
         }
         assert response

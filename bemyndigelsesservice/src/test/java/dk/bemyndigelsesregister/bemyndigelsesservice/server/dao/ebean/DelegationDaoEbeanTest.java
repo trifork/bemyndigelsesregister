@@ -143,7 +143,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     public void testListDelegations() throws Exception {
         final List<Delegation> delegations = dao.list();
 
-        assertEquals("Unexpected no. of delegations found", 3, delegations.size());
+        assertEquals("Unexpected no. of delegations found", 4, delegations.size());
 
         System.out.println(delegations);
     }

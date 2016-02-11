@@ -1,15 +1,15 @@
 package shared
 
-import com.googlecode.flyway.core.Flyway
-import org.springframework.jdbc.datasource.DriverManagerDataSource
 import org.w3c.dom.NodeList
 import sosi.SOSIUtil
 import wslite.soap.SOAPClient
 import wslite.soap.SOAPResponse
 
 import static dk.bemyndigelsesregister.integrationtest.TestUtil.urlPrefix
+import com.googlecode.flyway.core.Flyway
+import org.springframework.jdbc.datasource.DriverManagerDataSource
 
-abstract class WebServiceSupport {
+abstract class WebServiceSupport10 {
 
     SOSIUtil sosiUtil = new SOSIUtil();
 
@@ -17,9 +17,9 @@ abstract class WebServiceSupport {
         return sosiUtil;
     }
 
-    WebServiceSupport() {
+    WebServiceSupport10() {
         Properties conf = new Properties();
-        conf.load(WebServiceSupport.class.getResourceAsStream("/bemyndigelse.properties"))
+        conf.load(WebServiceSupport10.class.getResourceAsStream("/bemyndigelse.properties"))
         DriverManagerDataSource dataSource = new DriverManagerDataSource(
                 conf.getProperty("jdbc.url"),
                 conf.getProperty("jdbc.username"),
@@ -52,9 +52,9 @@ abstract class WebServiceSupport {
     protected SOAPResponse send(String action, Closure content) {
         SOAPClient client = getClient()
         client.send(
-                SOAPAction: "http://nsi.dk/bemyndigelse/2016/01/01/$action",
+                SOAPAction: "http://nsi.dk/bemyndigelse/2012/05/01/$action",
         ) {
-            envelopeAttributes 'xmlns:bms20160101': 'http://nsi.dk/bemyndigelse/2016/01/01/',
+            envelopeAttributes 'xmlns:bms': 'http://nsi.dk/bemyndigelse/2012/05/01/',
                     'xmlns:sosi': "http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
             header {
                 NodeList header = sosiUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")

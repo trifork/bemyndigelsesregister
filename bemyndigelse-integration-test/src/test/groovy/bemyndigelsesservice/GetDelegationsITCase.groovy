@@ -1,23 +1,21 @@
 package bemyndigelsesservice
 
-import org.junit.Ignore
 import org.junit.Test
-import shared.WebServiceSupport10
+import shared.WebServiceSupport
 import wslite.soap.SOAPFaultException
 
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertFalse
 
-class HentBemyndigelserITCase extends WebServiceSupport10 {
+class GetDelegationsITCase extends WebServiceSupport {
 
-    @Ignore
     @Test
     public void willNotValidateOnBothBemyndigendeAndBemyndigedeParameter() {
         try {
-            send("hentBemyndigelser") {
-                "bms:HentBemyndigelserRequest" {
-                    "BemyndigendeCpr"('2006271866')
-                    "BemyndigedeCpr"('1010101010')
+            send("GetDelegations") {
+                "bms20160101:GetDelegationsRequest" {
+                    "DelegatorCpr"('2006271866')
+                    "DelegateeCpr"('1010101010')
                 }
             }
         } catch (SOAPFaultException e) {
@@ -25,24 +23,23 @@ class HentBemyndigelserITCase extends WebServiceSupport10 {
         }
     }
 
-    @Ignore
     @Test
-    public void willValidateOnBemyndigendeParameter() {
-        def response = send("hentBemyndigelser") {
-            "bms:HentBemyndigelserRequest" {
-                "BemyndigendeCpr"('2006271866')
+    public void willGetDelegationsForDelegator() {
+        def response = send("GetDelegations") {
+            "bms20160101:GetDelegationsRequest" {
+                "DelegatorCpr"('2006271866')
             }
 
         }
         assertFalse response.hasFault()
     }
 
-    @Ignore
     @Test
     public void willNotValidateOnNoParameters() {
         try {
-            send("hentBemyndigelser") {
-                "bms:HentBemyndigelserRequest"();
+            send("GetDelegations") {
+                "bms20160101:GetDelegationsRequest" {
+                }
             }
         } catch (SOAPFaultException e) {
             assertEquals "Validation error", e.fault.':faultstring'.text()

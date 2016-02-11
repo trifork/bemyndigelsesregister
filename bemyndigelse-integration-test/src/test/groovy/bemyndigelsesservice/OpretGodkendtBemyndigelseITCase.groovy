@@ -1,10 +1,12 @@
 package bemyndigelsesservice
 
-import shared.WebServiceSupport
+import org.junit.Ignore
+import shared.WebServiceSupport10
 import org.junit.Test
 
-class OpretGodkendtBemyndigelseITCase extends WebServiceSupport {
+class OpretGodkendtBemyndigelseITCase extends WebServiceSupport10 {
 
+    @Ignore
     @Test
     public void canCreateApprovedBemyndigelse() {
         def response = send("opretGodkendteBemyndigelser") {
