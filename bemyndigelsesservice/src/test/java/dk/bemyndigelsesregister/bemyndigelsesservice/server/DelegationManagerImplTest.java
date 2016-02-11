@@ -2,7 +2,6 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import com.avaje.ebean.EbeanServer;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.LinkedSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.DaoUnitTestSupport;
@@ -15,6 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * BEM 2.0 bemyndigelse
@@ -74,15 +74,65 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testDeleteDelegation() throws Exception {
+    public void testDeleteDelegationAsDelegator() throws Exception {
         try {
             ebeanServer.beginTransaction();
 
             Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.BESTILT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato1, null);
-            String uuid = manager.deleteDelegation(delegation.getDomainId(), dato2);
+            String uuid = manager.deleteDelegation(delegatorCpr, null, delegation.getDomainId(), dato2);
             delegation = manager.getDelegation(uuid); // reload delegation
 
             assertEquals("Bemyndigelse skal være afsluttet", dato2, delegation.getEffectiveTo());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testDeleteDelegationAsDelegatee() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.BESTILT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato1, null);
+            String uuid = manager.deleteDelegation(null, delegateeCpr, delegation.getDomainId(), dato2);
+            delegation = manager.getDelegation(uuid); // reload delegation
+
+            assertEquals("Bemyndigelse skal være afsluttet", dato2, delegation.getEffectiveTo());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testDeleteNonExistingDelegation() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            String uuid = manager.deleteDelegation(null, delegateeCpr, "non-existing-delegation-id", dato2);
+
+            assertNull("Sletning af en ikke eksisterende bemyndigelse skal give null", uuid);
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testDeleteThirdPartyDelegation() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            Delegation delegation = manager.createDelegation(TestData.systemCode, "anotherCpr", delegateeCpr, delegateeCvr, TestData.roleCode, State.BESTILT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato1, null);
+            String delegationId = delegation.getDomainId();
+
+            Delegation loadedDelegation = manager.getDelegation(delegationId); // reload delegation
+
+            String uuid = manager.deleteDelegation(delegatorCpr, null, delegationId, dato2);
+            assertNull("Sletning af en ikke eksisterende bemyndigelse skal give null", uuid);
+
+            Delegation reloadedDelegation = manager.getDelegation(delegationId); // reload delegation
+
+            assertEquals("Bemyndigelse skal være uforandret", loadedDelegation.getDomainId(), reloadedDelegation.getDomainId());
+            assertEquals("Bemyndigelse skal være uforandret", loadedDelegation.getEffectiveTo(), reloadedDelegation.getEffectiveTo());
         } finally {
             ebeanServer.endTransaction();
         }
@@ -94,7 +144,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             ebeanServer.beginTransaction();
 
             Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.BESTILT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato1, null);
-            manager.deleteDelegation(delegation.getDomainId(), dato0); // should fail before date0 is before date1
+            manager.deleteDelegation(delegatorCpr, null, delegation.getDomainId(), dato0); // should fail before date0 is before date1
         } finally {
             ebeanServer.endTransaction();
         }

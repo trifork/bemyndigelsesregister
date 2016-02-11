@@ -60,11 +60,14 @@ public interface DelegationManager {
     /**
      * deleteDelegation sletter bemyndigelsen med den angivne nøgle.
      * Sletningen foregår i praksis ved at sætte slutdato til det aktuelle tidspunkt.
-     * Da status indgår i nøglen kan den bruges til at afvise en anmodning om bemyndigelser
+     * Kan også bruges til at afvise en anmodning om bemyndigelse
      *
+     *
+     * @param delegatorCpr
+     * @param delegateeCpr
      * @param delegationId kode på på bemyndigelse (uuid)
      * @param deletionDate slutdato til bemyndigelse
      * @return delegationId
      */
-    String deleteDelegation(String delegationId, DateTime deletionDate);
+    String deleteDelegation(String delegatorCpr, String delegateeCpr, String delegationId, DateTime deletionDate);
 }

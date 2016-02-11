@@ -242,6 +242,10 @@
             <xs:element name="DeleteDelegationsRequest">
                 <xs:complexType>
                     <xs:sequence>
+                        <xs:choice xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                            <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                            <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                        </xs:choice>
                         <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ListOfDelegationIds">
                             <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
                                 <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">

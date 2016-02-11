@@ -19,7 +19,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
 import javax.xml.datatype.*;
-import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -95,7 +94,7 @@ public class DelegationServiceImplTest {
         final Delegation delegation = createDelegation(domainIdText, null);
 
         when(delegationManager.createDelegation(systemId, delegatorCprText, delegateeCprText, delegateeCvrText, roleId, state, permissionIds, null, null)).thenReturn(delegation);
-        setupDgwsRequestContextForUser("BemyndigendeCpr");
+        setupDgwsRequestContextForUser(delegatorCprText);
 
         CreateDelegationsRequest request = new CreateDelegationsRequest() {{
             getCreate().add(new Create() {{
@@ -154,7 +153,7 @@ public class DelegationServiceImplTest {
         final Delegation delegation = createDelegation(domainIdText, null);
 
         when(delegationManager.getDelegationsByDelegatorCpr(delegatorCprText)).thenReturn(Arrays.asList(delegation));
-        setupDgwsRequestContextForUser("BemyndigendeCpr");
+        setupDgwsRequestContextForUser(delegatorCprText);
 
         GetDelegationsRequest request = new GetDelegationsRequest() {{
             setDelegatorCpr(delegatorCprText);
@@ -171,7 +170,7 @@ public class DelegationServiceImplTest {
         final Delegation delegation = createDelegation(domainIdText, null);
 
         when(delegationManager.getDelegationsByDelegateeCpr(delegateeCprText)).thenReturn(Arrays.asList(delegation));
-        setupDgwsRequestContextForUser("BemyndigedeCpr");
+        setupDgwsRequestContextForUser(delegatorCprText);
 
         GetDelegationsRequest request = new GetDelegationsRequest() {{
             setDelegateeCpr(delegateeCprText);
@@ -188,7 +187,7 @@ public class DelegationServiceImplTest {
         final Delegation delegation = createDelegation(domainIdText, null);
 
         when(delegationManager.getDelegation(domainIdText)).thenReturn(delegation);
-        setupDgwsRequestContextForUser("domainId");
+        setupDgwsRequestContextForUser(delegatorCprText);
 
         GetDelegationsRequest request = new GetDelegationsRequest() {{
             setDelegationId(domainIdText);
@@ -202,7 +201,7 @@ public class DelegationServiceImplTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void canGetDelegationsByBadArguments() throws Exception {
-        setupDgwsRequestContextForUser("BemyndigendeCpr");
+        setupDgwsRequestContextForUser(delegatorCprText);
 
         GetDelegationsRequest request = new GetDelegationsRequest() {{
             setDelegatorCpr(delegatorCprText);
@@ -213,11 +212,12 @@ public class DelegationServiceImplTest {
 
 
     @Test
-    public void canDeleteDelegations() throws Exception {
-        when(delegationManager.deleteDelegation(domainIdText, now.plusDays(1))).thenReturn(domainIdText);
-        setupDgwsRequestContextForUser("BemyndigendeCpr");
+    public void canDeleteDelegationsAsDelegator() throws Exception {
+        when(delegationManager.deleteDelegation(delegatorCprText, null, domainIdText, now.plusDays(1))).thenReturn(domainIdText);
+        setupDgwsRequestContextForUser(delegatorCprText);
 
         DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
+            setDelegatorCpr(delegatorCprText);
             ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
             listOfDelegationIds.getDelegationId().add(domainIdText);
             setListOfDelegationIds(listOfDelegationIds);
@@ -225,9 +225,54 @@ public class DelegationServiceImplTest {
         }};
         final DeleteDelegationsResponse response = service.deleteDelegations(request, soapHeader);
 
-        verify(delegationManager).deleteDelegation(domainIdText, now.plusDays(1));
+        verify(delegationManager).deleteDelegation(delegatorCprText, null, domainIdText, now.plusDays(1));
 
         assertEquals(1, response.getDelegationId().size());
+    }
+
+    @Test
+    public void canDeleteDelegationsAsDelegatee() throws Exception {
+        when(delegationManager.deleteDelegation(null, delegateeCprText, domainIdText, now.plusDays(1))).thenReturn(domainIdText);
+        setupDgwsRequestContextForUser(delegateeCprText);
+
+        DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
+            setDelegateeCpr(delegateeCprText);
+            ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
+            listOfDelegationIds.getDelegationId().add(domainIdText);
+            setListOfDelegationIds(listOfDelegationIds);
+            setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
+        }};
+        final DeleteDelegationsResponse response = service.deleteDelegations(request, soapHeader);
+
+        verify(delegationManager).deleteDelegation(null, delegateeCprText, domainIdText, now.plusDays(1));
+
+        assertEquals(1, response.getDelegationId().size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void canDeleteDelegationsByDelegatorAndDelegatee() throws Exception {
+
+        DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
+            setDelegatorCpr(delegatorCprText);
+            setDelegateeCpr(delegateeCprText);
+            ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
+            listOfDelegationIds.getDelegationId().add(domainIdText);
+            setListOfDelegationIds(listOfDelegationIds);
+            setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
+        }};
+        service.deleteDelegations(request, soapHeader);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void canGetDelegationsByNoDelegatorNorDelegatee() throws Exception {
+
+        DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
+            ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
+            listOfDelegationIds.getDelegationId().add(domainIdText);
+            setListOfDelegationIds(listOfDelegationIds);
+            setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
+        }};
+        service.deleteDelegations(request, soapHeader);
     }
 
     private XMLGregorianCalendar toXmlGregorianCalendar(DateTime dateTime) {

@@ -86,16 +86,18 @@ public class DelegationManagerImpl implements DelegationManager {
     }
 
     @Override
-    public String deleteDelegation(String delegationId, DateTime deletionDate) {
+    public String deleteDelegation(String delegatorCpr, String delegateeCpr, String delegationId, DateTime deletionDate) {
         DateTime now = systemService.getDateTime();
         final DateTime validTo = defaultIfNull(deletionDate, now);
 
         // find existing delegation
         Delegation delegation = delegationDao.findById(delegationId);
 
-        if (delegation == null) return null;
-
         // validate arguments
+        if (delegation == null) return null;
+        if (delegatorCpr != null && !delegatorCpr.equals(delegation.getDelegatorCpr())) return null;
+        if (delegateeCpr != null && !delegateeCpr.equals(delegation.getDelegateeCpr())) return null;
+
         if (validTo.isBefore(delegation.getEffectiveFrom()))
             throw new IllegalArgumentException("deletionDate=" + validTo + " must be after EffectiveFrom=" + delegation.getEffectiveFrom());
         if (validTo.isAfter(delegation.getEffectiveTo()))

@@ -361,7 +361,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         Collection<Delegation> delegations = new ArrayList();
 
         for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
-            // TODO KRS can also be done by delegatee
+            // TODO KRS can also be done by delegatee for "bestilt"
             authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
             logger.debug("Creating Delegation: " + createDelegation.toString());
             final Delegation delegation = delegationManager.createDelegation(
@@ -433,20 +433,37 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
+        String delegatorCpr = request.getDelegatorCpr();
+        String delegateeCpr = request.getDelegateeCpr();
         List<String> delegationIds = request.getListOfDelegationIds().getDelegationId();
         XMLGregorianCalendar xmlDate = request.getDeletionDate();
         DateTime deletionDate = xmlDate == null ? null : new DateTime(xmlDate.toGregorianCalendar().getTimeInMillis());
 
         // check arguments
+        if (delegatorCpr == null) {
+            if (delegateeCpr == null) {
+                throw new IllegalArgumentException("Exactly one of delegatorCpr and delegateeCpr must be supplied");
+            }
+        } else {
+            if (delegateeCpr != null) {
+                throw new IllegalArgumentException("Exactly one of delegatorCpr and delegateeCpr must be supplied");
+            }
+        }
         if (delegationIds == null || delegationIds.isEmpty())
             throw new IllegalArgumentException("List of delegationIds must not be empty");
         if (deletionDate != null && deletionDate.isBeforeNow())
             throw new IllegalArgumentException("DeletionDate cannot be in the past");
 
+        // authorize
+        if (delegatorCpr != null)
+            authorizeOperationForCpr("deleteDelegations", "IDCard CPR was different from DelegatorCpr", delegatorCpr);
+        else
+            authorizeOperationForCpr("deleteDelegations", "IDCard CPR was different from DelegateeCpr", delegateeCpr);
+
         // invoke manager
         List<String> result = new LinkedList<>();
         for (String delegationId : delegationIds) {
-            String deleted = delegationManager.deleteDelegation(delegationId, deletionDate);
+            String deleted = delegationManager.deleteDelegation(delegatorCpr, delegateeCpr, delegationId, deletionDate);
             if (deleted != null) result.add(deleted);
         }
 
