@@ -242,8 +242,15 @@
             <xs:element name="DeleteDelegationsRequest">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="DelegationId" type="bms20160101:DelegationId" maxOccurs="unbounded"/>
-                        <xs:element name="DeletionDate" type="bms20160101:EffectiveToDateTime"/>
+                        <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ListOfDelegationIds">
+                            <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                                <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                                    <xs:element minOccurs="1" maxOccurs="unbounded" name="DelegationId"
+                                                type="bms20160101:DelegationId"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="DeletionDate" type="bms20160101:EffectiveToDateTime" minOccurs="0"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>

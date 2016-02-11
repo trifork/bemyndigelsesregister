@@ -44,7 +44,7 @@ public class DelegationManagerImpl implements DelegationManager {
 
         DateTime now = systemService.getDateTime();
         final DateTime validFrom = defaultIfNull(effectiveFrom, now);
-        final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(100));
+        final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));
 
         // Find existing delegations with same key
         logger.debug("Finder eksisterende bemyndigelser for system=" + system + ", delegatorCpr=" + delegateeCpr + ", delegateeCpr=" + delegateeCpr + ", delegateeCvr=" + delegateeCvr + ", role=" + role + ", state=" + state + "validFrom=" + validFrom + ", validTo=" + validTo);
@@ -87,15 +87,22 @@ public class DelegationManagerImpl implements DelegationManager {
 
     @Override
     public String deleteDelegation(String delegationId, DateTime deletionDate) {
+        DateTime now = systemService.getDateTime();
+        final DateTime validTo = defaultIfNull(deletionDate, now);
+
         // find existing delegation
         Delegation delegation = delegationDao.findById(delegationId);
 
+        if (delegation == null) return null;
+
         // validate arguments
-        if (deletionDate.isBefore(delegation.getEffectiveFrom()))
-            throw new IllegalArgumentException("deletionDate=" + deletionDate + " must be after EffectiveFrom=" + delegation.getEffectiveFrom());
+        if (validTo.isBefore(delegation.getEffectiveFrom()))
+            throw new IllegalArgumentException("deletionDate=" + validTo + " must be after EffectiveFrom=" + delegation.getEffectiveFrom());
+        if (validTo.isAfter(delegation.getEffectiveTo()))
+            throw new IllegalArgumentException("deletionDate=" + validTo + " must be before EffectiveTo=" + delegation.getEffectiveTo());
 
         // update delegation
-        delegation.setEffectiveTo(deletionDate);
+        delegation.setEffectiveTo(validTo);
         delegation.setSidstModificeret(systemService.getDateTime());
         delegation.setSidstModificeretAf("Service");
         delegation.setVersionsid(delegation.getVersionsid() + 1);
@@ -107,7 +114,7 @@ public class DelegationManagerImpl implements DelegationManager {
     private Delegation createDelegationObject(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
         DateTime now = systemService.getDateTime();
         final DateTime validFrom = defaultIfNull(effectiveFrom, now);
-        final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(100));
+        final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));
         if (!validFrom.isBefore(validTo)) {
             throw new IllegalArgumentException("EffectiveFrom=" + validFrom + " must be before effectiveTo=" + validTo);
         }

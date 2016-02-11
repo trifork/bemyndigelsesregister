@@ -18,13 +18,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ws.soap.SoapHeader;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.xml.datatype.*;
+import java.math.BigDecimal;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -218,16 +214,18 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canDeleteDelegations() throws Exception {
-        when(delegationManager.deleteDelegation(domainIdText, now)).thenReturn(domainIdText);
+        when(delegationManager.deleteDelegation(domainIdText, now.plusDays(1))).thenReturn(domainIdText);
         setupDgwsRequestContextForUser("BemyndigendeCpr");
 
         DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
-            getDelegationId().add(domainIdText);
-            setDeletionDate(toXmlGregorianCalendar(now));
+            ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
+            listOfDelegationIds.getDelegationId().add(domainIdText);
+            setListOfDelegationIds(listOfDelegationIds);
+            setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
         }};
         final DeleteDelegationsResponse response = service.deleteDelegations(request, soapHeader);
 
-        verify(delegationManager).deleteDelegation(domainIdText, now);
+        verify(delegationManager).deleteDelegation(domainIdText, now.plusDays(1));
 
         assertEquals(1, response.getDelegationId().size());
     }
