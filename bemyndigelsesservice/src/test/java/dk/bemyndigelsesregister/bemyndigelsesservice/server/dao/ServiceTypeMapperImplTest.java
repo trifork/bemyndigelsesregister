@@ -1,10 +1,10 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.RoleDaoEbean;
 import dk.nsi.bemyndigelse._2012._05._01.Arbejdsfunktioner;
 import dk.nsi.bemyndigelse._2012._05._01.DelegerbarRettigheder;
 import dk.nsi.bemyndigelse._2012._05._01.Rettigheder;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.Set;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceTypeMapperImplTest {

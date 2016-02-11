@@ -4,7 +4,6 @@ import com.trifork.dgws.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;

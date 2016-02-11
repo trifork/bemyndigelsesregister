@@ -113,7 +113,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         delegationType.setDelegateeCpr(delegation.getDelegateeCpr());
         delegationType.setDelegateeCvr(delegation.getDelegateeCvr());
         delegationType.setCreated(toXmlGregorianCalendar(delegation.getCreated()));
-        delegationType.setState(delegation.getState() == State.GODKENDT ? dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT : dk.nsi.bemyndigelse._2016._01._01.State.BESTILT);
+        delegationType.setState(delegation.getState());
         delegationType.setDelegationId(delegation.getDomainId());
         delegationType.setRole(toRole(delegation.getDelegatingSystem(), delegation.getRole()));
         delegationType.setSystem(toSystem(delegation.getDelegatingSystem()));

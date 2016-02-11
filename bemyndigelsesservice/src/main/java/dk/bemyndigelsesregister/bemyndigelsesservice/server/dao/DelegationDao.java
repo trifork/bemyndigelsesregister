@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 
 import java.util.Collection;

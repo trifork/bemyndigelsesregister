@@ -7,7 +7,6 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
@@ -370,7 +369,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getDelegateeCpr(),
                     createDelegation.getDelegateeCvr(),
                     createDelegation.getRoleId(),
-                    State.GODKENDT, // valueOf(createDelegation.getState().value()), TODO OBJ Dette fungerede ikke, createDelegation.getState() returnerer null
+                    createDelegation.getState(),
                     createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));

@@ -2,9 +2,9 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import com.avaje.ebean.EbeanServer;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.DaoUnitTestSupport;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.junit.Test;
 

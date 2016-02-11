@@ -1,10 +1,11 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;

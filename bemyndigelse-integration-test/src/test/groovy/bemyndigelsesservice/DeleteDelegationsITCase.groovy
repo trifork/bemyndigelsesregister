@@ -7,7 +7,7 @@ class DeleteDelegationsITCase extends WebServiceSupport {
 
 
     @Test
-    public void canDelegationDelegationAsDelegator() {
+    public void canDeleteDelegationAsDelegator() {
         def response = send("DeleteDelegations") {
             "bms20160101:DeleteDelegationsRequest" {
                 "DelegatorCpr"('2006271866')
@@ -24,7 +24,7 @@ class DeleteDelegationsITCase extends WebServiceSupport {
 
 
     @Test
-    public void canDelegationDelegationAsDelegatee() {
+    public void canDeleteDelegationAsDelegatee() {
         def response = send("DeleteDelegations") {
             "bms20160101:DeleteDelegationsRequest" {
                 "DelegateeCpr"('2006271866')

@@ -1,8 +1,8 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.State;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
