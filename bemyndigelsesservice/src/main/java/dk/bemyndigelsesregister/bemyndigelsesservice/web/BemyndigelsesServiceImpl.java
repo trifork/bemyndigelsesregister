@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
+import static java.util.Collections.replaceAll;
 import static java.util.Collections.singletonList;
 
 @Repository("bemyndigelsesService")
@@ -159,7 +160,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }};
     }
 
-    //TODO KRS check that createDelegation check that state is "BESTILT"
     void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
         Set<String> authorizedCprSet = new HashSet<String>(Arrays.asList(authorizedCprs));
         IdCardData idCardData = dgwsRequestContext.getIdCardData();
@@ -360,8 +360,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         Collection<Delegation> delegations = new ArrayList();
 
         for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
-            // TODO KRS can also be done by delegatee for "bestilt"
-            authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
+            if (createDelegation.getState().equals(State.BESTILT)) {
+                authorizeOperationForCpr("createDelegation", "IDCard CPR was different from both DelegatorCpr and DelegateeCpr", createDelegation.getDelegatorCpr(), createDelegation.getDelegateeCpr());
+            } else {
+                authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
+            }
             logger.debug("Creating Delegation: " + createDelegation.toString());
             final Delegation delegation = delegationManager.createDelegation(
                     createDelegation.getSystemId(),
