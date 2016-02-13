@@ -141,11 +141,11 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         return ds == null ? null : roleDao.findByDomainId(ds.getId(), domainId);
     }
 
-    private dk.nsi.bemyndigelse._2016._01._01.Permission toPermission(String delegatingSystem, DelegationPermission permission) {
+    private dk.nsi.bemyndigelse._2016._01._01.SystemPermission toPermission(String delegatingSystem, DelegationPermission permission) {
         if (permission == null)
             return null;
 
-        dk.nsi.bemyndigelse._2016._01._01.Permission xmlPermission = objectFactory.createPermission();
+        dk.nsi.bemyndigelse._2016._01._01.SystemPermission xmlPermission = objectFactory.createSystemPermission();
         xmlPermission.setPermissionId(permission.getPermissionId());
         Permission p = getPermission(delegatingSystem, permission.getPermissionId());
         xmlPermission.setPermissionDescription(p != null ? p.getDescription() : permission.getPermissionId());
@@ -153,24 +153,24 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         return xmlPermission;
     }
 
-    private dk.nsi.bemyndigelse._2016._01._01.System toSystem(String delegatingSystem) {
+    private dk.nsi.bemyndigelse._2016._01._01.DelegatingSystem toSystem(String delegatingSystem) {
         DelegatingSystem ds = getDelegatingSystem(delegatingSystem);
         if (ds == null)
             return null;
 
-        dk.nsi.bemyndigelse._2016._01._01.System xmlSystem = objectFactory.createSystem();
+        dk.nsi.bemyndigelse._2016._01._01.DelegatingSystem xmlSystem = objectFactory.createDelegatingSystem();
         xmlSystem.setSystemId(ds.getDomainId());
         xmlSystem.setSystemLongName(ds.getDescription());
 
         return xmlSystem;
     }
 
-    private dk.nsi.bemyndigelse._2016._01._01.Role toRole(String delegatingSystem, String role) {
+    private dk.nsi.bemyndigelse._2016._01._01.DelegatingRole toRole(String delegatingSystem, String role) {
         Role r = getRole(delegatingSystem, role);
         if (r == null)
             return null;
 
-        dk.nsi.bemyndigelse._2016._01._01.Role xmlRole = objectFactory.createRole();
+        dk.nsi.bemyndigelse._2016._01._01.DelegatingRole xmlRole = objectFactory.createDelegatingRole();
         xmlRole.setRoleId(r.getDomainId());
         xmlRole.setRoleDescription(r.getDescription());
 

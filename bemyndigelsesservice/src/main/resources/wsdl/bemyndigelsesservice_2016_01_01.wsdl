@@ -23,31 +23,31 @@
                     <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                     <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
                     <xs:element name="DelegateeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
-                    <xs:element name="System" type="bms20160101:System"/>
-                    <xs:element name="Role" type="bms20160101:Role"/>
+                    <xs:element name="System" type="bms20160101:DelegatingSystem"/>
+                    <xs:element name="Role" type="bms20160101:DelegatingRole"/>
                     <xs:element name="State" type="bms20160101:State"/>
-                    <xs:element name="Permission" maxOccurs="unbounded" type="bms20160101:Permission"/>
+                    <xs:element name="Permission" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
                     <xs:element name="Created" type="bms20160101:CreatedDateTime"/>
                     <xs:element name="EffectiveFrom" type="bms20160101:EffectiveFromDateTime"/>
                     <xs:element name="EffectiveTo" type="bms20160101:EffectiveToDateTime"/>
                 </xs:sequence>
             </xs:complexType>
 
-            <xs:complexType name="System">
+            <xs:complexType name="DelegatingSystem">
                 <xs:sequence>
                     <xs:element name="SystemId" type="bms20160101:SystemId"/>
                     <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
                 </xs:sequence>
             </xs:complexType>
 
-            <xs:complexType name="Role">
+            <xs:complexType name="DelegatingRole">
                 <xs:sequence>
                     <xs:element name="RoleId" type="bms20160101:RoleId"/>
                     <xs:element name="RoleDescription" type="bms20160101:RoleDescription"/>
                 </xs:sequence>
             </xs:complexType>
 
-            <xs:complexType name="Permission">
+            <xs:complexType name="SystemPermission">
                 <xs:sequence>
                     <xs:element name="PermissionId" type="bms20160101:PermissionId"/>
                     <xs:element name="PermissionDescription" type="bms20160101:PermissionDescription"/>
@@ -119,8 +119,8 @@
 
             <xs:simpleType name="State" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                    <xs:enumeration value="Anmodet"/>
-                    <xs:enumeration value="Oprettet"/>
+                    <xs:enumeration value="Bestilt"/>
+                    <xs:enumeration value="Godkendt"/>
                 </xs:restriction>
             </xs:simpleType>
 
@@ -146,10 +146,10 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="Domain" type="bms20160101:Domain"/>
-                        <xs:element name="System" type="bms20160101:SystemId"/>
+                        <xs:element name="SystemId" type="bms20160101:SystemId"/>
                         <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
-                        <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:Role"/>
-                        <xs:element name="Permission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:Permission"/>
+                        <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
+                        <xs:element name="Permission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
                         <xs:element name="DelegatablePermission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatablePermission"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -174,9 +174,9 @@
                 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
                     <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                         <xs:element name="Domain" type="bms20160101:Domain"/>
-                        <xs:element name="System" type="bms20160101:System"/>
-                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Role" type="bms20160101:Role"/>
-                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Permission" type="bms20160101:Permission"/>
+                        <xs:element name="System" type="bms20160101:DelegatingSystem"/>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Role" type="bms20160101:DelegatingRole"/>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="Permission" type="bms20160101:SystemPermission"/>
                         <xs:element minOccurs="0" maxOccurs="unbounded" name="DelegatablePermission" type="bms20160101:DelegatablePermission"/>
                     </xs:sequence>
                 </xs:complexType>

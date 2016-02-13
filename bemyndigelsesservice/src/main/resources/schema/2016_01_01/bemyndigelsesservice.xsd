@@ -16,31 +16,31 @@
             <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
             <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
             <xs:element name="DelegateeCvr" type="cvr:CVRnumberIdentifierType" minOccurs="0"/>
-            <xs:element name="System" type="bms20160101:System"/>
-            <xs:element name="Role" type="bms20160101:Role"/>
+            <xs:element name="System" type="bms20160101:DelegatingSystem"/>
+            <xs:element name="Role" type="bms20160101:DelegatingRole"/>
             <xs:element name="State" type="bms20160101:State"/>
-            <xs:element name="Permission" maxOccurs="unbounded" type="bms20160101:Permission"/>
+            <xs:element name="Permission" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
             <xs:element name="Created" type="bms20160101:CreatedDateTime"/>
             <xs:element name="EffectiveFrom" type="bms20160101:EffectiveFromDateTime"/>
             <xs:element name="EffectiveTo" type="bms20160101:EffectiveToDateTime"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="System">
+    <xs:complexType name="DelegatingSystem">
         <xs:sequence>
             <xs:element name="SystemId" type="bms20160101:SystemId"/>
             <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="Role">
+    <xs:complexType name="DelegatingRole">
         <xs:sequence>
             <xs:element name="RoleId" type="bms20160101:RoleId"/>
             <xs:element name="RoleDescription" type="bms20160101:RoleDescription"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="Permission">
+    <xs:complexType name="SystemPermission">
         <xs:sequence>
             <xs:element name="PermissionId" type="bms20160101:PermissionId"/>
             <xs:element name="PermissionDescription" type="bms20160101:PermissionDescription"/>
@@ -117,20 +117,20 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="CreatedDateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-        <xs:restriction base="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="CreatedDateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:dateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:minInclusive value="2000-01-01T00:00:00Z"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="EffectiveFromDateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-        <xs:restriction base="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="EffectiveFromDateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:dateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:minInclusive value="2000-01-01T00:00:00Z"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="EffectiveToDateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-        <xs:restriction base="xs:dateTime" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="EffectiveToDateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:restriction base="xs:dateTime"  xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:minInclusive value="2000-01-01T00:00:00Z"/>
         </xs:restriction>
     </xs:simpleType>
@@ -139,12 +139,11 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="Domain" type="bms20160101:Domain"/>
-                <xs:element name="System" type="bms20160101:SystemId"/>
+                <xs:element name="SystemId" type="bms20160101:SystemId"/>
                 <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
-                <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:Role"/>
-                <xs:element name="Permission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:Permission"/>
-                <xs:element name="DelegatablePermission" minOccurs="0" maxOccurs="unbounded"
-                            type="bms20160101:DelegatablePermission"/>
+                <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
+                <xs:element name="Permission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
+                <xs:element name="DelegatablePermission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatablePermission"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -168,11 +167,10 @@
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="Domain" type="bms20160101:Domain"/>
-                <xs:element name="System" type="bms20160101:System"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="Role" type="bms20160101:Role"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="Permission" type="bms20160101:Permission"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="DelegatablePermission"
-                            type="bms20160101:DelegatablePermission"/>
+                <xs:element name="System" type="bms20160101:DelegatingSystem"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="Role" type="bms20160101:DelegatingRole"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="Permission" type="bms20160101:SystemPermission"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="DelegatablePermission" type="bms20160101:DelegatablePermission"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -199,10 +197,8 @@
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
-                            <xs:element minOccurs="0" maxOccurs="1" name="EffectiveFrom"
-                                        type="bms20160101:EffectiveFromDateTime"/>
-                            <xs:element minOccurs="0" maxOccurs="1" name="EffectiveTo"
-                                        type="bms20160101:EffectiveToDateTime"/>
+                            <xs:element minOccurs="0" maxOccurs="1" name="EffectiveFrom" type="bms20160101:EffectiveFromDateTime"/>
+                            <xs:element minOccurs="0" maxOccurs="1" name="EffectiveTo" type="bms20160101:EffectiveToDateTime"/>
                         </xs:all>
                     </xs:complexType>
                 </xs:element>
@@ -231,7 +227,7 @@
     <xs:element name="GetDelegationsResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="Delegation" type="bms20160101:Delegation"/>
+                <xs:element minOccurs="0"  maxOccurs="unbounded" name="Delegation" type="bms20160101:Delegation"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
