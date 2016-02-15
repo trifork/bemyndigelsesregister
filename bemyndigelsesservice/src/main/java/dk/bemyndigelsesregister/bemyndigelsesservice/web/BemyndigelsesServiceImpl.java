@@ -15,9 +15,7 @@ import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
 import dk.nsi.bemyndigelse._2016._01._01.*;
 import dk.nsi.bemyndigelse._2016._01._01.DelegatablePermission;
-import dk.nsi.bemyndigelse._2016._01._01.Permission;
-import dk.nsi.bemyndigelse._2016._01._01.Role;
-import dk.nsi.bemyndigelse._2016._01._01.System;
+import dk.nsi.bemyndigelse._2016._01._01.DelegatingSystem;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
@@ -34,7 +32,6 @@ import javax.inject.Inject;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
-import static java.util.Collections.replaceAll;
 import static java.util.Collections.singletonList;
 
 @Repository("bemyndigelsesService")
@@ -491,19 +488,19 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         if (domainId == null || domainId.trim().isEmpty())
             throw new IllegalArgumentException("Domain must be specified in the request");
 
-        String systemId = request.getSystem();
+        String systemId = request.getSystemId();
         if (systemId == null || systemId.trim().isEmpty())
             throw new IllegalArgumentException("System must be specified in the request");
 
         Metadata metadata = new Metadata(domainId, systemId, request.getSystemLongName());
 
         if (request.getRole() != null) {
-            for (Role role : request.getRole())
+            for (DelegatingRole role : request.getRole())
                 metadata.addRole(role.getRoleId(), role.getRoleDescription());
         }
 
         if (request.getPermission() != null) {
-            for (Permission permission : request.getPermission())
+            for (SystemPermission permission : request.getPermission())
                 metadata.addPermission(permission.getPermissionId(), permission.getPermissionDescription());
         }
 
@@ -527,14 +524,14 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         response.setDomain(metadata.getDomainId());
 
-        System system = new System();
+        DelegatingSystem system = new DelegatingSystem();
         system.setSystemId(metadata.getSystem().getDomainId());
         system.setSystemLongName(metadata.getSystem().getDescription());
         response.setSystem(system);
 
         if (metadata.getRoles() != null) {
             for (Metadata.CodeAndDescription c : metadata.getRoles()) {
-                Role role = new Role();
+                DelegatingRole role = new DelegatingRole();
                 role.setRoleId(c.getDomainId());
                 role.setRoleDescription(c.getDescription());
                 response.getRole().add(role);
@@ -543,7 +540,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         if (metadata.getPermissions() != null) {
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
-                Permission permission = new Permission();
+                SystemPermission permission = new SystemPermission();
                 permission.setPermissionId(c.getDomainId());
                 permission.setPermissionDescription(c.getDescription());
                 response.getPermission().add(permission);
