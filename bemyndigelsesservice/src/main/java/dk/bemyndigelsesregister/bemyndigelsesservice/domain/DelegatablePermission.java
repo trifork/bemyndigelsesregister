@@ -1,24 +1,27 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "delegerbarRettighed")
+@Table(name = "delegerbar_rettighed")
 public class DelegatablePermission extends DomainObject {
     @ManyToOne
+    @JoinColumn(name = "arbejdsfunktion_id")
     private Role role;
 
     @ManyToOne
-    private Permission permissionId;
+    @JoinColumn(name = "rettighedskode_id")
+    private Permission permission;
 
-    public Permission getPermissionId() {
-        return permissionId;
+    public Permission getPermission() {
+        return permission;
     }
 
-    public void setPermissionId(Permission permissionId) {
-        this.permissionId = permissionId;
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 
     public Role getRole() {

@@ -69,4 +69,14 @@ public interface BemyndigelsesService {
     @Action("http://nsi.dk/bemyndigelse/2016/01/01/deleteDelegations")
     @ResponsePayload
     DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader);
+
+    @PayloadRoot(localPart = "GetMetadataRequest", namespace = "http://nsi.dk/bemyndigelse/2016/01/01/")
+    @Action("http://nsi.dk/bemyndigelse/2016/01/01/getMetadata")
+    @ResponsePayload
+    GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader);
+
+    @PayloadRoot(localPart = "PutMetadataRequest", namespace = "http://nsi.dk/bemyndigelse/2016/01/01/")
+    @Action("http://nsi.dk/bemyndigelse/2016/01/01/putMetadata")
+    @ResponsePayload
+    PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader);
 }

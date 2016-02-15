@@ -21,4 +21,9 @@ public class RoleDaoEbean extends SupportDao<Role> implements RoleDao {
     public List<Role> findBySystem(Long delegatingSystemId) {
         return query().where().eq("delegatingSystem.id", delegatingSystemId).findList();
     }
+
+    @Override
+    public void remove(Role role) {
+        ebeanServer.delete(role);
+    }
 }

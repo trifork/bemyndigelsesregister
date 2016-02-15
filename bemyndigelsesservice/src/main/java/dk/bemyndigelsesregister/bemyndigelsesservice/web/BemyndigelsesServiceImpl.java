@@ -9,10 +9,15 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Bemyndigelse;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.BemyndigelseManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2012._05._01.*;
 import dk.nsi.bemyndigelse._2016._01._01.*;
+import dk.nsi.bemyndigelse._2016._01._01.DelegatablePermission;
+import dk.nsi.bemyndigelse._2016._01._01.Permission;
+import dk.nsi.bemyndigelse._2016._01._01.Role;
+import dk.nsi.bemyndigelse._2016._01._01.System;
 import org.apache.commons.collections15.CollectionUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
@@ -42,6 +47,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     BemyndigelseManager bemyndigelseManager;
     @Inject
     DelegationManager delegationManager;
+    @Inject
+    MetadataManager metadataManager;
     @Inject
     BemyndigelseDao bemyndigelseDao;
     @Inject
@@ -472,6 +479,86 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         // return result
         final DeleteDelegationsResponse response = new DeleteDelegationsResponse();
         response.getDelegationId().addAll(result);
+        return response;
+    }
+
+    @Override
+    @Transactional
+    @ResponsePayload
+//    @Protected
+    public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
+        String domainId = request.getDomain();
+        if (domainId == null || domainId.trim().isEmpty())
+            throw new IllegalArgumentException("Domain must be specified in the request");
+
+        String systemId = request.getSystem();
+        if (systemId == null || systemId.trim().isEmpty())
+            throw new IllegalArgumentException("System must be specified in the request");
+
+        Metadata metadata = new Metadata(domainId, systemId, request.getSystemLongName());
+
+        if (request.getRole() != null) {
+            for (Role role : request.getRole())
+                metadata.addRole(role.getRoleId(), role.getRoleDescription());
+        }
+
+        if (request.getPermission() != null) {
+            for (Permission permission : request.getPermission())
+                metadata.addPermission(permission.getPermissionId(), permission.getPermissionDescription());
+        }
+
+        if (request.getDelegatablePermission() != null) {
+            for (DelegatablePermission delegatablePermission : request.getDelegatablePermission())
+                metadata.addDelegatablePermission(delegatablePermission.getRoleId(), delegatablePermission.getPermissionId());
+        }
+
+        metadataManager.putMetadata(metadata);
+
+        return new PutMetadataResponse();
+    }
+
+    @Override
+    @ResponsePayload
+    //@Protected(whitelist = "bemyndigelsesservice.hentMetadata")
+    public GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader) {
+        Metadata metadata = metadataManager.getMetadata(request.getDomain(), request.getSystemId());
+
+        GetMetadataResponse response = new GetMetadataResponse();
+
+        response.setDomain(metadata.getDomainId());
+
+        System system = new System();
+        system.setSystemId(metadata.getSystem().getDomainId());
+        system.setSystemLongName(metadata.getSystem().getDescription());
+        response.setSystem(system);
+
+        if (metadata.getRoles() != null) {
+            for (Metadata.CodeAndDescription c : metadata.getRoles()) {
+                Role role = new Role();
+                role.setRoleId(c.getDomainId());
+                role.setRoleDescription(c.getDescription());
+                response.getRole().add(role);
+            }
+        }
+
+        if (metadata.getPermissions() != null) {
+            for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
+                Permission permission = new Permission();
+                permission.setPermissionId(c.getDomainId());
+                permission.setPermissionDescription(c.getDescription());
+                response.getPermission().add(permission);
+            }
+        }
+
+        if (metadata.getDelegatablePermissions() != null) {
+            for (Metadata.DelegatablePermission c : metadata.getDelegatablePermissions()) {
+                DelegatablePermission delegatablePermission = new DelegatablePermission();
+                delegatablePermission.setRoleId(c.getRoleId());
+                delegatablePermission.setPermissionId(c.getPermissionId());
+                response.getDelegatablePermission().add(delegatablePermission);
+            }
+        }
+
         return response;
     }
 }

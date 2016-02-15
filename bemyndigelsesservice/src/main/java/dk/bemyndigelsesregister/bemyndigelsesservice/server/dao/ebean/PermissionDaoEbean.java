@@ -22,4 +22,9 @@ public class PermissionDaoEbean extends SupportDao<Permission> implements Permis
     public List<Permission> findBySystem(String delegatingSystemId) {
         return query().where().eq("delegatingSystem.domainId", delegatingSystemId).findList();
     }
+
+    @Override
+    public void remove(Permission permission) {
+        ebeanServer.delete(permission);
+    }
 }

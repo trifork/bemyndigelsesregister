@@ -13,7 +13,18 @@ public class DelegatablePermissionDaoEbean extends SupportDao<DelegatablePermiss
     }
 
     @Override
+    public DelegatablePermission findByPermissionAndRole(String permissionId, String roleId) {
+        return query().where().eq("permission.domainId", permissionId).eq("role.domainId", roleId).findUnique();
+    }
+
+    @Override
     public List<DelegatablePermission> findBySystem(String delegatingSystemId) {
-        return query().fetch("arbejdsfunktion").where().eq("arbejdsfunktion.linkedSystem", delegatingSystemId).findList();
+        return query().where().eq("role.delegatingSystem.domainId", delegatingSystemId).findList();
+    }
+
+    @Override
+    public void remove(DelegatablePermission delegatablePermission) {
+        ebeanServer.delete(delegatablePermission);
     }
 }
+

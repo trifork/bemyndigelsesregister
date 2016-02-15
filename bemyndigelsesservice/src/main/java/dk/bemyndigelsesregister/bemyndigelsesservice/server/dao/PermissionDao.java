@@ -12,4 +12,6 @@ public interface PermissionDao {
     Permission findByDomainId(String delegatingSystemId, String domainId);
 
     List<Permission> findBySystem(String delegatingSystemId);
+
+    void remove(Permission permission);
 }

@@ -9,9 +9,4 @@ public class DomainDaoEbean extends SupportDao<Domain> implements DomainDao {
     public DomainDaoEbean() {
         super(Domain.class);
     }
-
-    @Override
-    public void save(Domain domain) {
-
-    }
 }

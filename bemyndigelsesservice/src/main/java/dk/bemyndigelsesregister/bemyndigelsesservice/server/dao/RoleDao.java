@@ -12,4 +12,6 @@ public interface RoleDao {
     Role findByDomainId(Long systemid, String id);
 
     List<Role> findBySystem(Long systemId);
+
+    void remove(Role role);
 }
