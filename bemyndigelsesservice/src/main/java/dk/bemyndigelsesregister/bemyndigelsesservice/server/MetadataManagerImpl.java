@@ -102,7 +102,7 @@ public class MetadataManagerImpl implements MetadataManager {
 
         // permissions
         if (metadata.getPermissions() != null) {
-            List<Permission> existingPermissions = permissionDao.findBySystem(metadata.getSystem().getDomainId());
+            List<Permission> existingPermissions = permissionDao.findBySystem(delegatingSystem.getId());
 
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
                 String permissionDescription = c.getDescription();
@@ -136,7 +136,7 @@ public class MetadataManagerImpl implements MetadataManager {
 
         // delegatable permissions
         if (metadata.getDelegatablePermissions() != null) {
-            List<DelegatablePermission> existingDelegatablePermissions = delegatablePermissionDao.findBySystem(metadata.getSystem().getDomainId());
+            List<DelegatablePermission> existingDelegatablePermissions = delegatablePermissionDao.findBySystem(delegatingSystem.getId());
 
             for (Metadata.DelegatablePermission c : metadata.getDelegatablePermissions()) {
                 Permission permission = permissionDao.findByDomainId(metadata.getSystem().getDomainId(), c.getPermissionId());
@@ -147,11 +147,13 @@ public class MetadataManagerImpl implements MetadataManager {
                 if (role == null)
                     throw new IllegalArgumentException("Cannot create delegatable permission [" + c.getPermissionId() + "] for role [" + c.getRoleId() + "]: Role [" + c.getRoleId() + "] not found for system [" + metadata.getSystem().getDomainId() + "]");
 
-                DelegatablePermission delegatablePermission = delegatablePermissionDao.findByPermissionAndRole(c.getPermissionId(), c.getRoleId());
+                DelegatablePermission delegatablePermission = delegatablePermissionDao.findByPermissionAndRole(permission.getId(), role.getId());
                 if (delegatablePermission == null) {
                     delegatablePermission = new DelegatablePermission();
                     delegatablePermission.setRole(role);
+                    role.getDelegatablePermissions().add(delegatablePermission);
                     delegatablePermission.setPermission(permission);
+                    permission.getDelegatablePermissions().add(delegatablePermission);
                     delegatablePermission.setSidstModificeret(now);
                     delegatablePermission.setSidstModificeretAf(modifiedBy);
 
@@ -183,12 +185,12 @@ public class MetadataManagerImpl implements MetadataManager {
             for (Role role : roles)
                 metadata.addRole(role.getDomainId(), role.getDescription());
 
-        List<Permission> permissions = permissionDao.findBySystem(systemId);
+        List<Permission> permissions = permissionDao.findBySystem(delegatingSystem.getId());
         if (permissions != null)
             for (Permission permission : permissions)
                 metadata.addPermission(permission.getDomainId(), permission.getDescription());
 
-        List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findBySystem(systemId);
+        List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findBySystem(delegatingSystem.getId());
         if (delegatablePermissions != null)
             for (DelegatablePermission delegatablePermission : delegatablePermissions)
                 metadata.addDelegatablePermission(delegatablePermission.getRole().getDomainId(), delegatablePermission.getPermission().getDomainId());

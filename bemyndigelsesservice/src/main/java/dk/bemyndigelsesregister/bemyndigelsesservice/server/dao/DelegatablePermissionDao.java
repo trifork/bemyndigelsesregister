@@ -9,9 +9,9 @@ public interface DelegatablePermissionDao {
 
     void save(DelegatablePermission delegatablePermission);
 
-    DelegatablePermission findByPermissionAndRole(String permissionId, String roleId);
+    DelegatablePermission findByPermissionAndRole(Long permissionId, Long roleId);
 
-    List<DelegatablePermission> findBySystem(String delegatingSystemId);
+    List<DelegatablePermission> findBySystem(Long systemId);
 
     void remove(DelegatablePermission delegatablePermission);
 }

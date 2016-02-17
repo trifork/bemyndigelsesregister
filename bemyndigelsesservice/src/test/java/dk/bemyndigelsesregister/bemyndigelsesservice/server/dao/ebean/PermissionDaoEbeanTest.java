@@ -15,7 +15,7 @@ public class PermissionDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void canFindPermissionBySystem() throws Exception {
-        List<Permission> permissions = permissionDao.findBySystem(delegatingSystemDao.get(1).getDomainId());
+        List<Permission> permissions = permissionDao.findBySystem(delegatingSystemDao.get(1).getId());
 
         assertEquals(2, permissions.size());
 
