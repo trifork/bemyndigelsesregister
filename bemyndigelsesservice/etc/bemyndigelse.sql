@@ -11,3 +11,7 @@ UPDATE rettighed SET beskrivelse = 'Bestil udlevering eller ny recept' WHERE kod
 UPDATE rettighed SET beskrivelse = 'Opretning tilknytning til en enhed (F.eks. tilknytning til hjemmepleje)' WHERE kode = 'Tilknytning';
 UPDATE rettighed SET beskrivelse = 'Opret, ret eller slet vaccinationer' WHERE kode = 'VaccinationVedligehold';
 UPDATE rettighed SET beskrivelse = 'Opret, ret eller slet anbefalede vaccinationer' WHERE kode = 'VaccinationVedligeholdAnbefalet';
+UPDATE rettighed SET beskrivelse = 'Vise kladder for tilskudsansøgninger' WHERE kode = 'LæsKladder';
+UPDATE rettighed SET beskrivelse = 'Rette og slette kladder for tilskudsansøgninger' WHERE kode = 'SkrivKladder';
+UPDATE rettighed SET beskrivelse = 'Vise indsendte tilskudsansøgninger' WHERE kode = 'LæsSager';
+UPDATE rettighed SET beskrivelse = 'Indsende tilskudsansøgninger og YO-svar' WHERE kode = 'SkrivSager';
