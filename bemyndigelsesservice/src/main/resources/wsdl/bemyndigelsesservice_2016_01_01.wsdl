@@ -12,10 +12,10 @@
                    targetNamespace="http://nsi.dk/bemyndigelse/2016/01/01/" version="2.0">
 
             <xs:import namespace="http://rep.oio.dk/cpr.dk/xml/schemas/core/2005/03/18/"
-                       schemaLocation="../schema/CPR_PersonCivilRegistrationIdentifier.xsd"/>
+                       schemaLocation="../schema/2005_03_18/CPR_PersonCivilRegistrationIdentifier.xsd"/>
 
             <xs:import namespace="http://rep.oio.dk/cvr.dk/xml/schemas/2005/03/22/"
-                       schemaLocation="../schema/CVR_CVRnumberIdentifier.xsd"/>
+                       schemaLocation="../schema/2005_03_22/CVR_CVRnumberIdentifier.xsd"/>
 
             <xs:complexType name="Delegation">
                 <xs:sequence>
