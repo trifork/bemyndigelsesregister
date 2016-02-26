@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
+import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
@@ -17,11 +17,14 @@ import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
 import org.springframework.oxm.Marshaller;
 
 import javax.xml.transform.Result;
-
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class NspManagerFtpTest {
     NspManagerFtp nspManagerFtp = new NspManagerFtp();
@@ -29,9 +32,7 @@ public class NspManagerFtpTest {
     Marshaller marshaller = mock(Marshaller.class);
 
     private final DateTime startTime = new DateTime(1982, 5, 21, 2, 15, 3);
-    private final Bemyndigelser bemyndigelser = new Bemyndigelser() {{
-        version = "v001";
-    }};
+    private final List<Delegation> delegations = new LinkedList<>();
     private FakeFtpServer ftpServer;
 
     @Before
@@ -66,7 +67,7 @@ public class NspManagerFtpTest {
         when(result.toString()).thenReturn(fileBody);
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);
 
-        nspManagerFtp.send(bemyndigelser, startTime);
+        nspManagerFtp.send(delegations, startTime);
 
         assertTrue(ftpServer.getFileSystem().exists("/" + filename));
 

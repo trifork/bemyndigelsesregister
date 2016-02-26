@@ -1,16 +1,11 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
-import dk.nsi.bemyndigelse._2016._01._01.*;
-import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -171,12 +166,12 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     }
 
     /**
-     * Bruges tilsyneladende kun til stamdata eksportering
+     * TODO OBJ Bruges tilsyneladende til stamdata eksportering
      * TODO hvorfor er så mange felter null?
      *
      * @return
      */
-    public List<Bemyndigelser.Bemyndigelse> toBemyndigelseType() {
+/*    public List<Bemyndigelser.Bemyndigelse> toBemyndigelseType() {
         List<Bemyndigelser.Bemyndigelse> bemyndigelser = new LinkedList<>();
         for (DelegationPermission permission : delegationPermissions) {
             Bemyndigelser.Bemyndigelse type = new Bemyndigelser.Bemyndigelse();
@@ -200,4 +195,5 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     private XMLGregorianCalendar toXmlGregorianCalendar(DateTime dateTime) {
         return datatypeFactory.newXMLGregorianCalendar(new DateTime(dateTime, DateTimeZone.UTC).toGregorianCalendar());
     }
+*/
 }

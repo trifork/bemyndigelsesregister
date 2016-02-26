@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
+import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -11,6 +11,8 @@ import org.springframework.oxm.Marshaller;
 
 import javax.xml.transform.Result;
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,9 +30,7 @@ public class NspManagerSFtpTest {
     Marshaller marshaller = mock(Marshaller.class);
 
     private final DateTime startTime = new DateTime(1982, 5, 21, 2, 15, 3);
-    private final Bemyndigelser bemyndigelser = new Bemyndigelser() {{
-        version = "v001";
-    }};
+    private final List<Delegation> delegations = new LinkedList<>();
 
     @Before
     public void setUp() {
@@ -71,7 +71,7 @@ public class NspManagerSFtpTest {
         when(result.toString()).thenReturn(fileBody);
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);
 
-        nspManager.send(bemyndigelser, startTime);
+        nspManager.send(delegations, startTime);
         //TODO: Check at filen findes "server side" efter upload
 //        assertTrue(ftpServer.getFileSystem().exists("/" + filename));
 

@@ -23,7 +23,7 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
  */
 @Repository
 public class DelegationManagerImpl implements DelegationManager {
-    private static Logger logger = Logger.getLogger(BemyndigelseManagerImpl.class);
+    private static Logger logger = Logger.getLogger(DelegationManagerImpl.class);
 
     @Inject
     DelegationDao delegationDao;

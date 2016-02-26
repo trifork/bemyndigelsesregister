@@ -19,17 +19,6 @@ import static org.mockito.Mockito.mock;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationRootConfig.class, DaoUnitTestSupport.MockContext.class})
 public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTests {
-
-    @Inject
-    DomaeneDao domaeneDao;
-    @Inject
-    ArbejdsfunktionDao arbejdsfunktionDao;
-    @Inject
-    LinkedSystemDao linkedSystemDao;
-    @Inject
-    RettighedDao rettighedDao;
-    @Inject
-    DelegerbarRettighedDao delegerbarRettighedDao;
     @Inject
     DomainDao domainDao;
     @Inject

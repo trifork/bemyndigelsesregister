@@ -1,12 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
-import static java.lang.System.getProperty;
-
-import java.util.ArrayList;
-
-import javax.persistence.Entity;
-import javax.sql.DataSource;
-
+import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
+import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
+import com.googlecode.flyway.core.Flyway;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +11,6 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
@@ -23,10 +19,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-import com.avaje.ebean.config.ServerConfig;
-import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
-import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
-import com.googlecode.flyway.core.Flyway;
+import javax.persistence.Entity;
+import javax.sql.DataSource;
+import java.util.ArrayList;
+
+import static java.lang.System.getProperty;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.shared.service", "dk.bemyndigelsesregister.bemyndigelsesservice.server"})
@@ -34,26 +31,24 @@ import com.googlecode.flyway.core.Flyway;
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationRootConfig implements TransactionManagementConfigurer {
-	static Logger logger = Logger.getLogger(ApplicationRootConfig.class);
-    @Value("${jdbc.url}") String url;
-    @Value("${jdbc.username}") String username;
-    @Value("${jdbc.password}") String password;
+    static Logger logger = Logger.getLogger(ApplicationRootConfig.class);
+    @Value("${jdbc.url}")
+    String url;
+    @Value("${jdbc.username}")
+    String username;
+    @Value("${jdbc.password}")
+    String password;
 
     @Bean
     public static PropertyPlaceholderConfigurer configuration() {
         final PropertyPlaceholderConfigurer props = new PropertyPlaceholderConfigurer();
         String bemyndigelseHome = getProperty("bemyndigelse.home");
-        if(bemyndigelseHome != null) {
+        if (bemyndigelseHome != null) {
             logger.info("Loading properties from " + bemyndigelseHome);
-    		props.setLocations(new Resource[]{
-                    new FileSystemResource(bemyndigelseHome)
-            });
-        }
-        else {
-        	logger.warn("bemyndigelse.home not set. Loading default configuration");
-        	props.setLocations(new Resource[] {
-        		new ClassPathResource("bemyndigelse.properties")	
-        	});
+            props.setLocations(new FileSystemResource(bemyndigelseHome));
+        } else {
+            logger.warn("bemyndigelse.home not set. Loading default configuration");
+            props.setLocations(new ClassPathResource("bemyndigelse.properties"));
         }
         props.setIgnoreResourceNotFound(true);
         props.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
@@ -101,11 +96,11 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         return factoryBean;
     }
 
-    @Bean(name = {"serviceMarshaller", "serviceUnmarshaller"}) @Primary
+    @Bean(name = {"serviceMarshaller", "serviceUnmarshaller"})
+    @Primary
     public Jaxb2Marshaller serviceMarshaller() {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
         bean.setContextPaths(
-                "dk.nsi.bemyndigelse._2012._05._01",
                 "dk.nsi.bemyndigelse._2016._01._01",
                 "dk.medcom.dgws._2006._04.dgws_1_0",
                 "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_secext_1_0",
@@ -122,7 +117,7 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     public Jaxb2Marshaller nspMarshaller() {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
         bean.setContextPath(
-                "dk.nsi.bemyndigelser._2012._04"
+                "dk.nsi.bemyndigelse._2016._01._01"
         );
         return bean;
     }

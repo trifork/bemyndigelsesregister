@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
+import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.transform.Result;
 import java.io.File;
+import java.util.List;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -48,12 +49,13 @@ public class NspManagerSFtp implements NspManager {
 
 
     @Override
-    public void send(Bemyndigelser bemyndigelser, DateTime startTime) {
+    public void send(List<Delegation> delegations, DateTime startTime) {
         final Result result = systemService.createXmlTransformResult();
         try {
-            marshaller.marshal(bemyndigelser, result);
+            marshaller.marshal(delegations, result);
 
-            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
+//            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
+            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_v001.bemyndigelse'"); // TODO OBJ v001 is temporarily hardcoded as version
             File file = systemService.writeToTempDir(filename, result.toString());
             logger.debug("Sending " + file.getAbsolutePath() + " with name " + filename);
             if (exportEnabled) {

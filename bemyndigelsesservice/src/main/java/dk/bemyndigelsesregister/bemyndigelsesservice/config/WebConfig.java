@@ -1,9 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
+import com.trifork.dgws.annotations.EnableDgwsProtection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -26,15 +26,13 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
-import com.trifork.dgws.annotations.EnableDgwsProtection;
-
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Properties;
 
 @Configuration
 @ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
-@EnableDgwsProtection(skipSOSI="${sosi.skipSosi}", test="${sosi.test}")
+@EnableDgwsProtection(skipSOSI = "${sosi.skipSosi}", test = "${sosi.test}")
 public class WebConfig extends WebMvcConfigurationSupport {
     @Inject
     ApplicationRootConfig applicationRootConfig;
@@ -47,18 +45,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
         bean.setPortTypeName("BemyndigelsesService");
         bean.setLocationUri("http://localhost:8080/BemyndigelsesService");
         Properties soapActions = new Properties();
-        soapActions.put("SletBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/SletBemyndigelser");
-        soapActions.put("OpretAnmodningOmBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/OpretAnmodningOmBemyndigelser");
-        soapActions.put("OpretGodkendteBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/OpretGodkendteBemyndigelser");
-        soapActions.put("HentBemyndigelser","http://nsi.dk/bemyndigelse/2012/05/01/HentBemyndigelser");
-        soapActions.put("HentMetadata","http://nsi.dk/bemyndigelse/2012/05/01/HentMetadata");
-        soapActions.put("IndlaesMetadata","http://nsi.dk/bemyndigelse/2012/05/01/IndlaesMetadata");
-        soapActions.put("GodkendBemyndigelse","http://nsi.dk/bemyndigelse/2012/05/01/GodkendBemyndigelse");
-        soapActions.put("GetDelegations","http://nsi.dk/bemyndigelse/2016/01/01/GetDelegations");
-        soapActions.put("CreateDelegations","http://nsi.dk/bemyndigelse/2016/01/01/CreateDelegations");
-        soapActions.put("DeleteDelegations","http://nsi.dk/bemyndigelse/2016/01/01/DeleteDelegations");
-        soapActions.put("GetMetadata","http://nsi.dk/bemyndigelse/2016/01/01/GetMetadata");
-        soapActions.put("PutMetadata","http://nsi.dk/bemyndigelse/2016/01/01/PutMetadata");
+        soapActions.put("GetDelegations", "http://nsi.dk/bemyndigelse/2016/01/01/GetDelegations");
+        soapActions.put("CreateDelegations", "http://nsi.dk/bemyndigelse/2016/01/01/CreateDelegations");
+        soapActions.put("DeleteDelegations", "http://nsi.dk/bemyndigelse/2016/01/01/DeleteDelegations");
+        soapActions.put("GetMetadata", "http://nsi.dk/bemyndigelse/2016/01/01/GetMetadata");
+        soapActions.put("PutMetadata", "http://nsi.dk/bemyndigelse/2016/01/01/PutMetadata");
         bean.setSoapActions(soapActions);
         return bean;
     }
@@ -68,7 +59,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
         final Resource[] resources = {
                 new ClassPathResource("/schema/CPR_PersonCivilRegistrationIdentifier.xsd"),
                 new ClassPathResource("/schema/CVR_CVRnumberIdentifier.xsd"),
-                new ClassPathResource("/schema/bemyndigelsesservice.xsd"),
                 new ClassPathResource("/schema/2016_01_01/bemyndigelsesservice.xsd")
         };
         for (Resource resource : resources) {

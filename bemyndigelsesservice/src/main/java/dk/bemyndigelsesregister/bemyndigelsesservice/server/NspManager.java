@@ -1,8 +1,10 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
+import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.joda.time.DateTime;
 
+import java.util.List;
+
 public interface NspManager {
-    void send(Bemyndigelser bemyndigelser, DateTime startTime);
+    void send(List<Delegation> delegations, DateTime startTime);
 }

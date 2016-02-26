@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelser._2012._04.Bemyndigelser;
+import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
@@ -16,7 +16,7 @@ import javax.inject.Named;
 import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
+import java.util.List;
 
 import static org.springframework.util.Assert.hasText;
 
@@ -26,7 +26,8 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     @Inject
     SystemService systemService;
 
-    @Inject @Named("nspMarshaller")
+    @Inject
+    @Named("nspMarshaller")
     Marshaller marshaller;
 
     @Value("${ftp.hostname}")
@@ -60,13 +61,14 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     }
 
     @Override
-    public void send(Bemyndigelser bemyndigelser, DateTime startTime) {
+    public void send(List<Delegation> delegations, DateTime startTime) {
         final Result result = systemService.createXmlTransformResult();
         FTPClient ftpClient = new FTPClient();
         try {
-            marshaller.marshal(bemyndigelser, result);
+            marshaller.marshal(delegations, result);
 
-            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
+//            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
+            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_v001.bemyndigelse'"); // TODO OBJ v001 is temporarily hardcoded as version
             File file = systemService.writeToTempDir(filename, result.toString());
             logger.debug("Sending " + file.getAbsolutePath() + " with name " + filename);
             if (exportEnabled) {
@@ -74,8 +76,7 @@ public class NspManagerFtp implements NspManager, InitializingBean {
                 ftpClient.connect(ftpHostname, ftpPort);
                 ftpClient.login(ftpUsername, ftpPassword);
                 ftpClient.storeFile(ftpRemote + filename, FileUtils.openInputStream(file));
-            }
-            else {
+            } else {
                 logger.info("FTP export has been disabled. Was supposed to send file=" + file.getAbsolutePath());
             }
         } catch (Exception e) {
