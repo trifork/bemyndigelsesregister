@@ -31,12 +31,12 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
 
             assertNotNull(g);
-            assertEquals(g.getDomainId(), p.getDomainId());
-            assertEquals(g.getSystem().getDomainId(), p.getSystem().getDomainId());
-            assertEquals(g.getSystem().getDescription(), p.getSystem().getDescription());
-            assertEquals(g.getRoles().size(), 0);
-            assertEquals(g.getPermissions().size(), 0);
-            assertEquals(g.getDelegatablePermissions().size(), 0);
+            assertEquals(p.getDomainId(), g.getDomainId());
+            assertEquals(p.getSystem().getDomainId(), g.getSystem().getDomainId());
+            assertEquals(p.getSystem().getDescription(), g.getSystem().getDescription());
+            assertEquals(0, g.getRoles().size());
+            assertEquals(0, g.getPermissions().size());
+            assertEquals(0, g.getDelegatablePermissions().size());
         } finally {
             ebeanServer.endTransaction();
         }
@@ -51,7 +51,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             manager.putMetadata(p);
             Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
 
-            assertEquals(g.getSystem().getDescription(), p.getSystem().getDescription());
+            assertEquals(p.getSystem().getDescription(), g.getSystem().getDescription());
         } finally {
             ebeanServer.endTransaction();
         }
@@ -70,11 +70,11 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata g = manager.getMetadata(domain, system);
 
             assertNotNull(g);
-            assertEquals(g.getDomainId(), p.getDomainId());
-            assertEquals(g.getSystem().getDomainId(), p.getSystem().getDomainId());
-            assertEquals(g.getRoles().size(), 0);
-            assertEquals(g.getPermissions().size(), 0);
-            assertEquals(g.getDelegatablePermissions().size(), 0);
+            assertEquals(p.getDomainId(), g.getDomainId());
+            assertEquals(p.getSystem().getDomainId(), g.getSystem().getDomainId());
+            assertEquals(0, g.getRoles().size());
+            assertEquals(0, g.getPermissions().size());
+            assertEquals(0, g.getDelegatablePermissions().size());
         } finally {
             ebeanServer.endTransaction();
         }
@@ -91,9 +91,9 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
 
             assertNotNull(g);
-            assertEquals(g.getRoles().size(), 1);
-            assertEquals(g.getRoles().get(0).getDomainId(), p.getRoles().get(0).getDomainId());
-            assertEquals(g.getRoles().get(0).getDescription(), p.getRoles().get(0).getDescription());
+            assertEquals(1, g.getRoles().size());
+            assertEquals(p.getRoles().get(0).getDomainId(), g.getRoles().get(0).getDomainId());
+            assertEquals(p.getRoles().get(0).getDescription(), g.getRoles().get(0).getDescription());
         } finally {
             ebeanServer.endTransaction();
         }
@@ -111,10 +111,10 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
 
             assertNotNull(g);
-            assertEquals(g.getPermissions().size(), 2);
+            assertEquals(2, g.getPermissions().size());
             for (int i = 0; i < 2; i++) {
-                assertEquals(g.getPermissions().get(i).getDomainId(), p.getPermissions().get(i).getDomainId());
-                assertEquals(g.getPermissions().get(i).getDescription(), p.getPermissions().get(i).getDescription());
+                assertEquals(p.getPermissions().get(i).getDomainId(), g.getPermissions().get(i).getDomainId());
+                assertEquals(p.getPermissions().get(i).getDescription(), g.getPermissions().get(i).getDescription());
             }
         } finally {
             ebeanServer.endTransaction();
@@ -134,9 +134,9 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
 
             assertNotNull(g);
-            assertEquals(g.getDelegatablePermissions().size(), 1);
-            assertEquals(g.getDelegatablePermissions().get(0).getRoleId(), p.getDelegatablePermissions().get(0).getRoleId());
-            assertEquals(g.getDelegatablePermissions().get(0).getPermissionId(), p.getDelegatablePermissions().get(0).getPermissionId());
+            assertEquals(1, g.getDelegatablePermissions().size());
+            assertEquals(p.getDelegatablePermissions().get(0).getRoleId(), g.getDelegatablePermissions().get(0).getRoleId());
+            assertEquals(p.getDelegatablePermissions().get(0).getPermissionId(), g.getDelegatablePermissions().get(0).getPermissionId());
         } finally {
             ebeanServer.endTransaction();
         }

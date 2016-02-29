@@ -5,6 +5,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Role;
 import dk.nsi.bemyndigelse._2016._01._01.ObjectFactory;
+import dk.nsi.bemyndigelse._2016._01._01.SystemPermission;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.stereotype.Repository;
@@ -54,8 +55,11 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         delegationType.setEffectiveFrom(toXmlGregorianCalendar(delegation.getEffectiveFrom()));
         delegationType.setEffectiveTo(toXmlGregorianCalendar(delegation.getEffectiveTo()));
 
-        for (DelegationPermission permission : delegation.getDelegationPermissions())
-            delegationType.getPermission().add(toPermission(delegation.getDelegatingSystem(), permission));
+        for (DelegationPermission permission : delegation.getDelegationPermissions()) {
+            SystemPermission p = toPermission(delegation.getDelegatingSystem(), permission);
+            if (p != null)
+                delegationType.getPermission().add(p);
+        }
 
         return delegationType;
     }
@@ -76,13 +80,16 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
     }
 
     private dk.nsi.bemyndigelse._2016._01._01.SystemPermission toPermission(String delegatingSystem, DelegationPermission permission) {
-        if (permission == null)
-            return null;
+        dk.nsi.bemyndigelse._2016._01._01.SystemPermission xmlPermission = null;
 
-        dk.nsi.bemyndigelse._2016._01._01.SystemPermission xmlPermission = objectFactory.createSystemPermission();
-        xmlPermission.setPermissionId(permission.getPermissionId());
-        Permission p = getPermission(delegatingSystem, permission.getPermissionId());
-        xmlPermission.setPermissionDescription(p != null ? p.getDescription() : permission.getPermissionId());
+        if (permission != null) {
+            Permission p = getPermission(delegatingSystem, permission.getPermissionId());
+            if (p != null) {
+                xmlPermission = objectFactory.createSystemPermission();
+                xmlPermission.setPermissionId(permission.getPermissionId());
+                xmlPermission.setPermissionDescription(p.getDescription());
+            }
+        }
 
         return xmlPermission;
     }

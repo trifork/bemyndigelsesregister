@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
 import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceTypeMapperImplTest {
@@ -53,6 +55,16 @@ public class ServiceTypeMapperImplTest {
 
     @Test
     public void willMapToDelegation() throws Exception {
+        Permission p1 = new Permission();
+        p1.setDomainId(permissionId1);
+        p1.setDescription("First Permission");
+        when(permissionDao.findByDomainId(systemId, permissionId1)).thenReturn(p1);
+
+        Permission p2 = new Permission();
+        p2.setDomainId(permissionId2);
+        p2.setDescription("Second Permission");
+        when(permissionDao.findByDomainId(systemId, permissionId2)).thenReturn(p2);
+
         dk.nsi.bemyndigelse._2016._01._01.Delegation d = typeMapper.toDelegationType(createDelegation());
 
         assertNotNull(d);
@@ -61,9 +73,24 @@ public class ServiceTypeMapperImplTest {
         assertEquals(delegateeCpr, d.getDelegateeCpr());
         assertEquals(delegateeCvr, d.getDelegateeCvr());
         assertEquals(dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT, d.getState());
+        assertEquals(2, d.getPermission().size());
         assertNotNull(d.getCreated());
         assertNotNull(d.getEffectiveFrom());
         assertNotNull(d.getEffectiveTo());
+    }
+
+    @Test
+    public void willNotMapPermissionsWithoutMetadata() throws Exception {
+        Permission p1 = new Permission();
+        p1.setDomainId(permissionId1);
+        p1.setDescription("First Permission");
+        when(permissionDao.findByDomainId(systemId, permissionId1)).thenReturn(p1);
+
+        dk.nsi.bemyndigelse._2016._01._01.Delegation d = typeMapper.toDelegationType(createDelegation());
+
+        assertNotNull(d);
+        assertEquals("Mappet bemyndigelse skal kun indeholde én rettighed, da kun én er defineret", 1, d.getPermission().size());
+        assertEquals("Mappet bemyndigelse skal indeholde den definerede rettighed", permissionId1, d.getPermission().get(0).getPermissionId());
     }
 
     private Delegation createDelegation() {

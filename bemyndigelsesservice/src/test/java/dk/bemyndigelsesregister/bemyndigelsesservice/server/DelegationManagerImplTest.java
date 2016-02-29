@@ -2,6 +2,8 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import com.avaje.ebean.EbeanServer;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.DaoUnitTestSupport;
 import dk.nsi.bemyndigelse._2016._01._01.State;
@@ -10,11 +12,11 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * BEM 2.0 bemyndigelse
@@ -23,6 +25,9 @@ import static org.junit.Assert.assertNull;
 public class DelegationManagerImplTest extends DaoUnitTestSupport {
     @Inject
     DelegationManager manager;
+
+    @Inject
+    MetadataManager metadataManager;
 
     @Inject
     EbeanServer ebeanServer;
@@ -177,6 +182,37 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
 
             assertNotNull("Der skal returneres en liste af bemyndigelser for bemyndigede cpr " + delegateeCpr, list);
             assertEquals("Der skal findes 2 bemyndigelser for bemyndigende cpr " + delegateeCpr, 2, list.size());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testFindDelegationsWithRemovedMetadata() {
+        try {
+            ebeanServer.beginTransaction();
+
+            List<String> permissionCodes = Arrays.asList(TestData.permissionCode1, TestData.permissionCode2);
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, permissionCodes, dato1, null);
+
+            // remove permissionCode2 from metadata
+            Metadata metadata = metadataManager.getMetadata(TestData.domainCode, TestData.systemCode);
+            metadata.getPermissions().clear();
+            metadata.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
+            metadataManager.putMetadata(metadata);
+
+            List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr);
+
+            assertNotNull("Der skal returneres en liste af bemyndigelser for bemyndigende cpr " + delegatorCpr, list);
+            assertEquals("Der skal findes 1 bemyndigelse for bemyndigende cpr " + delegatorCpr, 1, list.size());
+
+            Delegation delegation = list.get(0);
+            assertEquals("Der skal findes 2 rettigheder for bemyndigelse", 2, delegation.getDelegationPermissions().size());
+
+            Set<String> expectedCodes = new HashSet<>(permissionCodes);
+            for (DelegationPermission dp : delegation.getDelegationPermissions())
+                expectedCodes.remove(dp.getPermissionId());
+            assertTrue("Både " + TestData.permissionCode1 + " og " + TestData.permissionCode2 + " forventes returneret selvom metadata mangler for den ene", expectedCodes.isEmpty());
         } finally {
             ebeanServer.endTransaction();
         }
