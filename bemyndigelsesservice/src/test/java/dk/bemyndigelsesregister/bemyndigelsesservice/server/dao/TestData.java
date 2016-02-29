@@ -15,4 +15,6 @@ public final class TestData {
 
     public static final String roleCode = "Laege";
     public static final String roleDescription = "For unit test only";
+
+    public static final String domainCode = "trifork-test";
 }
