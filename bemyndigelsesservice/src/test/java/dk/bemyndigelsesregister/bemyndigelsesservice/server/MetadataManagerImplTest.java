@@ -150,7 +150,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
             p.addDelegatablePermission("Unknown", TestData.permissionCode1);
             manager.putMetadata(p);
-            manager.getMetadata(TestData.domainCode, TestData.systemCode);
         } finally {
             ebeanServer.endTransaction();
         }
@@ -164,7 +163,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
             p.addDelegatablePermission(TestData.roleCode, "Unknown");
             manager.putMetadata(p);
-            manager.getMetadata(TestData.domainCode, TestData.systemCode);
         } finally {
             ebeanServer.endTransaction();
         }
