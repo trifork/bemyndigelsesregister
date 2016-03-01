@@ -41,8 +41,7 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
                 .eq("delegatorCpr", delegatorCpr)
                 .eq("delegateeCpr", delegateeCpr)
                 .eq("delegateeCvr", delegateeCvr)
-                .eq("role", role)
-                .eq("state", state).and(
+                .eq("role", role).and(
                         expr().le("effectiveFrom", effectiveTo),
                         expr().gt("effectiveTo", effectiveFrom)
                 ).findList();

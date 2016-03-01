@@ -3,7 +3,10 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.PermissionDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.RoleDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.apache.log4j.Logger;
@@ -42,7 +45,6 @@ public class DelegationManagerImpl implements DelegationManager {
 
     @Override
     public Delegation createDelegation(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
-
         DateTime now = systemService.getDateTime();
         final DateTime validFrom = defaultIfNull(effectiveFrom, now);
         final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));
@@ -52,15 +54,18 @@ public class DelegationManagerImpl implements DelegationManager {
         List<Delegation> existingDelegations = delegationDao.findByInPeriod(system, delegatorCpr, delegateeCpr, delegateeCvr, role, state, validFrom, validTo);
         if (existingDelegations != null) {
             for (Delegation delegation : existingDelegations) {
-                DateTime end = delegation.getEffectiveFrom().isAfter(validFrom) ? delegation.getEffectiveFrom() : validFrom;
-                logger.debug("  Afslutter eksisterende bemyndigelse gyldig " + delegation.getEffectiveFrom() + " - " + delegation.getEffectiveTo() + " til tidspunkt + " + end);
 
-                // update delegation
-                delegation.setEffectiveTo(end);
-                delegation.setSidstModificeret(now);
-                delegation.setSidstModificeretAf("Service");
-                delegation.setVersionsid(delegation.getVersionsid() + 1);
-                delegationDao.save(delegation);
+                if (state == State.GODKENDT || state == State.BESTILT && delegation.getState() == State.BESTILT) { // determine if existing should be "closed" - depends on state, approved closes existing approved/requested, but requested only closes existing requested
+                    DateTime end = delegation.getEffectiveFrom().isAfter(validFrom) ? delegation.getEffectiveFrom() : validFrom;
+                    logger.debug("  Afslutter eksisterende bemyndigelse gyldig " + delegation.getEffectiveFrom() + " - " + delegation.getEffectiveTo() + " til tidspunkt + " + end);
+
+                    // update delegation
+                    delegation.setEffectiveTo(end);
+                    delegation.setSidstModificeret(now);
+                    delegation.setSidstModificeretAf("Service");
+                    delegation.setVersionsid(delegation.getVersionsid() + 1);
+                    delegationDao.save(delegation);
+                }
             }
         }
 
@@ -137,7 +142,7 @@ public class DelegationManagerImpl implements DelegationManager {
             Set<DelegationPermission> permissionSet = new HashSet<>();
             for (String permission : permissionCodeSet) {
                 Permission p = permissionDao.findByDomainId(system, permission);
-                if(p == null)
+                if (p == null)
                     throw new IllegalArgumentException("No permission " + permission + " exists for " + system);
 
                 DelegationPermission dp = new DelegationPermission();

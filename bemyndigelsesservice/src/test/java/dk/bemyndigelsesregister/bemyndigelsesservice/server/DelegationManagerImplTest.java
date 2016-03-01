@@ -79,6 +79,54 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
+    public void testCreateApprovedClosesOverlappingRequested() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.BESTILT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato1, null);
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato2, null);
+            delegation = manager.getDelegation(delegation.getDomainId()); // reload first delegation
+
+            assertEquals("Eksisterende bestilt bemyndigelse skal være afsluttet på samme tidspunkt som godkendt bemyndigelse starter når perioder overlapper", dato2, delegation.getEffectiveTo());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testCreateApprovedClosesOverlappingApproved() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato1, null);
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato2, null);
+            delegation = manager.getDelegation(delegation.getDomainId()); // reload first delegation
+
+            assertEquals("Eksisteerende godkendt bemyndigelse skal være afsluttet på samme tidspunkt som godkendt bemyndigelse starter når perioder overlapper", dato2, delegation.getEffectiveTo());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testCreateRequestedDoesNotCloseOverlappingApproved() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato1, null);
+            delegation = manager.getDelegation(delegation.getDomainId()); // reload first delegation
+            DateTime effectiveTo = delegation.getEffectiveTo();
+
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.BESTILT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), dato2, null);
+            delegation = manager.getDelegation(delegation.getDomainId()); // reload first delegation
+
+            assertEquals("Eksisterende godkendt bemyndigelse skal ikke påvirkes af ny bestilt bemyndigelse selvom perioder overlapper", effectiveTo, delegation.getEffectiveTo());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
     public void testDeleteDelegationAsDelegator() throws Exception {
         try {
             ebeanServer.beginTransaction();
