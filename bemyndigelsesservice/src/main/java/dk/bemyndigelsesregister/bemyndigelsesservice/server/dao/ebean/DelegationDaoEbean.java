@@ -30,35 +30,25 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     }
 
     @Override
-    public Delegation findById(String delegationId) {
-        return query().where().eq("kode", delegationId).findUnique();
-    }
-
-    @Override
-    public List<Delegation> findByInPeriod(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, DateTime effectiveFrom, DateTime effectiveTo) {
+    public List<Delegation> findInPeriod(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, DateTime effectiveFrom, DateTime effectiveTo) {
         return query().where()
-                .eq("delegatingSystem", system)
+                .eq("systemCode", systemCode)
                 .eq("delegatorCpr", delegatorCpr)
                 .eq("delegateeCpr", delegateeCpr)
                 .eq("delegateeCvr", delegateeCvr)
-                .eq("role", role).and(
+                .eq("roleCode", roleCode).and(
                         expr().le("effectiveFrom", effectiveTo),
                         expr().gt("effectiveTo", effectiveFrom)
                 ).findList();
     }
 
     @Override
-    public List<Delegation> findByIds(Collection<String> delegationIds) {
-        return query().where().in("domainId", delegationIds).findList();
-    }
-
-    @Override
-    public List<Delegation> findByDomainIds(Collection<String> domainIds) {
-        return query().where().in("domainId", domainIds).findList();
+    public List<Delegation> findByCodes(Collection<String> codes) {
+        return query().where().in("code", codes).findList();
     }
 
     @Override
     public List<Delegation> findByLastModifiedGreaterThanOrEquals(DateTime lastModified) {
-        return query().where().ge("sidstModificeret", lastModified).findList();
+        return query().where().ge("lastModified", lastModified).findList();
     }
 }

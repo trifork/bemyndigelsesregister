@@ -29,8 +29,8 @@ public abstract class SupportDao<T> {
         ebeanServer.save(entity);
     }
 
-    public T findByDomainId(String domainId) {
-        return query().where().eq("domainId", domainId).findUnique();
+    public T findByCode(String code) {
+        return query().where().eq("code", code).findUnique();
     }
 
     protected Query<T> query() {

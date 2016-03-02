@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import org.joda.time.DateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -9,10 +10,13 @@ import javax.persistence.MappedSuperclass;
 public abstract class DomainObject {
     @Id
     private Long id;
-    protected DateTime sidstModificeret;
-    protected String sidstModificeretAf;
 
-    //<editor-fold desc="GettersAndSetters">
+    @Column(name = "sidst_modificeret")
+    protected DateTime lastModified;
+
+    @Column(name = "sidst_modificeret_af")
+    protected String lastModifiedBy;
+
     public Long getId() {
         return id;
     }
@@ -21,20 +25,19 @@ public abstract class DomainObject {
         this.id = id;
     }
 
-    public DateTime getSidstModificeret() {
-        return sidstModificeret;
+    public DateTime getLastModified() {
+        return lastModified;
     }
 
-    public void setSidstModificeret(DateTime sidstModificeret) {
-        this.sidstModificeret = sidstModificeret;
+    public void setLastModified(DateTime lastModified) {
+        this.lastModified = lastModified;
     }
 
-    public String getSidstModificeretAf() {
-        return sidstModificeretAf;
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
     }
 
-    public void setSidstModificeretAf(String sidstModificeretAf) {
-        this.sidstModificeretAf = sidstModificeretAf;
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
-    //</editor-fold>
 }

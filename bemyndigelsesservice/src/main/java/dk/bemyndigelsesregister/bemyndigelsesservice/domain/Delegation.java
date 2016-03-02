@@ -34,10 +34,10 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     protected String delegateeCvr;
 
     @Column(name = "linked_system_kode")
-    protected String delegatingSystem;
+    protected String systemCode;
 
     @Column(name = "arbejdsfunktion_kode")
-    protected String role;
+    protected String roleCode;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -84,20 +84,20 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         this.delegateeCvr = value;
     }
 
-    public String getDelegatingSystem() {
-        return delegatingSystem;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setDelegatingSystem(String delegatingSystem) {
-        this.delegatingSystem = delegatingSystem;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
     public State getState() {
@@ -147,28 +147,4 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     public void setDelegationPermissions(Set<DelegationPermission> delegationPermissions) {
         this.delegationPermissions = delegationPermissions;
     }
-
-    @Override
-    public String toString() {
-        return "Delegation{" +
-                "delegatorCpr='" + delegatorCpr + '\'' +
-                ", delegateeCpr='" + delegateeCpr + '\'' +
-                ", delegateeCvr='" + delegateeCvr + '\'' +
-                ", delegatingSystem='" + delegatingSystem + '\'' +
-                ", role='" + role + '\'' +
-                ", state=" + state +
-                ", delegationPermissions=" + delegationPermissions +
-                ", created=" + created +
-                ", effectiveFrom=" + effectiveFrom +
-                ", effectiveTo=" + effectiveTo +
-                ", versionsid=" + versionsid +
-                '}';
-    }
-
-    /**
-     * TODO OBJ Bruges tilsyneladende til stamdata eksportering
-     * TODO hvorfor er så mange felter null?
-     *
-     * @return
-     */
 }

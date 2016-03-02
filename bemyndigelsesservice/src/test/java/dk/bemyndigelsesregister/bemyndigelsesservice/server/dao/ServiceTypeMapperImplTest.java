@@ -36,15 +36,15 @@ public class ServiceTypeMapperImplTest {
     @Mock
     PermissionDao permissionDao;
 
-    private String domainId = "UUID kode";
-    private String delegatorCpr = "BemyndigendeCpr";
-    private String delegateeCpr = "BemyndigedeCpr";
-    private String delegateeCvr = "BemyndigedeCvr";
-    private String roleId = "Arbejdsfunktionskode";
-    private String systemId = "SystemKode";
-    private String permissionId1 = "P1";
-    private String permissionId2 = "P2";
-    private List<String> permissionIds = Arrays.asList(permissionId1, permissionId2);
+    private String code = "UUID code";
+    private String delegatorCpr = "delegatorCpr";
+    private String delegateeCpr = "delegateeCpr";
+    private String delegateeCvr = "delegateeCvr";
+    private String roleCode = "roleCode";
+    private String systemCode = "SystemCode";
+    private String permissionCode1 = "P1";
+    private String permissionCode2 = "P2";
+    private List<String> permissionCodes = Arrays.asList(permissionCode1, permissionCode2);
     private State state = State.GODKENDT;
     private DateTime now = DateTime.now();
 
@@ -56,19 +56,19 @@ public class ServiceTypeMapperImplTest {
     @Test
     public void willMapToDelegation() throws Exception {
         Permission p1 = new Permission();
-        p1.setDomainId(permissionId1);
+        p1.setCode(permissionCode1);
         p1.setDescription("First Permission");
-        when(permissionDao.findByDomainId(systemId, permissionId1)).thenReturn(p1);
+        when(permissionDao.findByCode(systemCode, permissionCode1)).thenReturn(p1);
 
         Permission p2 = new Permission();
-        p2.setDomainId(permissionId2);
+        p2.setCode(permissionCode2);
         p2.setDescription("Second Permission");
-        when(permissionDao.findByDomainId(systemId, permissionId2)).thenReturn(p2);
+        when(permissionDao.findByCode(systemCode, permissionCode2)).thenReturn(p2);
 
         dk.nsi.bemyndigelse._2016._01._01.Delegation d = typeMapper.toDelegationType(createDelegation());
 
         assertNotNull(d);
-        assertEquals(domainId, d.getDelegationId());
+        assertEquals(code, d.getDelegationId());
         assertEquals(delegatorCpr, d.getDelegatorCpr());
         assertEquals(delegateeCpr, d.getDelegateeCpr());
         assertEquals(delegateeCvr, d.getDelegateeCvr());
@@ -82,33 +82,33 @@ public class ServiceTypeMapperImplTest {
     @Test
     public void willNotMapPermissionsWithoutMetadata() throws Exception {
         Permission p1 = new Permission();
-        p1.setDomainId(permissionId1);
+        p1.setCode(permissionCode1);
         p1.setDescription("First Permission");
-        when(permissionDao.findByDomainId(systemId, permissionId1)).thenReturn(p1);
+        when(permissionDao.findByCode(systemCode, permissionCode1)).thenReturn(p1);
 
         dk.nsi.bemyndigelse._2016._01._01.Delegation d = typeMapper.toDelegationType(createDelegation());
 
         assertNotNull(d);
         assertEquals("Mappet bemyndigelse skal kun indeholde én rettighed, da kun én er defineret", 1, d.getPermission().size());
-        assertEquals("Mappet bemyndigelse skal indeholde den definerede rettighed", permissionId1, d.getPermission().get(0).getPermissionId());
+        assertEquals("Mappet bemyndigelse skal indeholde den definerede rettighed", permissionCode1, d.getPermission().get(0).getPermissionId());
     }
 
     private Delegation createDelegation() {
         Delegation delegation = new Delegation();
 
-        delegation.setDomainId(domainId);
+        delegation.setCode(code);
         delegation.setDelegatorCpr(delegatorCpr);
         delegation.setDelegateeCpr(delegateeCpr);
         delegation.setDelegateeCvr(delegateeCvr);
-        delegation.setDelegatingSystem(systemId);
-        delegation.setRole(roleId);
+        delegation.setSystemCode(systemCode);
+        delegation.setRoleCode(roleCode);
         delegation.setState(state);
 
         Set<DelegationPermission> permissionList = new HashSet<>();
-        for (String permissionId : permissionIds) {
+        for (String permissionId : permissionCodes) {
             final DelegationPermission permission = new DelegationPermission();
             permission.setDelegation(delegation);
-            permission.setPermissionId(permissionId);
+            permission.setPermissionCode(permissionId);
             permissionList.add(permission);
         }
         delegation.setDelegationPermissions(permissionList);

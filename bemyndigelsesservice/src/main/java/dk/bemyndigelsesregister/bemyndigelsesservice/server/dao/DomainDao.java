@@ -7,5 +7,5 @@ public interface DomainDao {
 
     void save(Domain domain);
 
-    Domain findByDomainId(String domainId);
+    Domain findByCode(String code);
 }

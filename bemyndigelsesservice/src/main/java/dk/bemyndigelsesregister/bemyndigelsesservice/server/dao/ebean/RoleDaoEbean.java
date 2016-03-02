@@ -13,13 +13,13 @@ public class RoleDaoEbean extends SupportDao<Role> implements RoleDao {
     }
 
     @Override
-    public Role findByDomainId(Long delegatingSystemid, String id) {
-        return query().where().eq("delegatingSystem.id", delegatingSystemid).eq("domainId", id).findUnique();
+    public Role findByCode(Long systemId, String code) {
+        return query().where().eq("system.id", systemId).eq("code", code).findUnique();
     }
 
     @Override
-    public List<Role> findBySystem(Long delegatingSystemId) {
-        return query().where().eq("delegatingSystem.id", delegatingSystemId).findList();
+    public List<Role> findBySystem(Long systemId) {
+        return query().where().eq("system.id", systemId).findList();
     }
 
     @Override

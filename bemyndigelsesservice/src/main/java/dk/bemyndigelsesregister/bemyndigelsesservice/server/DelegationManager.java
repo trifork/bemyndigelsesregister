@@ -19,18 +19,18 @@ public interface DelegationManager {
      * Accepteret, og der er en eksisterende bemyndigelse med status Anmodet og ellers identiske værdier i
      * nøglen, så slettes denne, dvs. operationen svarer til en godkendelse af de anmodede bemyndigelser
      *
-     * @param system        IT-System, nøgleoplysning
+     * @param systemCode    IT-System, nøgleoplysning
      * @param delegatorCpr  Bemyndigende CPR, nøgleoplysning
      * @param delegateeCpr  Bemyndigede CPR, nøgleoplysning
      * @param delegateeCvr  Bemyndigede CVR, nøgleoplysning
-     * @param role          Arbejdsfunktion, nøgleoplysning
+     * @param roleCode      Arbejdsfunktion, nøgleoplysning
      * @param state         Anmodet / Accepteret, nøgleoplysning
      * @param permissions   De rettigheder, der gives bemyndigelse til
      * @param effectiveFrom Gyldigheds fradato
      * @param effectiveTo   Gyldigheds tildato
      * @return Data for bemyndigelse
      */
-    Delegation createDelegation(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo);
+    Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo);
 
     /**
      * Henter bemyndigelser uddelegeret af en person
@@ -51,10 +51,10 @@ public interface DelegationManager {
     /**
      * Henter bemyndigelser fra kode/uuid
      *
-     * @param delegationId cprnr på delegerende person
+     * @param delegationCode bemyndigelse UUID
      * @return Bemyndigelse
      */
-    Delegation getDelegation(String delegationId);
+    Delegation getDelegation(String delegationCode);
 
     /**
      * deleteDelegation sletter bemyndigelsen med den angivne nøgle.
@@ -62,11 +62,11 @@ public interface DelegationManager {
      * Kan også bruges til at afvise en anmodning om bemyndigelse
      *
      *
-     * @param delegatorCpr
-     * @param delegateeCpr
-     * @param delegationId kode på på bemyndigelse (uuid)
-     * @param deletionDate slutdato til bemyndigelse
+     * @param delegatorCpr   Bemyndigende CPR
+     * @param delegateeCpr   Bemyndigede CPR
+     * @param delegationCode kode på på bemyndigelse (uuid)
+     * @param deletionDate   slutdato til bemyndigelse
      * @return delegationId
      */
-    String deleteDelegation(String delegatorCpr, String delegateeCpr, String delegationId, DateTime deletionDate);
+    String deleteDelegation(String delegatorCpr, String delegateeCpr, String delegationCode, DateTime deletionDate);
 }

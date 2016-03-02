@@ -14,7 +14,7 @@ public class DelegationPermission extends DomainObject {
     private Delegation delegation;
 
     @Column(name = "rettighed_kode")
-    private String permissionId;
+    private String permissionCode;
 
     public DelegationPermission() {
     }
@@ -27,18 +27,19 @@ public class DelegationPermission extends DomainObject {
         this.delegation = delegation;
     }
 
-    public String getPermissionId() {
-        return permissionId;
+    public String getPermissionCode() {
+        return permissionCode;
     }
 
-    public void setPermissionId(String permissionId) {
-        this.permissionId = permissionId;
+    public void setPermissionCode(String permissionCode) {
+        this.permissionCode = permissionCode;
     }
 
     @Override
     public String toString() {
-        return "Bemyndigelse20Rettighed{" +
-                "rettighedKode='" + permissionId + '\'' +
+        return "DelegationPermission{" +
+                "delegation=" + delegation +
+                ", permissionCode='" + permissionCode + '\'' +
                 '}';
     }
 }

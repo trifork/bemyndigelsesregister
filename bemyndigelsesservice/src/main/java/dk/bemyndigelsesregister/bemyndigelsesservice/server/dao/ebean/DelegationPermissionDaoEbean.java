@@ -13,9 +13,4 @@ public class DelegationPermissionDaoEbean extends SupportDao<DelegationPermissio
     public DelegationPermissionDaoEbean() {
         super(DelegationPermission.class);
     }
-
-    @Override
-    public List<DelegationPermission> findByDelegation(Delegation delegation) {
-        return query().where().eq("bemyndigelse", delegation).findList();
-    }
 }

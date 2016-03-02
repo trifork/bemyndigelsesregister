@@ -80,19 +80,19 @@ public class DelegationServiceImplTest {
 
     private final DateTime now = new DateTime();
 
-    final String domainId = "UUID kode";
+    final String code = "UUID code";
     final String delegatorCprText = "DelegatorCpr";
     final String delegateeCprText = "DelegateeCpr";
     final String delegateeCvrText = "DelegateeCvr";
-    final String roleId = "RoleId";
+    final String roleCode = "RoleCode";
     final String roleDescription = "RoleDescription";
-    final String systemId = "SystemId";
+    final String systemCode = "SystemCode";
     final String systemDescription = "SystemDescription";
-    final String permissionId = "PermissionId";
-    final String permissionDescription = "PermissionDescription;";
-    final String permissionId1 = "P1";
-    final String permissionId2 = "P2";
-    final List<String> permissionIds = Arrays.asList(permissionId1, permissionId2);
+    final String permissionCode = "PermissionCode";
+    final String permissionDescription = "PermissionDescription";
+    final String permissionCode1 = "P1";
+    final String permissionCode2 = "P2";
+    final List<String> permissionCodes = Arrays.asList(permissionCode1, permissionCode2);
     final State state = State.GODKENDT;
 
     void setupDgwsRequestContextForSystem(String cvr) {
@@ -107,21 +107,21 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canCreateDelegationAsDelegator() throws Exception {
-        final Delegation delegation = createDelegation(domainId, state, null);
+        final Delegation delegation = createDelegation(code, state, null);
 
-        when(delegationManager.createDelegation(systemId, delegatorCprText, delegateeCprText, delegateeCvrText, roleId, state, permissionIds, null, null)).thenReturn(delegation);
+        when(delegationManager.createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, state, permissionCodes, null, null)).thenReturn(delegation);
         setupDgwsRequestContextForUser(delegatorCprText);
 
         CreateDelegationsRequest request = new CreateDelegationsRequest() {{
             getCreate().add(new Create() {{
-                setSystemId(DelegationServiceImplTest.this.systemId);
+                setSystemId(DelegationServiceImplTest.this.systemCode);
                 setDelegatorCpr(delegatorCprText);
                 setDelegateeCpr(delegateeCprText);
                 setDelegateeCvr(delegateeCvrText);
-                setRoleId(DelegationServiceImplTest.this.roleId);
+                setRoleId(DelegationServiceImplTest.this.roleCode);
 
                 ListOfPermissionIds pIds = new ListOfPermissionIds();
-                pIds.getPermissionId().addAll(permissionIds);
+                pIds.getPermissionId().addAll(permissionCodes);
                 setListOfPermissionIds(pIds);
                 setState(dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT);
             }});
@@ -129,7 +129,7 @@ public class DelegationServiceImplTest {
 
         final CreateDelegationsResponse response = service.createDelegations(request, soapHeader);
 
-        verify(delegationManager).createDelegation(systemId, delegatorCprText, delegateeCprText, delegateeCvrText, roleId, state, permissionIds, null, null);
+        verify(delegationManager).createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, state, permissionCodes, null, null);
 
         assertEquals(1, response.getDelegation().size());
         verify(typeMapper).toDelegationType(delegation);
@@ -137,21 +137,21 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canCreateDelegationAsDelegatee() throws Exception {
-        final Delegation delegation = createDelegation(domainId, State.BESTILT, null);
+        final Delegation delegation = createDelegation(code, State.BESTILT, null);
 
-        when(delegationManager.createDelegation(systemId, delegatorCprText, delegateeCprText, delegateeCvrText, roleId, State.BESTILT, permissionIds, null, null)).thenReturn(delegation);
+        when(delegationManager.createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.BESTILT, permissionCodes, null, null)).thenReturn(delegation);
         setupDgwsRequestContextForUser(delegateeCprText);
 
         CreateDelegationsRequest request = new CreateDelegationsRequest() {{
             getCreate().add(new Create() {{
-                setSystemId(DelegationServiceImplTest.this.systemId);
+                setSystemId(DelegationServiceImplTest.this.systemCode);
                 setDelegatorCpr(delegatorCprText);
                 setDelegateeCpr(delegateeCprText);
                 setDelegateeCvr(delegateeCvrText);
-                setRoleId(DelegationServiceImplTest.this.roleId);
+                setRoleId(DelegationServiceImplTest.this.roleCode);
 
                 ListOfPermissionIds pIds = new ListOfPermissionIds();
-                pIds.getPermissionId().addAll(permissionIds);
+                pIds.getPermissionId().addAll(permissionCodes);
                 setListOfPermissionIds(pIds);
                 setState(State.BESTILT);
             }});
@@ -159,7 +159,7 @@ public class DelegationServiceImplTest {
 
         final CreateDelegationsResponse response = service.createDelegations(request, soapHeader);
 
-        verify(delegationManager).createDelegation(systemId, delegatorCprText, delegateeCprText, delegateeCvrText, roleId, State.BESTILT, permissionIds, null, null);
+        verify(delegationManager).createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.BESTILT, permissionCodes, null, null);
 
         assertEquals(1, response.getDelegation().size());
         verify(typeMapper).toDelegationType(delegation);
@@ -167,20 +167,20 @@ public class DelegationServiceImplTest {
 
     @Test(expected = IllegalAccessError.class)
     public void cannotCreateDelegationForThirdPartyAsDelegator() throws Exception {
-        final Delegation delegation = createDelegation(domainId, state, null);
+        final Delegation delegation = createDelegation(code, state, null);
 
         setupDgwsRequestContextForUser(delegatorCprText);
 
         CreateDelegationsRequest request = new CreateDelegationsRequest() {{
             getCreate().add(new Create() {{
-                setSystemId(DelegationServiceImplTest.this.systemId);
+                setSystemId(DelegationServiceImplTest.this.systemCode);
                 setDelegatorCpr("anotherCpr");
                 setDelegateeCpr(delegateeCprText);
                 setDelegateeCvr(delegateeCvrText);
-                setRoleId(DelegationServiceImplTest.this.roleId);
+                setRoleId(DelegationServiceImplTest.this.roleCode);
 
                 ListOfPermissionIds pIds = new ListOfPermissionIds();
-                pIds.getPermissionId().addAll(permissionIds);
+                pIds.getPermissionId().addAll(permissionCodes);
                 setListOfPermissionIds(pIds);
                 setState(dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT);
             }});
@@ -191,20 +191,20 @@ public class DelegationServiceImplTest {
 
     @Test(expected = IllegalAccessError.class)
     public void cannotCreateDelegationWithStateGodkendtAsDelegatee() throws Exception {
-        final Delegation delegation = createDelegation(domainId, state, null);
+        final Delegation delegation = createDelegation(code, state, null);
 
         setupDgwsRequestContextForUser(delegateeCprText);
 
         CreateDelegationsRequest request = new CreateDelegationsRequest() {{
             getCreate().add(new Create() {{
-                setSystemId(DelegationServiceImplTest.this.systemId);
+                setSystemId(DelegationServiceImplTest.this.systemCode);
                 setDelegatorCpr(delegatorCprText);
                 setDelegateeCpr(delegateeCprText);
                 setDelegateeCvr(delegateeCvrText);
-                setRoleId(DelegationServiceImplTest.this.roleId);
+                setRoleId(DelegationServiceImplTest.this.roleCode);
 
                 ListOfPermissionIds pIds = new ListOfPermissionIds();
-                pIds.getPermissionId().addAll(permissionIds);
+                pIds.getPermissionId().addAll(permissionCodes);
                 setListOfPermissionIds(pIds);
                 setState(dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT);
             }});
@@ -216,19 +216,19 @@ public class DelegationServiceImplTest {
     private Delegation createDelegation(final String id, State state, DateTime creationDate) {
         final Delegation delegation = new Delegation();
 
-        delegation.setDomainId(id);
+        delegation.setCode(id);
 
         delegation.setDelegatorCpr(delegatorCprText);
         delegation.setDelegateeCpr(delegateeCprText);
         delegation.setDelegateeCvr(delegateeCvrText);
-        delegation.setDelegatingSystem(this.systemId);
-        delegation.setRole(this.roleId);
+        delegation.setSystemCode(this.systemCode);
+        delegation.setRoleCode(this.roleCode);
 
         Set<DelegationPermission> permissionList = new HashSet<>();
-        for (String permissionId : permissionIds) {
+        for (String permissionId : permissionCodes) {
             final DelegationPermission permission = new DelegationPermission();
             permission.setDelegation(delegation);
-            permission.setPermissionId(permissionId);
+            permission.setPermissionCode(permissionId);
             permissionList.add(permission);
         }
         delegation.setDelegationPermissions(permissionList);
@@ -243,7 +243,7 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canGetDelegationsByDelegatorCpr() throws Exception {
-        final Delegation delegation = createDelegation(domainId, state, null);
+        final Delegation delegation = createDelegation(code, state, null);
 
         when(delegationManager.getDelegationsByDelegatorCpr(delegatorCprText)).thenReturn(Arrays.asList(delegation));
         setupDgwsRequestContextForUser(delegatorCprText);
@@ -260,7 +260,7 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canGetDelegationsByDelegateeCpr() throws Exception {
-        final Delegation delegation = createDelegation(domainId, state, null);
+        final Delegation delegation = createDelegation(code, state, null);
 
         when(delegationManager.getDelegationsByDelegateeCpr(delegateeCprText)).thenReturn(Arrays.asList(delegation));
         setupDgwsRequestContextForUser(delegatorCprText);
@@ -277,17 +277,17 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canGetDelegationsById() throws Exception {
-        final Delegation delegation = createDelegation(domainId, state, null);
+        final Delegation delegation = createDelegation(code, state, null);
 
-        when(delegationManager.getDelegation(domainId)).thenReturn(delegation);
+        when(delegationManager.getDelegation(code)).thenReturn(delegation);
         setupDgwsRequestContextForUser(delegatorCprText);
 
         GetDelegationsRequest request = new GetDelegationsRequest() {{
-            setDelegationId(domainId);
+            setDelegationId(code);
         }};
         final GetDelegationsResponse response = service.getDelegations(request, soapHeader);
 
-        verify(delegationManager).getDelegation(domainId);
+        verify(delegationManager).getDelegation(code);
 
         assertEquals(1, response.getDelegation().size());
     }
@@ -306,38 +306,38 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canDeleteDelegationsAsDelegator() throws Exception {
-        when(delegationManager.deleteDelegation(delegatorCprText, null, domainId, now.plusDays(1))).thenReturn(domainId);
+        when(delegationManager.deleteDelegation(delegatorCprText, null, code, now.plusDays(1))).thenReturn(code);
         setupDgwsRequestContextForUser(delegatorCprText);
 
         DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
             setDelegatorCpr(delegatorCprText);
             ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
-            listOfDelegationIds.getDelegationId().add(domainId);
+            listOfDelegationIds.getDelegationId().add(code);
             setListOfDelegationIds(listOfDelegationIds);
             setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
         }};
         final DeleteDelegationsResponse response = service.deleteDelegations(request, soapHeader);
 
-        verify(delegationManager).deleteDelegation(delegatorCprText, null, domainId, now.plusDays(1));
+        verify(delegationManager).deleteDelegation(delegatorCprText, null, code, now.plusDays(1));
 
         assertEquals(1, response.getDelegationId().size());
     }
 
     @Test
     public void canDeleteDelegationsAsDelegatee() throws Exception {
-        when(delegationManager.deleteDelegation(null, delegateeCprText, domainId, now.plusDays(1))).thenReturn(domainId);
+        when(delegationManager.deleteDelegation(null, delegateeCprText, code, now.plusDays(1))).thenReturn(code);
         setupDgwsRequestContextForUser(delegateeCprText);
 
         DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
             setDelegateeCpr(delegateeCprText);
             ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
-            listOfDelegationIds.getDelegationId().add(domainId);
+            listOfDelegationIds.getDelegationId().add(code);
             setListOfDelegationIds(listOfDelegationIds);
             setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
         }};
         final DeleteDelegationsResponse response = service.deleteDelegations(request, soapHeader);
 
-        verify(delegationManager).deleteDelegation(null, delegateeCprText, domainId, now.plusDays(1));
+        verify(delegationManager).deleteDelegation(null, delegateeCprText, code, now.plusDays(1));
 
         assertEquals(1, response.getDelegationId().size());
     }
@@ -349,7 +349,7 @@ public class DelegationServiceImplTest {
             setDelegatorCpr(delegatorCprText);
             setDelegateeCpr(delegateeCprText);
             ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
-            listOfDelegationIds.getDelegationId().add(domainId);
+            listOfDelegationIds.getDelegationId().add(code);
             setListOfDelegationIds(listOfDelegationIds);
             setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
         }};
@@ -361,7 +361,7 @@ public class DelegationServiceImplTest {
 
         DeleteDelegationsRequest request = new DeleteDelegationsRequest() {{
             ListOfDelegationIds listOfDelegationIds = new ListOfDelegationIds();
-            listOfDelegationIds.getDelegationId().add(domainId);
+            listOfDelegationIds.getDelegationId().add(code);
             setListOfDelegationIds(listOfDelegationIds);
             setDeletionDate(toXmlGregorianCalendar(now.plusDays(1)));
         }};
@@ -377,49 +377,49 @@ public class DelegationServiceImplTest {
     @Test
     public void canGetMetadata() throws Exception {
         GetMetadataRequest request = new GetMetadataRequest();
-        request.setDomain(domainId);
-        request.setSystemId(systemId);
+        request.setDomain(code);
+        request.setSystemId(systemCode);
 
-        Metadata metadata = new Metadata(domainId, systemId, systemDescription);
-        metadata.addRole(roleId, roleDescription);
-        metadata.addPermission(permissionId, permissionDescription);
-        metadata.addDelegatablePermission(roleId, permissionId);
+        Metadata metadata = new Metadata(code, systemCode, systemDescription);
+        metadata.addRole(roleCode, roleDescription);
+        metadata.addPermission(permissionCode, permissionDescription);
+        metadata.addDelegatablePermission(roleCode, permissionCode);
 
-        when(metadataManager.getMetadata(domainId, systemId)).thenReturn(metadata);
+        when(metadataManager.getMetadata(code, systemCode)).thenReturn(metadata);
 
         GetMetadataResponse response = service.getMetadata(request, soapHeader);
 
-        assertEquals(response.getDomain(), domainId);
-        assertEquals(response.getSystem().getSystemId(), systemId);
+        assertEquals(response.getDomain(), code);
+        assertEquals(response.getSystem().getSystemId(), systemCode);
         assertEquals(response.getSystem().getSystemLongName(), systemDescription);
-        assertEquals(response.getRole().get(0).getRoleId(), roleId);
+        assertEquals(response.getRole().get(0).getRoleId(), roleCode);
         assertEquals(response.getRole().get(0).getRoleDescription(), roleDescription);
-        assertEquals(response.getPermission().get(0).getPermissionId(), permissionId);
+        assertEquals(response.getPermission().get(0).getPermissionId(), permissionCode);
         assertEquals(response.getPermission().get(0).getPermissionDescription(), permissionDescription);
-        assertEquals(response.getDelegatablePermission().get(0).getRoleId(), roleId);
-        assertEquals(response.getDelegatablePermission().get(0).getPermissionId(), permissionId);
+        assertEquals(response.getDelegatablePermission().get(0).getRoleId(), roleCode);
+        assertEquals(response.getDelegatablePermission().get(0).getPermissionId(), permissionCode);
     }
 
     @Test
     public void canPutMetadata() throws Exception {
         PutMetadataRequest request = new PutMetadataRequest();
-        request.setDomain(domainId);
-        request.setSystemId(systemId);
+        request.setDomain(code);
+        request.setSystemId(systemCode);
         request.setSystemLongName(systemDescription);
 
         DelegatingRole role = new DelegatingRole();
-        role.setRoleId(roleId);
+        role.setRoleId(roleCode);
         role.setRoleDescription(roleDescription);
         request.getRole().add(role);
 
         SystemPermission permission = new SystemPermission();
-        permission.setPermissionId(permissionId);
+        permission.setPermissionId(permissionCode);
         permission.setPermissionDescription(permissionDescription);
         request.getPermission().add(permission);
 
         DelegatablePermission delegatablePermission = new DelegatablePermission();
-        delegatablePermission.setRoleId(roleId);
-        delegatablePermission.setPermissionId(permissionId);
+        delegatablePermission.setRoleId(roleCode);
+        delegatablePermission.setPermissionId(permissionCode);
         request.getDelegatablePermission().add(delegatablePermission);
 
         assertNotNull(service.putMetadata(request, soapHeader));
@@ -428,15 +428,15 @@ public class DelegationServiceImplTest {
             @Override
             public boolean matchesSafely(Metadata item) {
                 return allTrue(
-                        item.getDomainId().equals(domainId),
-                        item.getSystem().getDomainId().equals(systemId),
+                        item.getDomainCode().equals(code),
+                        item.getSystem().getCode().equals(systemCode),
                         item.getSystem().getDescription().equals(systemDescription),
-                        item.getRoles().get(0).getDomainId().equals(roleId),
+                        item.getRoles().get(0).getCode().equals(roleCode),
                         item.getRoles().get(0).getDescription().equals(roleDescription),
-                        item.getPermissions().get(0).getDomainId().equals(permissionId),
+                        item.getPermissions().get(0).getCode().equals(permissionCode),
                         item.getPermissions().get(0).getDescription().equals(permissionDescription),
-                        item.getDelegatablePermissions().get(0).getRoleId().equals(roleId),
-                        item.getDelegatablePermissions().get(0).getPermissionId().equals(permissionId)
+                        item.getDelegatablePermissions().get(0).getRoleCode().equals(roleCode),
+                        item.getDelegatablePermissions().get(0).getPermissionCode().equals(permissionCode)
                 );
             }
 
@@ -478,8 +478,8 @@ public class DelegationServiceImplTest {
     @Test
     public void willAllowMinimalPutMetadata() throws Exception {
         PutMetadataRequest request = new PutMetadataRequest();
-        request.setDomain(domainId);
-        request.setSystemId(systemId);
+        request.setDomain(code);
+        request.setSystemId(systemCode);
         assertNotNull(service.putMetadata(request, soapHeader));
 
         verifyZeroInteractions(roleDao);

@@ -18,17 +18,15 @@ public interface DelegationDao {
 
     List<Delegation> list();
 
+    Delegation findByCode(String code);
+
     List<Delegation> findByDelegatorCpr(String delegatorCpr);
 
     List<Delegation> findByDelegateeCpr(String delegateeCpr);
 
-    Delegation findById(String delegationId);
+    List<Delegation> findInPeriod(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, DateTime effectiveFrom, DateTime effectiveTo);
 
-    List<Delegation> findByInPeriod(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, DateTime effectiveFrom, DateTime effectiveTo);
-
-    List<Delegation> findByIds(Collection<String> delegationIds);
-
-    List<Delegation> findByDomainIds(Collection<String> domainIds);
+    List<Delegation> findByCodes(Collection<String> codes);
 
     List<Delegation> findByLastModifiedGreaterThanOrEquals(DateTime lastModified);
 }

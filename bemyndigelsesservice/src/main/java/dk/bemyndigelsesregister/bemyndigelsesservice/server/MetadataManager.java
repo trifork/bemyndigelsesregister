@@ -17,5 +17,5 @@ public interface MetadataManager {
      * returns metadata
      * @return
      */
-    Metadata getMetadata(String domainId, String systemId);
+    Metadata getMetadata(String domainCode, String systemCode);
 }

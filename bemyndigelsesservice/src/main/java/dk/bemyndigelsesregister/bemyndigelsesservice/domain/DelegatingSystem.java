@@ -30,11 +30,4 @@ public class DelegatingSystem extends ExternalIdentifiedDomainObject {
     public void setDomain(Domain domain) {
         this.domain = domain;
     }
-
-    public static DelegatingSystem createForTest(final String domainId) {
-        return new DelegatingSystem() {{
-            setDomainId(domainId);
-        }};
-    }
-
 }

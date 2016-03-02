@@ -5,7 +5,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 public interface SystemDao {
     DelegatingSystem get(long id);
 
-    void save(DelegatingSystem systemystem);
+    void save(DelegatingSystem delegatingSystem);
 
-    DelegatingSystem findByDomainId(String domainId);
+    DelegatingSystem findByCode(String code);
 }

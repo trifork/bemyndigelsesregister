@@ -17,18 +17,17 @@ public class DelegatingSystemDaoEbeanTest extends DaoUnitTestSupport {
         System.out.println(system);
 
         assertNotNull(system);
-        assertEquals("DelegatingSystem should contain correct code", TestData.systemCode, system.getDomainId());
+        assertEquals("DelegatingSystem should contain correct code", TestData.systemCode, system.getCode());
         assertEquals("DelegatingSystem should contain correct description", TestData.systemDescription, system.getDescription());
     }
 
     @Test
-    public void testFindDelegatingSystemByDomainId() {
-
-        DelegatingSystem system = delegatingSystemDao.findByDomainId(TestData.systemCode);
+    public void testFindDelegatingSystemByCode() {
+        DelegatingSystem system = delegatingSystemDao.findByCode(TestData.systemCode);
         System.out.println(system);
 
         assertNotNull(system);
-        assertEquals("DelegatingSystem should contain correct code", TestData.systemCode, system.getDomainId());
+        assertEquals("DelegatingSystem should contain correct code", TestData.systemCode, system.getCode());
         assertEquals("DelegatingSystem should contain correct description", TestData.systemDescription, system.getDescription());
     }
 }

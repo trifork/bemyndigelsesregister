@@ -68,8 +68,8 @@ public class BemyndigelsesExportJobTest {
         linkedSystem.setKode("TEST system");
         bemyndigelse.setLinkedSystemKode(linkedSystem.getKode());
 
-        bemyndigelse.setSidstModificeret(new DateTime());
-        bemyndigelse.setSidstModificeretAf("Test");
+        bemyndigelse.setLastModified(new DateTime());
+        bemyndigelse.setLastModifiedBy("Test");
 
         return bemyndigelse;
     }

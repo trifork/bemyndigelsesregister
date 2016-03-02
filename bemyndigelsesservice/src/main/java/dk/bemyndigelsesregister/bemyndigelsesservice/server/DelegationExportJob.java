@@ -62,7 +62,7 @@ public class DelegationExportJob {
     }
 
     public void doExport(DateTime startTime, List<Delegation> delegations) throws IOException {
-        logger.info("Starting bemyndigelse sync job");
+        logger.info("Starting delegation sync job");
 
         if (delegations == null || delegations.size() == 0) {
             logger.info("Nothing to export. Stopping export job.");
@@ -71,17 +71,17 @@ public class DelegationExportJob {
             logger.info("Exporting " + delegations.size() + " entries");
         }
 
-        Delegations bemyndigelserType = new Delegations();
-        for (Delegation bemyndigelse : delegations) {
-            if (bemyndigelse.getState() == State.GODKENDT) {
-                bemyndigelserType.addDelegation(bemyndigelse);
+        Delegations exportData = new Delegations();
+        for (Delegation delegation : delegations) {
+            if (delegation.getState() == State.GODKENDT) {
+                exportData.addDelegation(delegation);
             }
         }
-        bemyndigelserType.setDate(startTime.toString("yyyyMMdd"));
-        bemyndigelserType.setTimeStamp(startTime.toString("HHmmssSSS"));
-        bemyndigelserType.setVersion(nspSchemaVersion);
+        exportData.setDate(startTime.toString("yyyyMMdd"));
+        exportData.setTimeStamp(startTime.toString("HHmmssSSS"));
+        exportData.setVersion(nspSchemaVersion);
 
-        nspManager.send(bemyndigelserType, startTime);
+        nspManager.send(exportData, startTime);
 
         logger.info("Completed export");
     }

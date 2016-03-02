@@ -49,14 +49,14 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         delegationType.setDelegateeCvr(delegation.getDelegateeCvr());
         delegationType.setCreated(toXmlGregorianCalendar(delegation.getCreated()));
         delegationType.setState(delegation.getState());
-        delegationType.setDelegationId(delegation.getDomainId());
-        delegationType.setRole(toRole(delegation.getDelegatingSystem(), delegation.getRole()));
-        delegationType.setSystem(toSystem(delegation.getDelegatingSystem()));
+        delegationType.setDelegationId(delegation.getCode());
+        delegationType.setRole(toRole(delegation.getSystemCode(), delegation.getRoleCode()));
+        delegationType.setSystem(toSystem(delegation.getSystemCode()));
         delegationType.setEffectiveFrom(toXmlGregorianCalendar(delegation.getEffectiveFrom()));
         delegationType.setEffectiveTo(toXmlGregorianCalendar(delegation.getEffectiveTo()));
 
         for (DelegationPermission permission : delegation.getDelegationPermissions()) {
-            SystemPermission p = toPermission(delegation.getDelegatingSystem(), permission);
+            SystemPermission p = toPermission(delegation.getSystemCode(), permission);
             if (p != null)
                 delegationType.getPermission().add(p);
         }
@@ -64,29 +64,29 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         return delegationType;
     }
 
-    private Permission getPermission(String delegatingSystem, String domainId) {
-        return delegatingSystem == null || domainId == null ? null : permissionDao.findByDomainId(delegatingSystem, domainId);
+    private Permission getPermission(String delegatingSystemCode, String code) {
+        return delegatingSystemCode == null || code == null ? null : permissionDao.findByCode(delegatingSystemCode, code);
     }
 
-    private DelegatingSystem getDelegatingSystem(String domainId) {
-        return domainId == null ? null : delegatingSystemDao.findByDomainId(domainId);
+    private DelegatingSystem getDelegatingSystem(String code) {
+        return code == null ? null : delegatingSystemDao.findByCode(code);
     }
 
-    private Role getRole(String delegatingSystem, String domainId) {
-        if (delegatingSystem == null || domainId == null)
+    private Role getRole(String delegatingSystemCode, String code) {
+        if (delegatingSystemCode == null || code == null)
             return null;
-        DelegatingSystem ds = getDelegatingSystem(delegatingSystem);
-        return ds == null ? null : roleDao.findByDomainId(ds.getId(), domainId);
+        DelegatingSystem ds = getDelegatingSystem(delegatingSystemCode);
+        return ds == null ? null : roleDao.findByCode(ds.getId(), code);
     }
 
-    private dk.nsi.bemyndigelse._2016._01._01.SystemPermission toPermission(String delegatingSystem, DelegationPermission permission) {
+    private dk.nsi.bemyndigelse._2016._01._01.SystemPermission toPermission(String delegatingSystemCode, DelegationPermission permission) {
         dk.nsi.bemyndigelse._2016._01._01.SystemPermission xmlPermission = null;
 
         if (permission != null) {
-            Permission p = getPermission(delegatingSystem, permission.getPermissionId());
+            Permission p = getPermission(delegatingSystemCode, permission.getPermissionCode());
             if (p != null) {
                 xmlPermission = objectFactory.createSystemPermission();
-                xmlPermission.setPermissionId(permission.getPermissionId());
+                xmlPermission.setPermissionId(permission.getPermissionCode());
                 xmlPermission.setPermissionDescription(p.getDescription());
             }
         }
@@ -94,25 +94,25 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         return xmlPermission;
     }
 
-    private dk.nsi.bemyndigelse._2016._01._01.DelegatingSystem toSystem(String delegatingSystem) {
-        DelegatingSystem ds = getDelegatingSystem(delegatingSystem);
+    private dk.nsi.bemyndigelse._2016._01._01.DelegatingSystem toSystem(String delegatingSystemCode) {
+        DelegatingSystem ds = getDelegatingSystem(delegatingSystemCode);
         if (ds == null)
             return null;
 
         dk.nsi.bemyndigelse._2016._01._01.DelegatingSystem xmlSystem = objectFactory.createDelegatingSystem();
-        xmlSystem.setSystemId(ds.getDomainId());
+        xmlSystem.setSystemId(ds.getCode());
         xmlSystem.setSystemLongName(ds.getDescription());
 
         return xmlSystem;
     }
 
-    private dk.nsi.bemyndigelse._2016._01._01.DelegatingRole toRole(String delegatingSystem, String role) {
-        Role r = getRole(delegatingSystem, role);
+    private dk.nsi.bemyndigelse._2016._01._01.DelegatingRole toRole(String delegatingSystemCode, String roleCode) {
+        Role r = getRole(delegatingSystemCode, roleCode);
         if (r == null)
             return null;
 
         dk.nsi.bemyndigelse._2016._01._01.DelegatingRole xmlRole = objectFactory.createDelegatingRole();
-        xmlRole.setRoleId(r.getDomainId());
+        xmlRole.setRoleId(r.getCode());
         xmlRole.setRoleDescription(r.getDescription());
 
         return xmlRole;

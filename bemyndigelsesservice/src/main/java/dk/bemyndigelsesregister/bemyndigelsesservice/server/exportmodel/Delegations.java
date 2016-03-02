@@ -34,7 +34,7 @@ public class Delegations {
                 delegations = new LinkedList<>();
 
             for (DelegationPermission permission : delegation.getDelegationPermissions())
-                delegations.add(new Delegation(delegation.getDelegateeCpr(), delegation.getDelegatingSystem(), delegation.getState().value(), delegation.getRole(), permission.getPermissionId(), delegation.getCreated(), delegation.getSidstModificeret(), delegation.getEffectiveFrom(), delegation.getEffectiveTo()));
+                delegations.add(new Delegation(delegation.getDelegateeCpr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), permission.getPermissionCode(), delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo()));
 
             recordCount = delegations.size();
         }

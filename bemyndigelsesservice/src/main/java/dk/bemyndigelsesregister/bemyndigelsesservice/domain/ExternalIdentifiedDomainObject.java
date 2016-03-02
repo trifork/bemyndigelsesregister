@@ -6,13 +6,13 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class ExternalIdentifiedDomainObject extends DomainObject {
     @Column(name = "kode")
-    private String domainId;
+    private String code;
 
-    public String getDomainId() {
-        return domainId;
+    public String getCode() {
+        return code;
     }
 
-    public void setDomainId(String id) {
-        this.domainId = id;
+    public void setCode(String id) {
+        this.code = id;
     }
 }

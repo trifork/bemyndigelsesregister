@@ -10,5 +10,5 @@ public interface DelegatingSystemDao {
 
     void save(DelegatingSystem delegatingSystem);
 
-    DelegatingSystem findByDomainId(String domainId);
+    DelegatingSystem findByCode(String code);
 }

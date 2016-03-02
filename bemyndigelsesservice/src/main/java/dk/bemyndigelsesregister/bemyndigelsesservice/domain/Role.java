@@ -8,7 +8,7 @@ import java.util.Set;
 public class Role extends ExternalIdentifiedDomainObject {
     @ManyToOne
     @JoinColumn(name="linked_system_id")
-    private DelegatingSystem delegatingSystem;
+    private DelegatingSystem system;
 
     @Column(name = "beskrivelse")
     private String description;
@@ -27,12 +27,12 @@ public class Role extends ExternalIdentifiedDomainObject {
         this.description = description;
     }
 
-    public void setDelegatingSystem(DelegatingSystem delegatingSystem) {
-        this.delegatingSystem = delegatingSystem;
+    public void setSystem(DelegatingSystem system) {
+        this.system = system;
     }
 
-    public DelegatingSystem getDelegatingSystem() {
-        return delegatingSystem;
+    public DelegatingSystem getSystem() {
+        return system;
     }
 
     public Set<DelegatablePermission> getDelegatablePermissions() {
@@ -41,11 +41,5 @@ public class Role extends ExternalIdentifiedDomainObject {
 
     public void setDelegatablePermissions(Set<DelegatablePermission> delegatablePermissions) {
         this.delegatablePermissions = delegatablePermissions;
-    }
-
-    public static Role createForTest(final String domainId) {
-        return new Role() {{
-            setDomainId(domainId);
-        }};
     }
 }

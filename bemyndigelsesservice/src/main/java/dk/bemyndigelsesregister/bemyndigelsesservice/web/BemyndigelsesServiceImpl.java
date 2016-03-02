@@ -46,7 +46,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
-        Set<String> authorizedCprSet = new HashSet<String>(Arrays.asList(authorizedCprs));
+        Set<String> authorizedCprSet = new HashSet<>(Arrays.asList(authorizedCprs));
         IdCardData idCardData = dgwsRequestContext.getIdCardData();
         if (idCardData.getIdCardType() == IdCardType.SYSTEM) {
             IdCardSystemLog systemLog = dgwsRequestContext.getIdCardSystemLog();
@@ -57,13 +57,10 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             if (!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
                 throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR " + cvr);
             }
-            return;
         } else if (idCardData.getIdCardType() == IdCardType.USER) {
             IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
-            if (userLog != null && authorizedCprSet.contains(userLog.cpr)) {
-                return;
-            } else {
-                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: " + userLog.cpr);
+            if (userLog == null || !authorizedCprSet.contains(userLog.cpr)) {
+                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: " + (userLog != null ? userLog.cpr : null));
                 throw new IllegalAccessError(errorMessage);
             }
         } else {
@@ -80,7 +77,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
-        Collection<Delegation> delegations = new ArrayList();
+        Collection<Delegation> delegations = new ArrayList<>();
 
         for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
             if (createDelegation.getState().equals(State.BESTILT)) {
@@ -99,7 +96,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));
-            logger.debug("Got delegation with domain id = " + delegation.getDomainId());
+            logger.debug("Got delegation with domain id = " + delegation.getCode());
 
             delegations.add(delegation);
         }
@@ -116,7 +113,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
-        Collection<Delegation> delegations = new ArrayList();
+        Collection<Delegation> delegations = new ArrayList<>();
 
         String delegatorCpr = request.getDelegatorCpr();
         String delegateeCpr = request.getDelegateeCpr();
@@ -203,15 +200,15 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @ResponsePayload
 //    @Protected
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
-        String domainId = request.getDomain();
-        if (domainId == null || domainId.trim().isEmpty())
+        String domainCode = request.getDomain();
+        if (domainCode == null || domainCode.trim().isEmpty())
             throw new IllegalArgumentException("Domain must be specified in the request");
 
-        String systemId = request.getSystemId();
-        if (systemId == null || systemId.trim().isEmpty())
+        String systemCode = request.getSystemId();
+        if (systemCode == null || systemCode.trim().isEmpty())
             throw new IllegalArgumentException("System must be specified in the request");
 
-        Metadata metadata = new Metadata(domainId, systemId, request.getSystemLongName());
+        Metadata metadata = new Metadata(domainCode, systemCode, request.getSystemLongName());
 
         if (request.getRole() != null) {
             for (DelegatingRole role : request.getRole())
@@ -241,17 +238,17 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
         GetMetadataResponse response = new GetMetadataResponse();
 
-        response.setDomain(metadata.getDomainId());
+        response.setDomain(metadata.getDomainCode());
 
         DelegatingSystem system = new DelegatingSystem();
-        system.setSystemId(metadata.getSystem().getDomainId());
+        system.setSystemId(metadata.getSystem().getCode());
         system.setSystemLongName(metadata.getSystem().getDescription());
         response.setSystem(system);
 
         if (metadata.getRoles() != null) {
             for (Metadata.CodeAndDescription c : metadata.getRoles()) {
                 DelegatingRole role = new DelegatingRole();
-                role.setRoleId(c.getDomainId());
+                role.setRoleId(c.getCode());
                 role.setRoleDescription(c.getDescription());
                 response.getRole().add(role);
             }
@@ -260,7 +257,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         if (metadata.getPermissions() != null) {
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
                 SystemPermission permission = new SystemPermission();
-                permission.setPermissionId(c.getDomainId());
+                permission.setPermissionId(c.getCode());
                 permission.setPermissionDescription(c.getDescription());
                 response.getPermission().add(permission);
             }
@@ -269,8 +266,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         if (metadata.getDelegatablePermissions() != null) {
             for (Metadata.DelegatablePermission c : metadata.getDelegatablePermissions()) {
                 DelegatablePermission delegatablePermission = new DelegatablePermission();
-                delegatablePermission.setRoleId(c.getRoleId());
-                delegatablePermission.setPermissionId(c.getPermissionId());
+                delegatablePermission.setRoleId(c.getRoleCode());
+                delegatablePermission.setPermissionId(c.getPermissionCode());
                 response.getDelegatablePermission().add(delegatablePermission);
             }
         }

@@ -44,14 +44,14 @@ public class DelegationManagerImpl implements DelegationManager {
     SystemDao systemDao;
 
     @Override
-    public Delegation createDelegation(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
+    public Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
         DateTime now = systemService.getDateTime();
         final DateTime validFrom = defaultIfNull(effectiveFrom, now);
         final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));
 
         // Find existing delegations with same key
-        logger.debug("Finder eksisterende bemyndigelser for system=" + system + ", delegatorCpr=" + delegateeCpr + ", delegateeCpr=" + delegateeCpr + ", delegateeCvr=" + delegateeCvr + ", role=" + role + ", state=" + state + "validFrom=" + validFrom + ", validTo=" + validTo);
-        List<Delegation> existingDelegations = delegationDao.findByInPeriod(system, delegatorCpr, delegateeCpr, delegateeCvr, role, state, validFrom, validTo);
+        logger.debug("Finder eksisterende bemyndigelser for system=" + systemCode + ", delegatorCpr=" + delegateeCpr + ", delegateeCpr=" + delegateeCpr + ", delegateeCvr=" + delegateeCvr + ", roleCode=" + roleCode + ", state=" + state + "validFrom=" + validFrom + ", validTo=" + validTo);
+        List<Delegation> existingDelegations = delegationDao.findInPeriod(systemCode, delegatorCpr, delegateeCpr, delegateeCvr, roleCode, state, validFrom, validTo);
         if (existingDelegations != null) {
             for (Delegation delegation : existingDelegations) {
 
@@ -61,15 +61,15 @@ public class DelegationManagerImpl implements DelegationManager {
 
                     // update delegation
                     delegation.setEffectiveTo(end);
-                    delegation.setSidstModificeret(now);
-                    delegation.setSidstModificeretAf("Service");
+                    delegation.setLastModified(now);
+                    delegation.setLastModifiedBy("Service");
                     delegation.setVersionsid(delegation.getVersionsid() + 1);
                     delegationDao.save(delegation);
                 }
             }
         }
 
-        Delegation delegation = createDelegationObject(system, delegatorCpr, delegateeCpr, delegateeCvr, role, state, permissions, validFrom, validTo);
+        Delegation delegation = createDelegationObject(systemCode, delegatorCpr, delegateeCpr, delegateeCvr, roleCode, state, permissions, validFrom, validTo);
         logger.debug("Creating delegation " + delegation);
         delegationDao.save(delegation);
 
@@ -87,17 +87,17 @@ public class DelegationManagerImpl implements DelegationManager {
     }
 
     @Override
-    public Delegation getDelegation(String delegationId) {
-        return delegationDao.findById(delegationId);
+    public Delegation getDelegation(String delegationCode) {
+        return delegationDao.findByCode(delegationCode);
     }
 
     @Override
-    public String deleteDelegation(String delegatorCpr, String delegateeCpr, String delegationId, DateTime deletionDate) {
+    public String deleteDelegation(String delegatorCpr, String delegateeCpr, String delegationCode, DateTime deletionDate) {
         DateTime now = systemService.getDateTime();
         final DateTime validTo = defaultIfNull(deletionDate, now);
 
         // find existing delegation
-        Delegation delegation = delegationDao.findById(delegationId);
+        Delegation delegation = delegationDao.findByCode(delegationCode);
 
         // validate arguments
         if (delegation == null) return null;
@@ -111,15 +111,15 @@ public class DelegationManagerImpl implements DelegationManager {
 
         // update delegation
         delegation.setEffectiveTo(validTo);
-        delegation.setSidstModificeret(systemService.getDateTime());
-        delegation.setSidstModificeretAf("Service");
+        delegation.setLastModified(systemService.getDateTime());
+        delegation.setLastModifiedBy("Service");
         delegation.setVersionsid(delegation.getVersionsid() + 1);
 
         delegationDao.save(delegation);
-        return delegation.getDomainId();
+        return delegation.getCode();
     }
 
-    private Delegation createDelegationObject(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
+    private Delegation createDelegationObject(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo) {
         DateTime now = systemService.getDateTime();
         final DateTime validFrom = defaultIfNull(effectiveFrom, now);
         final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));
@@ -128,26 +128,26 @@ public class DelegationManagerImpl implements DelegationManager {
         }
 
         final Delegation delegation = new Delegation();
-        delegation.setDomainId(systemService.createUUIDString());
-        delegation.setDelegatingSystem(system);
+        delegation.setCode(systemService.createUUIDString());
+        delegation.setSystemCode(systemCode);
         delegation.setDelegatorCpr(delegatorCpr);
         delegation.setDelegateeCpr(delegateeCpr);
         delegation.setDelegateeCvr(delegateeCvr);
 
-        delegation.setRole(role);
+        delegation.setRoleCode(roleCode);
         delegation.setState(state);
 
         if (permissions != null && !permissions.isEmpty()) {
             Set<String> permissionCodeSet = new HashSet<>(permissions); // ensures uniqueness
             Set<DelegationPermission> permissionSet = new HashSet<>();
             for (String permission : permissionCodeSet) {
-                Permission p = permissionDao.findByDomainId(system, permission);
+                Permission p = permissionDao.findByCode(systemCode, permission);
                 if (p == null)
-                    throw new IllegalArgumentException("No permission " + permission + " exists for " + system);
+                    throw new IllegalArgumentException("No permission " + permission + " exists for " + systemCode);
 
                 DelegationPermission dp = new DelegationPermission();
                 dp.setDelegation(delegation);
-                dp.setPermissionId(p.getDomainId());
+                dp.setPermissionCode(p.getCode());
                 permissionSet.add(dp);
             }
             delegation.setDelegationPermissions(permissionSet);
@@ -157,8 +157,8 @@ public class DelegationManagerImpl implements DelegationManager {
         delegation.setEffectiveTo(validTo);
 
         delegation.setCreated(now);
-        delegation.setSidstModificeret(now);
-        delegation.setSidstModificeretAf("Service");
+        delegation.setLastModified(now);
+        delegation.setLastModifiedBy("Service");
         delegation.setVersionsid(1);
 
         return delegation;

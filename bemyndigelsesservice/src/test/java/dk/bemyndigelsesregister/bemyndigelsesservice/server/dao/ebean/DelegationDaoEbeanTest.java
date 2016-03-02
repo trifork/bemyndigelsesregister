@@ -40,14 +40,14 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             int n = dao.list().size();
 
             Delegation d = new Delegation();
-            d.setDomainId("testId");
+            d.setCode("testId");
             d.setDelegatorCpr("0101010AB1");
             d.setDelegateeCpr("0202020AB2");
             d.setDelegateeCvr("12345678");
             d.setEffectiveFrom(new DateTime(System.currentTimeMillis()));
             d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
-            d.setDelegatingSystem(systemDao.get(1).getDomainId());
-            d.setRole(roleDao.get(1).getDomainId());
+            d.setSystemCode(systemDao.get(1).getCode());
+            d.setRoleCode(roleDao.get(1).getCode());
             d.setState(State.GODKENDT);
 
             Set<DelegationPermission> permissions = new HashSet<>();
@@ -55,7 +55,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             Permission p = permissionDao.get(1);
             DelegationPermission permission = new DelegationPermission();
             permission.setDelegation(d);
-            permission.setPermissionId(p.getDomainId());
+            permission.setPermissionCode(p.getCode());
             permissions.add(permission);
 
             d.setDelegationPermissions(permissions);
@@ -70,20 +70,20 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testCreateDelegationWithTwoPermissions() throws Exception {
-        final String testId = "testDomainId";
+        final String testCode = "testCode";
 
         try {
             ebeanServer.beginTransaction();
 
             Delegation d = new Delegation();
-            d.setDomainId(testId);
+            d.setCode(testCode);
             d.setDelegatorCpr("0101010AB1");
             d.setDelegateeCpr("0202020AB2");
             d.setDelegateeCvr("12345678");
             d.setEffectiveFrom(new DateTime(System.currentTimeMillis()));
             d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
-            d.setDelegatingSystem(systemDao.get(1).getDomainId());
-            d.setRole(roleDao.get(1).getDomainId());
+            d.setSystemCode(systemDao.get(1).getCode());
+            d.setRoleCode(roleDao.get(1).getCode());
             d.setState(State.GODKENDT);
 
             Set<DelegationPermission> permissions = new HashSet<>();
@@ -91,25 +91,25 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             Permission p = permissionDao.get(1);
             DelegationPermission delegationPermission = new DelegationPermission();
             delegationPermission.setDelegation(d);
-            delegationPermission.setPermissionId(p.getDomainId());
+            delegationPermission.setPermissionCode(p.getCode());
             permissions.add(delegationPermission);
 
             Permission p2 = permissionDao.get(2);
             DelegationPermission delegationPermission2 = new DelegationPermission();
             delegationPermission2.setDelegation(d);
-            delegationPermission2.setPermissionId(p2.getDomainId());
+            delegationPermission2.setPermissionCode(p2.getCode());
             permissions.add(delegationPermission2);
 
             d.setDelegationPermissions(permissions);
 
             dao.save(d);
 
-            Delegation retrievedDelegation = dao.findById(testId);
+            Delegation retrievedDelegation = dao.findByCode(testCode);
             assertNotNull(retrievedDelegation.getDelegationPermissions());
             assertEquals("Delegation should contain the right number of permissions", 2, retrievedDelegation.getDelegationPermissions().size());
             for (DelegationPermission dp : retrievedDelegation.getDelegationPermissions()) {
-                assertTrue("Delegation should contain the right permissions", dp.getPermissionId().equals(delegationPermission.getPermissionId())
-                                                                || dp.getPermissionId().equals(delegationPermission2.getPermissionId()));
+                assertTrue("Delegation should contain the right permissions", dp.getPermissionCode().equals(delegationPermission.getPermissionCode())
+                                                                || dp.getPermissionCode().equals(delegationPermission2.getPermissionCode()));
             }
         } finally {
             ebeanServer.endTransaction();
@@ -122,11 +122,11 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             ebeanServer.beginTransaction();
 
             Delegation delegation = dao.get(1);
-            delegation.setSidstModificeretAf("TestCase was here: " + System.currentTimeMillis());
+            delegation.setLastModifiedBy("TestCase was here: " + System.currentTimeMillis());
 //            dao.save(delegation);
 
             delegation = dao.get(1);
-            assertTrue("Text \"" + delegation.getSidstModificeretAf() + "\" should start with \"TestCase was here\"", delegation.getSidstModificeretAf().startsWith("TestCase was here"));
+            assertTrue("Text \"" + delegation.getLastModifiedBy() + "\" should start with \"TestCase was here\"", delegation.getLastModifiedBy().startsWith("TestCase was here"));
         } finally {
             ebeanServer.endTransaction();
         }
@@ -163,8 +163,8 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testFindByDomainIds() throws Exception {
-        final List<Delegation> delegations = dao.findByDomainIds(Arrays.asList("TestKode1", "TestKode3"));
+    public void testFindByCodes() throws Exception {
+        final List<Delegation> delegations = dao.findByCodes(Arrays.asList("TestKode1", "TestKode3"));
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }
