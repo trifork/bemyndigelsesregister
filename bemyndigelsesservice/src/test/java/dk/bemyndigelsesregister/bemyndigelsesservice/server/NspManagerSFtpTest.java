@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -11,8 +11,6 @@ import org.springframework.oxm.Marshaller;
 
 import javax.xml.transform.Result;
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,7 +28,7 @@ public class NspManagerSFtpTest {
     Marshaller marshaller = mock(Marshaller.class);
 
     private final DateTime startTime = new DateTime(1982, 5, 21, 2, 15, 3);
-    private final List<Delegation> delegations = new LinkedList<>();
+    private final Delegations delegations = new Delegations();
 
     @Before
     public void setUp() {
@@ -47,7 +45,6 @@ public class NspManagerSFtpTest {
         SFTPTestServer.destroy();
     }
 
-
     private SFtpClient createSFtpClient() {
         SFtpClientImpl sFtpClient = new SFtpClientImpl();
         sFtpClient.user = TEST_USER;
@@ -56,7 +53,6 @@ public class NspManagerSFtpTest {
         sFtpClient.hostName = "localhost";
 
         return sFtpClient;
-
     }
 
     @Test
@@ -67,6 +63,7 @@ public class NspManagerSFtpTest {
         final File tempFile = File.createTempFile(TEST_USER, ".bemyndigelse");
         FileUtils.writeStringToFile(tempFile, fileBody);
         final String filename = "19820521_021503000_v001.bemyndigelse";
+        delegations.setVersion("v001");
 
         when(result.toString()).thenReturn(fileBody);
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);
@@ -76,6 +73,5 @@ public class NspManagerSFtpTest {
 //        assertTrue(ftpServer.getFileSystem().exists("/" + filename));
 
 //        assertEquals(fileBody, IOUtils.toString(((FileEntry) ftpServer.getFileSystem().getEntry("/" + filename)).createInputStream()));
-
     }
 }

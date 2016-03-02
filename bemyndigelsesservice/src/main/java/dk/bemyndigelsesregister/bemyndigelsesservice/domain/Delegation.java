@@ -171,29 +171,4 @@ public class Delegation extends ExternalIdentifiedDomainObject {
      *
      * @return
      */
-/*    public List<Bemyndigelser.Bemyndigelse> toBemyndigelseType() {
-        List<Bemyndigelser.Bemyndigelse> bemyndigelser = new LinkedList<>();
-        for (DelegationPermission permission : delegationPermissions) {
-            Bemyndigelser.Bemyndigelse type = new Bemyndigelser.Bemyndigelse();
-            type.setBemyndigedeCpr(delegatorCpr);
-            type.setBemyndigedeCvr(delegateeCpr);
-            type.setBemyndigendeCpr(delegateeCvr);
-            type.setCreatedDate(toXmlGregorianCalendar(created));
-            type.setGodkendelsesdato(state == State.GODKENDT ? toXmlGregorianCalendar(created) : null);
-            type.setStatus(state == State.GODKENDT ? "Godkendt" : "Bestilt");
-            type.setKode(getDomainId());
-            type.setModifiedDate(toXmlGregorianCalendar(sidstModificeret));
-            type.setArbejdsfunktion(role);
-            type.setRettighed(permission.getPermissionId());
-            type.setSystem(delegatingSystem);
-            type.setValidFrom(toXmlGregorianCalendar(effectiveFrom));
-            type.setValidTo(toXmlGregorianCalendar(effectiveTo));
-        }
-        return bemyndigelser;
-    }
-
-    private XMLGregorianCalendar toXmlGregorianCalendar(DateTime dateTime) {
-        return datatypeFactory.newXMLGregorianCalendar(new DateTime(dateTime, DateTimeZone.UTC).toGregorianCalendar());
-    }
-*/
 }

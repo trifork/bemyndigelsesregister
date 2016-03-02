@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
@@ -16,7 +16,6 @@ import javax.inject.Named;
 import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static org.springframework.util.Assert.hasText;
 
@@ -61,14 +60,13 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     }
 
     @Override
-    public void send(List<Delegation> delegations, DateTime startTime) {
+    public void send(Delegations delegations, DateTime startTime) {
         final Result result = systemService.createXmlTransformResult();
         FTPClient ftpClient = new FTPClient();
         try {
             marshaller.marshal(delegations, result);
 
-//            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
-            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_v001.bemyndigelse'"); // TODO OBJ v001 is temporarily hardcoded as version
+            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + delegations.getVersion() + ".bemyndigelse'");
             File file = systemService.writeToTempDir(filename, result.toString());
             logger.debug("Sending " + file.getAbsolutePath() + " with name " + filename);
             if (exportEnabled) {

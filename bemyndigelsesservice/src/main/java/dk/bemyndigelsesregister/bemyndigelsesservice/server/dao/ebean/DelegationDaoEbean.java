@@ -56,4 +56,9 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     public List<Delegation> findByDomainIds(Collection<String> domainIds) {
         return query().where().in("domainId", domainIds).findList();
     }
+
+    @Override
+    public List<Delegation> findByLastModifiedGreaterThanOrEquals(DateTime lastModified) {
+        return query().where().ge("sidstModificeret", lastModified).findList();
+    }
 }

@@ -116,10 +116,7 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     @Bean(name = {"nspMarshaller", "nspUnarshaller"})
     public Jaxb2Marshaller nspMarshaller() {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
-        bean.setContextPath(
-                "dk.nsi.bemyndigelse._2016._01._01"
-        );
+        bean.setContextPath("dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel");
         return bean;
     }
-
 }

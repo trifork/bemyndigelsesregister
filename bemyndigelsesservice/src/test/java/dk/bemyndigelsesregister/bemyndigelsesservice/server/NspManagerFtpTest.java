@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
@@ -18,8 +18,6 @@ import org.springframework.oxm.Marshaller;
 
 import javax.xml.transform.Result;
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,7 +30,7 @@ public class NspManagerFtpTest {
     Marshaller marshaller = mock(Marshaller.class);
 
     private final DateTime startTime = new DateTime(1982, 5, 21, 2, 15, 3);
-    private final List<Delegation> delegations = new LinkedList<>();
+    private final Delegations delegations = new Delegations();
     private FakeFtpServer ftpServer;
 
     @Before
@@ -63,6 +61,7 @@ public class NspManagerFtpTest {
         final File tempFile = File.createTempFile("test", ".bemyndigelse");
         FileUtils.writeStringToFile(tempFile, fileBody);
         final String filename = "19820521_021503000_v001.bemyndigelse";
+        delegations.setVersion("v001");
 
         when(result.toString()).thenReturn(fileBody);
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);

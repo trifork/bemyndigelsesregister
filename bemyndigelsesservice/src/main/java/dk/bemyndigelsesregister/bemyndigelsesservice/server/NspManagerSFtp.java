@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.Delegation;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.transform.Result;
 import java.io.File;
-import java.util.List;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -41,21 +40,18 @@ public class NspManagerSFtp implements NspManager {
     @Value("${sftp.enabled}")
     boolean exportEnabled = true;
 
-
     @PostConstruct
     public void init() throws Exception {
         notNull(remoteFolder, "No sftp remote has been set");
     }
 
-
     @Override
-    public void send(List<Delegation> delegations, DateTime startTime) {
+    public void send(Delegations delegations, DateTime startTime) {
         final Result result = systemService.createXmlTransformResult();
         try {
             marshaller.marshal(delegations, result);
 
-//            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + bemyndigelser.getVersion() + ".bemyndigelse'");
-            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_v001.bemyndigelse'"); // TODO OBJ v001 is temporarily hardcoded as version
+            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + delegations.getVersion() + ".bemyndigelse'");
             File file = systemService.writeToTempDir(filename, result.toString());
             logger.debug("Sending " + file.getAbsolutePath() + " with name " + filename);
             if (exportEnabled) {
@@ -67,5 +63,4 @@ public class NspManagerSFtp implements NspManager {
             throw new RuntimeException("Failed to send file", e);
         }
     }
-
 }

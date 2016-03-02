@@ -29,4 +29,6 @@ public interface DelegationDao {
     List<Delegation> findByIds(Collection<String> delegationIds);
 
     List<Delegation> findByDomainIds(Collection<String> domainIds);
+
+    List<Delegation> findByLastModifiedGreaterThanOrEquals(DateTime lastModified);
 }
