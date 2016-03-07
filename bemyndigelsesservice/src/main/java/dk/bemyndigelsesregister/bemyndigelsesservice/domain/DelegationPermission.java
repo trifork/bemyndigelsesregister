@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "bemyndigelse20_rettighed")
 public class DelegationPermission extends DomainObject {
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "bemyndigelse20_id")
     private Delegation delegation;
 
@@ -33,13 +33,5 @@ public class DelegationPermission extends DomainObject {
 
     public void setPermissionCode(String permissionCode) {
         this.permissionCode = permissionCode;
-    }
-
-    @Override
-    public String toString() {
-        return "DelegationPermission{" +
-                "delegation=" + delegation +
-                ", permissionCode='" + permissionCode + '\'' +
-                '}';
     }
 }

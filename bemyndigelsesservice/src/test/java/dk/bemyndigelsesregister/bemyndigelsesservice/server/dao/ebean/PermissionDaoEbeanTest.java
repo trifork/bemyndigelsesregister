@@ -17,12 +17,20 @@ public class PermissionDaoEbeanTest extends DaoUnitTestSupport {
     public void canFindPermissionBySystem() throws Exception {
         List<Permission> permissions = permissionDao.findBySystem(delegatingSystemDao.get(1).getId());
 
-        assertEquals(2, permissions.size());
+        assertEquals(3, permissions.size());
 
         assertEquals(TestData.permissionCode1, permissions.get(0).getCode());
         assertEquals(TestData.permissionDescription1, permissions.get(0).getDescription());
 
         assertEquals(TestData.permissionCode2, permissions.get(1).getCode());
         assertEquals(TestData.permissionDescription2, permissions.get(1).getDescription());
+    }
+
+    @Test
+    public void canFindPermissionByCode() throws Exception {
+        Permission permission = permissionDao.findByCode(TestData.systemCode, TestData.permissionCode1);
+
+        assertEquals(TestData.permissionCode1, permission.getCode());
+        assertEquals(TestData.permissionDescription1, permission.getDescription());
     }
 }

@@ -5,6 +5,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * RootElement for data exported by ExportJob
@@ -28,16 +29,14 @@ public class Delegations {
     @XmlSchemaType(name = "positiveInteger")
     private int recordCount;
 
-    public void addDelegation(dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation delegation) {
-        if (delegation.getDelegationPermissions() != null && !delegation.getDelegationPermissions().isEmpty()) {
-            if (delegations == null)
-                delegations = new LinkedList<>();
+    public void addDelegation(dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation delegation, Set<String> permissionCodes) {
+        if (delegations == null)
+            delegations = new LinkedList<>();
 
-            for (DelegationPermission permission : delegation.getDelegationPermissions())
-                delegations.add(new Delegation(delegation.getDelegateeCpr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), permission.getPermissionCode(), delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo()));
+        for (String permissionCode : permissionCodes)
+            delegations.add(new Delegation(delegation.getDelegateeCpr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), permissionCode, delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo()));
 
-            recordCount = delegations.size();
-        }
+        recordCount = delegations.size();
     }
 
     public void setDate(String date) {

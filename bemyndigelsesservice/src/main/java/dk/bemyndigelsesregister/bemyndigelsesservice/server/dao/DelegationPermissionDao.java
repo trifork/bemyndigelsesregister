@@ -6,4 +6,6 @@ public interface DelegationPermissionDao {
     DelegationPermission get(long id);
 
     void save(DelegationPermission permission);
+
+    void remove(DelegationPermission delegationPermission);
 }

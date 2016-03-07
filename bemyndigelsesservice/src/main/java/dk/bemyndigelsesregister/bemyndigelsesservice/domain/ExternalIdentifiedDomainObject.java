@@ -15,4 +15,9 @@ public abstract class ExternalIdentifiedDomainObject extends DomainObject {
     public void setCode(String id) {
         this.code = id;
     }
+
+    @Override
+    public String toString() {
+        return getCode();
+    }
 }

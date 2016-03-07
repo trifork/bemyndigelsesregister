@@ -13,5 +13,7 @@ public interface DelegatablePermissionDao {
 
     List<DelegatablePermission> findBySystem(Long systemId);
 
+    List<DelegatablePermission> findBySystemAndRole(Long systemId, Long roleId);
+
     void remove(DelegatablePermission delegatablePermission);
 }

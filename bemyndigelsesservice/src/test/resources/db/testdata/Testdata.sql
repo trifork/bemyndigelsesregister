@@ -8,8 +8,11 @@ REPLACE INTO arbejdsfunktion(kode, beskrivelse, linked_system_id) values ('Laege
 
 REPLACE INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1);
 REPLACE INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R02', 'Testrettighed2', 1);
+REPLACE INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('*', 'Alle nuværende og fremtidige rettigheder', 1);
 
 REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES (1, 1);
+REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES (1, 2);
+REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES (1, 3);
 
 ##Bemyndigelser
 REPLACE INTO `bemyndigelse` (

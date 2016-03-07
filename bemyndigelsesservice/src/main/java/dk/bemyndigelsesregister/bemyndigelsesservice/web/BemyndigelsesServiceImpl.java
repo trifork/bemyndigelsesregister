@@ -55,12 +55,12 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             }
             String cvr = systemLog.getCareProviderId();
             if (!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
-                throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR " + cvr);
+                throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR [" + cvr + "]");
             }
         } else if (idCardData.getIdCardType() == IdCardType.USER) {
             IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
             if (userLog == null || !authorizedCprSet.contains(userLog.cpr)) {
-                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: " + (userLog != null ? userLog.cpr : null));
+                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: [" + (userLog != null ? userLog.cpr : null) + "]");
                 throw new IllegalAccessError(errorMessage);
             }
         } else {
@@ -96,7 +96,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                     createDelegation.getListOfPermissionIds().getPermissionId(),
                     nullableDateTime(createDelegation.getEffectiveFrom()),
                     nullableDateTime(createDelegation.getEffectiveTo()));
-            logger.debug("Got delegation with domain id = " + delegation.getCode());
+            logger.debug("Got delegation with code = [" + delegation.getCode() + "]");
 
             delegations.add(delegation);
         }
@@ -221,8 +221,19 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         }
 
         if (request.getDelegatablePermission() != null) {
-            for (DelegatablePermission delegatablePermission : request.getDelegatablePermission())
-                metadata.addDelegatablePermission(delegatablePermission.getRoleId(), delegatablePermission.getPermissionId());
+            for (DelegatablePermission delegatablePermission : request.getDelegatablePermission()) {
+                String permissionCode = delegatablePermission.getPermissionId();
+                String permissionDescription = null;
+                if (request.getPermission() != null) {
+                    for (SystemPermission c : request.getPermission()) {
+                        if (c.getPermissionId().equals(permissionCode)) {
+                            permissionDescription = c.getPermissionDescription();
+                            break;
+                        }
+                    }
+                }
+                metadata.addDelegatablePermission(delegatablePermission.getRoleId(), delegatablePermission.getPermissionId(), permissionDescription);
+            }
         }
 
         metadataManager.putMetadata(metadata);

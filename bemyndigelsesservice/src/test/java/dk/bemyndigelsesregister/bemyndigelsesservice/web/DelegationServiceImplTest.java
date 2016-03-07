@@ -383,7 +383,7 @@ public class DelegationServiceImplTest {
         Metadata metadata = new Metadata(code, systemCode, systemDescription);
         metadata.addRole(roleCode, roleDescription);
         metadata.addPermission(permissionCode, permissionDescription);
-        metadata.addDelegatablePermission(roleCode, permissionCode);
+        metadata.addDelegatablePermission(roleCode, permissionCode, permissionDescription);
 
         when(metadataManager.getMetadata(code, systemCode)).thenReturn(metadata);
 

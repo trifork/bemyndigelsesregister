@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -50,5 +51,17 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     @Override
     public List<Delegation> findByLastModifiedGreaterThanOrEquals(DateTime lastModified) {
         return query().where().ge("lastModified", lastModified).findList();
+    }
+
+    @Override
+    public List<Long> findWithAsterisk(String systemCode, DateTime validDate) {
+        List<Long> result = new LinkedList<>();
+
+        List<Delegation> delegations = ebeanServer.find(Delegation.class).select("id").where().eq("systemCode", systemCode).gt("effectiveTo", validDate).eq("delegationPermissions.permissionCode", "*").findList();
+        if (delegations != null)
+            for (Delegation delegation : delegations)
+                result.add(delegation.getId());
+
+        return result;
     }
 }

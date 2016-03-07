@@ -11,10 +11,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -121,6 +118,22 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
 
             assertEquals("Eksisterende godkendt bemyndigelse skal ikke påvirkes af ny bestilt bemyndigelse selvom perioder overlapper", effectiveTo, delegation.getEffectiveTo());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testCreateDelegationWithAsteriskPermission() throws Exception {
+        try {
+            ebeanServer.beginTransaction();
+
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList("*", TestData.permissionCode1, TestData.permissionCode2), date1, null);
+            delegation = manager.getDelegation(delegation.getCode()); // reload delegation
+
+            assertNotNull("Der skal findes en bemyndigelse", delegation);
+            assertNotNull("Der skal findes rettigheder i bemyndigelse", delegation.getDelegationPermissions());
+            assertEquals("Der skal være defineret én rettighed, de øvrige 2 skal ikke lagres", 1, delegation.getDelegationPermissions().size());
         } finally {
             ebeanServer.endTransaction();
         }
@@ -247,6 +260,8 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             Metadata metadata = metadataManager.getMetadata(TestData.domainCode, TestData.systemCode);
             metadata.getPermissions().clear();
             metadata.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
+            metadata.getDelegatablePermissions().clear();
+            metadata.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1);
             metadataManager.putMetadata(metadata);
 
             List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr);

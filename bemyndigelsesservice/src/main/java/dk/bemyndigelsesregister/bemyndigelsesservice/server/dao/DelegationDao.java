@@ -29,4 +29,13 @@ public interface DelegationDao {
     List<Delegation> findByCodes(Collection<String> codes);
 
     List<Delegation> findByLastModifiedGreaterThanOrEquals(DateTime lastModified);
+
+    /**
+     * findWithAsterisk finds delegations for a system containing asterisk permission
+     *
+     * @param systemCode system to find delegations for
+     * @param validDate date that the delegations should be valid on or after
+     * @return list of delegation ids
+     */
+    List<Long> findWithAsterisk(String systemCode, DateTime validDate);
 }

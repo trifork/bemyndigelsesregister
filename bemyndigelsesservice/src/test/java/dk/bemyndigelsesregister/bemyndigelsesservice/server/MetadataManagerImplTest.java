@@ -129,7 +129,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
             p.addRole(TestData.roleCode, TestData.roleDescription);
             p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
-            p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1);
+            p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1);
             manager.putMetadata(p);
             Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
 
@@ -148,7 +148,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             ebeanServer.beginTransaction();
 
             Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
-            p.addDelegatablePermission("Unknown", TestData.permissionCode1);
+            p.addDelegatablePermission("Unknown", TestData.permissionCode1, TestData.permissionDescription1);
             manager.putMetadata(p);
         } finally {
             ebeanServer.endTransaction();
@@ -161,7 +161,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             ebeanServer.beginTransaction();
 
             Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
-            p.addDelegatablePermission(TestData.roleCode, "Unknown");
+            p.addDelegatablePermission(TestData.roleCode, "Unknown", "Unknown");
             manager.putMetadata(p);
         } finally {
             ebeanServer.endTransaction();

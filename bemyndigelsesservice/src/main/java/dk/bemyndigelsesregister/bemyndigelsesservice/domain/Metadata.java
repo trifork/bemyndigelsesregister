@@ -46,8 +46,8 @@ public class Metadata {
         permissions.add(new CodeAndDescription(permissionCode, permissionDescription));
     }
 
-    public void addDelegatablePermission(String roleCode, String permissionCode) {
-        delegatablePermissions.add(new DelegatablePermission(roleCode, permissionCode));
+    public void addDelegatablePermission(String roleCode, String permissionCode, String permissionDescription) {
+        delegatablePermissions.add(new DelegatablePermission(roleCode, permissionCode, permissionDescription));
     }
 
     public boolean containsRole(String roleCode) {
@@ -88,15 +88,22 @@ public class Metadata {
         public String getDescription() {
             return description;
         }
+
+        @Override
+        public String toString() {
+            return code;
+        }
     }
 
     public class DelegatablePermission {
         String roleCode;
         String permissionCode;
+        String permissionDescription;
 
-        public DelegatablePermission(String roleCode, String permissionCode) {
+        public DelegatablePermission(String roleCode, String permissionCode, String permissionDescription) {
             this.roleCode = roleCode;
             this.permissionCode = permissionCode;
+            this.permissionDescription = permissionDescription;
         }
 
         public String getRoleCode() {
@@ -105,6 +112,10 @@ public class Metadata {
 
         public String getPermissionCode() {
             return permissionCode;
+        }
+
+        public String getPermissionDescription() {
+            return permissionDescription;
         }
     }
 }

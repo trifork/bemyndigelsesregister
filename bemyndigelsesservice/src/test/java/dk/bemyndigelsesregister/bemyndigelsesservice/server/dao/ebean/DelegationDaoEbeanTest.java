@@ -175,4 +175,11 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }
+
+    @Test
+    public void testFindWithAsterisk() throws Exception {
+        final List<Long> delegationIds = dao.findWithAsterisk("FMK", DateTime.now());
+
+        System.out.println(delegationIds);
+    }
 }

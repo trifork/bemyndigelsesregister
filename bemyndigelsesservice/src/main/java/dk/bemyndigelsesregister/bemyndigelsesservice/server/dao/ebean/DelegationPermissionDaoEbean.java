@@ -13,4 +13,8 @@ public class DelegationPermissionDaoEbean extends SupportDao<DelegationPermissio
     public DelegationPermissionDaoEbean() {
         super(DelegationPermission.class);
     }
+
+    public void remove(DelegationPermission delegationPermission) {
+        ebeanServer.delete(delegationPermission);
+    }
 }

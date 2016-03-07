@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,8 @@ import java.util.List;
  */
 @Repository
 public class MetadataManagerImpl implements MetadataManager {
+    private static Logger logger = Logger.getLogger(MetadataManagerImpl.class);
+
     @Inject
     DomainDao domainDao;
 
@@ -30,8 +33,8 @@ public class MetadataManagerImpl implements MetadataManager {
 
     @Override
     public void putMetadata(Metadata metadata) {
+        logger.info("putMetadata started, domain=[" + metadata.getDomainCode() + "], system=[" + metadata.getSystem().getCode() + "]");
         DateTime now = DateTime.now();
-        String modifiedBy = "Service";
 
         // domain
         Domain domain = domainDao.findByCode(metadata.getDomainCode());
@@ -39,16 +42,20 @@ public class MetadataManagerImpl implements MetadataManager {
             domain = new Domain();
             domain.setCode(metadata.getDomainCode());
             domain.setLastModified(now);
-            domain.setLastModifiedBy(modifiedBy);
+            domain.setLastModifiedBy(getClass().getSimpleName());
 
             domainDao.save(domain);
+            logger.info("  Domain [" + metadata.getDomainCode() + "] created");
         }
+
+        boolean systemUpdated = false;
 
         // system
         DelegatingSystem system = delegatingSystemDao.findByCode(metadata.getSystem().getCode());
         if (system == null) {
             system = new DelegatingSystem();
             system.setCode(metadata.getSystem().getCode());
+            logger.info("  System [" + metadata.getSystem() + "] created");
         }
 
         String systemDescription = metadata.getSystem().getDescription();
@@ -56,13 +63,16 @@ public class MetadataManagerImpl implements MetadataManager {
             systemDescription = metadata.getSystem().getCode();
 
         // check if update is necessary
-        if (!systemDescription.equals(system.getDescription()) || system.getDomain() == null || !metadata.getSystem().getCode().equals(system.getDomain().getCode())) {
+        if (!systemDescription.equals(system.getDescription()) || system.getDomain() == null || !metadata.getDomainCode().equals(system.getDomain().getCode())) {
             system.setDomain(domain);
             system.setDescription(systemDescription);
             system.setLastModified(now);
-            system.setLastModifiedBy(modifiedBy);
+            system.setLastModifiedBy(getClass().getSimpleName());
 
             delegatingSystemDao.save(system);
+
+            systemUpdated = true;
+            logger.info("  System [" + metadata.getSystem() + "] updated, description=[" + systemDescription + "]");
         }
 
         // roles
@@ -80,22 +90,29 @@ public class MetadataManagerImpl implements MetadataManager {
                     role = new Role();
                     role.setCode(c.getCode());
                     role.setSystem(system);
+
+                    logger.info("  Role [" + c + "] created");
                 }
 
                 // check if update is necessary
                 if (!roleDescription.equals(role.getDescription())) {
                     role.setDescription(roleDescription);
                     role.setLastModified(now);
-                    role.setLastModifiedBy(modifiedBy);
+                    role.setLastModifiedBy(getClass().getSimpleName());
 
                     roleDao.save(role);
+
+                    logger.info("  Role [" + c + "] updated, description=[" + roleDescription + "]");
                 }
             }
 
             if (existingRoles != null) {
                 for (Role role : existingRoles) {
-                    if (!metadata.containsRole(role.getCode()))
+                    if (!metadata.containsRole(role.getCode())) {
+                        logger.info("  Role [" + role.getCode() + "] removed");
+
                         roleDao.remove(role);
+                    }
                 }
             }
         }
@@ -105,6 +122,9 @@ public class MetadataManagerImpl implements MetadataManager {
             List<Permission> existingPermissions = permissionDao.findBySystem(system.getId());
 
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
+                if (c.getCode().contains("*") && !c.getCode().equals("*"))
+                    throw new IllegalArgumentException("Illegal permission [" + c.getCode() + "]. Code must either be \"*\" or contain no \"*\"-characters");
+
                 String permissionDescription = c.getDescription();
                 if (permissionDescription == null || permissionDescription.trim().isEmpty())
                     permissionDescription = c.getCode();
@@ -114,25 +134,34 @@ public class MetadataManagerImpl implements MetadataManager {
                     permission = new Permission();
                     permission.setCode(c.getCode());
                     permission.setSystem(system);
+
+                    logger.info("  Permission [" + c + "] created");
                 }
 
                 // check if update is necessary
                 if (!permissionDescription.equals(permission.getDescription())) {
                     permission.setDescription(permissionDescription);
                     permission.setLastModified(now);
-                    permission.setLastModifiedBy(modifiedBy);
+                    permission.setLastModifiedBy(getClass().getSimpleName());
 
                     permissionDao.save(permission);
+
+                    logger.info("  Permission [" + c + "] updated, description=[" + permissionDescription + "]");
                 }
             }
 
             if (existingPermissions != null) {
                 for (Permission permission : existingPermissions) {
-                    if (!metadata.containsPermission(permission.getCode()))
+                    if (!metadata.containsPermission(permission.getCode())) {
+                        logger.info("  Permission [" + permission.getCode() + "] removed");
+
                         permissionDao.remove(permission);
+                    }
                 }
             }
         }
+
+        boolean delegatablePermissionChange = false;
 
         // delegatable permissions
         if (metadata.getDelegatablePermissions() != null) {
@@ -141,11 +170,11 @@ public class MetadataManagerImpl implements MetadataManager {
             for (Metadata.DelegatablePermission c : metadata.getDelegatablePermissions()) {
                 Permission permission = permissionDao.findByCode(metadata.getSystem().getCode(), c.getPermissionCode());
                 if (permission == null)
-                    throw new IllegalArgumentException("Cannot create delegatable permission [" + c.getPermissionCode() + "] for roleCode [" + c.getRoleCode() + "]: Permission [" + c.getPermissionCode() + "] not found for system [" + metadata.getSystem().getCode() + "]");
+                    throw new IllegalArgumentException("Cannot create delegatable permission [" + c.getPermissionCode() + "] for role [" + c.getRoleCode() + "]: Permission [" + c.getPermissionCode() + "] not found for system [" + metadata.getSystem().getCode() + "]");
 
                 Role role = roleDao.findByCode(system.getId(), c.getRoleCode());
                 if (role == null)
-                    throw new IllegalArgumentException("Cannot create delegatable permission [" + c.getPermissionCode() + "] for roleCode [" + c.getRoleCode() + "]: Role [" + c.getRoleCode() + "] not found for system [" + metadata.getSystem().getCode() + "]");
+                    throw new IllegalArgumentException("Cannot create delegatable permission [" + c.getPermissionCode() + "] for role [" + c.getRoleCode() + "]: Role [" + c.getRoleCode() + "] not found for system [" + metadata.getSystem().getCode() + "]");
 
                 DelegatablePermission delegatablePermission = delegatablePermissionDao.findByPermissionAndRole(permission.getId(), role.getId());
                 if (delegatablePermission == null) {
@@ -155,28 +184,50 @@ public class MetadataManagerImpl implements MetadataManager {
                     delegatablePermission.setPermission(permission);
                     permission.getDelegatablePermissions().add(delegatablePermission);
                     delegatablePermission.setLastModified(now);
-                    delegatablePermission.setLastModifiedBy(modifiedBy);
+                    delegatablePermission.setLastModifiedBy(getClass().getSimpleName());
 
                     delegatablePermissionDao.save(delegatablePermission);
+
+                    delegatablePermissionChange = true;
+                    logger.info("  DelegatablePermission [" + c.getRoleCode() + "]:[" + c.getPermissionCode() + "] added");
                 }
             }
 
-            if (existingDelegatablePermissions != null)
-                for (DelegatablePermission delegatablePermission : existingDelegatablePermissions)
-                    if (!metadata.containsDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode()))
+            if (existingDelegatablePermissions != null) {
+                for (DelegatablePermission delegatablePermission : existingDelegatablePermissions) {
+                    if (!metadata.containsDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode())) {
+                        logger.info("  DelegatablePermission [" + delegatablePermission.getRole().getCode() + "]:[" + delegatablePermission.getPermission().getCode() + "] removed");
+
                         delegatablePermissionDao.remove(delegatablePermission);
+                        delegatablePermissionChange = true;
+                    }
+                }
+            }
         }
+
+        if (delegatablePermissionChange && !systemUpdated) { // update system timestamp to signal change in delegatable permissions to asterisk expander
+            system.setLastModified(now);
+            system.setLastModifiedBy(getClass().getSimpleName());
+
+            delegatingSystemDao.save(system);
+
+            logger.info("  System [" + metadata.getSystem() + "] marked as modified");
+        }
+
+        logger.info("putMetadata ended");
     }
 
     @Override
     public Metadata getMetadata(String domainCode, String systemCode) {
-        Domain domain = domainDao.findByCode(domainCode);
-        if (domain == null)
-            throw new IllegalArgumentException("Domain " + domainCode + " not found");
+        if(domainCode != null) {
+            Domain domain = domainDao.findByCode(domainCode);
+            if (domain == null)
+                throw new IllegalArgumentException("Domain [" + domainCode + "] not found");
+        }
 
         DelegatingSystem delegatingSystem = delegatingSystemDao.findByCode(systemCode);
         if (delegatingSystem == null)
-            throw new IllegalArgumentException("System " + systemCode + " not found");
+            throw new IllegalArgumentException("System [" + systemCode + "] not found");
 
         Metadata metadata = new Metadata(domainCode, systemCode, delegatingSystem.getDescription());
 
@@ -193,7 +244,7 @@ public class MetadataManagerImpl implements MetadataManager {
         List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findBySystem(delegatingSystem.getId());
         if (delegatablePermissions != null)
             for (DelegatablePermission delegatablePermission : delegatablePermissions)
-                metadata.addDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode());
+                metadata.addDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode(), delegatablePermission.getPermission().getDescription());
 
         return metadata;
     }

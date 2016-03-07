@@ -18,6 +18,11 @@ public class DelegatablePermissionDaoEbean extends SupportDao<DelegatablePermiss
     }
 
     @Override
+    public List<DelegatablePermission> findBySystemAndRole(Long systemId, Long roleId) {
+        return query().where().eq("role.id", roleId).eq("role.system.id", systemId).findList();
+    }
+
+    @Override
     public List<DelegatablePermission> findBySystem(Long systemId) {
         return query().where().eq("role.system.id", systemId).findList();
     }

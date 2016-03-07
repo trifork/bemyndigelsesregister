@@ -32,6 +32,8 @@ import static java.lang.System.getProperty;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationRootConfig implements TransactionManagementConfigurer {
     static Logger logger = Logger.getLogger(ApplicationRootConfig.class);
+    @Value("${jdbc.driver}")
+    String driver;
     @Value("${jdbc.url}")
     String url;
     @Value("${jdbc.username}")
@@ -70,7 +72,7 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
                 username,
                 password
         );
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setDriverClassName(driver);
         return dataSource;
     }
 

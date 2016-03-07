@@ -1,9 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Role;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.nsi.bemyndigelse._2016._01._01.ObjectFactory;
 import dk.nsi.bemyndigelse._2016._01._01.SystemPermission;
 import org.joda.time.DateTime;
@@ -25,6 +23,9 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
 
     @Inject
     PermissionDao permissionDao;
+
+    @Inject
+    MetadataManager metadataManager;
 
     private static DatatypeFactory datatypeFactory;
     private ObjectFactory objectFactory = new ObjectFactory();
@@ -56,9 +57,17 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         delegationType.setEffectiveTo(toXmlGregorianCalendar(delegation.getEffectiveTo()));
 
         for (DelegationPermission permission : delegation.getDelegationPermissions()) {
-            SystemPermission p = toPermission(delegation.getSystemCode(), permission);
-            if (p != null)
-                delegationType.getPermission().add(p);
+            if (permission.getPermissionCode().equals("*")) {
+                Metadata metadata = metadataManager.getMetadata(null, delegation.getSystemCode());
+                for (Metadata.DelegatablePermission p : metadata.getDelegatablePermissions()) {
+                    if(p.getRoleCode().equals(delegation.getRoleCode()))
+                        delegationType.getPermission().add(toPermission(p.getPermissionCode(), p.getPermissionDescription()));
+                }
+            } else {
+                SystemPermission p = toPermission(delegation.getSystemCode(), permission);
+                if (p != null)
+                    delegationType.getPermission().add(p);
+            }
         }
 
         return delegationType;
@@ -85,11 +94,18 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         if (permission != null) {
             Permission p = getPermission(delegatingSystemCode, permission.getPermissionCode());
             if (p != null) {
-                xmlPermission = objectFactory.createSystemPermission();
-                xmlPermission.setPermissionId(permission.getPermissionCode());
-                xmlPermission.setPermissionDescription(p.getDescription());
+                xmlPermission = toPermission(p.getCode(), p.getDescription());
             }
         }
+
+        return xmlPermission;
+    }
+
+    private dk.nsi.bemyndigelse._2016._01._01.SystemPermission toPermission(String permissionCode, String permissionDescription) {
+        dk.nsi.bemyndigelse._2016._01._01.SystemPermission xmlPermission = objectFactory.createSystemPermission();
+
+        xmlPermission.setPermissionId(permissionCode);
+        xmlPermission.setPermissionDescription(permissionDescription);
 
         return xmlPermission;
     }
