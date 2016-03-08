@@ -48,19 +48,21 @@ public class DelegationExportJob {
     @Value("${bemyndigelsesexportjob.enabled}")
     String jobEnabled;
 
-    Map<String, Map<String, Set<String>>> systemRolePermissionMap;
+    private Map<String, Map<String, Set<String>>> systemRolePermissionMap; // systemcode, rolecode, set of permissioncodes
 
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
     public void startExport() throws IOException {
         if (Boolean.valueOf(jobEnabled)) {
             logger.info("DelegationExport job started");
 
-            systemRolePermissionMap = new HashMap<>();
+            systemRolePermissionMap = null;
             SystemVariable lastRun = systemVariableDao.getByName("lastRun");
             final DateTime startTime = systemService.getDateTime();
 
+            // reexport delegations with asterisk permission for changed systems
             handleChangedMetadata(startTime, delegatingSystemDao.findByLastModifiedGreaterThanOrEquals(lastRun.getDateTimeValue()));
 
+            // export individually changed delegations
             handleChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(lastRun.getDateTimeValue()));
 
             updateLastRun(lastRun, startTime);
@@ -71,15 +73,19 @@ public class DelegationExportJob {
     }
 
     private Map<String, Set<String>> getRolePermissionMap(String systemCode) {
+        if (systemRolePermissionMap == null) {
+            systemRolePermissionMap = new HashMap<>();
+        }
+
         Map<String, Set<String>> rolePermissionMap = systemRolePermissionMap.get(systemCode);
         if (rolePermissionMap == null) {
             rolePermissionMap = new HashMap<>();
             systemRolePermissionMap.put(systemCode, rolePermissionMap);
 
             Metadata metadata = metadataManager.getMetadata(null, systemCode);
-            if (metadata.getDelegatablePermissions() != null) {
+            if (metadata != null && metadata.getDelegatablePermissions() != null) {
                 for (Metadata.DelegatablePermission permission : metadata.getDelegatablePermissions()) {
-                    if (!permission.getPermissionCode().equals("*")) { // this permission is not exported
+                    if (!permission.getPermissionCode().equals("*")) { // asterisk permissions are not exported
                         Set<String> permissionCodes = rolePermissionMap.get(permission.getRoleCode());
                         if (permissionCodes == null) {
                             permissionCodes = new HashSet<>();
@@ -94,6 +100,9 @@ public class DelegationExportJob {
         return rolePermissionMap;
     }
 
+    /**
+     * Returns a hash value for all role/permissions for a specific system
+     */
     private String getRolePermissionHash(String systemCode) {
         Map<String, Set<String>> rolePermissionMap = getRolePermissionMap(systemCode);
         StringBuilder buf = new StringBuilder();
@@ -112,10 +121,11 @@ public class DelegationExportJob {
             logger.info("No metadata changed");
         } else {
             for (DelegatingSystem system : systems) {
-                String hashName = system.getCode() + "Hash";
+                String hashSystemVariableName = system.getCode() + "Hash";
                 String newHash = getRolePermissionHash(system.getCode());
-                SystemVariable hash = systemVariableDao.getByName(hashName);
-                String oldHash = hash != null ? hash.getValue() : "";
+
+                SystemVariable hashSystemVariable = systemVariableDao.getByName(hashSystemVariableName);
+                String oldHash = hashSystemVariable != null ? hashSystemVariable.getValue() : "";
 
                 if (newHash.equals(oldHash)) {
                     logger.info("Role/permission metadata hash [" + newHash + "] unchanged for system [" + system.getCode() + "], skipping delegation export");
@@ -123,11 +133,12 @@ public class DelegationExportJob {
                     exportDelegationsWithAsteriskForSystem(startTime, system.getCode());
 
                     // save hash
-                    if (hash == null)
-                        hash = new SystemVariable(hashName, newHash);
-                    else
-                        hash.setValue(newHash);
-                    systemVariableDao.save(hash);
+                    if (hashSystemVariable == null) {
+                        hashSystemVariable = new SystemVariable(hashSystemVariableName, newHash);
+                    } else {
+                        hashSystemVariable.setValue(newHash);
+                    }
+                    systemVariableDao.save(hashSystemVariable);
 
                     logger.info("Saved new role/permission metadata hash [" + newHash + "] for system [" + system.getCode() + "]");
                 }
@@ -139,8 +150,9 @@ public class DelegationExportJob {
         logger.info("Processing system [" + systemCode + "]. *-permissions to delegate: ");
 
         Map<String, Set<String>> rolePermissionMap = getRolePermissionMap(systemCode);
-        for (String roleCode : rolePermissionMap.keySet())
+        for (String roleCode : rolePermissionMap.keySet()) {
             logger.info("   [" + roleCode + "]: " + rolePermissionMap.get(roleCode));
+        }
 
         List<Long> delegationIds = delegationDao.findWithAsterisk(systemCode, startTime);
         if (delegationIds == null || delegationIds.isEmpty()) {
@@ -177,7 +189,7 @@ public class DelegationExportJob {
     @Transactional
     public void completeExport() {
         SystemVariable lastRun = systemVariableDao.getByName("lastRun");
-        final DateTime startTime = systemService.getDateTime();
+        DateTime startTime = systemService.getDateTime();
         try {
             handleChangedDelegations(startTime, delegationDao.list());
             updateLastRun(lastRun, startTime);
@@ -196,8 +208,9 @@ public class DelegationExportJob {
             for (Delegation delegation : delegations) {
                 if (delegation.getState() == State.GODKENDT) {
                     Set<String> permissionCodes = new HashSet<>();
-                    for (DelegationPermission delegationPermission : delegation.getDelegationPermissions())
+                    for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
                         permissionCodes.add(delegationPermission.getPermissionCode());
+                    }
 
                     if (permissionCodes.contains("*")) { // expand asterisk to all delegatable permissions for role
                         Map<String, Set<String>> rolePermissionMap = getRolePermissionMap(delegation.getSystemCode());

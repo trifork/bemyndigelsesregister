@@ -38,6 +38,17 @@ public class Metadata {
         return delegatablePermissions;
     }
 
+    public List<DelegatablePermission> getDelegatablePermissions(String roleCode) {
+        List<DelegatablePermission> list = new LinkedList<>();
+        for (Metadata.DelegatablePermission p : delegatablePermissions) {
+            if (p.getRoleCode().equals(roleCode)) {
+                list.add(p);
+            }
+        }
+
+        return list;
+    }
+
     public void addRole(String roleCode, String roleDescription) {
         roles.add(new CodeAndDescription(roleCode, roleDescription));
     }

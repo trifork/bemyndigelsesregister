@@ -57,8 +57,8 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Bean
     public CommonsXsdSchemaCollection schemaCollection() {
         final Resource[] resources = {
-                new ClassPathResource("/schema/CPR_PersonCivilRegistrationIdentifier.xsd"),
-                new ClassPathResource("/schema/CVR_CVRnumberIdentifier.xsd"),
+                new ClassPathResource("/schema/2005_03_18/CPR_PersonCivilRegistrationIdentifier.xsd"),
+                new ClassPathResource("/schema/2005_03_22/CVR_CVRnumberIdentifier.xsd"),
                 new ClassPathResource("/schema/2016_01_01/bemyndigelsesservice.xsd")
         };
         for (Resource resource : resources) {

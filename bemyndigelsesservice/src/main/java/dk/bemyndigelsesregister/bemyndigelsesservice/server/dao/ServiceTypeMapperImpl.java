@@ -59,14 +59,14 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         for (DelegationPermission permission : delegation.getDelegationPermissions()) {
             if (permission.getPermissionCode().equals("*")) {
                 Metadata metadata = metadataManager.getMetadata(null, delegation.getSystemCode());
-                for (Metadata.DelegatablePermission p : metadata.getDelegatablePermissions()) {
-                    if(p.getRoleCode().equals(delegation.getRoleCode()))
-                        delegationType.getPermission().add(toPermission(p.getPermissionCode(), p.getPermissionDescription()));
+                for (Metadata.DelegatablePermission p : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
+                    delegationType.getPermission().add(toPermission(p.getPermissionCode(), p.getPermissionDescription()));
                 }
             } else {
                 SystemPermission p = toPermission(delegation.getSystemCode(), permission);
-                if (p != null)
+                if (p != null) {
                     delegationType.getPermission().add(p);
+                }
             }
         }
 
