@@ -23,6 +23,8 @@
             <xs:element name="Created" type="bms20160101:CreatedDateTime"/>
             <xs:element name="EffectiveFrom" type="bms20160101:EffectiveFromDateTime"/>
             <xs:element name="EffectiveTo" type="bms20160101:EffectiveToDateTime"/>
+            <xs:element name="NotDelegatedPermission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
+            <xs:element name="UndelegatablePermission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -142,6 +144,7 @@
                 <xs:element name="SystemId" type="bms20160101:SystemId"/>
                 <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
                 <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
+                <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
                 <xs:element name="Permission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
                 <xs:element name="DelegatablePermission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatablePermission"/>
             </xs:sequence>
@@ -168,9 +171,10 @@
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="Domain" type="bms20160101:Domain"/>
                 <xs:element name="System" type="bms20160101:DelegatingSystem"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="Role" type="bms20160101:DelegatingRole"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="Permission" type="bms20160101:SystemPermission"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" name="DelegatablePermission" type="bms20160101:DelegatablePermission"/>
+                <xs:element name="Role" minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
+                <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+                <xs:element name="Permission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
+                <xs:element name="DelegatablePermission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatablePermission"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

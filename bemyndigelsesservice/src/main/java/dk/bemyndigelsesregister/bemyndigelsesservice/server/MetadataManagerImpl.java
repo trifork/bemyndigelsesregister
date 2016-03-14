@@ -122,8 +122,8 @@ public class MetadataManagerImpl implements MetadataManager {
             List<Permission> existingPermissions = permissionDao.findBySystem(system.getId());
 
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
-                if (c.getCode().contains("*") && !c.getCode().equals("*"))
-                    throw new IllegalArgumentException("Illegal permission [" + c.getCode() + "]. Code must either be \"*\" or contain no \"*\"-characters");
+                if (c.getCode().contains(Metadata.ASTERISK_PERMISSION_CODE) && !c.getCode().equals(Metadata.ASTERISK_PERMISSION_CODE))
+                    throw new IllegalArgumentException("Illegal permission [" + c.getCode() + "]. Code must either be equal to \"" + Metadata.ASTERISK_PERMISSION_CODE + "\" or not contain \"" + Metadata.ASTERISK_PERMISSION_CODE + "\"-characters");
 
                 String permissionDescription = c.getDescription();
                 if (permissionDescription == null || permissionDescription.trim().isEmpty())
@@ -219,7 +219,7 @@ public class MetadataManagerImpl implements MetadataManager {
 
     @Override
     public Metadata getMetadata(String domainCode, String systemCode) {
-        if(domainCode != null) {
+        if (domainCode != null) {
             Domain domain = domainDao.findByCode(domainCode);
             if (domain == null)
                 throw new IllegalArgumentException("Domain [" + domainCode + "] not found");

@@ -42,6 +42,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Inject
     WhitelistChecker whitelistChecker;
 
+
     public BemyndigelsesServiceImpl() {
     }
 
@@ -142,7 +143,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             }
         }
 
-        // return result
+        // return the result
         final GetDelegationsResponse response = new GetDelegationsResponse();
         for (Delegation delegation : delegations) {
             response.getDelegation().add(typeMapper.toDelegationType(delegation));
@@ -198,7 +199,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Transactional
     @ResponsePayload
-//    @Protected
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
         String domainCode = request.getDomain();
         if (domainCode == null || domainCode.trim().isEmpty())
@@ -215,14 +215,29 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
                 metadata.addRole(role.getRoleId(), role.getRoleDescription());
         }
 
+        if (request.isEnableAsteriskPermission() != null && request.isEnableAsteriskPermission()) {
+            // create asterisk permission and add it as delegatable to all roles
+            metadata.addPermission(Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION);
+            for (DelegatingRole role : request.getRole()) {
+                metadata.addDelegatablePermission(role.getRoleId(), Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION);
+            }
+        }
+
         if (request.getPermission() != null) {
-            for (SystemPermission permission : request.getPermission())
+            for (SystemPermission permission : request.getPermission()) {
+                if (permission.getPermissionId().contains(Metadata.ASTERISK_PERMISSION_CODE))
+                    throw new IllegalArgumentException("Permission [*] for system [" + systemCode + "]: All current and future permissions are supported, but must be specified as EnableAsteriskPermission=true in request");
+
                 metadata.addPermission(permission.getPermissionId(), permission.getPermissionDescription());
+            }
         }
 
         if (request.getDelegatablePermission() != null) {
             for (DelegatablePermission delegatablePermission : request.getDelegatablePermission()) {
                 String permissionCode = delegatablePermission.getPermissionId();
+                if (permissionCode.contains(Metadata.ASTERISK_PERMISSION_CODE))
+                    throw new IllegalArgumentException("DelegatablePermission [*] for role [" + delegatablePermission.getRoleId() + "]: All current and future permissions are supported, but if used, delegation of this permission is implied for all roles, and cannot be explicitly delegated.");
+
                 String permissionDescription = null;
                 if (request.getPermission() != null) {
                     for (SystemPermission c : request.getPermission()) {
@@ -243,7 +258,6 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
     @Override
     @ResponsePayload
-    //@Protected(whitelist = "bemyndigelsesservice.hentMetadata")
     public GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader) {
         Metadata metadata = metadataManager.getMetadata(request.getDomain(), request.getSystemId());
 
@@ -265,21 +279,29 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             }
         }
 
+        boolean asteriskPermission = false;
         if (metadata.getPermissions() != null) {
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
-                SystemPermission permission = new SystemPermission();
-                permission.setPermissionId(c.getCode());
-                permission.setPermissionDescription(c.getDescription());
-                response.getPermission().add(permission);
+                if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
+                    asteriskPermission = true;
+                } else {
+                    SystemPermission permission = new SystemPermission();
+                    permission.setPermissionId(c.getCode());
+                    permission.setPermissionDescription(c.getDescription());
+                    response.getPermission().add(permission);
+                }
             }
         }
+        response.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
 
         if (metadata.getDelegatablePermissions() != null) {
             for (Metadata.DelegatablePermission c : metadata.getDelegatablePermissions()) {
-                DelegatablePermission delegatablePermission = new DelegatablePermission();
-                delegatablePermission.setRoleId(c.getRoleCode());
-                delegatablePermission.setPermissionId(c.getPermissionCode());
-                response.getDelegatablePermission().add(delegatablePermission);
+                if (!Metadata.ASTERISK_PERMISSION_CODE.equalsIgnoreCase(c.getPermissionCode())) {
+                    DelegatablePermission delegatablePermission = new DelegatablePermission();
+                    delegatablePermission.setRoleId(c.getRoleCode());
+                    delegatablePermission.setPermissionId(c.getPermissionCode());
+                    response.getDelegatablePermission().add(delegatablePermission);
+                }
             }
         }
 

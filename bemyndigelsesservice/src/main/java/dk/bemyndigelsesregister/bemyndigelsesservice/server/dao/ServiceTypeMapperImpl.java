@@ -56,18 +56,41 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         delegationType.setEffectiveFrom(toXmlGregorianCalendar(delegation.getEffectiveFrom()));
         delegationType.setEffectiveTo(toXmlGregorianCalendar(delegation.getEffectiveTo()));
 
-        for (DelegationPermission permission : delegation.getDelegationPermissions()) {
-            if (permission.getPermissionCode().equals("*")) {
-                Metadata metadata = metadataManager.getMetadata(null, delegation.getSystemCode());
-                for (Metadata.DelegatablePermission p : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
-                    delegationType.getPermission().add(toPermission(p.getPermissionCode(), p.getPermissionDescription()));
-                }
-            } else {
+
+        boolean hasAsteriskPermission = delegation.hasAsteriskPermission();
+        Metadata metadata = metadataManager.getMetadata(null, delegation.getSystemCode());
+
+        // permissions
+        if (hasAsteriskPermission) {
+            for (Metadata.DelegatablePermission p : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
+                delegationType.getPermission().add(toPermission(p.getPermissionCode(), p.getPermissionDescription()));
+            }
+        } else {
+            for (DelegationPermission permission : delegation.getDelegationPermissions()) {
                 SystemPermission p = toPermission(delegation.getSystemCode(), permission);
                 if (p != null) {
                     delegationType.getPermission().add(p);
                 }
             }
+
+            // delegatable, but not delegated permissions
+            for (Metadata.DelegatablePermission delegatablePermission : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
+                boolean found = false;
+                for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
+                    if (delegatablePermission.getPermissionCode().equals(delegationPermission.getPermissionCode())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    delegationType.getNotDelegatedPermission().add(toPermission(delegatablePermission.getPermissionCode(), delegatablePermission.getPermissionDescription()));
+                }
+            }
+        }
+
+        // undelegatable permissions
+        for (Metadata.CodeAndDescription permission : metadata.getUndelegatablePermissions(delegation.getRoleCode())) {
+            delegationType.getUndelegatablePermission().add(toPermission(permission.getCode(), permission.getDescription()));
         }
 
         return delegationType;

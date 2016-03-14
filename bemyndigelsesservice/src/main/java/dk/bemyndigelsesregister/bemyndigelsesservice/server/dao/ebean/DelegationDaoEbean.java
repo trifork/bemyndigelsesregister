@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
@@ -57,7 +58,7 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     public List<Long> findWithAsterisk(String systemCode, DateTime validDate) {
         List<Long> result = new LinkedList<>();
 
-        List<Delegation> delegations = ebeanServer.find(Delegation.class).select("id").where().eq("systemCode", systemCode).gt("effectiveTo", validDate).eq("delegationPermissions.permissionCode", "*").findList();
+        List<Delegation> delegations = ebeanServer.find(Delegation.class).select("id").where().eq("systemCode", systemCode).gt("effectiveTo", validDate).eq("delegationPermissions.permissionCode", Metadata.ASTERISK_PERMISSION_CODE).findList();
         if (delegations != null)
             for (Delegation delegation : delegations)
                 result.add(delegation.getId());

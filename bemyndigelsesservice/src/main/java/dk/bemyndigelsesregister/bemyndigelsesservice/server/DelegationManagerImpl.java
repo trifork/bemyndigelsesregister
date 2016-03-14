@@ -149,24 +149,11 @@ public class DelegationManagerImpl implements DelegationManager {
         if (permissionCodes != null && !permissionCodes.isEmpty()) {
             Set<String> permissionCodeSet = new HashSet<>(permissionCodes); // ensures uniqueness
 
-            if (permissionCodeSet.contains("*") && permissionCodeSet.size() > 1) {
+            if (permissionCodeSet.contains(Metadata.ASTERISK_PERMISSION_CODE) && permissionCodeSet.size() > 1) {
                 // if delegation contains asterisk permission, delete other permissions
                 logger.debug("  Truncating permissions " + permissionCodeSet + " to *");
                 permissionCodeSet.clear();
-                permissionCodeSet.add("*");
-/*
-                // if delegation has asterisk permission, ensure that all currently delegatable permissions are delegated
-                List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findBySystemAndRole(system.getId(), role.getId());
-                if (delegatablePermissions != null) {
-                    for (DelegatablePermission delegatablePermission : delegatablePermissions) {
-                        String permissionCode = delegatablePermission.getPermission().getCode();
-                        if(!permissionCodeSet.contains(permissionCode)) {
-                            permissionCodeSet.add(permissionCode);
-                            logger.debug("  Automatically included permission [" + permissionCode + "] in permissions");
-                        }
-                    }
-                }
-*/
+                permissionCodeSet.add(Metadata.ASTERISK_PERMISSION_CODE);
             }
 
             Set<DelegationPermission> permissionSet = new HashSet<>();

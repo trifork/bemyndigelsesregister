@@ -2,7 +2,9 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -36,12 +38,16 @@ public class ServiceTypeMapperImplTest {
     @Mock
     PermissionDao permissionDao;
 
+    @Mock
+    MetadataManager metadataManager;
+
     private String code = "UUID code";
     private String delegatorCpr = "delegatorCpr";
     private String delegateeCpr = "delegateeCpr";
     private String delegateeCvr = "delegateeCvr";
     private String roleCode = "roleCode";
     private String systemCode = "SystemCode";
+    private String systemDescription = "SystemDescription";
     private String permissionCode1 = "P1";
     private String permissionCode2 = "P2";
     private List<String> permissionCodes = Arrays.asList(permissionCode1, permissionCode2);
@@ -59,6 +65,7 @@ public class ServiceTypeMapperImplTest {
         p1.setCode(permissionCode1);
         p1.setDescription("First Permission");
         when(permissionDao.findByCode(systemCode, permissionCode1)).thenReturn(p1);
+        when(metadataManager.getMetadata(null, systemCode)).thenReturn(new Metadata(null, systemCode, systemDescription));
 
         Permission p2 = new Permission();
         p2.setCode(permissionCode2);
@@ -85,6 +92,7 @@ public class ServiceTypeMapperImplTest {
         p1.setCode(permissionCode1);
         p1.setDescription("First Permission");
         when(permissionDao.findByCode(systemCode, permissionCode1)).thenReturn(p1);
+        when(metadataManager.getMetadata(null, systemCode)).thenReturn(new Metadata(null, systemCode, systemDescription));
 
         dk.nsi.bemyndigelse._2016._01._01.Delegation d = typeMapper.toDelegationType(createDelegation());
 

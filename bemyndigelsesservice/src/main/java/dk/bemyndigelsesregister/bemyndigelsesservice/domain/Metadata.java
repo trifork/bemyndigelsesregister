@@ -7,6 +7,9 @@ import java.util.List;
  * Created by obj on 15-02-2016.
  */
 public class Metadata {
+    public static final String ASTERISK_PERMISSION_CODE = "*";
+    public static final String ASTERISK_PERMISSION_DESCRIPTION = "Alle delegerbare rettigheder (inkl. fremtidige)";
+
     private String domainCode;
     private CodeAndDescription system;
     private List<CodeAndDescription> roles = new LinkedList<>();
@@ -47,6 +50,25 @@ public class Metadata {
         }
 
         return list;
+    }
+
+    public List<CodeAndDescription> getUndelegatablePermissions(String roleCode) {
+        List<CodeAndDescription> undelegatablePermissions = new LinkedList<>();
+
+        for (CodeAndDescription permission : permissions) {
+            boolean found = false;
+            for (DelegatablePermission delegatablePermission : delegatablePermissions) {
+                if (delegatablePermission.getRoleCode().equals(roleCode) && delegatablePermission.getPermissionCode().equals(permission.getCode())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                undelegatablePermissions.add(permission);
+            }
+        }
+
+        return undelegatablePermissions;
     }
 
     public void addRole(String roleCode, String roleDescription) {

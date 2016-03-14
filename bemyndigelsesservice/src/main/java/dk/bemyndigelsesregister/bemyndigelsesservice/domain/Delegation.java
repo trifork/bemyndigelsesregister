@@ -147,4 +147,14 @@ public class Delegation extends ExternalIdentifiedDomainObject {
     public void setDelegationPermissions(Set<DelegationPermission> delegationPermissions) {
         this.delegationPermissions = delegationPermissions;
     }
+
+    public boolean hasAsteriskPermission() {
+        if(delegationPermissions != null) {
+            for (DelegationPermission delegationPermission : delegationPermissions) {
+                if (delegationPermission.getPermissionCode().equals(Metadata.ASTERISK_PERMISSION_CODE))
+                    return true;
+            }
+        }
+        return false;
+    }
 }

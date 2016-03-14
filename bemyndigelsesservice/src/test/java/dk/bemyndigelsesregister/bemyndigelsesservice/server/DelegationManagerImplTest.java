@@ -11,7 +11,10 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -128,7 +131,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
         try {
             ebeanServer.beginTransaction();
 
-            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList("*", TestData.permissionCode1, TestData.permissionCode2), date1, null);
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList(Metadata.ASTERISK_PERMISSION_CODE, TestData.permissionCode1, TestData.permissionCode2), date1, null);
             delegation = manager.getDelegation(delegation.getCode()); // reload delegation
 
             assertNotNull("Der skal findes en bemyndigelse", delegation);
