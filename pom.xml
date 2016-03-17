@@ -2,19 +2,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <repositories>
         <repository>
-            <id>trifork.nexus</id>
-            <url>https://nexus.trifork.com/content/repositories/snapshots/</url>
+            <id>trifork-public</id>
+            <name>Trifork public Nexus</name>
+            <url>https://nexus.trifork.com/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>trifork-intranet</id>
+            <name>Trifork internal Nexus</name>
+            <url>http://nexus.ci82.trifork.com/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>trifork.snapshots</id>
+            <name>Trifork internal snapshot Nexus</name>
+            <url>http://nexus.ci82.trifork.com/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>trifork.public</id>
-            <url>https://nexus.trifork.com/content/groups/public/</url>
-        </repository>
-    </repositories>         
-    <modelVersion>4.0.0</modelVersion>
+    </repositories>
 
+    <modelVersion>4.0.0</modelVersion>
     <groupId>dk.bemyndigelsesregister</groupId>
     <artifactId>bemyndigelsesregister</artifactId>
     <version>1.17-SNAPSHOT</version>
@@ -43,10 +50,16 @@
     </ciManagement>
 
     <distributionManagement>
+        <snapshotRepository>
+            <id>trifork.snapshots</id>
+            <name>Trifork internal snapshot Nexus</name>
+            <url>http://nexus.ci82.trifork.com/content/repositories/snapshots/</url>
+        </snapshotRepository>
+
         <repository>
-            <id>Trifork-Nexus-Public-Repository</id>
-            <name>Trifork Nexus Public Repository</name>
-            <url>https://nexus.trifork.com/content/repositories/releases/</url>
+            <id>trifork.releases</id>
+            <name>Trifork internal releases Nexus</name>
+            <url>http://nexus.ci82.trifork.com/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 
@@ -227,6 +240,7 @@
                     </execution>
                 </executions>
             </plugin>
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -234,7 +248,7 @@
                 <configuration>
                     <skip>true</skip>
                 </configuration>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
 </project>
