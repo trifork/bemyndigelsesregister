@@ -137,9 +137,9 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canCreateDelegationAsDelegatee() throws Exception {
-        final Delegation delegation = createDelegation(code, State.BESTILT, null);
+        final Delegation delegation = createDelegation(code, State.ANMODET, null);
 
-        when(delegationManager.createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.BESTILT, permissionCodes, null, null)).thenReturn(delegation);
+        when(delegationManager.createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.ANMODET, permissionCodes, null, null)).thenReturn(delegation);
         setupDgwsRequestContextForUser(delegateeCprText);
 
         CreateDelegationsRequest request = new CreateDelegationsRequest() {{
@@ -153,13 +153,13 @@ public class DelegationServiceImplTest {
                 ListOfPermissionIds pIds = new ListOfPermissionIds();
                 pIds.getPermissionId().addAll(permissionCodes);
                 setListOfPermissionIds(pIds);
-                setState(State.BESTILT);
+                setState(State.ANMODET);
             }});
         }};
 
         final CreateDelegationsResponse response = service.createDelegations(request, soapHeader);
 
-        verify(delegationManager).createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.BESTILT, permissionCodes, null, null);
+        verify(delegationManager).createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.ANMODET, permissionCodes, null, null);
 
         assertEquals(1, response.getDelegation().size());
         verify(typeMapper).toDelegationType(delegation);

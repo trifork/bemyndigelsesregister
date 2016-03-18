@@ -127,7 +127,7 @@
 
             <xs:simpleType name="State" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:restriction base="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                    <xs:enumeration value="Bestilt"/>
+                    <xs:enumeration value="Anmodet"/>
                     <xs:enumeration value="Godkendt"/>
                 </xs:restriction>
             </xs:simpleType>

@@ -45,7 +45,7 @@ class CreateDelegationITCase extends WebServiceSupport {
                     "DelegateeCvr"('10101010')
                     "SystemId"('testsys')
                     "RoleId"('Laege')
-                    "State"('Bestilt')
+                    "State"('Anmodet')
                     "ListOfPermissionIds" {
                         "PermissionId"('R01')
                     }
@@ -62,6 +62,6 @@ class CreateDelegationITCase extends WebServiceSupport {
         assert 'testsys' == response.CreateDelegationsResponse.Delegation[0].System.SystemId.text()
         assert 'Laege' == response.CreateDelegationsResponse.Delegation[0].Role.RoleId.text()
         assert 1 == response.CreateDelegationsResponse.Delegation[0].Permission.size()
-        assert 'Bestilt' == response.CreateDelegationsResponse.Delegation[0].State.text()
+        assert 'Anmodet' == response.CreateDelegationsResponse.Delegation[0].State.text()
     }
 }

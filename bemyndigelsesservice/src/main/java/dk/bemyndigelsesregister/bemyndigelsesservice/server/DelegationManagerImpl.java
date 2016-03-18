@@ -55,7 +55,7 @@ public class DelegationManagerImpl implements DelegationManager {
             logger.debug("  " + existingDelegations.size() + " overlapping delegations found");
 
             for (Delegation delegation : existingDelegations) {
-                if (state == State.GODKENDT || state == State.BESTILT && delegation.getState() == State.BESTILT) { // determine if existing should be "closed" - depends on state, approved closes existing approved/requested, but requested only closes existing requested
+                if (state == State.GODKENDT || state == State.ANMODET && delegation.getState() == State.ANMODET) { // determine if existing should be "closed" - depends on state, approved closes existing approved/requested, but requested only closes existing requested
                     DateTime end = delegation.getEffectiveFrom().isAfter(validFrom) ? delegation.getEffectiveFrom() : validFrom;
 
                     logger.debug("  Updating delegation [" + delegation + "] currently valid [" + delegation.getEffectiveFrom() + "]-[" + delegation.getEffectiveTo() + "] to end at [" + end + "]");

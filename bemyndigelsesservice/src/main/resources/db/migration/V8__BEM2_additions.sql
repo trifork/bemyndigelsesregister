@@ -20,7 +20,7 @@ CREATE TABLE bemyndigelse20 (
   versionsid int NOT NULL,
   sidst_modificeret datetime DEFAULT NULL,
   sidst_modificeret_af varchar(255) DEFAULT NULL,
-  status enum('GODKENDT','BESTILT') NOT NULL DEFAULT 'BESTILT',
+  status enum('GODKENDT','ANMODET') NOT NULL DEFAULT 'ANMODET',
   linked_system_kode varchar(255) NOT NULL,
   arbejdsfunktion_kode varchar(255) NOT NULL,
   PRIMARY KEY (id)

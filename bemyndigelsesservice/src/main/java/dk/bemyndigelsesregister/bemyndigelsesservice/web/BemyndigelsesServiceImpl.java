@@ -81,7 +81,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         Collection<Delegation> delegations = new ArrayList<>();
 
         for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
-            if (createDelegation.getState().equals(State.BESTILT)) {
+            if (createDelegation.getState().equals(State.ANMODET)) {
                 authorizeOperationForCpr("createDelegation", "IDCard CPR was different from both DelegatorCpr and DelegateeCpr", createDelegation.getDelegatorCpr(), createDelegation.getDelegateeCpr());
             } else {
                 authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
