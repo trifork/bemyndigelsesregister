@@ -36,7 +36,7 @@ public class NspManagerFtpTest {
     @Before
     public void setUp() throws Exception {
         ftpServer = new FakeFtpServer();
-        ftpServer.setServerControlPort(2121);
+        ftpServer.setServerControlPort(21213);
         ftpServer.addUserAccount(new UserAccount("nsp", "password", "/"));
 
         FileSystem fileSystem = new UnixFakeFileSystem();
@@ -50,7 +50,7 @@ public class NspManagerFtpTest {
 
         nspManagerFtp.ftpUsername = "nsp";
         nspManagerFtp.ftpPassword = "password";
-        nspManagerFtp.ftpPort = 2121;
+        nspManagerFtp.ftpPort = 21213;
     }
 
     @Test

@@ -21,7 +21,7 @@ class ExportToFtpITCase {
 
     @Before
     public void setUp() {
-        ftpServer.serverControlPort = 2121
+        ftpServer.serverControlPort = 21213
         ftpServer.addUserAccount(new UserAccount("bemyndigelse", "BEMYNDIGELSE", "/"))
 
         FileSystem fileSystem = new UnixFakeFileSystem()
