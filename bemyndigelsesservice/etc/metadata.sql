@@ -6,12 +6,12 @@ LOCK TABLES `rettighed` WRITE;
 DELETE FROM rettighed;
 UNLOCK TABLES;
 
-LOCK TABLES `linked_system` WRITE;
-DELETE FROM `linked_system`;
-UNLOCK TABLES;
-
 LOCK TABLES `arbejdsfunktion` WRITE;
 DELETE FROM `arbejdsfunktion`;
+UNLOCK TABLES;
+
+LOCK TABLES `linked_system` WRITE;
+DELETE FROM `linked_system`;
 UNLOCK TABLES;
 
 LOCK TABLES `domaene` WRITE;
