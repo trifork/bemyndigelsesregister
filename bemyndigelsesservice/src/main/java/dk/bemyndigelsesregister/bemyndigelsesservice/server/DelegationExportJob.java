@@ -53,7 +53,7 @@ public class DelegationExportJob {
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
     public void startExport() throws IOException {
         if (Boolean.valueOf(jobEnabled)) {
-            logger.info("DelegationExport job started");
+            logger.info("DelegationExport job begun");
 
             systemRolePermissionMap = null;
             SystemVariable lastRun = systemVariableDao.getByName("lastRun");
