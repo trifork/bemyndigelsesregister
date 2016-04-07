@@ -6,48 +6,28 @@ import java.io.*;
 import java.sql.*;
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Migration of delegations from old data structure to new
  */
 public class Migration {
     private static Logger logger = Logger.getLogger(Migration.class);
-    private static final String FILENAME_PREFIX = "bem_migration_";
 
     private enum Command {find, migrate, all}
 
-    private Properties properties;
-    private Date conversionDate;
-    private Date changedSinceDate;
+    private MigrationSettings settings;
 
     public static void main(String[] args) {
         logger.info("---------------------");
         logger.info("BEM 2 migration start");
         logger.info("---------------------");
 
-        Properties properties = new Properties();
-        try {
-            InputStream in = Migration.class.getResourceAsStream("/migration.properties");
-            properties.load(in);
-            in.close();
-        } catch (Exception e) {
-            logger.error("Error loading properties from file", e);
-            System.exit(-1);
-        }
-
-        try {
-            Class.forName(properties.getProperty("jdbc.driver"));
-        } catch (Exception e) {
-            logger.error("Error loading MySQL driver", e);
-            System.exit(-1);
-        }
-
         if (args != null && args.length > 0) {
             Command command = Command.valueOf(args[0]);
             if (command != null) {
-                new Migration(command, properties);
+                new Migration(command);
                 System.exit(0);
             }
         }
@@ -55,18 +35,23 @@ public class Migration {
         System.exit(-1);
     }
 
-    private Migration(Command command, Properties properties) {
-        this.properties = properties;
+    private Migration(Command command) {
+        try {
+            settings = new MigrationSettings();
+            logger.info(settings);
+        } catch (IOException e) {
+            logger.error("Error loading properties from file", e);
+            System.exit(-1);
+        }
 
         try {
-            changedSinceDate = getPropertyAsDate("changedSinceDate");
-            logger.info("changedSinceDate=" + changedSinceDate);
+            Class.forName(settings.getJdbcDriver());
+        } catch (Exception e) {
+            logger.error("Error loading MySQL driver", e);
+            System.exit(-1);
+        }
 
-            conversionDate = getPropertyAsDate("conversionDate");
-            if (conversionDate == null)
-                conversionDate = new Date(System.currentTimeMillis());
-            logger.info("conversionDate=" + conversionDate);
-
+        try {
             switch (command) {
                 case find:
                     dumpDelegationKeys();
@@ -86,15 +71,6 @@ public class Migration {
         }
     }
 
-    private Date getPropertyAsDate(String property) {
-        String value = properties.getProperty(property);
-        try {
-            return new Date(new SimpleDateFormat("yyyy-MM-dd").parse(value).getTime());
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
 
 // ------------------------------------------------------------------------------------------------------------------
 // dump to file
@@ -102,8 +78,7 @@ public class Migration {
     private void dumpDelegationKeys() throws SQLException, ParseException, IOException {
         List<Key> list = findKeysOfChangedDelegations();
         if (list != null && !list.isEmpty()) {
-            String filename = FILENAME_PREFIX + properties.getProperty("changedSinceDate") + ".csv";
-            dumpDelegationKeysToFile(filename, list);
+            dumpDelegationKeysToFile(settings.getFilename(), list);
         }
     }
 
@@ -115,9 +90,9 @@ public class Migration {
         try {
             con = getConnection();
             stmt = con.prepareStatement("SELECT DISTINCT linked_system_kode, arbejdsfunktion_kode, bemyndigende_cpr, bemyndigede_cpr, bemyndigede_cvr, status FROM bemyndigelse.bemyndigelse WHERE sidst_modificeret >= ? ORDER BY linked_system_kode, arbejdsfunktion_kode, bemyndigende_cpr, bemyndigede_cpr, bemyndigede_cvr, status");
-            stmt.setDate(1, changedSinceDate);
+            stmt.setDate(1, settings.getChangedSinceDate());
 
-            logger.info("Fetching keys of delegations changed since " + changedSinceDate);
+            logger.info("Fetching keys of delegations changed since " + settings.getChangedSinceDate());
             rs = stmt.executeQuery();
 
             List<Key> list = new LinkedList<>();
@@ -163,28 +138,55 @@ public class Migration {
 // migration
 
     private void migrateDelegations() throws IOException, SQLException {
-        String filename = FILENAME_PREFIX + properties.getProperty("changedSinceDate") + ".csv";
-        File file = new File(filename);
+        File file = new File(settings.getFilename());
 
         logger.info("Processing delegation keys in file " + file.getAbsolutePath());
+
         LineNumberReader reader = null;
+
+        // count lines
+        int totalKeys = 0;
+        try {
+            reader = new LineNumberReader(new BufferedReader(new FileReader(file)));
+            String line = reader.readLine();
+            while (line != null) {
+                totalKeys += 1;
+                line = reader.readLine();
+            }
+        } finally {
+            if (reader != null) {
+                reader.close();
+                reader = null;
+            }
+        }
+
+        logger.info("  No. of keys: " + totalKeys);
+        if (settings.getSkipKeys() > 0)
+            logger.info("  Skipping " + settings.getSkipKeys() + " keys");
+
+
         Connection connection = null;
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
             reader = new LineNumberReader(new BufferedReader(new FileReader(file)));
 
+            int lineNo = 0;
             String line = reader.readLine();
             while (line != null) {
-                if (!line.isEmpty()) {
-                    Key key = new Key(line);
-                    List<Delegation> oldDelegations = getOldDelegations(connection, key);
-                    if (oldDelegations != null && !oldDelegations.isEmpty()) {
-                        List<Delegation> newDelegations = determineNewDelegations(key, oldDelegations);
-                        if (newDelegations != null && !newDelegations.isEmpty()) {
-                            clearPreviousNewDelegations(connection, key);
-                            saveNewDelegations(connection, key, newDelegations);
-                            connection.commit();
+                lineNo++;
+                if (lineNo >= settings.getSkipKeys()) {
+                    if (!line.isEmpty()) {
+                        logger.info(lineNo + "/" + totalKeys + " ---------------------------------------------------------------------------------- ");
+                        Key key = new Key(line);
+                        List<Delegation> oldDelegations = getOldDelegations(connection, key);
+                        if (oldDelegations != null && !oldDelegations.isEmpty()) {
+                            List<Delegation> newDelegations = determineNewDelegations(key, oldDelegations);
+                            if (newDelegations != null && !newDelegations.isEmpty()) {
+                                clearPreviousNewDelegations(connection, key);
+                                saveNewDelegations(connection, key, newDelegations);
+                                connection.commit();
+                            }
                         }
                     }
                 }
@@ -238,7 +240,6 @@ public class Migration {
                 delegations.add(d);
             }
 
-            logger.info("-------------------------------------------------------------------------------------------");
             logger.info("  " + key + ": " + delegations.size() + " delegations"); // valid after " + conversionDate);
             for (Delegation d : delegations) {
                 logger.info("    " + d.toString());
@@ -339,14 +340,27 @@ public class Migration {
                 Set<String> permissions = map.get(oldDate);
                 if (permissions != null && !permissions.isEmpty()) {
                     newDelegation.nye_rettighed_koder = new LinkedList<>(permissions);
-                    newDelegation.gyldig_fra = oldDate;
-                    newDelegation.gyldig_til = d;
-                    newDelegation.sidst_modificeret = conversionDate;
+                    newDelegation.sidst_modificeret = settings.getConversionDate();
                     newDelegation.sidst_modificeret_af = "konvertering";
                     newDelegation.kode = UUID.randomUUID().toString();
 
-                    newDelegations.add(newDelegation);
+                    // fix date interval
+                    newDelegation.gyldig_fra = oldDate;
+                    Date toDate = d;
+                    if (d.after(settings.getConversionDate())) { // in future?
+                        long diff = d.getTime() - settings.getConversionDate().getTime();
+                        long daysInFuture = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                        if (daysInFuture > settings.getMaximumFutureDays()) {
+                            Calendar cal = GregorianCalendar.getInstance();
+                            cal.setTime(settings.getConversionDate());
+                            cal.add(Calendar.DAY_OF_YEAR, settings.getMaximumFutureDays());
+                            toDate = new Date(cal.getTimeInMillis());
+                            logger.debug("  Changed toDate from " + d + " to " + toDate);
+                        }
+                    }
+                    newDelegation.gyldig_til = toDate;
 
+                    newDelegations.add(newDelegation);
                     logger.info("  NEW Delegation: " + newDelegation);
                 }
             }
@@ -469,7 +483,7 @@ public class Migration {
 
     private Connection getConnection() throws SQLException {
         Connection con;
-        con = DriverManager.getConnection(properties.getProperty("jdbc.url"), properties.getProperty("jdbc.username"), properties.getProperty("jdbc.password"));
+        con = DriverManager.getConnection(settings.getJdbcUrl(), settings.getJdbcUsername(), settings.getJdbcPassword());
         return con;
     }
 
