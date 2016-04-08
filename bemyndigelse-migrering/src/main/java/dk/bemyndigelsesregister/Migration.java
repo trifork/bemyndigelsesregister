@@ -177,7 +177,7 @@ public class Migration {
                 lineNo++;
                 if (lineNo >= settings.getSkipKeys()) {
                     if (!line.isEmpty()) {
-                        logger.info(lineNo + "/" + totalKeys + " ---------------------------------------------------------------------------------- ");
+                        logger.info(lineNo + "/" + totalKeys);
                         Key key = new Key(line);
                         List<Delegation> oldDelegations = getOldDelegations(connection, key);
                         if (oldDelegations != null && !oldDelegations.isEmpty()) {
@@ -240,9 +240,9 @@ public class Migration {
                 delegations.add(d);
             }
 
-            logger.info("  " + key + ": " + delegations.size() + " delegations"); // valid after " + conversionDate);
+            logger.debug("  " + key + ": " + delegations.size() + " delegations"); // valid after " + conversionDate);
             for (Delegation d : delegations) {
-                logger.info("    " + d.toString());
+                logger.debug("    " + d.toString());
             }
 
             return delegations;
@@ -276,7 +276,11 @@ public class Migration {
                 logger.debug("  Removed empty delegation " + d);
         }
 
-        // 2. Merge alle A, B hvor A.tildato = B.fradato eller A.tildato = B.fradato - 1 og A.kode = B.kode til C, hvor C.fradato = A.fradato og C.tildato = B.tildato
+        // 2. Merge alle A, B hvor og A.kode = B.kode og
+        //    - A begynder før B og slutter i B
+        //    -   eller
+        //    - A er helt indeholdt i B
+        //    til C, hvor C har den mindste fradato og største tildato af A og B
         boolean change = true;
         while (change) {
             change = false;
@@ -336,38 +340,45 @@ public class Migration {
         Date oldDate = null;
         for (Date d : sortedDates) {
             if (oldDate != null) {
-                Delegation newDelegation = new Delegation(key);
-                Set<String> permissions = map.get(oldDate);
-                if (permissions != null && !permissions.isEmpty()) {
-                    newDelegation.nye_rettighed_koder = new LinkedList<>(permissions);
-                    newDelegation.sidst_modificeret = settings.getConversionDate();
-                    newDelegation.sidst_modificeret_af = "konvertering";
-                    newDelegation.kode = UUID.randomUUID().toString();
+                if (daysInFuture(oldDate) <= settings.getMinimumFutureDays()) {
+                    Delegation newDelegation = new Delegation(key);
+                    Set<String> permissions = map.get(oldDate);
+                    if (permissions != null && !permissions.isEmpty()) {
+                        newDelegation.nye_rettighed_koder = new LinkedList<>(permissions);
+                        newDelegation.sidst_modificeret = settings.getConversionDate();
+                        newDelegation.sidst_modificeret_af = "konvertering";
+                        newDelegation.kode = UUID.randomUUID().toString();
 
-                    // fix date interval
-                    newDelegation.gyldig_fra = oldDate;
-                    Date toDate = d;
-                    if (d.after(settings.getConversionDate())) { // in future?
-                        long diff = d.getTime() - settings.getConversionDate().getTime();
-                        long daysInFuture = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                        if (daysInFuture > settings.getMaximumFutureDays()) {
-                            Calendar cal = GregorianCalendar.getInstance();
-                            cal.setTime(settings.getConversionDate());
-                            cal.add(Calendar.DAY_OF_YEAR, settings.getMaximumFutureDays());
-                            toDate = new Date(cal.getTimeInMillis());
-                            logger.debug("  Changed toDate from " + d + " to " + toDate);
+                        // fix date interval
+                        newDelegation.gyldig_fra = oldDate;
+                        Date toDate = d;
+                        if (d.after(settings.getConversionDate())) { // in future?
+                            if (daysInFuture(d) > settings.getMaximumFutureDays()) {
+                                Calendar cal = GregorianCalendar.getInstance();
+                                cal.setTime(settings.getConversionDate());
+                                cal.add(Calendar.DAY_OF_YEAR, settings.getMaximumFutureDays());
+                                toDate = new Date(cal.getTimeInMillis());
+                                logger.debug("  Truncated toDate " + d + " to " + toDate);
+                            }
                         }
-                    }
-                    newDelegation.gyldig_til = toDate;
+                        newDelegation.gyldig_til = toDate;
 
-                    newDelegations.add(newDelegation);
-                    logger.info("  NEW Delegation: " + newDelegation);
+                        newDelegations.add(newDelegation);
+                        logger.info("  NEW " + newDelegation);
+                    }
                 }
+                else
+                    logger.debug("  Dropped creating delegations starting " + oldDate);
             }
             oldDate = d;
         }
 
         return newDelegations;
+    }
+
+    private long daysInFuture(Date date) {
+        long diff = date.getTime() - settings.getConversionDate().getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
 
@@ -380,7 +391,7 @@ public class Migration {
      */
     private void clearPreviousNewDelegations(Connection connection, Key key) throws SQLException {
         PreparedStatement stmt = null;
-        ResultSet rs = null;
+        ResultSet rs;
         try {
             stmt = connection.prepareStatement("SELECT id FROM bemyndigelse.bemyndigelse20" +
                     " WHERE linked_system_kode = ? AND arbejdsfunktion_kode = ? AND bemyndigende_cpr = ? AND bemyndigede_cpr = ? AND bemyndigede_cvr = ? AND status = ?");
@@ -448,7 +459,6 @@ public class Migration {
                 ResultSet rs = stmt.getGeneratedKeys();
                 if (rs.next()) {
                     id = rs.getLong(1);
-
                 } else {
                     throw new SQLException("Creating delegation failed, no ID obtained.");
                 }
