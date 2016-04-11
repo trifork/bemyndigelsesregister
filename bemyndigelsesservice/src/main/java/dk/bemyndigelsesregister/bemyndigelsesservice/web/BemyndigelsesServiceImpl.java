@@ -146,7 +146,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         // return the result
         final GetDelegationsResponse response = new GetDelegationsResponse();
         for (Delegation delegation : delegations) {
-            response.getDelegation().add(typeMapper.toDelegationType(delegation));
+            if(delegation.getEffectiveTo() == null || delegation.getEffectiveFrom().isBefore(delegation.getEffectiveTo()))
+                response.getDelegation().add(typeMapper.toDelegationType(delegation));
         }
         return response;
     }

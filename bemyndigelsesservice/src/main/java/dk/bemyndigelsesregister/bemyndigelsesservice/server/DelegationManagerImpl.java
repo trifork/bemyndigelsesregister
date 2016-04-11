@@ -56,7 +56,7 @@ public class DelegationManagerImpl implements DelegationManager {
 
             for (Delegation delegation : existingDelegations) {
                 if (state == State.GODKENDT || state == State.ANMODET && delegation.getState() == State.ANMODET) { // determine if existing should be "closed" - depends on state, approved closes existing approved/requested, but requested only closes existing requested
-                    DateTime end = delegation.getEffectiveFrom().isAfter(validFrom) ? delegation.getEffectiveFrom() : validFrom;
+                    DateTime end = validFrom; // delegation.getEffectiveFrom().isAfter(validFrom) ? delegation.getEffectiveFrom() : validFrom;
 
                     logger.debug("  Updating delegation [" + delegation + "] currently valid [" + delegation.getEffectiveFrom() + "]-[" + delegation.getEffectiveTo() + "] to end at [" + end + "]");
 
@@ -105,8 +105,6 @@ public class DelegationManagerImpl implements DelegationManager {
         if (delegatorCpr != null && !delegatorCpr.equals(delegation.getDelegatorCpr())) return null;
         if (delegateeCpr != null && !delegateeCpr.equals(delegation.getDelegateeCpr())) return null;
 
-        if (validTo.isBefore(delegation.getEffectiveFrom()))
-            throw new IllegalArgumentException("deletionDate=[" + validTo + "] must be after EffectiveFrom=" + delegation.getEffectiveFrom());
         if (validTo.isAfter(delegation.getEffectiveTo()))
             throw new IllegalArgumentException("deletionDate=[" + validTo + "] must be before EffectiveTo=" + delegation.getEffectiveTo());
 

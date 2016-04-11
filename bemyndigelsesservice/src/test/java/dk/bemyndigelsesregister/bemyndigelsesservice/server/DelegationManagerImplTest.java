@@ -41,7 +41,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     final DateTime date2 = new DateTime(2015, 1, 10, 10, 0, 0);
 
     @Test
-    public void testCreateOverlappingDelegation1() throws Exception {
+    public void testCreateOverlappingDelegation() throws Exception {
         try {
             ebeanServer.beginTransaction();
 
@@ -54,25 +54,6 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
 
             assertEquals("Først oprettede bemyndigelse skal være afsluttet på samme tidspunkt som sidst oprettede bemyndigelse starter når perioder overlapper", date2, delegation.getEffectiveTo());
-        } finally {
-            ebeanServer.endTransaction();
-        }
-    }
-
-    @Test
-    public void testCreateOverlappingDelegation2() throws Exception {
-        try {
-            ebeanServer.beginTransaction();
-
-            // create delegation valid from date1
-            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
-
-            // create delegation valid from before the first
-            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, null);
-
-            delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
-
-            assertEquals("Først oprettede bemyndigelse skal være afsluttet på samme tidspunkt som den starter", date1, delegation.getEffectiveTo());
         } finally {
             ebeanServer.endTransaction();
         }
