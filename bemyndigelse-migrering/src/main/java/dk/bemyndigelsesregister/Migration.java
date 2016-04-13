@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Migration {
     private static Logger logger = Logger.getLogger(Migration.class);
+    private static final Date FAR_FUTURE = new Date(200, 0, 1); // 2100-01-01
 
     private enum Command {find, migrate, all}
 
@@ -237,6 +238,10 @@ public class Migration {
                 d.sidst_modificeret_af = rs.getString(6);
                 d.gl_rettighed_kode = rs.getString(7);
 
+                if (d.gyldig_til == null || d.gyldig_til.after(FAR_FUTURE)) {
+                    d.gyldig_til = FAR_FUTURE;
+                }
+
                 delegations.add(d);
             }
 
@@ -265,13 +270,15 @@ public class Migration {
      * @param oldDelegations list of old delegations
      */
     private List<Delegation> determineNewDelegations(Key key, List<Delegation> oldDelegations) {
-        // algoritme
+        Date latestModifiedDate = null;
 
         // 1. Fjern alle "tomme" perioder, dvs. dem hvor fradato = tildato
         List<Delegation> list1 = new LinkedList<>();
         for (Delegation d : oldDelegations) {
             if (d.gyldig_fra.before(d.gyldig_til)) {
                 list1.add(d);
+                if(latestModifiedDate == null || d.sidst_modificeret.after(latestModifiedDate))
+                    latestModifiedDate = d.sidst_modificeret;
             } else
                 logger.debug("  Removed empty delegation " + d);
         }
@@ -345,7 +352,7 @@ public class Migration {
                     Set<String> permissions = map.get(oldDate);
                     if (permissions != null && !permissions.isEmpty()) {
                         newDelegation.nye_rettighed_koder = new LinkedList<>(permissions);
-                        newDelegation.sidst_modificeret = settings.getConversionDate();
+                        newDelegation.sidst_modificeret = latestModifiedDate;
                         newDelegation.sidst_modificeret_af = "konvertering";
                         newDelegation.kode = UUID.randomUUID().toString();
 
@@ -354,6 +361,8 @@ public class Migration {
                         Date toDate = d;
                         if (d.after(settings.getConversionDate())) { // in future?
                             if (daysInFuture(d) > settings.getMaximumFutureDays()) {
+                                newDelegation.sidst_modificeret = settings.getConversionDate();
+
                                 Calendar cal = GregorianCalendar.getInstance();
                                 cal.setTime(settings.getConversionDate());
                                 cal.add(Calendar.DAY_OF_YEAR, settings.getMaximumFutureDays());
@@ -366,8 +375,7 @@ public class Migration {
                         newDelegations.add(newDelegation);
                         logger.info("  NEW " + newDelegation);
                     }
-                }
-                else
+                } else
                     logger.debug("  Dropped creating delegations starting " + oldDate);
             }
             oldDate = d;

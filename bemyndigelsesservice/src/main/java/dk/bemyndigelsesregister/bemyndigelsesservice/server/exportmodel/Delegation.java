@@ -14,8 +14,17 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType
 public class Delegation {
+    @XmlElement(name = "kode")
+    protected String uuid;
+
+    @XmlElement(name = "bemyndigende_cpr")
+    protected String delegatorCpr;
+
     @XmlElement(name = "bemyndigede_cpr")
     protected String delegateeCpr;
+
+    @XmlElement(name = "bemyndigede_cvr")
+    protected String delegateeCvr;
 
     @XmlElement
     protected String system;
@@ -48,8 +57,11 @@ public class Delegation {
     public Delegation() {
     }
 
-    public Delegation(String delegateeCpr, String system, String status, String role, String permission, DateTime approvalDate, DateTime modifiedDate, DateTime effectiveFrom, DateTime effectiveTo) {
+    public Delegation(String uuid, String delegatorCpr, String delegateeCpr, String delegateeCvr, String system, String status, String role, String permission, DateTime approvalDate, DateTime modifiedDate, DateTime effectiveFrom, DateTime effectiveTo) {
+        this.uuid = uuid;
+        this.delegatorCpr = delegatorCpr;
         this.delegateeCpr = delegateeCpr;
+        this.delegateeCvr = delegateeCvr;
         this.system = system;
         this.status = status;
         this.role = role;

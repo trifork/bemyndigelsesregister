@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
@@ -32,7 +33,7 @@ public class MigrationSettings {
         InputStream in = null;
         try {
             Properties properties = new Properties();
-            in = Migration.class.getResourceAsStream("/migration.properties");
+            in = new FileInputStream("migration.properties");
             properties.load(in);
             in.close();
 
@@ -122,6 +123,7 @@ public class MigrationSettings {
                 "changedSinceDate=" + changedSinceDate + '\n' +
                 "conversionDate=" + conversionDate + '\n' +
                 "skipKeys=" + skipKeys + '\n' +
-                "minimumFutureDays=" + minimumFutureDays;
+                "minimumFutureDays=" + minimumFutureDays + "\n" +
+                "maximumFutureDays=" + maximumFutureDays;
     }
 }

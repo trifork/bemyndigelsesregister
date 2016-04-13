@@ -1,7 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +31,11 @@ public class Delegations {
         if (delegations == null)
             delegations = new LinkedList<>();
 
-        for (String permissionCode : permissionCodes)
-            delegations.add(new Delegation(delegation.getDelegateeCpr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), permissionCode, delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo()));
+        int n = 0;
+        for (String permissionCode : permissionCodes) {
+            String uuid = String.format("%s-%03d", delegation.getCode(), ++n); // create a unique id for each exported "Bemyndigelse" by concatenating delegation uuid and an incremental number
+            delegations.add(new Delegation(uuid, delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), permissionCode, delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo()));
+        }
 
         recordCount = delegations.size();
     }
