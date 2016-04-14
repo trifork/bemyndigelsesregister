@@ -193,8 +193,8 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
         try {
             ebeanServer.beginTransaction();
 
-            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
-            manager.deleteDelegation(delegatorCpr, null, delegation.getCode(), date0); // should fail before date0 is before date1
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+            manager.deleteDelegation(delegatorCpr, null, delegation.getCode(), date2); // should fail because date2 is after date1
         } finally {
             ebeanServer.endTransaction();
         }
