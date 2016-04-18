@@ -90,7 +90,8 @@ public class Migration {
 
         try {
             con = getConnection();
-            stmt = con.prepareStatement("SELECT DISTINCT linked_system_kode, arbejdsfunktion_kode, bemyndigende_cpr, bemyndigede_cpr, bemyndigede_cvr, status FROM bemyndigelse.bemyndigelse WHERE sidst_modificeret >= ? ORDER BY linked_system_kode, arbejdsfunktion_kode, bemyndigende_cpr, bemyndigede_cpr, bemyndigede_cvr, status");
+
+            stmt = con.prepareStatement("SELECT DISTINCT linked_system_id, arbejdsfunktion_id, bemyndigende_cpr, bemyndigede_cpr, bemyndigede_cvr, status FROM bemyndigelse WHERE sidst_modificeret >= ? ORDER BY linked_system_id, arbejdsfunktion_id, bemyndigende_cpr, bemyndigede_cpr, bemyndigede_cvr, status");
             stmt.setDate(1, settings.getChangedSinceDate());
 
             logger.info("Fetching keys of delegations changed since " + settings.getChangedSinceDate());
@@ -99,7 +100,7 @@ public class Migration {
             List<Key> list = new LinkedList<>();
 
             while (rs.next()) {
-                Key key = new Key(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+                Key key = new Key(rs.getLong(1), rs.getLong(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
                 list.add(key);
             }
 
@@ -212,12 +213,17 @@ public class Migration {
         ResultSet rs = null;
 
         try {
-            stmt = connection.prepareStatement("SELECT kode, godkendelsesdato, gyldig_fra, gyldig_til, sidst_modificeret, sidst_modificeret_af, rettighed_kode" +
-                    " FROM bemyndigelse.bemyndigelse" +
-                    " WHERE linked_system_kode = ? AND arbejdsfunktion_kode = ? AND bemyndigende_cpr = ? AND bemyndigede_cpr = ? AND status = ? AND bemyndigede_cvr " + (key.bemyndigede_cvr == null ? "IS NULL" : "= ?"));
+            String sql = "SELECT b.kode, b.godkendelsesdato, b.gyldig_fra, b.gyldig_til, b.sidst_modificeret, b.sidst_modificeret_af, r.kode, a.kode, s.kode" +
+                    " FROM bemyndigelse b" +
+                    " JOIN arbejdsfunktion a ON a.id = b.arbejdsfunktion_id" +
+                    " JOIN linked_system s ON s.id = b.linked_system_id" +
+                    " JOIN rettighed r ON r.id = b.rettighed_id" +
+                    " WHERE b.linked_system_id = ? AND b.arbejdsfunktion_id = ? AND bemyndigende_cpr = ? AND bemyndigede_cpr = ? AND status = ? AND bemyndigede_cvr " + (key.bemyndigede_cvr == null ? "IS NULL" : "= ?");
+
+            stmt = connection.prepareStatement(sql);
             // + " AND (gyldig_til IS NULL OR gyldig_til > ?)");
-            stmt.setString(1, key.linked_system_kode);
-            stmt.setString(2, key.arbejdsfunktion_kode);
+            stmt.setLong(1, key.linked_system_id);
+            stmt.setLong(2, key.arbejdsfunktion_id);
             stmt.setString(3, key.bemyndigende_cpr);
             stmt.setString(4, key.bemyndigede_cpr);
             stmt.setString(5, key.status);
@@ -237,6 +243,8 @@ public class Migration {
                 d.sidst_modificeret = rs.getDate(5);
                 d.sidst_modificeret_af = rs.getString(6);
                 d.gl_rettighed_kode = rs.getString(7);
+                d.arbejdsfunktion_kode = rs.getString(8);
+                d.linked_system_kode = rs.getString(9);
 
                 if (d.gyldig_til == null || d.gyldig_til.after(FAR_FUTURE)) {
                     d.gyldig_til = FAR_FUTURE;
@@ -271,13 +279,20 @@ public class Migration {
      */
     private List<Delegation> determineNewDelegations(Key key, List<Delegation> oldDelegations) {
         Date latestModifiedDate = null;
+        String linked_system_kode = null;
+        String arbejdsfunktion_kode = null;
+
 
         // 1. Fjern alle "tomme" perioder, dvs. dem hvor fradato = tildato
         List<Delegation> list1 = new LinkedList<>();
         for (Delegation d : oldDelegations) {
+            if (linked_system_kode == null)
+                linked_system_kode = d.linked_system_kode;
+            if (arbejdsfunktion_kode == null)
+                arbejdsfunktion_kode = d.arbejdsfunktion_kode;
             if (d.gyldig_fra.before(d.gyldig_til)) {
                 list1.add(d);
-                if(latestModifiedDate == null || d.sidst_modificeret.after(latestModifiedDate))
+                if (latestModifiedDate == null || d.sidst_modificeret.after(latestModifiedDate))
                     latestModifiedDate = d.sidst_modificeret;
             } else
                 logger.debug("  Removed empty delegation " + d);
@@ -355,6 +370,8 @@ public class Migration {
                         newDelegation.sidst_modificeret = latestModifiedDate;
                         newDelegation.sidst_modificeret_af = "konvertering";
                         newDelegation.kode = UUID.randomUUID().toString();
+                        newDelegation.linked_system_kode = linked_system_kode;
+                        newDelegation.arbejdsfunktion_kode = arbejdsfunktion_kode;
 
                         // fix date interval
                         newDelegation.gyldig_fra = oldDate;
@@ -401,14 +418,20 @@ public class Migration {
         PreparedStatement stmt = null;
         ResultSet rs;
         try {
-            stmt = connection.prepareStatement("SELECT id FROM bemyndigelse.bemyndigelse20" +
-                    " WHERE linked_system_kode = ? AND arbejdsfunktion_kode = ? AND bemyndigende_cpr = ? AND bemyndigede_cpr = ? AND bemyndigede_cvr = ? AND status = ?");
-            stmt.setString(1, key.linked_system_kode);
-            stmt.setString(2, key.arbejdsfunktion_kode);
+
+            String sql = "SELECT b.id FROM bemyndigelse20 b" +
+                    " WHERE b.linked_system_kode = (select s.kode from linked_system s where s.id = ?)" +
+                    " AND b.arbejdsfunktion_kode = (select a.kode from arbejdsfunktion a where a.id = ?)" +
+                    " AND b.bemyndigende_cpr = ? AND b.bemyndigede_cpr = ? AND b.status = ?" +
+                    " AND bemyndigede_cvr " + (key.bemyndigede_cvr == null ? "IS NULL" : "= ?");
+            stmt = connection.prepareStatement(sql);
+            stmt.setLong(1, key.linked_system_id);
+            stmt.setLong(2, key.arbejdsfunktion_id);
             stmt.setString(3, key.bemyndigende_cpr);
             stmt.setString(4, key.bemyndigede_cpr);
-            stmt.setString(5, key.bemyndigede_cvr);
-            stmt.setString(6, key.status);
+            stmt.setString(5, key.status);
+            if (key.bemyndigede_cvr != null)
+                stmt.setString(6, key.bemyndigede_cvr);
 
             StringBuilder ids = new StringBuilder();
             rs = stmt.executeQuery();
@@ -422,12 +445,12 @@ public class Migration {
             stmt = null;
 
             if (ids.length() > 0) {
-                stmt = connection.prepareStatement("DELETE FROM bemyndigelse.bemyndigelse20_rettighed WHERE bemyndigelse20_id IN (" + ids + ")");
+                stmt = connection.prepareStatement("DELETE FROM bemyndigelse20_rettighed WHERE bemyndigelse20_id IN (" + ids + ")");
                 stmt.executeUpdate();
                 stmt.close();
                 stmt = null;
 
-                stmt = connection.prepareStatement("DELETE FROM bemyndigelse.bemyndigelse20 WHERE id IN (" + ids + ")");
+                stmt = connection.prepareStatement("DELETE FROM bemyndigelse20 WHERE id IN (" + ids + ")");
                 stmt.executeUpdate();
             }
         } finally {
@@ -447,8 +470,8 @@ public class Migration {
                 stmt = connection.prepareStatement("INSERT INTO bemyndigelse.bemyndigelse20 (linked_system_kode, arbejdsfunktion_kode, bemyndigende_cpr, bemyndigede_cpr, bemyndigede_cvr, status, kode, godkendelsesdato, gyldig_fra, gyldig_til, versionsid, sidst_modificeret, sidst_modificeret_af)" +
                         " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-                stmt.setString(1, key.linked_system_kode);
-                stmt.setString(2, key.arbejdsfunktion_kode);
+                stmt.setString(1, d.linked_system_kode);
+                stmt.setString(2, d.arbejdsfunktion_kode);
                 stmt.setString(3, key.bemyndigende_cpr);
                 stmt.setString(4, key.bemyndigede_cpr);
                 stmt.setString(5, key.bemyndigede_cvr);
@@ -506,16 +529,16 @@ public class Migration {
     }
 
     private class Key {
-        String linked_system_kode;
-        String arbejdsfunktion_kode;
+        long linked_system_id;
+        long arbejdsfunktion_id;
         String bemyndigende_cpr;
         String bemyndigede_cpr;
         String bemyndigede_cvr;
         String status;
 
-        public Key(String linked_system_kode, String arbejdsfunktion_kode, String bemyndigende_cpr, String bemyndigede_cpr, String bemyndigede_cvr, String status) {
-            this.linked_system_kode = linked_system_kode;
-            this.arbejdsfunktion_kode = arbejdsfunktion_kode;
+        public Key(long linked_system_id, long arbejdsfunktion_id, String bemyndigende_cpr, String bemyndigede_cpr, String bemyndigede_cvr, String status) {
+            this.linked_system_id = linked_system_id;
+            this.arbejdsfunktion_id = arbejdsfunktion_id;
             this.bemyndigende_cpr = bemyndigende_cpr;
             this.bemyndigede_cpr = bemyndigede_cpr;
             this.bemyndigede_cvr = bemyndigede_cvr;
@@ -524,8 +547,8 @@ public class Migration {
 
         public Key(String line) {
             String[] items = line.split(";");
-            this.linked_system_kode = items[0];
-            this.arbejdsfunktion_kode = items[1];
+            this.linked_system_id = Long.valueOf(items[0]);
+            this.arbejdsfunktion_id = Long.valueOf(items[1]);
             this.bemyndigende_cpr = items[2];
             this.bemyndigede_cpr = items[3];
             this.bemyndigede_cvr = (items[4] != null && !items[4].isEmpty()) ? items[4] : null;
@@ -539,33 +562,30 @@ public class Migration {
 
             Key key = (Key) o;
 
-            if (linked_system_kode != null ? !linked_system_kode.equals(key.linked_system_kode) : key.linked_system_kode != null)
+            if (linked_system_id != key.linked_system_id) return false;
+            if (arbejdsfunktion_id != key.arbejdsfunktion_id) return false;
+            if (!bemyndigende_cpr.equals(key.bemyndigende_cpr)) return false;
+            if (!bemyndigede_cpr.equals(key.bemyndigede_cpr)) return false;
+            if (bemyndigede_cvr != null ? !bemyndigede_cvr.equals(key.bemyndigede_cvr) : key.bemyndigede_cvr != null)
                 return false;
-            if (arbejdsfunktion_kode != null ? !arbejdsfunktion_kode.equals(key.arbejdsfunktion_kode) : key.arbejdsfunktion_kode != null)
-                return false;
-            if (bemyndigende_cpr != null ? !bemyndigende_cpr.equals(key.bemyndigende_cpr) : key.bemyndigende_cpr != null)
-                return false;
-            if (bemyndigede_cpr != null ? !bemyndigede_cpr.equals(key.bemyndigede_cpr) : key.bemyndigede_cpr != null)
-                return false;
-            if (!bemyndigede_cvr.equals(key.bemyndigede_cvr)) return false;
-            return status != null ? status.equals(key.status) : key.status == null;
+            return status.equals(key.status);
 
         }
 
         @Override
         public int hashCode() {
-            int result = linked_system_kode != null ? linked_system_kode.hashCode() : 0;
-            result = 31 * result + (arbejdsfunktion_kode != null ? arbejdsfunktion_kode.hashCode() : 0);
-            result = 31 * result + (bemyndigende_cpr != null ? bemyndigende_cpr.hashCode() : 0);
-            result = 31 * result + (bemyndigede_cpr != null ? bemyndigede_cpr.hashCode() : 0);
-            result = 31 * result + bemyndigede_cvr.hashCode();
-            result = 31 * result + (status != null ? status.hashCode() : 0);
+            int result = (int) (linked_system_id ^ (linked_system_id >>> 32));
+            result = 31 * result + (int) (arbejdsfunktion_id ^ (arbejdsfunktion_id >>> 32));
+            result = 31 * result + bemyndigende_cpr.hashCode();
+            result = 31 * result + bemyndigede_cpr.hashCode();
+            result = 31 * result + (bemyndigede_cvr != null ? bemyndigede_cvr.hashCode() : 0);
+            result = 31 * result + status.hashCode();
             return result;
         }
 
         @Override
         public String toString() {
-            return linked_system_kode + ';' + arbejdsfunktion_kode + ';' + bemyndigende_cpr + ';' + bemyndigede_cpr + ';' + (bemyndigede_cvr != null ? bemyndigede_cvr : "") + ';' + status;
+            return linked_system_id + ";" + arbejdsfunktion_id + ";" + bemyndigende_cpr + ";" + bemyndigede_cpr + ";" + (bemyndigede_cvr != null ? bemyndigede_cvr : "") + ";" + status;
         }
     }
 
@@ -580,6 +600,8 @@ public class Migration {
         String sidst_modificeret_af;
         String gl_rettighed_kode;
         List<String> nye_rettighed_koder;
+        String arbejdsfunktion_kode;
+        String linked_system_kode;
 
         public Delegation(Key key) {
             this.key = key;
