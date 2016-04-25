@@ -180,7 +180,7 @@ public class SOSIUtil {
         props.setProperty(SOSIFactory.PROPERTYNAME_SOSI_VALIDATE_ENHANCED, "false");
         props.setProperty(SOSIFactory.PROPERTYNAME_SOSI_VALIDATE, "false");
         
-        SOSIFederation federation = new SOSIFederation(props);
+        Federation federation = new SOSITestFederation(props);
         ClasspathCredentialVault vault = new ClasspathCredentialVault(props, "test_voces1.jks", "Test1234");
         SOSIFactory factory = new SOSIFactory(federation, vault, props);
 

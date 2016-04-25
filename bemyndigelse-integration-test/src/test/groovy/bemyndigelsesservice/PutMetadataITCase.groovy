@@ -1,21 +1,28 @@
 package bemyndigelsesservice
 
-import org.junit.Ignore
 import org.junit.Test
 import shared.WebServiceSupport
 
 class PutMetadataITCase extends WebServiceSupport {
 
-    @Ignore
     @Test
-    public void willAllowWhitelistedSystemsToRead() throws Exception {
-        def response = send("hentMetadata") {
-            "bms:HentMetadataRequest" {
-                "Domaene"('trifork-test')
-                "System"('testsys')
+    public void willAllowWhitelistedSystemsToWrite() throws Exception {
+        def response = sendAsSystem("PutMetadata") {
+            "bms20160101:PutMetadataRequest" {
+                "Domain"('trifork-test')
+                "SystemId"('testsys')
+                "SystemLongName"("'Trifork testsystem")
+                "Role" {
+                    "RoleId"('Laege')
+                    "RoleDescription"('En praktiserende læge')
+                }
+                "Permission" {
+                    "PermissionId"('Read')
+                    "PermissionDescription"('Læse i journal')
+                }
             }
         }
         assert response
-        assert 1 == response.HentMetadataResponse.Arbejdsfunktioner.size()
+        assert null != response.PutMetadataResponse
     }
 }

@@ -200,6 +200,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Override
     @Transactional
     @ResponsePayload
+    @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
         String domainCode = request.getDomain();
         if (domainCode == null || domainCode.trim().isEmpty())

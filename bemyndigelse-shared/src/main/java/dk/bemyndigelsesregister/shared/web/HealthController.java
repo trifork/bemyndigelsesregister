@@ -21,7 +21,8 @@ public class HealthController {
     String githubHome;
 
     @RequestMapping("/health")
-    public @ResponseBody String health() {
+    public @ResponseBody
+    String health() {
         return "OK";
     }
 

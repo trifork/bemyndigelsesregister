@@ -50,6 +50,14 @@ abstract class WebServiceSupport {
     }
 
     protected SOAPResponse send(String action, Closure content) {
+        return doSend(action, content, false);
+    }
+
+    protected SOAPResponse sendAsSystem(String action, Closure content) {
+        return doSend(action, content, true);
+    }
+
+    private SOAPResponse doSend(String action, Closure content, boolean asSystem) {
         SOAPClient client = getClient()
         client.send(
                 SOAPAction: "http://nsi.dk/bemyndigelse/2016/01/01/$action",
@@ -57,7 +65,7 @@ abstract class WebServiceSupport {
             envelopeAttributes 'xmlns:bms20160101': 'http://nsi.dk/bemyndigelse/2016/01/01/',
                     'xmlns:sosi': "http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
             header {
-                NodeList header = sosiUtil.getIdCard().getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
+                NodeList header = (asSystem ? sosiUtil.getSystemIdCard() : sosiUtil.getIdCard()).getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
                 for (int i = 0; i < header.item(0).childNodes.length; i++) {
                     String headerItem = header.item(0).childNodes.item(i) as String
                     assert headerItem

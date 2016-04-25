@@ -1,13 +1,13 @@
 -- The following updates the old BEM1 bemyndigelse table, but since BEM2 introduces new tables,
 -- and PROD never got any further than V6, this has now been removed
 
--- ALTER TABLE bemyndigelse ADD COLUMN linked_system_kode VARCHAR(255);
--- ALTER TABLE bemyndigelse ADD COLUMN arbejdsfunktion_kode VARCHAR(255);
--- ALTER TABLE bemyndigelse ADD COLUMN rettighed_kode VARCHAR(255);
+ALTER TABLE bemyndigelse ADD COLUMN linked_system_kode VARCHAR(255);
+ALTER TABLE bemyndigelse ADD COLUMN arbejdsfunktion_kode VARCHAR(255);
+ALTER TABLE bemyndigelse ADD COLUMN rettighed_kode VARCHAR(255);
 
--- UPDATE bemyndigelse SET linked_system_kode = (SELECT kode FROM linked_system WHERE id = linked_system_id);
--- UPDATE bemyndigelse SET arbejdsfunktion_kode = (SELECT kode FROM arbejdsfunktion WHERE id = arbejdsfunktion_id);
--- UPDATE bemyndigelse SET rettighed_kode = (SELECT kode FROM rettighed WHERE id = rettighed_id);
+UPDATE bemyndigelse SET linked_system_kode = (SELECT kode FROM linked_system WHERE id = linked_system_id);
+UPDATE bemyndigelse SET arbejdsfunktion_kode = (SELECT kode FROM arbejdsfunktion WHERE id = arbejdsfunktion_id);
+UPDATE bemyndigelse SET rettighed_kode = (SELECT kode FROM rettighed WHERE id = rettighed_id);
 
 -- ALTER TABLE bemyndigelse MODIFY linked_system_kode VARCHAR(255) NOT NULL;
 -- ALTER TABLE bemyndigelse MODIFY arbejdsfunktion_kode VARCHAR(255) NOT NULL;
