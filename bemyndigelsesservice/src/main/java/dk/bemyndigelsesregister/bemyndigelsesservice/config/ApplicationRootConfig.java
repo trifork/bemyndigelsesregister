@@ -40,6 +40,8 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     String username;
     @Value("${jdbc.password}")
     String password;
+    @Value("${flyway.enabled}")
+    String flywayEnabled;
 
     @Bean
     public static PropertyPlaceholderConfigurer configuration() {
@@ -59,10 +61,16 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
 
     @Bean(initMethod = "migrate")
     public Flyway flyway(DataSource dataSource) {
-        Flyway flyway = new Flyway();
-        flyway.setDataSource(dataSource);
-        flyway.setCleanOnValidationError(false);
-        return flyway;
+        if (Boolean.valueOf(flywayEnabled)) {
+            Flyway flyway = new Flyway();
+            flyway.setDataSource(dataSource);
+            flyway.setCleanOnValidationError(false);
+            return flyway;
+        }
+        else {
+            logger.info("Skipped FlyWay");
+            return null;
+        }
     }
 
     @Bean
