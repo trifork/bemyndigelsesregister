@@ -286,24 +286,21 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
                 if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
                     asteriskPermission = true;
-                } else {
-                    SystemPermission permission = new SystemPermission();
-                    permission.setPermissionId(c.getCode());
-                    permission.setPermissionDescription(c.getDescription());
-                    response.getPermission().add(permission);
                 }
+                SystemPermission permission = new SystemPermission();
+                permission.setPermissionId(c.getCode());
+                permission.setPermissionDescription(c.getDescription());
+                response.getPermission().add(permission);
             }
         }
-        response.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
+        response.setEnableAsteriskPermission(asteriskPermission); 
 
         if (metadata.getDelegatablePermissions() != null) {
             for (Metadata.DelegatablePermission c : metadata.getDelegatablePermissions()) {
-                if (!Metadata.ASTERISK_PERMISSION_CODE.equalsIgnoreCase(c.getPermissionCode())) {
-                    DelegatablePermission delegatablePermission = new DelegatablePermission();
-                    delegatablePermission.setRoleId(c.getRoleCode());
-                    delegatablePermission.setPermissionId(c.getPermissionCode());
-                    response.getDelegatablePermission().add(delegatablePermission);
-                }
+                DelegatablePermission delegatablePermission = new DelegatablePermission();
+                delegatablePermission.setRoleId(c.getRoleCode());
+                delegatablePermission.setPermissionId(c.getPermissionCode());
+                response.getDelegatablePermission().add(delegatablePermission);
             }
         }
 
