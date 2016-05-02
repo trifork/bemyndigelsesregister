@@ -55,16 +55,14 @@ public class Metadata {
     public List<CodeAndDescription> getUndelegatablePermissions(String roleCode) {
         List<CodeAndDescription> undelegatablePermissions = new LinkedList<>();
 
-        for (CodeAndDescription permission : permissions) {
-            boolean found = false;
-            for (DelegatablePermission delegatablePermission : delegatablePermissions) {
-                if (delegatablePermission.getRoleCode().equals(roleCode) && delegatablePermission.getPermissionCode().equals(permission.getCode())) {
-                    found = true;
-                    break;
+        for (DelegatablePermission delegatablePermission : delegatablePermissions) {
+            if (delegatablePermission.getRoleCode().equals(roleCode) && !delegatablePermission.isDelegatable()) {
+                for (CodeAndDescription permission : permissions) {
+                    if (permission.getCode().equalsIgnoreCase(delegatablePermission.getPermissionCode())) {
+                        undelegatablePermissions.add(permission);
+                        break;
+                    }
                 }
-            }
-            if (!found) {
-                undelegatablePermissions.add(permission);
             }
         }
 
@@ -79,8 +77,8 @@ public class Metadata {
         permissions.add(new CodeAndDescription(permissionCode, permissionDescription));
     }
 
-    public void addDelegatablePermission(String roleCode, String permissionCode, String permissionDescription) {
-        delegatablePermissions.add(new DelegatablePermission(roleCode, permissionCode, permissionDescription));
+    public void addDelegatablePermission(String roleCode, String permissionCode, String permissionDescription, boolean delegatable) {
+        delegatablePermissions.add(new DelegatablePermission(roleCode, permissionCode, permissionDescription, delegatable));
     }
 
     public boolean containsRole(String roleCode) {
@@ -132,11 +130,13 @@ public class Metadata {
         String roleCode;
         String permissionCode;
         String permissionDescription;
+        boolean delegatable;
 
-        public DelegatablePermission(String roleCode, String permissionCode, String permissionDescription) {
+        public DelegatablePermission(String roleCode, String permissionCode, String permissionDescription, boolean delegatable) {
             this.roleCode = roleCode;
             this.permissionCode = permissionCode;
             this.permissionDescription = permissionDescription;
+            this.delegatable = delegatable;
         }
 
         public String getRoleCode() {
@@ -149,6 +149,10 @@ public class Metadata {
 
         public String getPermissionDescription() {
             return permissionDescription;
+        }
+
+        public boolean isDelegatable() {
+            return delegatable;
         }
     }
 }

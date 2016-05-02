@@ -12,13 +12,16 @@ class PutMetadataITCase extends WebServiceSupport {
                 "Domain"('trifork-test')
                 "SystemId"('testsys')
                 "SystemLongName"("'Trifork testsystem")
-                "Role" {
-                    "RoleId"('Laege')
-                    "RoleDescription"('En praktiserende læge')
-                }
                 "Permission" {
                     "PermissionId"('Read')
                     "PermissionDescription"('Læse i journal')
+                }
+                "Role" {
+                    "RoleId"('Laege')
+                    "RoleDescription"('En praktiserende læge')
+                    "DelegatablePermissions" {
+                        "PermissionId"('Read')
+                    }
                 }
             }
         }

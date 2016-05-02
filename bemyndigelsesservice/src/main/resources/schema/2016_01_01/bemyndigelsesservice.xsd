@@ -39,6 +39,20 @@
         <xs:sequence>
             <xs:element name="RoleId" type="bms20160101:RoleId"/>
             <xs:element name="RoleDescription" type="bms20160101:RoleDescription"/>
+            <xs:element name="DelegatablePermissions" minOccurs="0" maxOccurs="1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element minOccurs="1" maxOccurs="unbounded" name="PermissionId" type="bms20160101:PermissionId"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="UndelegatablePermissions" minOccurs="0" maxOccurs="1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element minOccurs="1" maxOccurs="unbounded" name="PermissionId" type="bms20160101:PermissionId"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
@@ -46,13 +60,6 @@
         <xs:sequence>
             <xs:element name="PermissionId" type="bms20160101:PermissionId"/>
             <xs:element name="PermissionDescription" type="bms20160101:PermissionDescription"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="DelegatablePermission">
-        <xs:sequence>
-            <xs:element name="RoleId" type="bms20160101:RoleId"/>
-            <xs:element name="PermissionId" type="bms20160101:PermissionId"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -143,10 +150,9 @@
                 <xs:element name="Domain" type="bms20160101:Domain"/>
                 <xs:element name="SystemId" type="bms20160101:SystemId"/>
                 <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
-                <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
-                <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
                 <xs:element name="Permission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
-                <xs:element name="DelegatablePermission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatablePermission"/>
+                <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+                <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -171,10 +177,9 @@
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="Domain" type="bms20160101:Domain"/>
                 <xs:element name="System" type="bms20160101:DelegatingSystem"/>
-                <xs:element name="Role" minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
-                <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
                 <xs:element name="Permission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
-                <xs:element name="DelegatablePermission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatablePermission"/>
+                <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+                <xs:element name="Role" minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

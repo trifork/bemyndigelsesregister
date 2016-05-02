@@ -183,6 +183,7 @@ public class MetadataManagerImpl implements MetadataManager {
                     role.getDelegatablePermissions().add(delegatablePermission);
                     delegatablePermission.setPermission(permission);
                     permission.getDelegatablePermissions().add(delegatablePermission);
+                    delegatablePermission.setDelegatable(c.isDelegatable());
                     delegatablePermission.setLastModified(now);
                     delegatablePermission.setLastModifiedBy(getClass().getSimpleName());
 
@@ -190,6 +191,14 @@ public class MetadataManagerImpl implements MetadataManager {
 
                     delegatablePermissionChange = true;
                     logger.info("  DelegatablePermission [" + c.getRoleCode() + "]:[" + c.getPermissionCode() + "] added");
+                } else {
+                    if (delegatablePermission.isDelegatable() != c.isDelegatable()) {
+                        delegatablePermission.setDelegatable(c.isDelegatable());
+                        delegatablePermissionDao.save(delegatablePermission);
+
+                        delegatablePermissionChange = true;
+                        logger.info("  DelegatablePermission [" + c.getRoleCode() + "]:[" + c.getPermissionCode() + "] updated to delegatable=[" + c.isDelegatable() + "]");
+                    }
                 }
             }
 
@@ -244,7 +253,7 @@ public class MetadataManagerImpl implements MetadataManager {
         List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findBySystem(delegatingSystem.getId());
         if (delegatablePermissions != null)
             for (DelegatablePermission delegatablePermission : delegatablePermissions)
-                metadata.addDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode(), delegatablePermission.getPermission().getDescription());
+                metadata.addDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode(), delegatablePermission.getPermission().getDescription(), delegatablePermission.isDelegatable());
 
         return metadata;
     }
