@@ -379,11 +379,7 @@ public class Migration {
                         if (d.after(settings.getConversionDate())) { // in future?
                             if (daysInFuture(d) > settings.getMaximumFutureDays()) {
                                 newDelegation.sidst_modificeret = settings.getConversionDate();
-
-                                Calendar cal = GregorianCalendar.getInstance();
-                                cal.setTime(settings.getConversionDate());
-                                cal.add(Calendar.DAY_OF_YEAR, settings.getMaximumFutureDays());
-                                toDate = new Date(cal.getTimeInMillis());
+                                toDate = calcSpecialToDate(settings.getConversionDate(), key.bemyndigede_cpr);
                                 logger.debug("  Truncated toDate " + d + " to " + toDate);
                             }
                         }
@@ -399,6 +395,31 @@ public class Migration {
         }
 
         return newDelegations;
+    }
+
+    /**
+     * beregn 2 år fra nu + dagen efter næste fødselsdato på bemyndigede
+     *
+     * @param bemyndigede_cpr cprnr på bemyndigede
+     * @return justeret dato
+     */
+    private static Date calcSpecialToDate(Date concersionDate, String bemyndigede_cpr) {
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(concersionDate);
+        cal.add(Calendar.YEAR, 2);
+
+        long millis = cal.getTimeInMillis();
+
+        int day = Integer.valueOf(bemyndigede_cpr.substring(0, 2));
+        int month = Integer.valueOf(bemyndigede_cpr.substring(2, 4)) - 1;
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        cal.add(Calendar.DAY_OF_YEAR, 1);
+
+        if (cal.getTimeInMillis() < millis)
+            cal.add(Calendar.YEAR, 1);
+
+        return new Date(cal.getTimeInMillis());
     }
 
     private long daysInFuture(Date date) {
