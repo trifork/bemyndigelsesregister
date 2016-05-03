@@ -46,8 +46,14 @@ public class DelegationManagerImpl implements DelegationManager {
         logger.info("createDelegation started, system=[" + systemCode + "], delegatorCpr=[" + delegatorCpr + "], delegateeCpr=[" + delegateeCpr + "], delegateeCvr=[" + delegateeCvr + "], roleCode=[" + roleCode + "], state=[" + state + "], efftiveFrom=[" + effectiveFrom + "], effectiveTo=[" + effectiveTo + "]");
 
         DateTime now = systemService.getDateTime();
-        final DateTime validFrom = defaultIfNull(effectiveFrom, now);
-        final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));
+        DateTime validFrom = defaultIfNull(effectiveFrom, now);
+
+        DateTime twoYearsFromStart = validFrom.plusYears(2);
+        DateTime validTo = defaultIfNull(effectiveTo, twoYearsFromStart);
+        if (validTo.isAfter(twoYearsFromStart)) {
+            logger.debug("  changed enddate " + validTo + " to 2 years after start: " + twoYearsFromStart);
+            validTo = twoYearsFromStart;
+        }
 
         // Find existing delegations with same key
         List<Delegation> existingDelegations = delegationDao.findInPeriod(systemCode, delegatorCpr, delegateeCpr, delegateeCvr, roleCode, state, validFrom, validTo);
@@ -120,10 +126,9 @@ public class DelegationManagerImpl implements DelegationManager {
 
     private Delegation createDelegationObject(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissionCodes, DateTime effectiveFrom, DateTime effectiveTo) {
         DateTime now = systemService.getDateTime();
-        final DateTime validFrom = defaultIfNull(effectiveFrom, now);
-        final DateTime validTo = defaultIfNull(effectiveTo, now.plusYears(2));
-        if (!validFrom.isBefore(validTo)) {
-            throw new IllegalArgumentException("EffectiveFrom=[" + validFrom + "] must be before effectiveTo=[" + validTo + "]");
+
+        if (!effectiveFrom.isBefore(effectiveTo)) {
+            throw new IllegalArgumentException("EffectiveFrom=[" + effectiveFrom + "] must be before effectiveTo=[" + effectiveTo + "]");
         }
 
         DelegatingSystem system = systemDao.findByCode(systemCode);
@@ -176,8 +181,8 @@ public class DelegationManagerImpl implements DelegationManager {
             delegation.setDelegationPermissions(permissionSet);
         }
 
-        delegation.setEffectiveFrom(validFrom);
-        delegation.setEffectiveTo(validTo);
+        delegation.setEffectiveFrom(effectiveFrom);
+        delegation.setEffectiveTo(effectiveTo);
 
         delegation.setCreated(now);
         delegation.setLastModified(now);
