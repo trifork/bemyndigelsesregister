@@ -16,6 +16,7 @@ class PutMetadataITCase extends WebServiceSupport {
                     "PermissionId"('Read')
                     "PermissionDescription"('Læse i journal')
                 }
+                "EnableAsteriskPermission"('false')
                 "Role" {
                     "RoleId"('Laege')
                     "RoleDescription"('En praktiserende læge')

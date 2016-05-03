@@ -164,7 +164,7 @@
                         <xs:element name="SystemId" type="bms20160101:SystemId"/>
                         <xs:element name="SystemLongName" type="bms20160101:SystemLongName"/>
                         <xs:element name="Permission"  minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
-                        <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+                        <xs:element name="EnableAsteriskPermission" type="xs:boolean"/>
                         <xs:element name="Role" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -191,7 +191,7 @@
                         <xs:element name="Domain" type="bms20160101:Domain"/>
                         <xs:element name="System" type="bms20160101:DelegatingSystem"/>
                         <xs:element name="Permission" minOccurs="0" maxOccurs="unbounded" type="bms20160101:SystemPermission"/>
-                        <xs:element name="EnableAsteriskPermission" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+                        <xs:element name="EnableAsteriskPermission" type="xs:boolean"/>
                         <xs:element name="Role" minOccurs="0" maxOccurs="unbounded" type="bms20160101:DelegatingRole"/>
                     </xs:sequence>
                 </xs:complexType>

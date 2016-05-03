@@ -263,7 +263,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             }
         }
 
-        if (request.isEnableAsteriskPermission() != null && request.isEnableAsteriskPermission()) {
+        if (request.isEnableAsteriskPermission()) {
             // create asterisk permission and add it as delegatable to all roles
             metadata.addPermission(Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION);
             for (DelegatingRole role : request.getRole()) {
@@ -295,12 +295,11 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
             for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
                 if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
                     asteriskPermission = true;
-                } else {
-                    SystemPermission permission = new SystemPermission();
-                    permission.setPermissionId(c.getCode());
-                    permission.setPermissionDescription(c.getDescription());
-                    response.getPermission().add(permission);
                 }
+                SystemPermission permission = new SystemPermission();
+                permission.setPermissionId(c.getCode());
+                permission.setPermissionDescription(c.getDescription());
+                response.getPermission().add(permission);
             }
         }
         response.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
@@ -313,18 +312,16 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
 
                 if (metadata.getDelegatablePermissions() != null) {
                     for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
-                        if (!Metadata.ASTERISK_PERMISSION_CODE.equalsIgnoreCase(dp.getPermissionCode())) {
-                            if (dp.isDelegatable()) {
-                                if (role.getDelegatablePermissions() == null) {
-                                    role.setDelegatablePermissions(new DelegatingRole.DelegatablePermissions());
-                                }
-                                role.getDelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
-                            } else {
-                                if (role.getUndelegatablePermissions() == null) {
-                                    role.setUndelegatablePermissions(new DelegatingRole.UndelegatablePermissions());
-                                }
-                                role.getUndelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
+                        if (dp.isDelegatable()) {
+                            if (role.getDelegatablePermissions() == null) {
+                                role.setDelegatablePermissions(new DelegatingRole.DelegatablePermissions());
                             }
+                            role.getDelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
+                        } else {
+                            if (role.getUndelegatablePermissions() == null) {
+                                role.setUndelegatablePermissions(new DelegatingRole.UndelegatablePermissions());
+                            }
+                            role.getUndelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
                         }
                     }
                 }
