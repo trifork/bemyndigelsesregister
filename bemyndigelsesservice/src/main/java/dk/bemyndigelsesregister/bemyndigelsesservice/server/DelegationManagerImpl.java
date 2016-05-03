@@ -161,7 +161,7 @@ public class DelegationManagerImpl implements DelegationManager {
                     throw new IllegalArgumentException("No permission [" + permissionCode + "] exists for system [" + systemCode + "]");
 
                 DelegatablePermission delegatablePermission = delegatablePermissionDao.findByPermissionAndRole(permission.getId(), role.getId());
-                if (delegatablePermission == null)
+                if (delegatablePermission == null || !delegatablePermission.isDelegatable())
                     throw new IllegalArgumentException("Permission [" + permissionCode + "] is not delegatable for role [" + roleCode + "]");
 
                 DelegationPermission dp = new DelegationPermission();

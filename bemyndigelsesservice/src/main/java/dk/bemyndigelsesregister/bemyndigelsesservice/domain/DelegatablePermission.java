@@ -13,6 +13,9 @@ public class DelegatablePermission extends DomainObject {
     @JoinColumn(name = "rettighedskode_id")
     private Permission permission;
 
+    @Column(name = "delegerbar")
+    boolean delegatable;
+
     public Permission getPermission() {
         return permission;
     }
@@ -27,5 +30,13 @@ public class DelegatablePermission extends DomainObject {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isDelegatable() {
+        return delegatable;
+    }
+
+    public void setDelegatable(boolean delegatable) {
+        this.delegatable = delegatable;
     }
 }

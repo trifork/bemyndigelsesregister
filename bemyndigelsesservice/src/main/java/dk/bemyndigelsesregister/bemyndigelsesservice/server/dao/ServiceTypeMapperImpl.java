@@ -75,15 +75,17 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
 
             // delegatable, but not delegated permissions
             for (Metadata.DelegatablePermission delegatablePermission : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
-                boolean found = false;
-                for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
-                    if (delegatablePermission.getPermissionCode().equals(delegationPermission.getPermissionCode())) {
-                        found = true;
-                        break;
+                if (delegatablePermission.isDelegatable()) {
+                    boolean found = false;
+                    for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
+                        if (delegatablePermission.getPermissionCode().equals(delegationPermission.getPermissionCode())) {
+                            found = true;
+                            break;
+                        }
                     }
-                }
-                if (!found) {
-                    delegationType.getNotDelegatedPermission().add(toPermission(delegatablePermission.getPermissionCode(), delegatablePermission.getPermissionDescription()));
+                    if (!found) {
+                        delegationType.getNotDelegatedPermission().add(toPermission(delegatablePermission.getPermissionCode(), delegatablePermission.getPermissionDescription()));
+                    }
                 }
             }
         }

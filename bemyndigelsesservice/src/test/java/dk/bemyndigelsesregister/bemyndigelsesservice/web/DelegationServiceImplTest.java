@@ -383,7 +383,7 @@ public class DelegationServiceImplTest {
         Metadata metadata = new Metadata(code, systemCode, systemDescription);
         metadata.addRole(roleCode, roleDescription);
         metadata.addPermission(permissionCode, permissionDescription);
-        metadata.addDelegatablePermission(roleCode, permissionCode, permissionDescription);
+        metadata.addDelegatablePermission(roleCode, permissionCode, permissionDescription, true);
 
         when(metadataManager.getMetadata(code, systemCode)).thenReturn(metadata);
 
@@ -394,10 +394,9 @@ public class DelegationServiceImplTest {
         assertEquals(response.getSystem().getSystemLongName(), systemDescription);
         assertEquals(response.getRole().get(0).getRoleId(), roleCode);
         assertEquals(response.getRole().get(0).getRoleDescription(), roleDescription);
+        assertEquals(response.getRole().get(0).getDelegatablePermissions().getPermissionId().get(0), permissionCode);
         assertEquals(response.getPermission().get(0).getPermissionId(), permissionCode);
         assertEquals(response.getPermission().get(0).getPermissionDescription(), permissionDescription);
-        assertEquals(response.getDelegatablePermission().get(0).getRoleId(), roleCode);
-        assertEquals(response.getDelegatablePermission().get(0).getPermissionId(), permissionCode);
     }
 
     @Test
@@ -407,20 +406,20 @@ public class DelegationServiceImplTest {
         request.setSystemId(systemCode);
         request.setSystemLongName(systemDescription);
 
-        DelegatingRole role = new DelegatingRole();
-        role.setRoleId(roleCode);
-        role.setRoleDescription(roleDescription);
-        request.getRole().add(role);
-
         SystemPermission permission = new SystemPermission();
         permission.setPermissionId(permissionCode);
         permission.setPermissionDescription(permissionDescription);
         request.getPermission().add(permission);
 
-        DelegatablePermission delegatablePermission = new DelegatablePermission();
-        delegatablePermission.setRoleId(roleCode);
-        delegatablePermission.setPermissionId(permissionCode);
-        request.getDelegatablePermission().add(delegatablePermission);
+        DelegatingRole role = new DelegatingRole();
+        role.setRoleId(roleCode);
+        role.setRoleDescription(roleDescription);
+
+        DelegatingRole.DelegatablePermissions p = new DelegatingRole.DelegatablePermissions();
+        p.getPermissionId().add(permissionCode);
+        role.setDelegatablePermissions(p);
+
+        request.getRole().add(role);
 
         assertNotNull(service.putMetadata(request, soapHeader));
 

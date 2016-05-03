@@ -245,7 +245,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             metadata.getPermissions().clear();
             metadata.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
             metadata.getDelegatablePermissions().clear();
-            metadata.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1);
+            metadata.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
             metadataManager.putMetadata(metadata);
 
             List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr);
