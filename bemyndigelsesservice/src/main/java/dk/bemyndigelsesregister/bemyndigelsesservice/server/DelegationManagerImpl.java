@@ -48,7 +48,7 @@ public class DelegationManagerImpl implements DelegationManager {
         DateTime now = systemService.getDateTime();
         DateTime validFrom = defaultIfNull(effectiveFrom, now);
 
-        DateTime twoYearsFromStart = validFrom.plusYears(2);
+        DateTime twoYearsFromStart = validFrom.isBefore(now) ? now.plusYears(2) : validFrom.plusYears(2);
         DateTime validTo = defaultIfNull(effectiveTo, twoYearsFromStart);
         if (validTo.isAfter(twoYearsFromStart)) {
             logger.debug("  changed enddate " + validTo + " to 2 years after start: " + twoYearsFromStart);
