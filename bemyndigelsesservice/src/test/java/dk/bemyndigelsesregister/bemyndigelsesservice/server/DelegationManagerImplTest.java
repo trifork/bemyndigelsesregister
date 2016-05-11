@@ -118,6 +118,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
             assertNotNull("Der skal findes en bemyndigelse", delegation);
             assertNotNull("Der skal findes rettigheder i bemyndigelse", delegation.getDelegationPermissions());
             assertEquals("Der skal være defineret én rettighed, de øvrige 2 skal ikke lagres", 1, delegation.getDelegationPermissions().size());
+            assertEquals("Der skal returneres en stjernerettighed i denne bemyndigelse", Metadata.ASTERISK_PERMISSION_CODE, delegation.getDelegationPermissions().iterator().next().getPermissionCode());
         } finally {
             ebeanServer.endTransaction();
         }

@@ -29,9 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
@@ -389,14 +387,39 @@ public class DelegationServiceImplTest {
 
         GetMetadataResponse response = service.getMetadata(request, soapHeader);
 
-        assertEquals(response.getDomain(), code);
-        assertEquals(response.getSystem().getSystemId(), systemCode);
-        assertEquals(response.getSystem().getSystemLongName(), systemDescription);
-        assertEquals(response.getRole().get(0).getRoleId(), roleCode);
-        assertEquals(response.getRole().get(0).getRoleDescription(), roleDescription);
-        assertEquals(response.getRole().get(0).getDelegatablePermissions().getPermissionId().get(0), permissionCode);
-        assertEquals(response.getPermission().get(0).getPermissionId(), permissionCode);
-        assertEquals(response.getPermission().get(0).getPermissionDescription(), permissionDescription);
+        assertEquals(code, response.getDomain());
+        assertEquals(systemCode, response.getSystem().getSystemId());
+        assertEquals(systemDescription, response.getSystem().getSystemLongName());
+        assertEquals(1, response.getRole().size());
+        assertEquals(roleCode, response.getRole().get(0).getRoleId());
+        assertEquals(roleDescription, response.getRole().get(0).getRoleDescription());
+        assertEquals(permissionCode, response.getRole().get(0).getDelegatablePermissions().getPermissionId().get(0));
+        assertEquals(1, response.getPermission().size());
+        assertEquals(permissionCode, response.getPermission().get(0).getPermissionId());
+        assertEquals(permissionDescription, response.getPermission().get(0).getPermissionDescription());
+        assertFalse(response.isEnableAsteriskPermission());
+    }
+
+    @Test
+    public void canGetMetadataWithAsteriskPermission() throws Exception {
+        GetMetadataRequest request = new GetMetadataRequest();
+        request.setDomain(code);
+        request.setSystemId(systemCode);
+
+        Metadata metadata = new Metadata(code, systemCode, systemDescription);
+        metadata.addRole(roleCode, roleDescription);
+        metadata.addPermission(permissionCode, permissionDescription);
+        metadata.addPermission(Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION);
+        metadata.addDelegatablePermission(roleCode, permissionCode, permissionDescription, true);
+
+        when(metadataManager.getMetadata(code, systemCode)).thenReturn(metadata);
+
+        GetMetadataResponse response = service.getMetadata(request, soapHeader);
+
+        assertTrue(response.isEnableAsteriskPermission());
+        assertEquals(2, response.getPermission().size());
+        for (SystemPermission p : response.getPermission())
+            assertTrue(Arrays.asList(permissionCode, Metadata.ASTERISK_PERMISSION_CODE).contains(p.getPermissionId()));
     }
 
     @Test
@@ -467,8 +490,7 @@ public class DelegationServiceImplTest {
         try {
             service.authorizeOperationForCpr("getDelegations", "error message");
             fail();
-        }
-        catch (IllegalAccessError e) {
+        } catch (IllegalAccessError e) {
             // expected
         }
         verify(whitelistChecker, never()).isSystemWhitelisted(any(String.class), any(String.class));
