@@ -85,7 +85,7 @@ public class DelegationExportJob {
             Metadata metadata = metadataManager.getMetadata(null, systemCode);
             if (metadata != null && metadata.getDelegatablePermissions() != null) {
                 for (Metadata.DelegatablePermission permission : metadata.getDelegatablePermissions()) {
-                    if (!permission.getPermissionCode().equals(Metadata.ASTERISK_PERMISSION_CODE)) { // asterisk permissions are not exported
+                    if (permission.isDelegatable() && !permission.getPermissionCode().equals(Metadata.ASTERISK_PERMISSION_CODE)) { // asterisk permissions are not exported
                         Set<String> permissionCodes = rolePermissionMap.get(permission.getRoleCode());
                         if (permissionCodes == null) {
                             permissionCodes = new HashSet<>();
