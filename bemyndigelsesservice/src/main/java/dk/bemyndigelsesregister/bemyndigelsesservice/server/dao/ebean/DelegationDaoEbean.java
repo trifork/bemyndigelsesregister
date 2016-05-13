@@ -50,18 +50,25 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     }
 
     @Override
-    public List<Delegation> findByLastModifiedGreaterThanOrEquals(DateTime lastModified) {
-        return query().where().ge("lastModified", lastModified).findList();
+    public List<Long> findByLastModifiedGreaterThanOrEquals(DateTime lastModified) {
+        List<Long> result = new LinkedList<>();
+
+        List<Object> ids = query().where().ge("lastModified", lastModified).eq("state", State.GODKENDT).findIds();
+        if (ids != null)
+            for (Object id : ids)
+                result.add((Long)id);
+
+        return result;
     }
 
     @Override
     public List<Long> findWithAsterisk(String systemCode, DateTime validDate) {
         List<Long> result = new LinkedList<>();
 
-        List<Delegation> delegations = ebeanServer.find(Delegation.class).select("id").where().eq("systemCode", systemCode).gt("effectiveTo", validDate).eq("delegationPermissions.permissionCode", Metadata.ASTERISK_PERMISSION_CODE).findList();
-        if (delegations != null)
-            for (Delegation delegation : delegations)
-                result.add(delegation.getId());
+        List<Object> ids = query().where().eq("systemCode", systemCode).gt("effectiveTo", validDate).eq("delegationPermissions.permissionCode", Metadata.ASTERISK_PERMISSION_CODE).findIds();
+        if (ids != null)
+            for (Object id : ids)
+                result.add((Long)id);
 
         return result;
     }

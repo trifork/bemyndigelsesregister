@@ -4,6 +4,7 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
 import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
 import com.googlecode.flyway.core.Flyway;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +13,6 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -66,8 +66,7 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
             flyway.setDataSource(dataSource);
             flyway.setCleanOnValidationError(false);
             return flyway;
-        }
-        else {
+        } else {
             logger.info("Skipped FlyWay");
             return null;
         }
@@ -75,12 +74,11 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
 
     @Bean
     public DataSource dataSource() {
-        final DriverManagerDataSource dataSource = new DriverManagerDataSource(
-                url,
-                username,
-                password
-        );
+        BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         return dataSource;
     }
 

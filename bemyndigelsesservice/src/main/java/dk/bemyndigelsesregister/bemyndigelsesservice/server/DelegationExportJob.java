@@ -191,21 +191,22 @@ public class DelegationExportJob {
         SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         DateTime startTime = systemService.getDateTime();
         try {
-            handleChangedDelegations(startTime, delegationDao.list());
+            handleChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(new DateTime(1970, 1, 1, 0, 0)));
             updateLastRun(lastRun, startTime);
         } catch (IOException e) {
             logger.error("Export failed", e);
         }
     }
 
-    public void handleChangedDelegations(DateTime startTime, List<Delegation> delegations) throws IOException {
-        if (delegations == null || delegations.size() == 0) {
+    public void handleChangedDelegations(DateTime startTime, List<Long> delegationIds) throws IOException {
+        if (delegationIds == null || delegationIds.size() == 0) {
             logger.info("No changed delegations to export");
         } else {
-            logger.info("Exporting " + delegations.size() + " changed delegations");
+            logger.info("Exporting " + delegationIds.size() + " changed delegations");
 
             Delegations exportData = new Delegations();
-            for (Delegation delegation : delegations) {
+            for (Long delegationId : delegationIds) {
+                Delegation delegation = delegationDao.get(delegationId);
                 if (delegation.getState() == State.GODKENDT) {
                     Set<String> permissionCodes = new HashSet<>();
                     for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
@@ -219,6 +220,7 @@ public class DelegationExportJob {
 
                     exportData.addDelegation(delegation, permissionCodes);
                 }
+
             }
             exportData.setDate(startTime.toString("yyyyMMdd"));
             exportData.setTimeStamp(startTime.toString("HHmmssSSS"));
