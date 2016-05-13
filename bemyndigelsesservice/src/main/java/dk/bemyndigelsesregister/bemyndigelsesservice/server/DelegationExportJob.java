@@ -165,10 +165,14 @@ public class DelegationExportJob {
             for (Long delegationId : delegationIds) {
                 Delegation delegation = delegationDao.get(delegationId);
                 if (delegation.getState() == State.GODKENDT && delegation.getEffectiveTo().isAfter(startTime)) {
-                    exportData.addDelegation(delegation, rolePermissionMap.get(delegation.getRoleCode()));
-
-                    if (++exportCount % 100 == 0) {
-                        logger.info("  " + exportCount + " exported");
+                    Set<String> permissionCodes = rolePermissionMap.get(delegation.getRoleCode());
+                    if (permissionCodes != null) {
+                        exportData.addDelegation(delegation, permissionCodes);
+                        if (++exportCount % 100 == 0) {
+                            logger.info("  " + exportCount + " exported");
+                        }
+                    } else {
+                        logger.warn("  - skipped unknown role " + delegation.getRoleCode());
                     }
                 }
             }
