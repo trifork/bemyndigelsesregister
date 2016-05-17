@@ -55,4 +55,8 @@ public class Delegations {
     public String getVersion() {
         return version;
     }
+
+    public int getRecordCount() {
+        return recordCount;
+    }
 }
