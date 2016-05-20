@@ -62,13 +62,13 @@ public class NspManagerSFtpTest {
         final String fileBody = "File body";
         final File tempFile = File.createTempFile(TEST_USER, ".bemyndigelse");
         FileUtils.writeStringToFile(tempFile, fileBody);
-        final String filename = "19820521_021503000_v001.bemyndigelse";
+        final String filename = "19820521_021503000_v001_001.bemyndigelse";
         delegations.setVersion("v001");
 
         when(result.toString()).thenReturn(fileBody);
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);
 
-        nspManager.send(delegations, startTime);
+        nspManager.send(delegations, startTime, 1);
         //TODO: Check at filen findes "server side" efter upload
 //        assertTrue(ftpServer.getFileSystem().exists("/" + filename));
 

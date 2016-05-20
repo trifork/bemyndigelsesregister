@@ -45,31 +45,51 @@ public class DelegationExportJob {
     @Value("${nsp.schema.version}")
     String nspSchemaVersion;
 
-    @Value("${bemyndigelsesexportjob.enabled}")
+    @Value("${bemyndigelsesexportjob.enabled:true}")
     String jobEnabled;
 
+    @Value("${bemyndigelsesexportjob.batchsize:5000}")
+    Integer batchSize;
+
     private Map<String, Map<String, Set<String>>> systemRolePermissionMap; // systemcode, rolecode, set of permissioncodes
+    private int batchNo;
 
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
     public void startExport() throws IOException {
         if (Boolean.valueOf(jobEnabled)) {
-            logger.info("DelegationExport job begun");
+            logger.info("DelegationExport job started");
 
             systemRolePermissionMap = null;
+            batchNo = 1;
             SystemVariable lastRun = systemVariableDao.getByName("lastRun");
-            final DateTime startTime = systemService.getDateTime();
+            DateTime startTime = systemService.getDateTime();
 
             // reexport delegations with asterisk permission for changed systems
             handleChangedMetadata(startTime, delegatingSystemDao.findByLastModifiedGreaterThanOrEquals(lastRun.getDateTimeValue()));
 
             // export individually changed delegations
-            handleChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(lastRun.getDateTimeValue()));
+            exportChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(lastRun.getDateTimeValue()));
 
             updateLastRun(lastRun, startTime);
             systemRolePermissionMap = null;
             logger.info("DelegationExport job ended");
         } else
             logger.info("DelegationExport job disabled");
+    }
+
+    @Transactional
+    public void completeExport() {
+        logger.info("Complete DelegationExport started");
+
+        systemRolePermissionMap = null;
+        batchNo = 1;
+        SystemVariable lastRun = systemVariableDao.getByName("lastRun");
+        DateTime startTime = systemService.getDateTime();
+
+        exportChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(new DateTime(1970, 1, 1, 0, 0)));
+        updateLastRun(lastRun, startTime);
+
+        logger.info("Complete DelegationExport ended");
     }
 
     private Map<String, Set<String>> getRolePermissionMap(String systemCode) {
@@ -155,84 +175,80 @@ public class DelegationExportJob {
         }
 
         List<Long> delegationIds = delegationDao.findWithAsterisk(systemCode, startTime);
-        if (delegationIds == null || delegationIds.isEmpty()) {
-            logger.info("No delegations to with asterisk permission to export for system [" + systemCode + "]");
-        } else {
-            logger.info("Processing " + delegationIds.size() + " delegations with asterisk permission for system [" + systemCode + "]");
-            int exportCount = 0;
-            Delegations exportData = new Delegations();
-
-            for (Long delegationId : delegationIds) {
-                Delegation delegation = delegationDao.get(delegationId);
-                if (delegation.getState() == State.GODKENDT && delegation.getEffectiveTo().isAfter(startTime)) {
-                    Set<String> permissionCodes = rolePermissionMap.get(delegation.getRoleCode());
-                    if (permissionCodes != null) {
-                        exportData.addDelegation(delegation, permissionCodes);
-                        if (++exportCount % 100 == 0) {
-                            logger.info("  " + exportCount + " exported");
-                        }
-                    } else {
-                        logger.warn("  - skipped unknown role " + delegation.getRoleCode());
-                    }
-                }
-            }
-
-            if (exportCount > 0) {
-                exportData.setDate(startTime.toString("yyyyMMdd"));
-                exportData.setTimeStamp(startTime.toString("HHmmssSSS"));
-                exportData.setVersion(nspSchemaVersion);
-
-                nspManager.send(exportData, startTime);
-            }
-
-            logger.info("Exported " + exportCount + " of " + delegationIds.size() + " delegations for system [" + systemCode + "]");
-        }
+        exportChangedDelegations(startTime, delegationIds);
     }
 
 
-    @Transactional
-    public void completeExport() {
-        SystemVariable lastRun = systemVariableDao.getByName("lastRun");
-        DateTime startTime = systemService.getDateTime();
-        try {
-            handleChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(new DateTime(1970, 1, 1, 0, 0)));
-            updateLastRun(lastRun, startTime);
-        } catch (IOException e) {
-            logger.error("Export failed", e);
-        }
-    }
-
-    public void handleChangedDelegations(DateTime startTime, List<Long> delegationIds) throws IOException {
+    public void exportChangedDelegations(DateTime startTime, List<Long> delegationIds) {
         if (delegationIds == null || delegationIds.size() == 0) {
             logger.info("No changed delegations to export");
         } else {
             logger.info("Exporting " + delegationIds.size() + " changed delegations");
 
-            Delegations exportData = new Delegations();
-            for (Long delegationId : delegationIds) {
-                Delegation delegation = delegationDao.get(delegationId);
-                if (delegation.getState() == State.GODKENDT) {
-                    Set<String> permissionCodes = new HashSet<>();
-                    for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
-                        permissionCodes.add(delegationPermission.getPermissionCode());
-                    }
+            // export in batches
+            int startIndex = 0;
+            while (startIndex < delegationIds.size()) {
+                int endIndex = startIndex + batchSize;
+                if (endIndex > delegationIds.size())
+                    endIndex = delegationIds.size();
 
-                    if (permissionCodes.contains(Metadata.ASTERISK_PERMISSION_CODE)) { // expand asterisk to all delegatable permissions for role
-                        Map<String, Set<String>> rolePermissionMap = getRolePermissionMap(delegation.getSystemCode());
-                        permissionCodes = rolePermissionMap.get(delegation.getRoleCode());
-                    }
+                logger.info("  Exporting batch " + batchNo + " (index " + startIndex + " - " + endIndex + ")");
+                exportBatch(startTime, delegationIds.subList(startIndex, endIndex));
 
-                    exportData.addDelegation(delegation, permissionCodes);
+                startIndex = endIndex;
+            }
+        }
+    }
+
+    public void exportBatch(DateTime startTime, List<Long> delegationIds) {
+        int exportCount = 0;
+        Set<String> unknownSystems = new HashSet<>();
+        Set<String> unknownRoles = new HashSet<>();
+
+        Delegations exportData = new Delegations();
+        for (Long delegationId : delegationIds) {
+            Delegation delegation = delegationDao.get(delegationId);
+            if (delegation.getState() == State.GODKENDT) {
+                Set<String> permissionCodes = new HashSet<>();
+                for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
+                    permissionCodes.add(delegationPermission.getPermissionCode());
                 }
 
+                if (permissionCodes.contains(Metadata.ASTERISK_PERMISSION_CODE)) { // expand asterisk to all delegatable permissions for role
+                    Map<String, Set<String>> rolePermissionMap = getRolePermissionMap(delegation.getSystemCode());
+                    if (rolePermissionMap != null) {
+                        permissionCodes = rolePermissionMap.get(delegation.getRoleCode());
+                        if (permissionCodes == null) {
+                            unknownRoles.add(delegation.getRoleCode());
+                        }
+
+                    } else {
+                        unknownSystems.add(delegation.getSystemCode());
+                        permissionCodes = null;
+                    }
+                }
+
+                if (permissionCodes != null) {
+                    exportData.addDelegation(delegation, permissionCodes);
+                    exportCount++;
+                }
             }
+        }
+
+        logger.info("    " + exportCount + " exported");
+        if (!unknownSystems.isEmpty())
+            logger.warn("No metadata found for systems " + unknownSystems);
+        if (!unknownRoles.isEmpty())
+            logger.warn("No permissions found in metadata for role " + unknownRoles);
+
+        if (exportCount > 0) {
             exportData.setDate(startTime.toString("yyyyMMdd"));
             exportData.setTimeStamp(startTime.toString("HHmmssSSS"));
             exportData.setVersion(nspSchemaVersion);
 
-            nspManager.send(exportData, startTime);
+            nspManager.send(exportData, startTime, batchNo);
 
-            logger.info("Completed export of changed delegations");
+            batchNo++; // Note: batchNo will only increase when delegations were actually exported
         }
     }
 

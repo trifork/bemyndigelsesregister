@@ -46,6 +46,7 @@ public class DelegationExportJobTest {
         job.systemService = systemService;
         job.metadataManager = metadataManager;
         job.jobEnabled = "true";
+        job.batchSize = 5000;
     }
 
     @Test
@@ -65,7 +66,7 @@ public class DelegationExportJobTest {
 
         job.startExport();
 
-        verify(nspManager).send(bemyndigelserEq(Arrays.asList(delegation1, delegation2)), eq(startTime));
+        verify(nspManager).send(bemyndigelserEq(Arrays.asList(delegation1, delegation2)), eq(startTime), eq(1));
         verify(systemVariableDao).save(lastRunSV);
     }
 
@@ -84,7 +85,7 @@ public class DelegationExportJobTest {
 
         job.completeExport();
 
-        verify(nspManager).send(bemyndigelserEq(Arrays.asList(delegation1, delegation2)), eq(startTime));
+        verify(nspManager).send(bemyndigelserEq(Arrays.asList(delegation1, delegation2)), eq(startTime), eq(1));
         verify(systemVariableDao).save(lastRunSV);
     }
 

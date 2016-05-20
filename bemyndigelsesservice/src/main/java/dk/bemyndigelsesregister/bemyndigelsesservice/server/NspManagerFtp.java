@@ -60,13 +60,13 @@ public class NspManagerFtp implements NspManager, InitializingBean {
     }
 
     @Override
-    public void send(Delegations delegations, DateTime startTime) {
+    public void send(Delegations delegations, DateTime startTime, int batchNo) {
         final Result result = systemService.createXmlTransformResult();
         FTPClient ftpClient = new FTPClient();
         try {
             marshaller.marshal(delegations, result);
 
-            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_" + delegations.getVersion() + ".bemyndigelse'");
+            final String filename = startTime.toString("yyyyMMdd'_'HHmmssSSS'_'") + delegations.getVersion() + "_" + String.format("%03d", batchNo) + ".bemyndigelse";
             File file = systemService.writeToTempDir(filename, result.toString());
             logger.debug("Sending " + file.getAbsolutePath() + " with name " + filename);
             if (exportEnabled) {

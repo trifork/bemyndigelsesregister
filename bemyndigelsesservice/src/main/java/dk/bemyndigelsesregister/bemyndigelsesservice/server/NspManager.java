@@ -4,5 +4,5 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegati
 import org.joda.time.DateTime;
 
 public interface NspManager {
-    void send(Delegations delegations, DateTime startTime);
+    void send(Delegations delegations, DateTime startTime, int batchNo);
 }

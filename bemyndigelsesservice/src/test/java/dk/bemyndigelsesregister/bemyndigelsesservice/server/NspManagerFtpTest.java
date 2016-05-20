@@ -60,13 +60,13 @@ public class NspManagerFtpTest {
         final String fileBody = "File body";
         final File tempFile = File.createTempFile("test", ".bemyndigelse");
         FileUtils.writeStringToFile(tempFile, fileBody);
-        final String filename = "19820521_021503000_v001.bemyndigelse";
+        final String filename = "19820521_021503000_v001_001.bemyndigelse";
         delegations.setVersion("v001");
 
         when(result.toString()).thenReturn(fileBody);
         when(systemService.writeToTempDir(filename, fileBody)).thenReturn(tempFile);
 
-        nspManagerFtp.send(delegations, startTime);
+        nspManagerFtp.send(delegations, startTime, 1);
 
         assertTrue(ftpServer.getFileSystem().exists("/" + filename));
 

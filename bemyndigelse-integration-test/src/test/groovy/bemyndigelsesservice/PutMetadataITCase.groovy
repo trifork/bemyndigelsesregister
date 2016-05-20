@@ -11,7 +11,7 @@ class PutMetadataITCase extends WebServiceSupport {
             "bms20160101:PutMetadataRequest" {
                 "Domain"('trifork-test')
                 "SystemId"('testsys')
-                "SystemLongName"("'Trifork testsystem")
+                "SystemLongName"('Trifork testsystem')
                 "Permission" {
                     "PermissionId"('Read')
                     "PermissionDescription"('Læse i journal')
