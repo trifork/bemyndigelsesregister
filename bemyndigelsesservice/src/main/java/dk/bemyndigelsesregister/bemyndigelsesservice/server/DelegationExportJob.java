@@ -39,6 +39,9 @@ public class DelegationExportJob {
     MetadataManager metadataManager;
 
     @Inject
+    DelegationManager delegationManager;
+
+    @Inject
     @Named("nspManagerSftp")
     NspManager nspManager;
 
@@ -175,9 +178,46 @@ public class DelegationExportJob {
         }
 
         List<Long> delegationIds = delegationDao.findWithAsterisk(systemCode, startTime);
-        exportChangedDelegations(startTime, delegationIds);
+        updatePermissionsForDelegations(startTime, systemCode, delegationIds);
     }
 
+    private void updatePermissionsForDelegations(DateTime startTime, String systemCode, List<Long> delegationIds) {
+        Metadata metadata = metadataManager.getMetadata(null, systemCode);
+        if (metadata != null && metadata.getDelegatablePermissions() != null) {
+            logger.info("Start updating permissions for " + delegationIds.size() + " delegations with *-permission");
+            int updateCount = 0;
+            for (Long delegationId : delegationIds) {
+                Delegation delegation = delegationDao.get(delegationId);
+                if (delegation.getState() == State.GODKENDT) {
+                    boolean update = true;
+
+                    if (delegation.getDelegationPermissions() != null) {
+                        // check if permissions is unchanged
+
+                        Set<String> permissionCodesDelegation = new HashSet<>();
+                        for (DelegationPermission dp : delegation.getDelegationPermissions())
+                            if (!Metadata.ASTERISK_PERMISSION_CODE.equals(dp.getPermissionCode()))
+                                permissionCodesDelegation.add(dp.getPermissionCode());
+
+                        Set<String> permissionCodesMetadata = new HashSet<>();
+                        for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(delegation.getRoleCode()))
+                            if (dp.isDelegatable() && !Metadata.ASTERISK_PERMISSION_CODE.equals(dp.getPermissionCode()))
+                                permissionCodesMetadata.add(dp.getPermissionCode());
+
+                        if (permissionCodesDelegation.equals(permissionCodesMetadata))
+                            update = false;
+                    }
+
+                    if (update) {
+                        // delegationManager will expand asterisk to new permissions
+                        delegationManager.createDelegation(delegation.getSystemCode(), delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getRoleCode(), State.GODKENDT, Collections.singletonList(Metadata.ASTERISK_PERMISSION_CODE), startTime, delegation.getEffectiveTo());
+                        updateCount++;
+                    }
+                }
+            }
+            logger.info("End updating permissions, updated " + updateCount + " of " + delegationIds.size() + " delegations");
+        }
+    }
 
     public void exportChangedDelegations(DateTime startTime, List<Long> delegationIds) {
         if (delegationIds == null || delegationIds.size() == 0) {
@@ -202,44 +242,21 @@ public class DelegationExportJob {
 
     public void exportBatch(DateTime startTime, List<Long> delegationIds) {
         int exportCount = 0;
-        Set<String> unknownSystems = new HashSet<>();
-        Set<String> unknownRoles = new HashSet<>();
 
         Delegations exportData = new Delegations();
         for (Long delegationId : delegationIds) {
             Delegation delegation = delegationDao.get(delegationId);
             if (delegation.getState() == State.GODKENDT) {
-                Set<String> permissionCodes = new HashSet<>();
                 for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
-                    permissionCodes.add(delegationPermission.getPermissionCode());
-                }
-
-                if (permissionCodes.contains(Metadata.ASTERISK_PERMISSION_CODE)) { // expand asterisk to all delegatable permissions for role
-                    Map<String, Set<String>> rolePermissionMap = getRolePermissionMap(delegation.getSystemCode());
-                    if (rolePermissionMap != null) {
-                        permissionCodes = rolePermissionMap.get(delegation.getRoleCode());
-                        if (permissionCodes == null) {
-                            unknownRoles.add(delegation.getRoleCode());
-                        }
-
-                    } else {
-                        unknownSystems.add(delegation.getSystemCode());
-                        permissionCodes = null;
+                    if (!Metadata.ASTERISK_PERMISSION_CODE.equals(delegationPermission.getPermissionCode())) {
+                        exportData.addDelegation(delegationPermission.getCode(), delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), delegationPermission.getPermissionCode(), delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo());
+                        exportCount++;
                     }
-                }
-
-                if (permissionCodes != null) {
-                    exportData.addDelegation(delegation, permissionCodes);
-                    exportCount++;
                 }
             }
         }
 
-        logger.info("    " + exportCount + " exported");
-        if (!unknownSystems.isEmpty())
-            logger.warn("No metadata found for systems " + unknownSystems);
-        if (!unknownRoles.isEmpty())
-            logger.warn("No permissions found in metadata for role " + unknownRoles);
+        logger.info("    " + exportCount + " records exported");
 
         if (exportCount > 0) {
             exportData.setDate(startTime.toString("yyyyMMdd"));

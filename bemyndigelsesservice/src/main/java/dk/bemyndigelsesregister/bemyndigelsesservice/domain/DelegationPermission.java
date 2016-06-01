@@ -8,7 +8,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "bemyndigelse20_rettighed")
-public class DelegationPermission extends DomainObject {
+public class DelegationPermission extends ExternalIdentifiedDomainObject {
     @ManyToOne
     @JoinColumn(name = "bemyndigelse20_id")
     private Delegation delegation;

@@ -40,7 +40,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             int n = dao.list().size();
 
             Delegation d = new Delegation();
-            d.setCode("testId");
+            d.setCode("testId1");
             d.setDelegatorCpr("0101010AB1");
             d.setDelegateeCpr("0202020AB2");
             d.setDelegateeCvr("12345678");
@@ -56,6 +56,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             DelegationPermission permission = new DelegationPermission();
             permission.setDelegation(d);
             permission.setPermissionCode(p.getCode());
+            permission.setCode("testId2");
             permissions.add(permission);
 
             d.setDelegationPermissions(permissions);
@@ -70,7 +71,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testCreateDelegationWithTwoPermissions() throws Exception {
-        final String testCode = "testCode";
+        final String testCode = "testCode1";
 
         try {
             ebeanServer.beginTransaction();
@@ -88,16 +89,18 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
             Set<DelegationPermission> permissions = new HashSet<>();
 
-            Permission p = permissionDao.get(1);
-            DelegationPermission delegationPermission = new DelegationPermission();
-            delegationPermission.setDelegation(d);
-            delegationPermission.setPermissionCode(p.getCode());
-            permissions.add(delegationPermission);
+            Permission p1 = permissionDao.get(1);
+            DelegationPermission delegationPermission1 = new DelegationPermission();
+            delegationPermission1.setDelegation(d);
+            delegationPermission1.setPermissionCode(p1.getCode());
+            delegationPermission1.setCode("testCode2");
+            permissions.add(delegationPermission1);
 
             Permission p2 = permissionDao.get(2);
             DelegationPermission delegationPermission2 = new DelegationPermission();
             delegationPermission2.setDelegation(d);
             delegationPermission2.setPermissionCode(p2.getCode());
+            delegationPermission2.setCode("testCode3");
             permissions.add(delegationPermission2);
 
             d.setDelegationPermissions(permissions);
@@ -108,7 +111,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             assertNotNull(retrievedDelegation.getDelegationPermissions());
             assertEquals("Delegation should contain the right number of permissions", 2, retrievedDelegation.getDelegationPermissions().size());
             for (DelegationPermission dp : retrievedDelegation.getDelegationPermissions()) {
-                assertTrue("Delegation should contain the right permissions", dp.getPermissionCode().equals(delegationPermission.getPermissionCode())
+                assertTrue("Delegation should contain the right permissions", dp.getPermissionCode().equals(delegationPermission1.getPermissionCode())
                                                                 || dp.getPermissionCode().equals(delegationPermission2.getPermissionCode()));
             }
         } finally {

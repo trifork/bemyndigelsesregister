@@ -1,7 +1,10 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatablePermissionDao;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.apache.log4j.Logger;
@@ -30,16 +33,10 @@ public class DelegationManagerImpl implements DelegationManager {
     SystemService systemService;
 
     @Inject
-    RoleDao roleDao;
-
-    @Inject
-    PermissionDao permissionDao;
-
-    @Inject
     DelegatablePermissionDao delegatablePermissionDao;
 
     @Inject
-    SystemDao systemDao;
+    MetadataManager metadataManager;
 
     @Override
     public Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissionCodes, DateTime effectiveFrom, DateTime effectiveTo) {
@@ -131,12 +128,11 @@ public class DelegationManagerImpl implements DelegationManager {
             throw new IllegalArgumentException("EffectiveFrom=[" + effectiveFrom + "] must be before effectiveTo=[" + effectiveTo + "]");
         }
 
-        DelegatingSystem system = systemDao.findByCode(systemCode);
-        if (system == null)
+        Metadata metadata = metadataManager.getMetadata(null, systemCode);
+        if (metadata == null)
             throw new IllegalArgumentException("No system [" + systemCode + "] exists");
 
-        Role role = roleDao.findByCode(system.getId(), roleCode);
-        if (role == null)
+        if (!metadata.containsRole(roleCode))
             throw new IllegalArgumentException("No role [" + roleCode + "] exists for system [" + systemCode + "]");
 
         final Delegation delegation = new Delegation();
@@ -152,31 +148,32 @@ public class DelegationManagerImpl implements DelegationManager {
         if (permissionCodes != null && !permissionCodes.isEmpty()) {
             Set<String> permissionCodeSet = new HashSet<>(permissionCodes); // ensures uniqueness
 
-            if (permissionCodeSet.contains(Metadata.ASTERISK_PERMISSION_CODE) && permissionCodeSet.size() > 1) {
-                // if delegation contains asterisk permission, delete other permissions
-                logger.debug("  Truncating permissions " + permissionCodeSet + " to *");
-                permissionCodeSet.clear();
-                permissionCodeSet.add(Metadata.ASTERISK_PERMISSION_CODE);
+            if (permissionCodeSet.contains(Metadata.ASTERISK_PERMISSION_CODE)) { // if delegation contains *, add any missing permissions
+                logger.debug("  * found, expanding permissions");
+                for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(roleCode)) {
+                    if (dp.isDelegatable()) {
+                        permissionCodeSet.add(dp.getPermissionCode());
+                    }
+                }
             }
 
             Set<DelegationPermission> permissionSet = new HashSet<>();
             for (String permissionCode : permissionCodeSet) {
-                Permission permission = permissionDao.findByCode(systemCode, permissionCode);
-                if (permission == null)
+                if (!metadata.containsPermission(permissionCode))
                     throw new IllegalArgumentException("No permission [" + permissionCode + "] exists for system [" + systemCode + "]");
 
-                DelegatablePermission delegatablePermission = delegatablePermissionDao.findByPermissionAndRole(permission.getId(), role.getId());
-                if (delegatablePermission == null || !delegatablePermission.isDelegatable())
+                if (!metadata.containsDelegatablePermission(roleCode, permissionCode, true))
                     throw new IllegalArgumentException("Permission [" + permissionCode + "] is not delegatable for role [" + roleCode + "]");
 
                 DelegationPermission dp = new DelegationPermission();
                 dp.setDelegation(delegation);
-                dp.setPermissionCode(permission.getCode());
+                dp.setPermissionCode(permissionCode);
+                dp.setCode(systemService.createUUIDString());
                 dp.setLastModified(now);
                 dp.setLastModifiedBy(getClass().getSimpleName());
                 permissionSet.add(dp);
 
-                logger.debug("  + permision [" + permission.getCode() + "]");
+                logger.debug("  + permision [" + permissionCode + "]");
             }
             delegation.setDelegationPermissions(permissionSet);
         }

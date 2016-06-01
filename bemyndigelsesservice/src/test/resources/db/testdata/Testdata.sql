@@ -263,13 +263,13 @@ VALUES (
   '2000-05-22 02:15:00',
   NULL);
 
-REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (1, 'R01');
-REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (2, 'R01');
-REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (3, 'R01');
-REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (4, 'R01');
-REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (4, 'R02');
-REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (5, 'R01');
-REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`) VALUES (5, 'R02');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`, `kode`) VALUES (1, 'R01', 'TestKode6');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`, `kode`) VALUES (2, 'R01', 'TestKode7');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`, `kode`) VALUES (3, 'R01', 'TestKode8');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`, `kode`) VALUES (4, 'R01', 'TestKode9');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`, `kode`) VALUES (4, 'R02', 'TestKode10');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`, `kode`) VALUES (5, 'R01', 'TestKode11');
+REPLACE INTO `bemyndigelse20_rettighed` (`bemyndigelse20_id`, `rettighed_kode`, `kode`) VALUES (5, 'R02', 'TestKode12');
 
 REPLACE INTO `system_variable` (`name`, `value`) VALUES ('testVariable', 'den gode test');
 

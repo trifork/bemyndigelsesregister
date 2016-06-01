@@ -103,6 +103,13 @@ public class Metadata {
         return false;
     }
 
+    public boolean containsDelegatablePermission(String roleCode, String permissionCode, boolean delegatable) {
+        for (DelegatablePermission c : delegatablePermissions)
+            if (c.isDelegatable() == delegatable && c.getRoleCode().equals(roleCode) && c.getPermissionCode().equals(permissionCode))
+                return true;
+        return false;
+    }
+
     public class CodeAndDescription {
         String code;
         String description;

@@ -236,13 +236,12 @@ public class Migration {
             List<Delegation> delegations = new LinkedList<>();
             while (rs.next()) {
                 Delegation d = new Delegation(key);
-                d.kode = rs.getString(1);
                 d.godkendelsesdato = rs.getDate(2);
                 d.gyldig_fra = rs.getDate(3);
                 d.gyldig_til = rs.getDate(4);
                 d.sidst_modificeret = rs.getDate(5);
                 d.sidst_modificeret_af = rs.getString(6);
-                d.gl_rettighed_kode = rs.getString(7);
+                d.gl_rettighed_kode = new Permission(rs.getString(7), rs.getString(1), d.gyldig_fra, d.gyldig_til);
                 d.arbejdsfunktion_kode = rs.getString(8);
                 d.linked_system_kode = rs.getString(9);
 
@@ -298,6 +297,7 @@ public class Migration {
                 logger.debug("  Removed empty delegation " + d);
         }
 
+/* disabled merge, to allow better mapning of uuid's
         // 2. Merge alle A, B hvor og A.kode = B.kode og
         //    - A begynder før B og slutter i B
         //    -   eller
@@ -329,7 +329,7 @@ public class Migration {
                 }
             }
         }
-
+*/
         // 3. Sorter datoer
         Set<Date> dates = new HashSet<>();
         for (Delegation d : list1) {
@@ -342,13 +342,13 @@ public class Migration {
         Collections.sort(sortedDates);
 
         // 4. Fordel permissions på datoer
-        Map<Date, Set<String>> map = new HashMap<>();
+        Map<Date, List<Permission>> map = new HashMap<>();
         for (Date date : sortedDates) {
             for (Delegation d : list1) {
                 if (!d.gyldig_fra.after(date) && d.gyldig_til.after(date)) {
-                    Set<String> list = map.get(date);
+                    List<Permission> list = map.get(date);
                     if (list == null) {
-                        list = new HashSet<>();
+                        list = new LinkedList<>();
                         map.put(date, list);
                     }
                     list.add(d.gl_rettighed_kode);
@@ -356,7 +356,15 @@ public class Migration {
             }
         }
 
-        // 5. Lav nye delegations
+        // 5. Udtynd lister, så koder bliver unikke
+        for (Date date : sortedDates) {
+            List<Permission> list = map.get(date);
+            if (list != null) {
+                removeDuplicates(date, list);
+            }
+        }
+
+        // 6. Lav nye delegations
         List<Delegation> newDelegations = new LinkedList<>();
 
         Date oldDate = null;
@@ -364,12 +372,11 @@ public class Migration {
             if (oldDate != null) {
                 if (daysInFuture(oldDate) <= settings.getMinimumFutureDays()) {
                     Delegation newDelegation = new Delegation(key);
-                    Set<String> permissions = map.get(oldDate);
+                    List<Permission> permissions = map.get(oldDate);
                     if (permissions != null && !permissions.isEmpty()) {
-                        newDelegation.nye_rettighed_koder = new LinkedList<>(permissions);
-                        newDelegation.sidst_modificeret = latestModifiedDate;
+                        newDelegation.nye_rettighed_koder = clonePermissions(permissions);
+                        newDelegation.sidst_modificeret = settings.getConversionDate(); //newDelegation.sidst_modificeret = latestModifiedDate;
                         newDelegation.sidst_modificeret_af = "konvertering";
-                        newDelegation.kode = UUID.randomUUID().toString();
                         newDelegation.linked_system_kode = linked_system_kode;
                         newDelegation.arbejdsfunktion_kode = arbejdsfunktion_kode;
 
@@ -378,7 +385,7 @@ public class Migration {
                         Date toDate = d;
                         if (d.after(settings.getConversionDate())) { // in future?
                             if (daysInFuture(d) > settings.getMaximumFutureDays()) {
-                                newDelegation.sidst_modificeret = settings.getConversionDate();
+                                // newDelegation.sidst_modificeret = settings.getConversionDate();
                                 toDate = calcSpecialToDate(settings.getConversionDate(), key.bemyndigede_cpr);
                                 logger.debug("  Truncated toDate " + d + " to " + toDate);
                             }
@@ -386,7 +393,6 @@ public class Migration {
                         newDelegation.gyldig_til = toDate;
 
                         newDelegations.add(newDelegation);
-                        logger.info("  NEW " + newDelegation);
                     }
                 } else
                     logger.debug("  Dropped creating delegations starting " + oldDate);
@@ -394,7 +400,75 @@ public class Migration {
             oldDate = d;
         }
 
+        // 7. clear duplicate uuid's
+        clearDuplicateUuids(newDelegations);
+
+        // 8. add debug output
+        for(Delegation newDelegation : newDelegations)
+            logger.info("  NEW " + newDelegation);
+
         return newDelegations;
+    }
+
+    /**
+     * Removes duplicate permission codes from list, while keeping uuid of the newest
+     *
+     * @param list list of permissions on same date
+     */
+
+    private void removeDuplicates(Date date, List<Permission> list) {
+        List<Permission> originalList = new LinkedList<>(list);
+        for (Iterator<Permission> i = list.iterator(); i.hasNext(); ) {
+            Permission p1 = i.next();
+            boolean newerWithSameCodeExists = false;
+            for (Permission p2 : list) {
+                if (p1 != p2 && p1.rettighed_kode.equals(p2.rettighed_kode) && (p2.gyldig_til.after(p1.gyldig_til) || p2.gyldig_til.equals(p1.gyldig_til) && p2.gyldig_fra.after(p1.gyldig_fra))) {
+                    newerWithSameCodeExists = true;
+                    break;
+                }
+            }
+            if (newerWithSameCodeExists)
+                i.remove();
+        }
+
+        if (list.size() < originalList.size()) {
+            logger.debug("  Reduced list of " + originalList.size() + " permission codes to " + list.size() + " for date " + date);
+            logger.debug("    Original permissions:");
+            for (Permission p : originalList)
+                logger.debug("      " + p);
+            logger.debug("    Reduced permissions:");
+            for (Permission p : list)
+                logger.debug("      " + p);
+        }
+    }
+
+    private List<Permission> clonePermissions(List<Permission> source) {
+        List<Permission> dest = new LinkedList<>();
+        for (Permission p : source)
+            dest.add(new Permission(p.rettighed_kode, p.uuid, p.gyldig_fra, p.gyldig_til));
+        return dest;
+    }
+
+    private void clearDuplicateUuids(List<Delegation> delegations) {
+        for (Delegation delegation : delegations) {
+            if (delegation.gyldig_til.before(settings.getConversionDate())) {
+                for (Permission permission : delegation.nye_rettighed_koder) {
+                    boolean sameUuidFound = false;
+                    for (Delegation d : delegations) {
+                        if (d != delegation && !sameUuidFound) {
+                            for (Permission p : d.nye_rettighed_koder) {
+                                if (permission.uuid.equals(p.uuid)) {
+                                    sameUuidFound = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (sameUuidFound)
+                        permission.uuid = null;
+                }
+            }
+        }
     }
 
     /**
@@ -497,7 +571,7 @@ public class Migration {
                 stmt.setString(4, key.bemyndigede_cpr);
                 stmt.setString(5, key.bemyndigede_cvr);
                 stmt.setString(6, key.status);
-                stmt.setString(7, d.kode);
+                stmt.setString(7, UUID.randomUUID().toString());
                 stmt.setDate(8, d.godkendelsesdato);
                 stmt.setDate(9, d.gyldig_fra);
                 stmt.setDate(10, d.gyldig_til);
@@ -518,14 +592,15 @@ public class Migration {
                 stmt.close();
                 stmt = null;
 
-                for (String permission : d.nye_rettighed_koder) {
-                    stmt = connection.prepareStatement("INSERT INTO bemyndigelse.bemyndigelse20_rettighed (bemyndigelse20_id, rettighed_kode, sidst_modificeret, sidst_modificeret_af)" +
-                            " VALUES (?, ?, ?, ?)");
+                for (Permission permission : d.nye_rettighed_koder) {
+                    stmt = connection.prepareStatement("INSERT INTO bemyndigelse.bemyndigelse20_rettighed (bemyndigelse20_id, rettighed_kode, sidst_modificeret, sidst_modificeret_af, kode)" +
+                            " VALUES (?, ?, ?, ?, ?)");
 
                     stmt.setLong(1, id);
-                    stmt.setString(2, permission);
+                    stmt.setString(2, permission.rettighed_kode);
                     stmt.setDate(3, d.sidst_modificeret);
                     stmt.setString(4, d.sidst_modificeret_af);
+                    stmt.setString(5, permission.uuid != null ? permission.uuid : UUID.randomUUID().toString());
 
                     stmt.executeUpdate();
                     stmt.close();
@@ -613,14 +688,13 @@ public class Migration {
 
     private class Delegation {
         Key key;
-        String kode;
         Date godkendelsesdato;
         Date gyldig_fra;
         Date gyldig_til;
         Date sidst_modificeret;
         String sidst_modificeret_af;
-        String gl_rettighed_kode;
-        List<String> nye_rettighed_koder;
+        Permission gl_rettighed_kode;
+        List<Permission> nye_rettighed_koder;
         String arbejdsfunktion_kode;
         String linked_system_kode;
 
@@ -636,6 +710,41 @@ public class Migration {
                     (gl_rettighed_kode != null ? ", gl_rettighed_kode='" + gl_rettighed_kode + '\'' : "") +
                     (nye_rettighed_koder != null && !nye_rettighed_koder.isEmpty() ? ", nye_rettighed_koder='" + nye_rettighed_koder + '\'' : "") +
                     '}';
+        }
+    }
+
+    private class Permission {
+        String rettighed_kode;
+        String uuid;
+        Date gyldig_fra;
+        Date gyldig_til;
+
+        public Permission(String rettighed_kode, String uuid, Date gyldig_fra, Date gyldig_til) {
+            this.rettighed_kode = rettighed_kode;
+            this.uuid = uuid;
+            this.gyldig_fra = gyldig_fra;
+            this.gyldig_til = gyldig_til;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Permission that = (Permission) o;
+
+            return rettighed_kode != null ? rettighed_kode.equals(that.rettighed_kode) : that.rettighed_kode == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            return rettighed_kode != null ? rettighed_kode.hashCode() : 0;
+        }
+
+        @Override
+        public String toString() {
+            return rettighed_kode + (uuid != null ? "/" + uuid : "");
         }
     }
 }

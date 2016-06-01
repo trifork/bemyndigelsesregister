@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.util.EhCache;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
@@ -30,6 +31,8 @@ public class MetadataManagerImpl implements MetadataManager {
 
     @Inject
     DelegatablePermissionDao delegatablePermissionDao;
+
+    private static EhCache<String, Metadata> metadataCache = new EhCache<>("MetadataCache");
 
     @Override
     public void putMetadata(Metadata metadata) {
@@ -190,7 +193,7 @@ public class MetadataManagerImpl implements MetadataManager {
                     delegatablePermissionDao.save(delegatablePermission);
 
                     delegatablePermissionChange = true;
-                    logger.info("  DelegatablePermission [" + c.getRoleCode() + "]:[" + c.getPermissionCode() + "] added");
+                    logger.info("  DelegatablePermission [" + c.getRoleCode() + "]:[" + c.getPermissionCode() + "] added, delegatable=[" + c.isDelegatable() + "]");
                 } else {
                     if (delegatablePermission.isDelegatable() != c.isDelegatable()) {
                         delegatablePermission.setDelegatable(c.isDelegatable());
@@ -223,11 +226,18 @@ public class MetadataManagerImpl implements MetadataManager {
             logger.info("  System [" + metadata.getSystem() + "] marked as modified");
         }
 
+        metadataCache.clear();
         logger.info("putMetadata ended");
     }
 
     @Override
     public Metadata getMetadata(String domainCode, String systemCode) {
+        Metadata metadata = metadataCache.get(systemCode);
+        if (metadata != null) {
+            logger.info("Metadata found in cache, system=[" + systemCode + "]");
+            return metadata;
+        }
+
         if (domainCode != null) {
             Domain domain = domainDao.findByCode(domainCode);
             if (domain == null)
@@ -238,7 +248,7 @@ public class MetadataManagerImpl implements MetadataManager {
         if (delegatingSystem == null)
             throw new IllegalArgumentException("System [" + systemCode + "] not found");
 
-        Metadata metadata = new Metadata(domainCode, systemCode, delegatingSystem.getDescription());
+        metadata = new Metadata(delegatingSystem.getDomain().getCode(), delegatingSystem.getCode(), delegatingSystem.getDescription());
 
         List<Role> roles = roleDao.findBySystem(delegatingSystem.getId());
         if (roles != null)
@@ -254,6 +264,8 @@ public class MetadataManagerImpl implements MetadataManager {
         if (delegatablePermissions != null)
             for (DelegatablePermission delegatablePermission : delegatablePermissions)
                 metadata.addDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode(), delegatablePermission.getPermission().getDescription(), delegatablePermission.isDelegatable());
+
+        metadataCache.put(systemCode, metadata);
 
         return metadata;
     }

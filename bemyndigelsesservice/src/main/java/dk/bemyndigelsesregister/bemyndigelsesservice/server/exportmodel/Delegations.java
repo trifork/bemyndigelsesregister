@@ -1,5 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel;
 
+import org.joda.time.DateTime;
+
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,16 +29,11 @@ public class Delegations {
     @XmlSchemaType(name = "positiveInteger")
     private int recordCount;
 
-    public void addDelegation(dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation delegation, Set<String> permissionCodes) {
+    public void addDelegation(String uuid, String delegatorCpr, String delegateeCpr, String delegateeCvr, String system, String status, String role, String permission, DateTime approvalDate, DateTime modifiedDate, DateTime effectiveFrom, DateTime effectiveTo) {
         if (delegations == null)
             delegations = new LinkedList<>();
 
-        int n = 0;
-        for (String permissionCode : permissionCodes) {
-            String uuid = String.format("%s-%03d", delegation.getCode(), ++n); // create a unique id for each exported "Bemyndigelse" by concatenating delegation uuid and an incremental number
-            delegations.add(new Delegation(uuid, delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), permissionCode, delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo()));
-        }
-
+        delegations.add(new Delegation(uuid, delegatorCpr, delegateeCpr, delegateeCvr, system, status, role, permission, approvalDate, modifiedDate, effectiveFrom, effectiveTo));
         recordCount = delegations.size();
     }
 

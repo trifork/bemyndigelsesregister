@@ -112,13 +112,12 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
         try {
             ebeanServer.beginTransaction();
 
-            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList(Metadata.ASTERISK_PERMISSION_CODE, TestData.permissionCode1, TestData.permissionCode2), date1, null);
+            Delegation delegation = manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, State.GODKENDT, Arrays.asList(Metadata.ASTERISK_PERMISSION_CODE, TestData.permissionCode1), date1, null);
             delegation = manager.getDelegation(delegation.getCode()); // reload delegation
 
             assertNotNull("Der skal findes en bemyndigelse", delegation);
-            assertNotNull("Der skal findes rettigheder i bemyndigelse", delegation.getDelegationPermissions());
-            assertEquals("Der skal være defineret én rettighed, de øvrige 2 skal ikke lagres", 1, delegation.getDelegationPermissions().size());
-            assertEquals("Der skal returneres en stjernerettighed i denne bemyndigelse", Metadata.ASTERISK_PERMISSION_CODE, delegation.getDelegationPermissions().iterator().next().getPermissionCode());
+            assertNotNull("Der skal findes rettigheder i bemyndigelsen", delegation.getDelegationPermissions());
+            assertEquals("Der skal være 3 lagrede rettigheder i bemyndigelsen pga. *", 3, delegation.getDelegationPermissions().size());
         } finally {
             ebeanServer.endTransaction();
         }
