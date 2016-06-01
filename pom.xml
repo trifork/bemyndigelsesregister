@@ -24,7 +24,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.bemyndigelsesregister</groupId>
     <artifactId>bemyndigelsesregister</artifactId>
-    <version>1.18-SNAPSHOT</version>
+    <version>2.0</version>
     <packaging>pom</packaging>
 
     <licenses>
@@ -38,7 +38,7 @@
         <url>scm:git:git@github.com:trifork/bemyndigelsesregister</url>
         <connection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</connection>
         <developerConnection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</developerConnection>
-      <tag>bemyndigelsesregister-1.18-SNAPSHOT</tag>
+      <tag>bemyndigelsesregister-2.0</tag>
   </scm>
     <issueManagement>
         <system>JIRA</system>
