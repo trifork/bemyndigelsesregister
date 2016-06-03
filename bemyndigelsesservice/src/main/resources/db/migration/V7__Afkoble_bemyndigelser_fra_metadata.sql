@@ -9,9 +9,9 @@ UPDATE bemyndigelse SET linked_system_kode = (SELECT kode FROM linked_system WHE
 UPDATE bemyndigelse SET arbejdsfunktion_kode = (SELECT kode FROM arbejdsfunktion WHERE id = arbejdsfunktion_id);
 UPDATE bemyndigelse SET rettighed_kode = (SELECT kode FROM rettighed WHERE id = rettighed_id);
 
--- ALTER TABLE bemyndigelse MODIFY linked_system_kode VARCHAR(255) NOT NULL;
--- ALTER TABLE bemyndigelse MODIFY arbejdsfunktion_kode VARCHAR(255) NOT NULL;
--- ALTER TABLE bemyndigelse MODIFY rettighed_kode VARCHAR(255) NOT NULL;
+ALTER TABLE bemyndigelse MODIFY linked_system_kode VARCHAR(255) NOT NULL;
+ALTER TABLE bemyndigelse MODIFY arbejdsfunktion_kode VARCHAR(255) NOT NULL;
+ALTER TABLE bemyndigelse MODIFY rettighed_kode VARCHAR(255) NOT NULL;
 
 ALTER TABLE bemyndigelse DROP FOREIGN KEY arbejdsfunktion_type;
 ALTER TABLE bemyndigelse DROP FOREIGN KEY bemyndigelse_system_type;
