@@ -79,6 +79,10 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
+
+        dataSource.setTimeBetweenEvictionRunsMillis(5 * 60 * 1000);
+        dataSource.setMinEvictableIdleTimeMillis(3 * 60 * 1000);
+
         return dataSource;
     }
 
