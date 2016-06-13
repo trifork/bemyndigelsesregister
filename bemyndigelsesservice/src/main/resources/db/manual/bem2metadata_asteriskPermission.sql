@@ -1,10 +1,10 @@
-INSERT INTO `rettighed`
+INSERT INTO `bemyndigelse`.`rettighed` (`id`,`linked_system_id`,`kode`,`beskrivelse`,`sidst_modificeret`,`sidst_modificeret_af`)
 VALUES
 (51,1, '*', 'Alle delegerbare rettigheder (inkl. fremtidige)','2016-06-13 11:30:00','2016-06-13 11:30:00'),
 (52,2, '*', 'Alle delegerbare rettigheder (inkl. fremtidige)','2016-06-13 11:30:00','2016-06-13 11:30:00'),
 (53,3, '*', 'Alle delegerbare rettigheder (inkl. fremtidige)','2016-06-13 11:30:00','2016-06-13 11:30:00');
 
-INSERT INTO `delegerbar_rettighed` (`arbejdsfunktion_id`,`rettighedskode_id`,`sidst_modificeret`,`sidst_modificeret_af`,`delegerbar`)
+INSERT INTO `bemyndigelse`.`delegerbar_rettighed` (`arbejdsfunktion_id`,`rettighedskode_id`,`sidst_modificeret`,`sidst_modificeret_af`,`delegerbar`)
 VALUES
 (77,51,'2016-06-13 11:30:00','2016-06-13 11:30:00',1),
 (78,51,'2016-06-13 11:30:00','2016-06-13 11:30:00',1),
@@ -24,7 +24,7 @@ VALUES
 (92,51,'2016-06-13 11:30:00','2016-06-13 11:30:00',1),
 (93,51,'2016-06-13 11:30:00','2016-06-13 11:30:00',1);
 
-INSERT INTO `delegerbar_rettighed` (`arbejdsfunktion_id`,`rettighedskode_id`,`sidst_modificeret`,`sidst_modificeret_af`,`delegerbar`)
+INSERT INTO `bemyndigelse`.`delegerbar_rettighed` (`arbejdsfunktion_id`,`rettighedskode_id`,`sidst_modificeret`,`sidst_modificeret_af`,`delegerbar`)
 VALUES
 (42,52,'2016-06-13 11:30:00','2016-06-13 11:30:00',1),
 (43,52,'2016-06-13 11:30:00','2016-06-13 11:30:00',1),
@@ -46,7 +46,7 @@ VALUES
 (59,52,'2016-06-13 11:30:00','2016-06-13 11:30:00',1),
 (60,52,'2016-06-13 11:30:00','2016-06-13 11:30:00',1);
 
-INSERT INTO `delegerbar_rettighed` (`arbejdsfunktion_id`,`rettighedskode_id`,`sidst_modificeret`,`sidst_modificeret_af`,`delegerbar`)
+INSERT INTO `bemyndigelse`.`delegerbar_rettighed` (`arbejdsfunktion_id`,`rettighedskode_id`,`sidst_modificeret`,`sidst_modificeret_af`,`delegerbar`)
 VALUES
 (94,53,'2016-06-13 11:30:00','2016-06-13 11:30:00',1),
 (95,53,'2016-06-13 11:30:00','2016-06-13 11:30:00',1);
