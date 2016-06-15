@@ -3,45 +3,48 @@
         xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
-        <Domain>SST</Domain>
-        <System>TAS</System>
-        <SystemLongName>Tilskudsansøgningsservicen</SystemLongName>
-        <Roles>
-            <RoleWithDescription>
-                <Role>Læge</Role>
-                <RoleDescription>Autoriseret læge</RoleDescription>
-            </RoleWithDescription>
-            <RoleWithDescription>
-                <Role>Tandlæge</Role>
-                <RoleDescription>Autoriseret tandlæge</RoleDescription>
-            </RoleWithDescription>
-        </Roles>
-        <Permissions>
-            <PermissionWithDescription>
-                <Permission>*</Permission>
-                <PermissionDescription>Alle nuværende og fremtidige delegerbare rettigheder</PermissionDescription>
-            </PermissionWithDescription>
-            <PermissionWithDescription>
-                <Permission>SkrivAnsøgninger</Permission>
-                <PermissionDescription>Oprette tilskudsansøgninger og svare på yderligere oplysninger</PermissionDescription>
-            </PermissionWithDescription>
-            <PermissionWithDescription>
-                <Permission>LæsAnsøgninger</Permission>
-                <PermissionDescription>Vise indsendte tilskudsansøgninger</PermissionDescription>
-            </PermissionWithDescription>
-            <PermissionWithDescription>
-                <Permission>SkrivAnsøgninger</Permission>
-                <PermissionDescription>Oprette tilskudsansøgninger og svare på yderligere oplysninger</PermissionDescription>
-            </PermissionWithDescription>
-        </Permissions>
+    <Domain>SST</Domain>
+    <SystemId>TAS</SystemId>
+    <SystemLongName>Tilskudsansøgningsservicen</SystemLongName>
+    <Permission>
+        <PermissionId>LæsSager</PermissionId>
+        <PermissionDescription>Vise indsendte tilskudsansøgninger</PermissionDescription>
+    </Permission>
+    <Permission>
+        <PermissionId>LæsKladder</PermissionId>
+        <PermissionDescription>Vise kladder for tilskudsansøgninger</PermissionDescription>
+    </Permission>
+    <Permission>
+        <PermissionId>SkrivKladder</PermissionId>
+        <PermissionDescription>Rette og slette kladder for tilskudsansøgninger</PermissionDescription>
+    </Permission>
+    <Permission>
+        <PermissionId>SkrivSager</PermissionId>
+        <PermissionDescription>Indsende tilskudsansøgninger og YO-svar</PermissionDescription>
+    </Permission>
+    <EnableAsteriskPermission>true</EnableAsteriskPermission>
+    <Role>
+        <RoleId>Læge</RoleId>
+        <RoleDescription>Autoriseret læge</RoleDescription>
         <DelegatablePermissions>
-            <DelegatablePermission>
-                <Role>Læge</Role>
-                <Permission>LæsAnsøgninger</Permission>
-            </DelegatablePermission>
-            <DelegatablePermission>
-                <Role>Tandlæge</Role>
-                <Permission>LæsAnsøgninger</Permission>
-            </DelegatablePermission>
+            <PermissionId>LæsSager</PermissionId>
+            <PermissionId>LæsKladder</PermissionId>
+            <PermissionId>SkrivKladder</PermissionId>
         </DelegatablePermissions>
+        <UndelegatablePermissions>
+            <PermissionId>SkrivSager</PermissionId>
+        </UndelegatablePermissions>
+    </Role>
+    <Role>
+        <RoleId>Tandlæge</RoleId>
+        <RoleDescription>Autoriseret tandlæge</RoleDescription>
+        <DelegatablePermissions>
+            <PermissionId>LæsSager</PermissionId>
+            <PermissionId>LæsKladder</PermissionId>
+            <PermissionId>SkrivKladder</PermissionId>
+        </DelegatablePermissions>
+        <UndelegatablePermissions>
+            <PermissionId>SkrivSager</PermissionId>
+        </UndelegatablePermissions>
+    </Role>
 </bms20160101:PutMetadataRequest>
