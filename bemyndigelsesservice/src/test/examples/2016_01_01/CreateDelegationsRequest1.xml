@@ -6,11 +6,11 @@
     <Create>
         <DelegatorCpr>1206879196</DelegatorCpr>
         <DelegateeCpr>0304838140</DelegateeCpr>
-        <System>TAS</System>
-        <Role>Tandlæge</Role>
+        <SystemId>TAS</SystemId>
+        <RoleId>Tandlæge</RoleId>
         <State>Anmodet</State>
-        <ListOfPermissions>
-            <Permission>*</Permission>
-        </ListOfPermissions>
+        <ListOfPermissionIds>
+            <PermissionId>*</PermissionId>
+        </ListOfPermissionIds>
     </Create>
 </bms20160101:CreateDelegationsRequest>

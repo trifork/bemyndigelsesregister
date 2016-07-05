@@ -8,15 +8,19 @@
         <DelegatorCpr>2005511871</DelegatorCpr>
         <DelegateeCpr>0304838140</DelegateeCpr>
         <DelegateeCvr>20921897</DelegateeCvr>
-        <System>FMK</System>
-        <SystemLongName>Fælles Medicinkort</SystemLongName>
-        <Role>Læge</Role>
-        <RoleDescription>Autoriseret læge</RoleDescription>
-        <State>Oprettet</State>
-        <PermissionNameDescription>
-            <Permission>SundhedsfagligOpslag</Permission>
+        <System>
+            <SystemId>FMK</SystemId>
+            <SystemLongName>Fælles Medicinkort</SystemLongName>
+        </System>
+        <Role>
+            <RoleId>Læge</RoleId>
+            <RoleDescription>Autoriseret læge</RoleDescription>
+        </Role>
+        <State>Godkendt</State>
+        <Permission>
+            <PermissionId>SundhedsfagligOpslag</PermissionId>
             <PermissionDescription>Sundhedsfagligt opslag</PermissionDescription>
-        </PermissionNameDescription>
+        </Permission>
         <Created>2016-01-04T10:10:00Z</Created>
         <EffectiveFrom>2016-02-01T00:00:00Z</EffectiveFrom>
         <EffectiveTo>2017-01-31T00:00:00Z</EffectiveTo>
@@ -25,19 +29,23 @@
         <DelegationId>DB83CA88-2B84-4ADE-908F-596F9ABE366C</DelegationId>
         <DelegatorCpr>2005511871</DelegatorCpr>
         <DelegateeCpr>0304838140</DelegateeCpr>
-        <System>DDV</System>
-        <SystemLongName>Vaccinationsregistret</SystemLongName>
-        <Role>Læge</Role>
-        <RoleDescription>Autoriseret læge</RoleDescription>
-        <State>Oprettet</State>
-        <PermissionNameDescription>
-            <Permission>VaccinationVedligehold</Permission>
+        <System>
+            <SystemId>DDV</SystemId>
+            <SystemLongName>Vaccinationsregistret</SystemLongName>
+        </System>
+        <Role>
+            <RoleId>Læge</RoleId>
+            <RoleDescription>Autoriseret læge</RoleDescription>
+        </Role>
+        <State>Godkendt</State>
+        <Permission>
+            <PermissionId>VaccinationVedligehold</PermissionId>
             <PermissionDescription>Opret, ret eller slet vaccinationer</PermissionDescription>
-        </PermissionNameDescription>
-        <PermissionNameDescription>
-            <Permission>VaccinationVedligeholdAnbefalet</Permission>
+        </Permission>
+        <Permission>
+            <PermissionId>VaccinationVedligeholdAnbefalet</PermissionId>
             <PermissionDescription>Opret, ret eller slet anbefalede vaccinationer</PermissionDescription>
-        </PermissionNameDescription>
+        </Permission>
         <Created>2016-01-04T10:10:00Z</Created>
         <EffectiveFrom>2016-01-04T10:10:00Z</EffectiveFrom>
         <EffectiveTo>2017-01-31T00:00:00Z</EffectiveTo>
@@ -46,15 +54,19 @@
         <DelegationId>2079412A-FC09-4072-A5DA-039B80357369</DelegationId>
         <DelegatorCpr>1206879196</DelegatorCpr>
         <DelegateeCpr>0304838140</DelegateeCpr>
-        <System>TAS</System>
-        <SystemLongName>Tilskudsansøgningsservicen</SystemLongName>
-        <Role>Tandlæge</Role>
-        <RoleDescription>Autoriseret tandlæge</RoleDescription>
+        <System>
+            <SystemId>TAS</SystemId>
+            <SystemLongName>Tilskudsansøgningsservicen</SystemLongName>
+        </System>
+        <Role>
+            <RoleId>Tandlæge</RoleId>
+            <RoleDescription>Autoriseret tandlæge</RoleDescription>
+        </Role>
         <State>Anmodet</State>
-        <PermissionNameDescription>
-            <Permission>*</Permission>
+        <Permission>
+            <PermissionId>*</PermissionId>
             <PermissionDescription>Alle nuværende og fremtidige delegerbare rettigheder</PermissionDescription>
-        </PermissionNameDescription>
+        </Permission>
         <Created>2016-02-03T13:14:00Z</Created>
         <EffectiveFrom>2016-02-03T13:14:00Z</EffectiveFrom>
         <EffectiveTo>2017-02-03T13:14:00Z</EffectiveTo>
