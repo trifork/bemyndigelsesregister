@@ -34,17 +34,14 @@ public class DelegationExportJobTest {
     private final SystemVariableDao systemVariableDao = Mockito.mock(SystemVariableDao.class);
 
     NspManager nspManager = Mockito.mock(NspManager.class);
-    MetadataManager metadataManager = Mockito.mock(MetadataManager.class);
     private final SystemService systemService = Mockito.mock(SystemService.class);
 
     @Before
     public void setUp() throws Exception {
         job.nspManager = nspManager;
         job.delegationDao = delegationDao;
-        job.delegatingSystemDao = delegatingSystemDao;
         job.systemVariableDao = systemVariableDao;
         job.systemService = systemService;
-        job.metadataManager = metadataManager;
         job.jobEnabled = "true";
         job.batchSize = 5000;
     }
