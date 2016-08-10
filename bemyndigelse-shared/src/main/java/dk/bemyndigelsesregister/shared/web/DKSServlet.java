@@ -28,11 +28,11 @@ public class DKSServlet {
     private static final Logger logger = Logger.getLogger(DKSServlet.class);
     private static final String RESOURCE_NAME = "/dksconfig/BEM_2016_01_01.xml";
 
-    private static final String TEST1_ENV = "bem01.test1.fmk.netic.dk:8080";
-    private static final String TEST2_ENV = "bem01.test2.fmk.netic.dk:8080";
-    private static final String UDD_ENV = "bem01.udd.fmk.netic.dk:8080";
-    private static final String PRODTEST_ENV = "bem01.prodtest.fmk.netic.dk:8080";
-    private static final String PROD_ENV = "bemprod01.ddv.netic.dk:8080";
+    private static final String TEST1_ENV = "bemtest.ddv.netic.dk:8080";
+    private static final String TEST2_ENV = "bemtest.ddv.netic.dk:8080";
+    private static final String UDD_ENV = "bemtest.ddv.netic.dk:8080";
+    private static final String PRODTEST_ENV = "bemtest.ddv.netic.dk:8080";
+    private static final String PROD_ENV = "bemprod.ddv.netic.dk:8080";
 
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(DateTimeZone.UTC);
 
@@ -44,7 +44,7 @@ public class DKSServlet {
         String env = req.getParameter("Env");
         logger.debug("dksconfig request, Env=" + env);
 
-        if(localPort == null) {
+        if (localPort == null) {
             localPort = req.getServerPort();
         }
 
@@ -85,15 +85,15 @@ public class DKSServlet {
         if (env == null || env.isEmpty()) {
             return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", getEndpointFromLocalServer());
         } else if (env.toLowerCase().equals("prod")) {
-            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", "bemprod01.ddv.netic.dk:8080");
+            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", PROD_ENV);
         } else if (env.toLowerCase().equals("test1")) {
-            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", "bem01.test1.fmk.netic.dk:8080");
+            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", TEST1_ENV);
         } else if (env.toLowerCase().equals("test2")) {
-            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", "bem01.test2.fmk.netic.dk:8080");
+            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", TEST2_ENV);
         } else if (env.toLowerCase().equals("udd")) {
-            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", "bem01.udd.fmk.netic.dk:8080");
+            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", UDD_ENV);
         } else if (env.toLowerCase().equals("prodtest")) {
-            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", "bem01.prodtest.fmk.netic.dk:8080");
+            return template.toString().replace("ENDPOINT_SERVERNAME_PLACEHOLDER", PRODTEST_ENV);
         } else {
             return template.toString();
         }
@@ -106,15 +106,15 @@ public class DKSServlet {
         try {
             String hostName = InetAddress.getLocalHost().getHostName();
 
-            if (hostName.toLowerCase().contains(TEST1_ENV)) {
+            if (hostName.toLowerCase().contains("test1")) {
                 return TEST1_ENV;
-            } else if (hostName.toLowerCase().contains(TEST2_ENV)) {
+            } else if (hostName.toLowerCase().contains("test2")) {
                 return TEST2_ENV;
-            } else if (hostName.toLowerCase().contains(UDD_ENV)) {
+            } else if (hostName.toLowerCase().contains("udd")) {
                 return UDD_ENV;
-            } else if (hostName.toLowerCase().contains(PRODTEST_ENV)) {
+            } else if (hostName.toLowerCase().contains("prodtest")) {
                 return PRODTEST_ENV;
-            } else if (hostName.toLowerCase().contains(PROD_ENV)) {
+            } else if (hostName.toLowerCase().contains("bemprod")) {
                 return PROD_ENV;
             } else {
                 return hostName + ":" + localPort;
