@@ -52,7 +52,7 @@
 	<wsdl:message name="GetDelegationsRequest_2016_01_01">
 		<wsdl:part element="bms20160101:GetDelegationsRequest" name="GetDelegationsRequest"/>
 	</wsdl:message>
-	<wsdl:message name="GetDelagationsResponse_2016_01_01">
+	<wsdl:message name="GetDelegationsResponse_2016_01_01">
 		<wsdl:part element="bms20160101:GetDelegationsResponse" name="GetDelegationsResponse"/>
 	</wsdl:message>
 	<wsdl:message name="CreateDelegationsRequest_2016_01_01">
@@ -85,7 +85,7 @@
 		</wsdl:operation>
 		<wsdl:operation name="GetDelegations_2016_01_01">
 			<wsdl:input message="tns:GetDelegationsRequest_2016_01_01" name="GetDelegationsRequest_2016_01_01"/>
-			<wsdl:output message="tns:GetDelagationsResponse_2016_01_01" name="GetDelagationsResponse_2016_01_01"/>
+			<wsdl:output message="tns:GetDelegationsResponse_2016_01_01" name="GetDelegationsResponse_2016_01_01"/>
 			<wsdl:fault name="DGWSFault" message="tns:DGWSFault" />
 		</wsdl:operation>
 		<wsdl:operation name="CreateDelegations_2016_01_01">
