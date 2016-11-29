@@ -123,6 +123,11 @@
             <version>1.2</version> 
         </dependency>
 -->
+        <dependency>
+            <groupId>com.trifork</groupId>
+            <artifactId>xmlobject</artifactId>
+            <version>1.19</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -213,7 +218,10 @@
                             <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
                             <generateDirectory>${project.build.directory}/generated-sources/jaxb</generateDirectory>
                             <schemaIncludes>
-                                <include>**/*.xsd</include>
+                                <include>**/bemyndigelsesservice.xsd</include>
+                                <include>**/medcom.xsd</include>
+                                <include>**/CVR_CVRnumberIdentifier.xsd</include>
+								<include>**/CPR_PersonCivilRegistrationIdentifier.xsd</include>
                             </schemaIncludes>
                             <plugins>
                                 <plugin>
