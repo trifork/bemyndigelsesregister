@@ -32,7 +32,7 @@ public class DKSServlet {
     private static final String TEST2_ENV = "bemtest.ddv.netic.dk:8080";
     private static final String UDD_ENV = "bemtest.ddv.netic.dk:8080";
     private static final String PRODTEST_ENV = "bemtest.ddv.netic.dk:8080";
-    private static final String PROD_ENV = "bemprod.ddv.netic.dk:8080";
+    private static final String PROD_ENV = "bemprod.netic.dsdn.dk:8080";
 
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(DateTimeZone.UTC);
 
