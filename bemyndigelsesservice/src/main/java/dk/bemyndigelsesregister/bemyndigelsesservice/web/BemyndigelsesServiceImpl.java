@@ -38,10 +38,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     DgwsRequestContext dgwsRequestContext;
     @Inject
     ServiceTypeMapper typeMapper;
-
     @Inject
     WhitelistChecker whitelistChecker;
-
 
     public BemyndigelsesServiceImpl() {
     }
@@ -74,7 +72,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected
+    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
@@ -110,7 +108,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected
+    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
@@ -124,6 +122,12 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
         if ((delegatorCpr != null ? 1 : 0) + (delegateeCpr != null ? 1 : 0) + (delegationId != null ? 1 : 0) != 1) {
             throw new IllegalArgumentException("A single argument must be supplied, i.e. exactly one of delegatorCpr, delegateeCpr or delegationId must not be null");
         }
+
+        // authorize
+        if (delegatorCpr != null)
+            authorizeOperationForCpr("getDelegations", "IDCard CPR was different from DelegatorCpr", delegatorCpr);
+        else if (delegateeCpr != null)
+            authorizeOperationForCpr("getDelegations", "IDCard CPR was different from DelegateeCpr", delegateeCpr);
 
         // invoke correct method on manager
         if (delegatorCpr != null) {
@@ -153,7 +157,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     }
 
     @Override
-    @Protected
+    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
