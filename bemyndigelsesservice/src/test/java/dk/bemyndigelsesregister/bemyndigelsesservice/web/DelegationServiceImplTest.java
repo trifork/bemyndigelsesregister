@@ -261,7 +261,7 @@ public class DelegationServiceImplTest {
         final Delegation delegation = createDelegation(code, state, null);
 
         when(delegationManager.getDelegationsByDelegateeCpr(delegateeCprText)).thenReturn(Arrays.asList(delegation));
-        setupDgwsRequestContextForUser(delegatorCprText);
+        setupDgwsRequestContextForUser(delegateeCprText);
 
         GetDelegationsRequest request = new GetDelegationsRequest() {{
             setDelegateeCpr(delegateeCprText);
