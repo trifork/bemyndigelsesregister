@@ -59,8 +59,14 @@ public class DelegationExportJob {
             SystemVariable lastRun = systemVariableDao.getByName(LAST_RUN_SYSTEM_VARIABLE);
             DateTime startTime = systemService.getDateTime();
 
+            DateTime fromIncluding = lastRun.getDateTimeValue();
+            fromIncluding = fromIncluding.minusMinutes(1);
+
+            DateTime toExcluding = startTime;
+            toExcluding = toExcluding.minusMinutes(1);
+
             // export changed delegations
-            exportChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(lastRun.getDateTimeValue()));
+            exportChangedDelegations(startTime, delegationDao.findByModifiedInPeriod(fromIncluding, toExcluding));
 
             updateLastRun(lastRun, startTime);
             logger.info("DelegationExport job ended");
@@ -76,7 +82,7 @@ public class DelegationExportJob {
         SystemVariable lastRun = systemVariableDao.getByName("lastRun");
         DateTime startTime = systemService.getDateTime();
 
-        exportChangedDelegations(startTime, delegationDao.findByLastModifiedGreaterThanOrEquals(new DateTime(1970, 1, 1, 0, 0)));
+        exportChangedDelegations(startTime, delegationDao.findByModifiedInPeriod(null, null));
         updateLastRun(lastRun, startTime);
 
         logger.info("Complete DelegationExport ended");

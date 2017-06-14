@@ -174,7 +174,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindByLastModifiedGreaterThanOrEquals() throws Exception {
-        final List<Long> delegations = dao.findByLastModifiedGreaterThanOrEquals(new DateTime(2011, 1, 1, 0, 0));
+        final List<Long> delegations = dao.findByModifiedInPeriod(new DateTime(2011, 1, 1, 0, 0), null);
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }

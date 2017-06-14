@@ -1,5 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
+import com.avaje.ebean.ExpressionList;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
@@ -50,10 +51,16 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     }
 
     @Override
-    public List<Long> findByLastModifiedGreaterThanOrEquals(DateTime lastModified) {
+    public List<Long> findByModifiedInPeriod(DateTime fromIncluding, DateTime toExcluding) {
         List<Long> result = new LinkedList<>();
 
-        List<Object> ids = query().where().ge("lastModified", lastModified).eq("state", State.GODKENDT).findIds();
+        ExpressionList<Delegation> expression = query().where().eq("state", State.GODKENDT);
+        if(fromIncluding != null)
+            expression = expression.ge("lastModified", fromIncluding);
+        if(toExcluding != null)
+            expression = expression.lt("lastModified", toExcluding);
+
+        List<Object> ids = expression.findIds();
         if (ids != null)
             for (Object id : ids)
                 result.add((Long)id);

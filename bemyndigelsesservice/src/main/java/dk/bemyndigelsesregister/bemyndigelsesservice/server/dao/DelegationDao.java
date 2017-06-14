@@ -28,7 +28,7 @@ public interface DelegationDao {
 
     List<Delegation> findByCodes(Collection<String> codes);
 
-    List<Long> findByLastModifiedGreaterThanOrEquals(DateTime lastModified);
+    List<Long> findByModifiedInPeriod(DateTime fromIncluding, DateTime toExcluding);
 
     /**
      * findWithAsterisk finds delegations for a system containing asterisk permission

@@ -54,10 +54,16 @@ public class DelegationExportJobTest {
         final DelegatingSystem system = createSystem("system1");
         final SystemVariable lastRunSV = new SystemVariable("lastRun", new DateTime(0l));
 
+        DateTime fromIncluding = lastRunSV.getDateTimeValue();
+        fromIncluding.minusMinutes(1);
+
+        DateTime toExcluding = startTime;
+        toExcluding.minusMinutes(1);
+
         when(systemVariableDao.getByName("lastRun")).thenReturn(lastRunSV);
         when(systemService.getDateTime()).thenReturn(startTime);
         when(delegatingSystemDao.findByLastModifiedGreaterThanOrEquals(lastRunSV.getDateTimeValue())).thenReturn(Arrays.asList(system));
-        when(delegationDao.findByLastModifiedGreaterThanOrEquals(lastRunSV.getDateTimeValue())).thenReturn(Arrays.asList(id1, id2));
+        when(delegationDao.findByModifiedInPeriod(fromIncluding, toExcluding)).thenReturn(Arrays.asList(id1, id2));
         when(delegationDao.get(id1)).thenReturn(delegation1);
         when(delegationDao.get(id2)).thenReturn(delegation2);
 
@@ -76,7 +82,7 @@ public class DelegationExportJobTest {
 
         when(systemVariableDao.getByName("lastRun")).thenReturn(lastRunSV);
         when(systemService.getDateTime()).thenReturn(startTime);
-        when(delegationDao.findByLastModifiedGreaterThanOrEquals(new DateTime(1970, 1, 1, 0, 0))).thenReturn(Arrays.asList(id1, id2));
+        when(delegationDao.findByModifiedInPeriod(null, null)).thenReturn(Arrays.asList(id1, id2));
         when(delegationDao.get(id1)).thenReturn(delegation1);
         when(delegationDao.get(id2)).thenReturn(delegation2);
 
