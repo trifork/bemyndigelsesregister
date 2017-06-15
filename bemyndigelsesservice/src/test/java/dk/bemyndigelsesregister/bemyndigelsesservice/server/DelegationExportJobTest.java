@@ -55,10 +55,10 @@ public class DelegationExportJobTest {
         final SystemVariable lastRunSV = new SystemVariable("lastRun", new DateTime(0l));
 
         DateTime fromIncluding = lastRunSV.getDateTimeValue();
-        fromIncluding.minusMinutes(1);
+        fromIncluding = fromIncluding.minusMinutes(1);
 
         DateTime toExcluding = startTime;
-        toExcluding.minusMinutes(1);
+        toExcluding = toExcluding.minusMinutes(1);
 
         when(systemVariableDao.getByName("lastRun")).thenReturn(lastRunSV);
         when(systemService.getDateTime()).thenReturn(startTime);
