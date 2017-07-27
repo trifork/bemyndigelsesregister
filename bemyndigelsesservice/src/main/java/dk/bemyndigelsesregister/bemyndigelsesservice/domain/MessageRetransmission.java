@@ -1,5 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
+import org.joda.time.DateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 
@@ -19,6 +21,7 @@ public class MessageRetransmission extends DomainObject {
         this.messageID = messageID;
         this.messageResponse = messageResponse;
         this.implementationBuild = implementationBuild;
+        this.lastModified = DateTime.now();
     }
 
     //<editor-fold desc="GettersAndSetters">

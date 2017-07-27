@@ -7,6 +7,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2016._01._01.*;
@@ -62,6 +63,8 @@ public class DelegationServiceImplTest {
     WhitelistChecker whitelistChecker;
     @Mock
     MetadataManager metadataManager;
+    @Mock
+    AuditLogger auditLogger;
 
     @Mock
     SoapHeader soapHeader;

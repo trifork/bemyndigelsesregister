@@ -4,6 +4,7 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
 import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
 import com.googlecode.flyway.core.Flyway;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
@@ -31,17 +32,22 @@ import static java.lang.System.getProperty;
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationRootConfig implements TransactionManagementConfigurer {
-    static Logger logger = Logger.getLogger(ApplicationRootConfig.class);
+    private static Logger logger = Logger.getLogger(ApplicationRootConfig.class);
+
     @Value("${jdbc.driver}")
-    String driver;
+    private String driver;
     @Value("${jdbc.url}")
-    String url;
+    private String url;
     @Value("${jdbc.username}")
-    String username;
+    private String username;
     @Value("${jdbc.password}")
-    String password;
+    private String password;
     @Value("${flyway.enabled}")
-    String flywayEnabled;
+    private String flywayEnabled;
+    @Value("${auditlog.enabled}")
+    private String auditLogEnabled;
+    @Value("${auditlog.usemock}")
+    private String auditLogUseMock;
 
     @Bean
     public static PropertyPlaceholderConfigurer configuration() {
@@ -57,6 +63,11 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         props.setIgnoreResourceNotFound(true);
         props.setSystemPropertiesMode(PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE);
         return props;
+    }
+
+    @Bean
+    public AuditLogger auditLogger() {
+        return new AuditLogger(Boolean.valueOf(auditLogEnabled), Boolean.valueOf(auditLogUseMock));
     }
 
     @Bean(initMethod = "migrate")

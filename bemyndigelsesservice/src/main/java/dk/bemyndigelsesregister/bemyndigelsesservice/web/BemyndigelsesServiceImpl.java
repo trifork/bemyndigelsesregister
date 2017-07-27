@@ -7,6 +7,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ServiceTypeMapper;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.bemyndigelse._2016._01._01.*;
@@ -40,6 +41,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     ServiceTypeMapper typeMapper;
     @Inject
     WhitelistChecker whitelistChecker;
+    @Inject
+    AuditLogger auditLogger;
 
     public BemyndigelsesServiceImpl() {
     }
@@ -76,6 +79,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
+        auditLogger.log("CreateDelegationsRequest");
+
         Collection<Delegation> delegations = new ArrayList<>();
 
         for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
@@ -112,6 +117,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
+        auditLogger.log("GetDelegationsRequest");
+
         Collection<Delegation> delegations = new ArrayList<>();
 
         String delegatorCpr = request.getDelegatorCpr();
@@ -161,6 +168,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
+        auditLogger.log("DeleteDelegationsRequest");
+
         String delegatorCpr = request.getDelegatorCpr();
         String delegateeCpr = request.getDelegateeCpr();
         List<String> delegationIds = request.getListOfDelegationIds().getDelegationId();
@@ -206,6 +215,8 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @ResponsePayload
     @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
+        auditLogger.log("PutMetadataRequest");
+
         String domainCode = request.getDomain();
         if (domainCode == null || domainCode.trim().isEmpty())
             throw new IllegalArgumentException("Domain must be specified in the request");

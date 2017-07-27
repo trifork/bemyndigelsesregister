@@ -3,6 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import com.trifork.dgws.MedcomRetransmission;
 import com.trifork.dgws.MedcomRetransmissionRegister;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.RequestContext;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
@@ -35,6 +36,7 @@ public class MedcomRetransmissionRegisterImpl implements MedcomRetransmissionReg
         //TODO: check for implementationbuild
         MessageRetransmission messageRetransmission = messageRetransmissionDao.getByMessageIDAndImplementationBuild(messageID, systemService.getImplementationBuild());
         if (messageRetransmission == null) {
+            RequestContext.get().setMessageId(messageID); // store for later use by auditlog
             logger.debug("Found no MessageRetransmission for messageID=" + messageID);
             return null;
         }

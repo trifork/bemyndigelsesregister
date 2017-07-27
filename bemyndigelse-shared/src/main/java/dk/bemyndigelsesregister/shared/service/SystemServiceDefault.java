@@ -21,6 +21,8 @@ import java.util.jar.Manifest;
 public class SystemServiceDefault implements SystemService {
     private static Logger logger = Logger.getLogger(SystemServiceDefault.class);
 
+    private static String implementationBuild = null;
+
     @Value("${temp.dir}")
     String tempDirLocation;
 
@@ -34,34 +36,33 @@ public class SystemServiceDefault implements SystemService {
 
     @Override
     public String getImplementationBuild() {
-        Manifest manifest = getManifest();
-        if (manifest == null) {
-            return "develop";
-        }
-        final String implementationBuild = manifest.getMainAttributes().getValue("Implementation-Build");
-        if (implementationBuild == null) {
-            logger.warn("No Implementation-Build property found in Manifest file");
-            return "develop";
+        if(implementationBuild == null) {
+            Manifest manifest = getManifest();
+            if (manifest == null) {
+                implementationBuild = "develop";
+            }
+            else {
+                implementationBuild = manifest.getMainAttributes().getValue("Implementation-Build");
+                if (implementationBuild == null || implementationBuild.isEmpty()) {
+                    logger.warn("No Implementation-Build property found in Manifest file");
+                    implementationBuild = "develop";
+                }
+            }
         }
         return implementationBuild;
     }
 
-    private static Manifest manifest;
-
-    public Manifest getManifest() {
-        if (manifest == null) {
-            try {
-                final InputStream resourceAsStream = servletContext.getResourceAsStream("META-INF/MANIFEST.MF");
-                if (resourceAsStream == null) {
-                    logger.warn("No manifest file found");
-                    return null;
-                }
-                manifest = new Manifest(resourceAsStream);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not open manifest", e);
+    private Manifest getManifest() {
+        try {
+            final InputStream resourceAsStream = servletContext.getResourceAsStream("META-INF/MANIFEST.MF");
+            if (resourceAsStream == null) {
+                logger.warn("No manifest file found");
+                return null;
             }
+            return new Manifest(resourceAsStream);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not open manifest", e);
         }
-        return manifest;
     }
 
     /**
