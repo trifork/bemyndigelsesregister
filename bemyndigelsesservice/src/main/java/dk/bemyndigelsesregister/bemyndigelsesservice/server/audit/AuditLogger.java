@@ -3,7 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.audit;
 import com.trifork.dgws.DgwsRequestContext;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.fmk.auditlog.client.AuditLogKafkaClient;
-import dk.nsi.fmk.auditlog.data.proto.AuditLog;
+import dk.nsi.fmk.auditlog.data.proto.AuditLog.AuditLogEntry;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog.AuditLogEntryId;
 import dk.nsi.fmk.moduleframework.data.ModuleFramework;
 import org.apache.log4j.Logger;
@@ -25,8 +25,7 @@ public class AuditLogger {
     @Inject
     DgwsRequestContext dgwsRequestContext;
 
-
-    // Instance
+    // instance
     private boolean loggingEnabled;
     private boolean useMock;
     private boolean configured = false;
@@ -69,7 +68,7 @@ public class AuditLogger {
 
     public AuditLogEntryId log(String method) {
         if (configured) {
-            AuditLog.AuditLogEntry.Builder entryBuilder = AuditLog.AuditLogEntry.newBuilder();
+            AuditLogEntry.Builder entryBuilder = AuditLogEntry.newBuilder();
 
             String messageId = RequestContext.get().getMessageId();
             entryBuilder.setRequestId(messageId);
@@ -90,7 +89,7 @@ public class AuditLogger {
             entryBuilder.setOrganisationName(dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
             entryBuilder.setSystem(dgwsRequestContext.getIdCardSystemLog().getItSystemName());
 
-            AuditLog.AuditLogEntry logEntry = entryBuilder.build();
+            AuditLogEntry logEntry = entryBuilder.build();
 
             ModuleFramework.RequestContext.Builder ctxBuilder = ModuleFramework.RequestContext.newBuilder();
             ctxBuilder.setClientSystem("BEM");
@@ -99,9 +98,13 @@ public class AuditLogger {
             ModuleFramework.RequestContext reqCtx = ctxBuilder.build();
 
             AuditLogEntryId auditLogEntryId = auditLogKafkaClient.createAuditLogEntryId(logEntry);
-            auditLogKafkaClient.sendAuditLog(reqCtx, logEntry, auditLogEntryId);
+            sendAuditLog(reqCtx, logEntry, auditLogEntryId);
             return auditLogEntryId;
         }
         return null;
+    }
+
+    protected void sendAuditLog(ModuleFramework.RequestContext reqCtx, AuditLogEntry logEntry, AuditLogEntryId auditLogEntryId) {
+        auditLogKafkaClient.sendAuditLog(reqCtx, logEntry, auditLogEntryId);
     }
 }
