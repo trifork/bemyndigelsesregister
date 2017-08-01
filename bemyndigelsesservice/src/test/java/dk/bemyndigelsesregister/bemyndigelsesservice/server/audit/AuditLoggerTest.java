@@ -83,7 +83,7 @@ public class AuditLoggerTest {
         assertEquals(TEST_CPR, logEntry.getCpr());
         assertEquals(TEST_ROLE, logEntry.getRole());
         assertEquals(TEST_EMAIL, logEntry.getAdditionalUserInfo());
-        assertEquals("BEM", reqCtx.getClientSystem());
-        assertEquals(TEST_BUILD, reqCtx.getClientVersionOfService());
+        assertEquals("BEM", logEntry.getServerSystemName());
+        assertEquals(TEST_BUILD, logEntry.getServiceVersion());
     }
 }

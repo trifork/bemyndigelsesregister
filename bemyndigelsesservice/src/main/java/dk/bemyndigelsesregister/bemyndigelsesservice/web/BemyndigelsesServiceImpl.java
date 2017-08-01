@@ -79,7 +79,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
-        auditLogger.log("CreateDelegationsRequest");
+        auditLogger.log("Opret bemyndigelser");
 
         Collection<Delegation> delegations = new ArrayList<>();
 
@@ -117,7 +117,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
-        auditLogger.log("GetDelegationsRequest");
+        auditLogger.log("Hent bemyndigelser");
 
         Collection<Delegation> delegations = new ArrayList<>();
 
@@ -168,7 +168,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
-        auditLogger.log("DeleteDelegationsRequest");
+        auditLogger.log("Slet bemyndigelser");
 
         String delegatorCpr = request.getDelegatorCpr();
         String delegateeCpr = request.getDelegateeCpr();
@@ -215,7 +215,7 @@ public class BemyndigelsesServiceImpl implements BemyndigelsesService {
     @ResponsePayload
     @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
-        auditLogger.log("PutMetadataRequest");
+        auditLogger.log("Indlæs metadata");
 
         String domainCode = request.getDomain();
         if (domainCode == null || domainCode.trim().isEmpty())

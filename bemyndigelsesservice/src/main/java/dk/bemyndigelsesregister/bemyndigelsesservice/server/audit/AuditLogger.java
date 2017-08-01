@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.audit;
 
 import com.trifork.dgws.DgwsRequestContext;
+import com.trifork.dgws.IdCardUserLog;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.fmk.auditlog.client.AuditLogKafkaClient;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog.AuditLogEntry;
@@ -71,6 +72,9 @@ public class AuditLogger {
             AuditLogEntry.Builder entryBuilder = AuditLogEntry.newBuilder();
 
             String messageId = RequestContext.get().getMessageId();
+            entryBuilder.setAccessType("Soap");
+            entryBuilder.setServerSystemName("BEM");
+            entryBuilder.setServiceVersion(systemService.getImplementationBuild());
             entryBuilder.setRequestId(messageId);
             entryBuilder.setMessageId(messageId);
             entryBuilder.setMethod(method);
@@ -79,10 +83,25 @@ public class AuditLogger {
             entryBuilder.setAuthLevel(authLevel);
 
             if (authLevel > 3) {
-                entryBuilder.setCpr(dgwsRequestContext.getIdCardUserLog().cpr);
-                entryBuilder.setRole(dgwsRequestContext.getIdCardUserLog().role);
-                entryBuilder.setAdditionalUserInfo(dgwsRequestContext.getIdCardUserLog().emailAddress);
-                entryBuilder.setAuthorizationNumber(dgwsRequestContext.getIdCardUserLog().authorisationCode);
+                IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
+                entryBuilder.setCpr(userLog.cpr);
+                entryBuilder.setRole(userLog.role);
+                entryBuilder.setAdditionalUserInfo(userLog.emailAddress);
+                entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
+
+                StringBuilder b = new StringBuilder();
+                if (userLog.givenName != null) {
+                    b.append(userLog.givenName);
+                }
+                if (userLog.surname != null && !userLog.surname.isEmpty()) {
+                    if (b.length() > 0) {
+                        b.append(" ");
+                    }
+                    b.append(userLog.surname);
+                }
+                if (b.length() > 0) {
+                    entryBuilder.setUserName(b.toString());
+                }
             }
 
             entryBuilder.setCvr(dgwsRequestContext.getIdCardSystemLog().getCareProviderId());
@@ -92,8 +111,6 @@ public class AuditLogger {
             AuditLogEntry logEntry = entryBuilder.build();
 
             ModuleFramework.RequestContext.Builder ctxBuilder = ModuleFramework.RequestContext.newBuilder();
-            ctxBuilder.setClientSystem("BEM");
-            ctxBuilder.setClientVersionOfService(systemService.getImplementationBuild());
             ctxBuilder.setMessageId(logEntry.getMessageId());
             ModuleFramework.RequestContext reqCtx = ctxBuilder.build();
 
