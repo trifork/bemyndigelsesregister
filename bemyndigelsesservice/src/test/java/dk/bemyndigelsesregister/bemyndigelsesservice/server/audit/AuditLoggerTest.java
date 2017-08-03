@@ -51,6 +51,7 @@ public class AuditLoggerTest {
         String TEST_GIVENNAME = "test";
         String TEST_SURNAME = "testesen";
         String TEST_EMAIL = "test@test.com";
+        String TEST_OCCUPATION = "testoccupation";
         String TEST_ROLE = "testrole";
         String TEST_AUTH = "testauth";
         String TEST_SYSTEM = "testsystem";
@@ -60,7 +61,7 @@ public class AuditLoggerTest {
         String TEST_BUILD = "testbuild";
 
         IdCardData data = new IdCardData(IdCardType.USER, 4);
-        IdCardUserLog userLog = new IdCardUserLog(TEST_CPR, TEST_GIVENNAME, TEST_SURNAME, TEST_EMAIL, TEST_ROLE, null, TEST_AUTH);
+        IdCardUserLog userLog = new IdCardUserLog(TEST_CPR, TEST_GIVENNAME, TEST_SURNAME, TEST_EMAIL, TEST_ROLE, TEST_OCCUPATION, TEST_AUTH);
         IdCardSystemLog systemLog = new IdCardSystemLog(TEST_SYSTEM, CareProviderIdType.CVR_NUMBER, TEST_CVR, TEST_PROVIDER);
 
         when(dgwsRequestContext.getIdCardData()).thenReturn(data);
@@ -82,7 +83,6 @@ public class AuditLoggerTest {
         assertEquals(TEST_SYSTEM, logEntry.getSystem());
         assertEquals(TEST_CPR, logEntry.getCpr());
         assertEquals(TEST_ROLE, logEntry.getRole());
-        assertEquals(TEST_EMAIL, logEntry.getAdditionalUserInfo());
         assertEquals("BEM", logEntry.getServerSystemName());
         assertEquals(TEST_BUILD, logEntry.getServiceVersion());
     }

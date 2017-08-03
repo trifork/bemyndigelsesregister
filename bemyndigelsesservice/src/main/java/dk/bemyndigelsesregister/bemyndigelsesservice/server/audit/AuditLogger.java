@@ -85,8 +85,9 @@ public class AuditLogger {
             if (authLevel > 3) {
                 IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
                 entryBuilder.setCpr(userLog.cpr);
+                entryBuilder.setPersonCPR(userLog.cpr);
                 entryBuilder.setRole(userLog.role);
-                entryBuilder.setAdditionalUserInfo(userLog.emailAddress);
+                entryBuilder.setAdditionalUserInfo(userLog.occupation);
                 entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
 
                 StringBuilder b = new StringBuilder();
