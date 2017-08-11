@@ -48,7 +48,7 @@ public class AuditLogger {
     private void init() {
         if (loggingEnabled) {
             try {
-                InputStream is = AuditLogger.class.getResourceAsStream("/kafka-producer.properties");
+                InputStream is = AuditLogger.class.getResourceAsStream("/bem-kafka-producer.properties");
                 if (is != null) {
                     Properties props = new Properties();
                     props.load(is);
@@ -57,7 +57,7 @@ public class AuditLogger {
                     configured = true;
                     log.info("AuditLogKafkaClient configured, useMock=" + useMock);
                 } else {
-                    log.warn("Could not configure AuditLogKafkaClient - kafka-producer.properties not found!");
+                    log.warn("Could not configure AuditLogKafkaClient - bem-kafka-producer.properties not found!");
                 }
             } catch (Exception e) {
                 log.error("Could not configure AuditLogKafkaClient - got exception", e);
