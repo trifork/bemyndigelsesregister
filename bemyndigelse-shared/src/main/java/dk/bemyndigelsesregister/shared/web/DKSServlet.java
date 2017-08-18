@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 @RequestMapping
 public class DKSServlet {
     private static final Logger logger = Logger.getLogger(DKSServlet.class);
-    private static final String RESOURCE_NAME = "/dksconfig/BEM_2016_01_01.xml";
+    private static final String RESOURCE_NAME = "/dksconfig/BEM.xml";
 
     private static final String TEST1_ENV = "bemtest.ddv.netic.dk:8080";
     private static final String TEST2_ENV = "bemtest.ddv.netic.dk:8080";

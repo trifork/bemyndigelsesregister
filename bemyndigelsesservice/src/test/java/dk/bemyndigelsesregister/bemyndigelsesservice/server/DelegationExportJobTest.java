@@ -1,15 +1,11 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatingSystemDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -101,7 +97,7 @@ public class DelegationExportJobTest {
     private Delegation createDelegation(String delegateeCpr) {
         final Delegation delegation = new Delegation();
 
-        delegation.setState(State.GODKENDT);
+        delegation.setState(Status.GODKENDT);
         delegation.setDelegateeCpr(delegateeCpr);
 
         final DelegationPermission permission = new DelegationPermission();

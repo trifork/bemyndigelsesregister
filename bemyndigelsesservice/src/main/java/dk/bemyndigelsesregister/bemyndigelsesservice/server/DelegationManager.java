@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 
@@ -24,13 +25,13 @@ public interface DelegationManager {
      * @param delegateeCpr  Bemyndigede CPR, nøgleoplysning
      * @param delegateeCvr  Bemyndigede CVR, nøgleoplysning
      * @param roleCode      Arbejdsfunktion, nøgleoplysning
-     * @param state         Anmodet / Accepteret, nøgleoplysning
+     * @param state         Anmodet / Godkendt, nøgleoplysning
      * @param permissions   De rettigheder, der gives bemyndigelse til
      * @param effectiveFrom Gyldigheds fradato
      * @param effectiveTo   Gyldigheds tildato
      * @return Data for bemyndigelse
      */
-    Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo);
+    Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, Status state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo);
 
     /**
      * Henter bemyndigelser uddelegeret af en person

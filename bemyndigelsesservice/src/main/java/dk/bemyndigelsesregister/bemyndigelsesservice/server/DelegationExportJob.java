@@ -1,14 +1,10 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,7 +111,7 @@ public class DelegationExportJob {
         Delegations exportData = new Delegations();
         for (Long delegationId : delegationIds) {
             Delegation delegation = delegationDao.get(delegationId);
-            if (delegation.getState() == State.GODKENDT) {
+            if (delegation.getState() == Status.GODKENDT) {
                 for (DelegationPermission delegationPermission : delegation.getDelegationPermissions()) {
                     if (!Metadata.ASTERISK_PERMISSION_CODE.equals(delegationPermission.getPermissionCode())) {
                         exportData.addDelegation(delegationPermission.getCode(), delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getSystemCode(), delegation.getState().value(), delegation.getRoleCode(), delegationPermission.getPermissionCode(), delegation.getCreated(), delegation.getLastModified(), delegation.getEffectiveFrom(), delegation.getEffectiveTo());

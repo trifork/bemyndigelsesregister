@@ -3,8 +3,8 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 import com.avaje.ebean.ExpressionList;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +33,7 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     }
 
     @Override
-    public List<Delegation> findInPeriod(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, DateTime effectiveFrom, DateTime effectiveTo) {
+    public List<Delegation> findInPeriod(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, Status state, DateTime effectiveFrom, DateTime effectiveTo) {
         return query().where()
                 .eq("systemCode", systemCode)
                 .eq("delegatorCpr", delegatorCpr)
@@ -54,7 +54,7 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     public List<Long> findByModifiedInPeriod(DateTime fromIncluding, DateTime toExcluding) {
         List<Long> result = new LinkedList<>();
 
-        ExpressionList<Delegation> expression = query().where().eq("state", State.GODKENDT);
+        ExpressionList<Delegation> expression = query().where().eq("state", Status.GODKENDT);
         if(fromIncluding != null)
             expression = expression.ge("lastModified", fromIncluding);
         if(toExcluding != null)

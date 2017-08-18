@@ -1,6 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -41,7 +40,7 @@ public class Delegation extends ExternalIdentifiedDomainObject {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    protected State state;
+    protected Status state;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "delegation")
     protected Set<DelegationPermission> delegationPermissions;
@@ -100,11 +99,11 @@ public class Delegation extends ExternalIdentifiedDomainObject {
         this.roleCode = roleCode;
     }
 
-    public State getState() {
+    public Status getState() {
         return state;
     }
 
-    public void setState(State value) {
+    public void setState(Status value) {
         this.state = value;
     }
 

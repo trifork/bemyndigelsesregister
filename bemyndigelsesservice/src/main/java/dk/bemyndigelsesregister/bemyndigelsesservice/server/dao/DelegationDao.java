@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.nsi.bemyndigelse._2016._01._01.State;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
@@ -24,7 +24,7 @@ public interface DelegationDao {
 
     List<Delegation> findByDelegateeCpr(String delegateeCpr);
 
-    List<Delegation> findInPeriod(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, State state, DateTime effectiveFrom, DateTime effectiveTo);
+    List<Delegation> findInPeriod(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, Status state, DateTime effectiveFrom, DateTime effectiveTo);
 
     List<Delegation> findByCodes(Collection<String> codes);
 

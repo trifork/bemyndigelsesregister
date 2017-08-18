@@ -4,8 +4,8 @@ import com.avaje.ebean.EbeanServer;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +48,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
             d.setSystemCode(systemDao.get(1).getCode());
             d.setRoleCode(roleDao.get(1).getCode());
-            d.setState(State.GODKENDT);
+            d.setState(Status.GODKENDT);
 
             Set<DelegationPermission> permissions = new HashSet<>();
 
@@ -85,7 +85,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             d.setEffectiveTo(new DateTime(System.currentTimeMillis() + 20000000));
             d.setSystemCode(systemDao.get(1).getCode());
             d.setRoleCode(roleDao.get(1).getCode());
-            d.setState(State.GODKENDT);
+            d.setState(Status.GODKENDT);
 
             Set<DelegationPermission> permissions = new HashSet<>();
 

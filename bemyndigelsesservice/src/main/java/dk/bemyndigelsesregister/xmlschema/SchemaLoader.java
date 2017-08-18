@@ -49,7 +49,7 @@ public class SchemaLoader {
             case "WsdlName":
                 return "bemyndigelsesservice";
             case "VersionDate":
-                return "2016_01_01";
+                return "2017_08_01";
             case "WsdlFileLocation":
                 return "src/main/resources/wsdl/";
             case "FileLocation":

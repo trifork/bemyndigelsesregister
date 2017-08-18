@@ -1,11 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Permission;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +23,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceTypeMapperImplTest {
     @InjectMocks
-    private ServiceTypeMapperImpl typeMapper = new ServiceTypeMapperImpl();
+    private ServiceTypeMapperImpl_20160101 typeMapper = new ServiceTypeMapperImpl_20160101();
 
     @Mock
     RoleDao roleDao;
@@ -51,7 +47,7 @@ public class ServiceTypeMapperImplTest {
     private String permissionCode1 = "P1";
     private String permissionCode2 = "P2";
     private List<String> permissionCodes = Arrays.asList(permissionCode1, permissionCode2);
-    private State state = State.GODKENDT;
+    private Status state = Status.GODKENDT;
     private DateTime now = DateTime.now();
 
     @Before

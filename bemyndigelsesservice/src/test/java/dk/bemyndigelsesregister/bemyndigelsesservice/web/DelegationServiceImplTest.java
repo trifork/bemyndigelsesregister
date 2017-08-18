@@ -1,10 +1,9 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import com.trifork.dgws.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegatingSystem;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
@@ -37,7 +36,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class DelegationServiceImplTest {
     @InjectMocks
-    BemyndigelsesServiceImpl service = new BemyndigelsesServiceImpl();
+    BemyndigelsesServiceImpl_20160101 service = new BemyndigelsesServiceImpl_20160101();
 
     @Mock
     DelegationManager delegationManager;
@@ -58,7 +57,7 @@ public class DelegationServiceImplTest {
     @Mock
     DgwsRequestContext dgwsRequestContext;
     @Mock
-    ServiceTypeMapper typeMapper;
+    ServiceTypeMapper_20160101 typeMapper;
     @Mock
     WhitelistChecker whitelistChecker;
     @Mock
@@ -94,7 +93,7 @@ public class DelegationServiceImplTest {
     final String permissionCode1 = "P1";
     final String permissionCode2 = "P2";
     final List<String> permissionCodes = Arrays.asList(permissionCode1, permissionCode2);
-    final State state = State.GODKENDT;
+    final Status state = Status.GODKENDT;
 
     void setupDgwsRequestContextForSystem(String cvr) {
         when(dgwsRequestContext.getIdCardData()).thenReturn(new IdCardData(IdCardType.SYSTEM, 3));
@@ -138,9 +137,9 @@ public class DelegationServiceImplTest {
 
     @Test
     public void canCreateDelegationAsDelegatee() throws Exception {
-        final Delegation delegation = createDelegation(code, State.ANMODET, null);
+        final Delegation delegation = createDelegation(code, Status.ANMODET, null);
 
-        when(delegationManager.createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.ANMODET, permissionCodes, null, null)).thenReturn(delegation);
+        when(delegationManager.createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, Status.ANMODET, permissionCodes, null, null)).thenReturn(delegation);
         setupDgwsRequestContextForUser(delegateeCprText);
 
         CreateDelegationsRequest request = new CreateDelegationsRequest() {{
@@ -160,7 +159,7 @@ public class DelegationServiceImplTest {
 
         final CreateDelegationsResponse response = service.createDelegations(request, soapHeader);
 
-        verify(delegationManager).createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, State.ANMODET, permissionCodes, null, null);
+        verify(delegationManager).createDelegation(systemCode, delegatorCprText, delegateeCprText, delegateeCvrText, roleCode, Status.ANMODET, permissionCodes, null, null);
 
         assertEquals(1, response.getDelegation().size());
         verify(typeMapper).toDelegationType(delegation);
@@ -214,7 +213,7 @@ public class DelegationServiceImplTest {
         service.createDelegations(request, soapHeader);
     }
 
-    private Delegation createDelegation(final String id, State state, DateTime creationDate) {
+    private Delegation createDelegation(final String id, Status state, DateTime creationDate) {
         final Delegation delegation = new Delegation();
 
         delegation.setCode(id);

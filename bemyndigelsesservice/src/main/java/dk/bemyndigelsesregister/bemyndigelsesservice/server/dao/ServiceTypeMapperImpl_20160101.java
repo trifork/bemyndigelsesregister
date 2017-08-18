@@ -3,6 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.nsi.bemyndigelse._2016._01._01.ObjectFactory;
+import dk.nsi.bemyndigelse._2016._01._01.State;
 import dk.nsi.bemyndigelse._2016._01._01.SystemPermission;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -14,7 +15,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 @Repository
-public class ServiceTypeMapperImpl implements ServiceTypeMapper {
+public class ServiceTypeMapperImpl_20160101 implements ServiceTypeMapper_20160101 {
     @Inject
     RoleDao roleDao;
 
@@ -49,7 +50,7 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         delegationType.setDelegateeCpr(delegation.getDelegateeCpr());
         delegationType.setDelegateeCvr(delegation.getDelegateeCvr());
         delegationType.setCreated(toXmlGregorianCalendar(delegation.getCreated()));
-        delegationType.setState(delegation.getState());
+        delegationType.setState(State.fromValue(delegation.getState().value()));
         delegationType.setDelegationId(delegation.getCode());
         delegationType.setRole(toRole(delegation.getSystemCode(), delegation.getRoleCode()));
         delegationType.setSystem(toSystem(delegation.getSystemCode()));

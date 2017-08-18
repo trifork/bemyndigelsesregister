@@ -5,7 +5,6 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatingSystem
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,7 +117,7 @@ public class MetadataChangeHandlerJob {
             int updateCount = 0;
             for (Long delegationId : delegationIds) {
                 Delegation delegation = delegationDao.get(delegationId);
-                if (delegation.getState() == State.GODKENDT) {
+                if (delegation.getState() == Status.GODKENDT) {
                     boolean update = true;
 
                     if (delegation.getDelegationPermissions() != null) {
@@ -140,7 +139,7 @@ public class MetadataChangeHandlerJob {
 
                     if (update) {
                         // delegationManager will expand asterisk to new permissions
-                        delegationManager.createDelegation(delegation.getSystemCode(), delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getRoleCode(), State.GODKENDT, Collections.singletonList(Metadata.ASTERISK_PERMISSION_CODE), startTime, delegation.getEffectiveTo());
+                        delegationManager.createDelegation(delegation.getSystemCode(), delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getRoleCode(), Status.GODKENDT, Collections.singletonList(Metadata.ASTERISK_PERMISSION_CODE), startTime, delegation.getEffectiveTo());
                         updateCount++;
                     }
                 }

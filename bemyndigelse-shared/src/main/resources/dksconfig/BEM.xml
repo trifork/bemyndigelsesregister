@@ -30,5 +30,31 @@
             <idCardLevel>VOCES</idCardLevel>
             <idCardMaxAgeMins>540</idCardMaxAgeMins>
         </action>
+
+        <action name="http://nsi.dk/bemyndigelse/2017/08/01#GetDelegations">
+            <timeoutMillis>30000</timeoutMillis>
+            <idCardLevel>MOCES</idCardLevel>
+            <idCardMaxAgeMins>540</idCardMaxAgeMins>
+        </action>
+        <action name="http://nsi.dk/bemyndigelse/2017/08/01#CreateDelegations">
+            <timeoutMillis>30000</timeoutMillis>
+            <idCardLevel>MOCES</idCardLevel>
+            <idCardMaxAgeMins>540</idCardMaxAgeMins>
+        </action>
+        <action name="http://nsi.dk/bemyndigelse/2017/08/01#DeleteDelegations">
+            <timeoutMillis>30000</timeoutMillis>
+            <idCardLevel>MOCES</idCardLevel>
+            <idCardMaxAgeMins>540</idCardMaxAgeMins>
+        </action>
+        <action name="http://nsi.dk/bemyndigelse/2017/08/01#GetMetadata">
+            <timeoutMillis>30000</timeoutMillis>
+            <idCardLevel>MOCES</idCardLevel>
+            <idCardMaxAgeMins>540</idCardMaxAgeMins>
+        </action>
+        <action name="http://nsi.dk/bemyndigelse/2017/08/01#PutMetadata">
+            <timeoutMillis>30000</timeoutMillis>
+            <idCardLevel>VOCES</idCardLevel>
+            <idCardMaxAgeMins>540</idCardMaxAgeMins>
+        </action>
     </operations>
 </root>

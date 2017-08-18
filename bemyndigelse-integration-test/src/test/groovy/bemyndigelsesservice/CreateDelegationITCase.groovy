@@ -1,4 +1,4 @@
-package bemyndigelsesservice
+package bemyndigelsesservice_20170801
 
 import org.junit.Test
 import shared.WebServiceSupport
@@ -8,16 +8,16 @@ class CreateDelegationITCase extends WebServiceSupport {
     @Test
     public void canCreateDelegationAsDelegator() {
         def response = send("CreateDelegations") {
-            "bms20160101:CreateDelegationsRequest" {
-                "Create" {
-                    "DelegatorCpr"('2006271866')
-                    "DelegateeCpr"('1010101010')
-                    "DelegateeCvr"('10101010')
-                    "SystemId"('testsys')
-                    "RoleId"('Laege')
-                    "State"('Godkendt')
-                    "ListOfPermissionIds" {
-                        "PermissionId"('R01')
+            "bms20170801:CreateDelegationsRequest" {
+                "bms20170801:Create" {
+                    "bms20170801:DelegatorCpr"('2006271866')
+                    "bms20170801:DelegateeCpr"('1010101010')
+                    "bms20170801:DelegateeCvr"('10101010')
+                    "bms20170801:SystemId"('testsys')
+                    "bms20170801:RoleId"('Laege')
+                    "bms20170801:State"('Godkendt')
+                    "bms20170801:ListOfPermissionIds" {
+                        "bms20170801:PermissionId"('R01')
                     }
                 }
             }
@@ -38,16 +38,16 @@ class CreateDelegationITCase extends WebServiceSupport {
     @Test
     public void canCreateDelegationAsDelegatee() {
         def response = send("CreateDelegations") {
-            "bms20160101:CreateDelegationsRequest" {
-                "Create" {
-                    "DelegatorCpr"('1010101010')
-                    "DelegateeCpr"('2006271866')
-                    "DelegateeCvr"('10101010')
-                    "SystemId"('testsys')
-                    "RoleId"('Laege')
-                    "State"('Anmodet')
-                    "ListOfPermissionIds" {
-                        "PermissionId"('R01')
+            "bms20170801:CreateDelegationsRequest" {
+                "bms20170801:Create" {
+                    "bms20170801:DelegatorCpr"('1010101010')
+                    "bms20170801:DelegateeCpr"('2006271866')
+                    "bms20170801:DelegateeCvr"('10101010')
+                    "bms20170801:SystemId"('testsys')
+                    "bms20170801:RoleId"('Laege')
+                    "bms20170801:State"('Anmodet')
+                    "bms20170801:ListOfPermissionIds" {
+                        "bms20170801:PermissionId"('R01')
                     }
                 }
             }

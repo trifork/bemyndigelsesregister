@@ -1,4 +1,4 @@
-package bemyndigelsesservice
+package bemyndigelsesservice_20170801
 
 import org.junit.Test
 import shared.WebServiceSupport
@@ -9,10 +9,10 @@ class DeleteDelegationsITCase extends WebServiceSupport {
     @Test
     public void canDeleteDelegationAsDelegator() {
         def response = send("DeleteDelegations") {
-            "bms20160101:DeleteDelegationsRequest" {
-                "DelegatorCpr"('2006271866')
-                "ListOfDelegationIds" {
-                    "DelegationId"('TestKode4')
+            "bms20170801:DeleteDelegationsRequest" {
+                "bms20170801:DelegatorCpr"('2006271866')
+                "bms20170801:ListOfDelegationIds" {
+                    "bms20170801:DelegationId"('TestKode4')
                 }
             }
         }
@@ -26,10 +26,10 @@ class DeleteDelegationsITCase extends WebServiceSupport {
     @Test
     public void canDeleteDelegationAsDelegatee() {
         def response = send("DeleteDelegations") {
-            "bms20160101:DeleteDelegationsRequest" {
-                "DelegateeCpr"('2006271866')
-                "ListOfDelegationIds" {
-                    "DelegationId"('TestKode5')
+            "bms20170801:DeleteDelegationsRequest" {
+                "bms20170801:DelegateeCpr"('2006271866')
+                "bms20170801:ListOfDelegationIds" {
+                    "bms20170801:DelegationId"('TestKode5')
                 }
             }
         }

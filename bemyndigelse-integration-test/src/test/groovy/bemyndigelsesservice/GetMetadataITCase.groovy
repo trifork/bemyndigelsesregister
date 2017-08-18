@@ -1,4 +1,4 @@
-package bemyndigelsesservice
+package bemyndigelsesservice_20170801
 
 import org.junit.Test
 import shared.WebServiceSupport
@@ -8,9 +8,9 @@ class GetMetadataITCase extends WebServiceSupport {
     @Test
     public void willAllowRead() throws Exception {
         def response = send("GetMetadata") {
-            "bms20160101:GetMetadataRequest" {
-                "Domain"('trifork-test')
-                "SystemId"('testsys')
+            "bms20170801:GetMetadataRequest" {
+                "bms20170801:Domain"('trifork-test')
+                "bms20170801:SystemId"('testsys')
             }
         }
         assert response

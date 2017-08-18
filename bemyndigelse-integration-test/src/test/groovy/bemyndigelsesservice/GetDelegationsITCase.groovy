@@ -1,4 +1,4 @@
-package bemyndigelsesservice
+package bemyndigelsesservice_20170801
 
 import org.junit.Test
 import shared.WebServiceSupport
@@ -13,9 +13,9 @@ class GetDelegationsITCase extends WebServiceSupport {
     public void willNotValidateOnBothBemyndigendeAndBemyndigedeParameter() {
         try {
             send("GetDelegations") {
-                "bms20160101:GetDelegationsRequest" {
-                    "DelegatorCpr"('2006271866')
-                    "DelegateeCpr"('1010101010')
+                "bms20170801:GetDelegationsRequest" {
+                    "bms20170801:DelegatorCpr"('2006271866')
+                    "bms20170801:DelegateeCpr"('1010101010')
                 }
             }
         } catch (SOAPFaultException e) {
@@ -26,8 +26,8 @@ class GetDelegationsITCase extends WebServiceSupport {
     @Test
     public void willGetDelegationsForDelegator() {
         def response = send("GetDelegations") {
-            "bms20160101:GetDelegationsRequest" {
-                "DelegatorCpr"('2006271866')
+            "bms20170801:GetDelegationsRequest" {
+                "bms20170801:DelegatorCpr"('2006271866')
             }
 
         }
@@ -38,7 +38,7 @@ class GetDelegationsITCase extends WebServiceSupport {
     public void willNotValidateOnNoParameters() {
         try {
             send("GetDelegations") {
-                "bms20160101:GetDelegationsRequest" {
+                "bms20170801:GetDelegationsRequest" {
                 }
             }
         } catch (SOAPFaultException e) {

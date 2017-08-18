@@ -3,10 +3,10 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatablePermissionDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
@@ -39,7 +39,7 @@ public class DelegationManagerImpl implements DelegationManager {
     MetadataManager metadataManager;
 
     @Override
-    public Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissionCodes, DateTime effectiveFrom, DateTime effectiveTo) {
+    public Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, Status state, List<String> permissionCodes, DateTime effectiveFrom, DateTime effectiveTo) {
         logger.info("createDelegation started, system=[" + systemCode + "], delegatorCpr=[" + delegatorCpr + "], delegateeCpr=[" + delegateeCpr + "], delegateeCvr=[" + delegateeCvr + "], roleCode=[" + roleCode + "], state=[" + state + "], efftiveFrom=[" + effectiveFrom + "], effectiveTo=[" + effectiveTo + "]");
 
         DateTime now = systemService.getDateTime();
@@ -58,7 +58,7 @@ public class DelegationManagerImpl implements DelegationManager {
             logger.debug("  " + existingDelegations.size() + " overlapping delegations found");
 
             for (Delegation delegation : existingDelegations) {
-                if (state == State.GODKENDT || state == State.ANMODET && delegation.getState() == State.ANMODET) { // determine if existing should be "closed" - depends on state, approved closes existing approved/requested, but requested only closes existing requested
+                if (state == Status.GODKENDT || state == Status.ANMODET && delegation.getState() == Status.ANMODET) { // determine if existing should be "closed" - depends on state, approved closes existing approved/requested, but requested only closes existing requested
                     DateTime end = validFrom; // delegation.getEffectiveFrom().isAfter(validFrom) ? delegation.getEffectiveFrom() : validFrom;
 
                     logger.debug("  Updating delegation [" + delegation + "] currently valid [" + delegation.getEffectiveFrom() + "]-[" + delegation.getEffectiveTo() + "] to end at [" + end + "]");
@@ -121,7 +121,7 @@ public class DelegationManagerImpl implements DelegationManager {
         return delegation.getCode();
     }
 
-    private Delegation createDelegationObject(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, State state, List<String> permissionCodes, DateTime effectiveFrom, DateTime effectiveTo) {
+    private Delegation createDelegationObject(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, Status state, List<String> permissionCodes, DateTime effectiveFrom, DateTime effectiveTo) {
         DateTime now = systemService.getDateTime();
 
         if (!effectiveFrom.isBefore(effectiveTo)) {

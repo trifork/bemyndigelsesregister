@@ -38,7 +38,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     ApplicationRootConfig applicationRootConfig;
 
     @Bean
-    public WsdlDefinition serviceDefinition() {
+    public WsdlDefinition serviceDefinition_20160101() {
         final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
         bean.setSchema(schema1XsdSchema());
         //bean.setSchemaCollection(schemaCollection()); //this will inline the defs from the schemas in the collections
@@ -55,11 +55,29 @@ public class WebConfig extends WebMvcConfigurationSupport {
     }
 
     @Bean
+    public WsdlDefinition serviceDefinition_20170801() {
+        final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
+        bean.setSchema(schema2XsdSchema());
+        //bean.setSchemaCollection(schemaCollection()); //this will inline the defs from the schemas in the collections
+        bean.setPortTypeName("BemyndigelsesService");
+        bean.setLocationUri("http://localhost:8080/BemyndigelsesService_20170801");
+        Properties soapActions = new Properties();
+        soapActions.put("GetDelegations", "http://nsi.dk/bemyndigelse/2017/08/01/GetDelegations");
+        soapActions.put("CreateDelegations", "http://nsi.dk/bemyndigelse/2017/08/01/CreateDelegations");
+        soapActions.put("DeleteDelegations", "http://nsi.dk/bemyndigelse/2017/08/01/DeleteDelegations");
+        soapActions.put("GetMetadata", "http://nsi.dk/bemyndigelse/2017/08/01/GetMetadata");
+        soapActions.put("PutMetadata", "http://nsi.dk/bemyndigelse/2017/08/01/PutMetadata");
+        bean.setSoapActions(soapActions);
+        return bean;
+    }
+
+    @Bean
     public CommonsXsdSchemaCollection schemaCollection() {
         final Resource[] resources = {
                 new ClassPathResource("/schema/2005_03_18/CPR_PersonCivilRegistrationIdentifier.xsd"),
                 new ClassPathResource("/schema/2005_03_22/CVR_CVRnumberIdentifier.xsd"),
-                new ClassPathResource("/schema/2016_01_01/bemyndigelsesservice.xsd")
+                new ClassPathResource("/schema/2016_01_01/bemyndigelsesservice.xsd"),
+                new ClassPathResource("/schema/2017_08_01/bemyndigelsesservice.xsd")
         };
         for (Resource resource : resources) {
             if (!resource.exists()) {
@@ -72,6 +90,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Bean
     public SimpleXsdSchema schema1XsdSchema() {
         return new SimpleXsdSchema(new ClassPathResource("schema/2016_01_01/bemyndigelsesservice.xsd"));
+    }
+
+    @Bean
+    public SimpleXsdSchema schema2XsdSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("schema/2017_08_01/bemyndigelsesservice.xsd"));
     }
 
     @Bean
@@ -109,7 +132,8 @@ public class WebConfig extends WebMvcConfigurationSupport {
         final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setOrder(2);
         final HashMap<String, Object> urlMap = new HashMap<String, Object>();
-        urlMap.put("*.wsdl", serviceDefinition());
+        urlMap.put("bemyndigelsesservice_2016_01_01.wsdl", serviceDefinition_20160101());
+        urlMap.put("bemyndigelsesservice_2017_08_01.wsdl", serviceDefinition_20170801());
         mapping.setUrlMap(urlMap);
         return mapping;
     }
@@ -157,6 +181,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
         final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
         interceptor.setSchemas(new Resource[]{
                 new ClassPathResource("schema/2016_01_01/bemyndigelsesservice.xsd"),
+                new ClassPathResource("schema/2017_08_01/bemyndigelsesservice.xsd")
         });
         interceptor.setValidateRequest(true);
         interceptor.setValidateResponse(false);
