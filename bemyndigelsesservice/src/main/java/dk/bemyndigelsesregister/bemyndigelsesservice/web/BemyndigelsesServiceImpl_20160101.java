@@ -240,6 +240,8 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     }
 
     private void logCallOfOldService(String method) {
-        logger.warn("bemyndigelse_2016_01_01 called. Method=" + method + " System=" + dgwsRequestContext.getIdCardSystemLog().getItSystemName() + " Careprovider=" + dgwsRequestContext.getIdCardSystemLog().getCareProviderId() + " " + dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
+        if (dgwsRequestContext != null && dgwsRequestContext.getIdCardSystemLog() != null) {
+            logger.warn("bemyndigelse_2016_01_01 called. Method=" + method + " System=" + dgwsRequestContext.getIdCardSystemLog().getItSystemName() + " Careprovider=" + dgwsRequestContext.getIdCardSystemLog().getCareProviderId() + " " + dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
+        }
     }
 }
