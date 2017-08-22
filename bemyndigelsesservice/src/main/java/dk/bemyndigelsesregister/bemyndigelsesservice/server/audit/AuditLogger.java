@@ -67,7 +67,7 @@ public class AuditLogger {
         }
     }
 
-    public AuditLogEntryId log(String method) {
+    public AuditLogEntryId log(String method, String delegateeCpr) {
         if (configured) {
             AuditLogEntry.Builder entryBuilder = AuditLogEntry.newBuilder();
 
@@ -85,10 +85,16 @@ public class AuditLogger {
             if (authLevel > 3) {
                 IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
                 entryBuilder.setCpr(userLog.cpr);
-                entryBuilder.setPersonCPR(userLog.cpr);
+                if (delegateeCpr != null) {
+                    entryBuilder.setPersonCPR(delegateeCpr);
+                }
                 entryBuilder.setRole(userLog.role);
-                entryBuilder.setAdditionalUserInfo(userLog.occupation);
-                entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
+                if (userLog.occupation != null) {
+                    entryBuilder.setAdditionalUserInfo(userLog.occupation);
+                }
+                if (userLog.authorisationCode != null) {
+                    entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
+                }
 
                 StringBuilder b = new StringBuilder();
                 if (userLog.givenName != null) {

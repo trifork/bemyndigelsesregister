@@ -69,7 +69,7 @@ public class AuditLoggerTest {
         when(dgwsRequestContext.getIdCardSystemLog()).thenReturn(systemLog);
         when(systemService.getImplementationBuild()).thenReturn(TEST_BUILD);
 
-        Object id = auditLogger.log(TEST_METHOD);
+        Object id = auditLogger.log(TEST_METHOD, TEST_CPR);
 
         assertNotNull(id);
         assertNotNull(reqCtx);

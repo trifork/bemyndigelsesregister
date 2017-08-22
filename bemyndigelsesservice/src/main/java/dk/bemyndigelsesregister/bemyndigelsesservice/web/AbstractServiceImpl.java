@@ -65,7 +65,7 @@ public abstract class AbstractServiceImpl {
     }
 
     protected List<Delegation> getDelegationsCommon(String delegatorCpr, String delegateeCpr, String delegationId) {
-        auditLogger.log("Hent bemyndigelser");
+        auditLogger.log("Hent bemyndigelser", delegateeCpr);
 
         List<Delegation> delegations = new LinkedList<>();
 
@@ -109,7 +109,7 @@ public abstract class AbstractServiceImpl {
     }
 
     protected List<String> deleteDelegationsCommon(String delegatorCpr, String delegateeCpr, List<String> delegationIds, XMLGregorianCalendar xmlDate) {
-        auditLogger.log("Slet bemyndigelser");
+        auditLogger.log("Slet bemyndigelser", delegateeCpr);
 
         DateTime deletionDate = xmlDate == null ? null : new DateTime(xmlDate.toGregorianCalendar().getTimeInMillis());
 

@@ -16,9 +16,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.springframework.ws.soap.SoapHeader;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Repository("bemyndigelsesService")
 @Endpoint
@@ -37,7 +35,14 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
-        auditLogger.log("Opret bemyndigelser");
+        // auditlog call - one for each delegatee
+        Set<String> delegateeCprs = new HashSet<>();
+        for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
+            delegateeCprs.add(createDelegation.getDelegateeCpr());
+        }
+        for (String delegateeCpr : delegateeCprs) {
+            auditLogger.log("Opret bemyndigelser", delegateeCpr);
+        }
         logCallOfOldService("Opret bemyndigelser");
 
         Collection<Delegation> delegations = new ArrayList<>();
@@ -106,7 +111,7 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @ResponsePayload
     @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
-        auditLogger.log("Indlæs metadata");
+        auditLogger.log("Indlæs metadata", null);
 
         String domainCode = request.getDomain();
         if (domainCode == null || domainCode.trim().isEmpty())
