@@ -88,9 +88,8 @@ public class AuditLogger {
                 if (delegateeCpr != null) {
                     entryBuilder.setPersonCPR(delegateeCpr);
                 }
-                entryBuilder.setRole(userLog.role);
-                if (userLog.occupation != null) {
-                    entryBuilder.setAdditionalUserInfo(userLog.occupation);
+                if (userLog.role != null) {
+                    entryBuilder.setRole(userLog.role);
                 }
                 if (userLog.authorisationCode != null) {
                     entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
