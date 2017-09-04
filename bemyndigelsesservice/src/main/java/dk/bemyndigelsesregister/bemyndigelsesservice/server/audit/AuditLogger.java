@@ -154,5 +154,6 @@ public class AuditLogger {
     protected void sendAuditLog(ModuleFramework.RequestContext reqCtx, AuditLogEntry logEntry, AuditLogEntryId auditLogEntryId) {
         log.debug("calling sendAuditLog" + logEntry);
         auditLogKafkaClient.sendAuditLog(reqCtx, logEntry, auditLogEntryId);
+        log.debug("sent sendAuditLog");
     }
 }
