@@ -10,6 +10,8 @@ import dk.nsi.fmk.moduleframework.data.ModuleFramework;
 import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -48,10 +50,27 @@ public class AuditLogger {
     private void init() {
         if (loggingEnabled) {
             try {
-                InputStream is = AuditLogger.class.getResourceAsStream("/bem-kafka-producer.properties");
-                if (is != null) {
-                    Properties props = new Properties();
+                Properties props = new Properties();
+
+                File configDir = new File(System.getProperty("catalina.base"), "conf");
+                File configFile = new File(configDir, "bem-kafka-producer.properties");
+                if (configFile.exists() && configFile.canRead()) {
+                    log.info("Loading kafka properties from tomcat conf");
+                    InputStream is = new FileInputStream(configFile);
                     props.load(is);
+                } else {
+                    InputStream is = AuditLogger.class.getResourceAsStream("/bem-kafka-producer.properties");
+                    if (is != null) {
+                        log.info("Loading kafka properties from resource");
+                        props.load(is);
+                    }
+                }
+
+                if (props.size() > 0) {
+                    log.info("Kafka producer properties:");
+                    for (String n : props.stringPropertyNames()) {
+                        log.info("  " + n + "=" + props.getProperty(n));
+                    }
 
                     auditLogKafkaClient = new AuditLogKafkaClient(props, useMock);
                     configured = true;
