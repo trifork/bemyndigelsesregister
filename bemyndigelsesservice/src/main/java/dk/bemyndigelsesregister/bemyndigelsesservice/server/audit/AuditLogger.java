@@ -88,6 +88,8 @@ public class AuditLogger {
 
     public AuditLogEntryId log(String method, String delegateeCpr) {
         if (configured) {
+            log.debug("AuditLogging configured - starting logging.");
+
             AuditLogEntry.Builder entryBuilder = AuditLogEntry.newBuilder();
 
             String messageId = RequestContext.get().getMessageId();
@@ -101,6 +103,7 @@ public class AuditLogger {
             int authLevel = dgwsRequestContext.getIdCardData().getAuthenticationLevel();
             entryBuilder.setAuthLevel(authLevel);
 
+            log.debug("authLevel =" + authLevel);
             if (authLevel > 3) {
                 IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
                 entryBuilder.setCpr(userLog.cpr);
@@ -134,10 +137,12 @@ public class AuditLogger {
             entryBuilder.setSystem(dgwsRequestContext.getIdCardSystemLog().getItSystemName());
 
             AuditLogEntry logEntry = entryBuilder.build();
+            log.debug("built logEntry");
 
             ModuleFramework.RequestContext.Builder ctxBuilder = ModuleFramework.RequestContext.newBuilder();
             ctxBuilder.setMessageId(logEntry.getMessageId());
             ModuleFramework.RequestContext reqCtx = ctxBuilder.build();
+            log.debug("built reqCtx");
 
             AuditLogEntryId auditLogEntryId = auditLogKafkaClient.createAuditLogEntryId(logEntry);
             sendAuditLog(reqCtx, logEntry, auditLogEntryId);
@@ -147,6 +152,7 @@ public class AuditLogger {
     }
 
     protected void sendAuditLog(ModuleFramework.RequestContext reqCtx, AuditLogEntry logEntry, AuditLogEntryId auditLogEntryId) {
+        log.debug("calling sendAuditLog" + logEntry);
         auditLogKafkaClient.sendAuditLog(reqCtx, logEntry, auditLogEntryId);
     }
 }
