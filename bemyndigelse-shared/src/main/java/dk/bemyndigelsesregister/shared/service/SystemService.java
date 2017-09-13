@@ -9,6 +9,8 @@ import java.io.File;
 public interface SystemService {
     String getImplementationBuild();
 
+    String getImplementationVersion();
+
     DateTime getDateTime();
 
     Result createXmlTransformResult();

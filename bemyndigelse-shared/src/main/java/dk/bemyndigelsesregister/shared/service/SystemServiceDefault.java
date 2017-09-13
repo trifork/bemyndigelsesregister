@@ -22,6 +22,7 @@ public class SystemServiceDefault implements SystemService {
     private static Logger logger = Logger.getLogger(SystemServiceDefault.class);
 
     private static String implementationBuild = null;
+    private static String implementationVersion = null;
 
     @Value("${temp.dir}")
     String tempDirLocation;
@@ -36,20 +37,30 @@ public class SystemServiceDefault implements SystemService {
 
     @Override
     public String getImplementationBuild() {
-        if(implementationBuild == null) {
-            Manifest manifest = getManifest();
-            if (manifest == null) {
-                implementationBuild = "develop";
-            }
-            else {
-                implementationBuild = manifest.getMainAttributes().getValue("Implementation-Build");
-                if (implementationBuild == null || implementationBuild.isEmpty()) {
-                    logger.warn("No Implementation-Build property found in Manifest file");
-                    implementationBuild = "develop";
-                }
-            }
+        if (implementationBuild == null) {
+            implementationBuild = getManifestProperty("Implementation-Build");
         }
         return implementationBuild;
+    }
+
+    @Override
+    public String getImplementationVersion() {
+        if (implementationVersion == null) {
+            implementationVersion = getManifestProperty("Implementation-Version");
+        }
+        return implementationVersion;
+    }
+
+    private String getManifestProperty(String name) {
+        Manifest manifest = getManifest();
+        if (manifest != null) {
+            String value = manifest.getMainAttributes().getValue(name);
+            if (value != null && !value.isEmpty()) {
+                return value;
+            }
+        }
+        logger.warn("Property " + name + " not found in Manifest file");
+        return "develop";
     }
 
     private Manifest getManifest() {

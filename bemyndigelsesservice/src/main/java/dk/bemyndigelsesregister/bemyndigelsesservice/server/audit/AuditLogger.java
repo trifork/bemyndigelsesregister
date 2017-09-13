@@ -95,7 +95,7 @@ public class AuditLogger {
             String messageId = RequestContext.get().getMessageId();
             entryBuilder.setAccessType("Soap");
             entryBuilder.setServerSystemName("BEM");
-            entryBuilder.setServiceVersion(systemService.getImplementationBuild());
+            entryBuilder.setServiceVersion(systemService.getImplementationVersion());
             entryBuilder.setRequestId(messageId);
             entryBuilder.setMessageId(messageId);
             entryBuilder.setMethod(method);
