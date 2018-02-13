@@ -67,7 +67,6 @@
         <module>bemyndigelse-integration-test</module>
         <module>bemyndigelse-shared-test</module>
         <module>bemyndigelse-shared</module>
-        <module>bemyndigelse-migrering</module>
     </modules>
 
     <properties>
