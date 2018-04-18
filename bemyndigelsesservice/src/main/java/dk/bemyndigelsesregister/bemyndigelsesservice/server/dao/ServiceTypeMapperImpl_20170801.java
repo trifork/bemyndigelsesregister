@@ -64,7 +64,9 @@ public class ServiceTypeMapperImpl_20170801 implements ServiceTypeMapper_2017080
         // permissions
         if (hasAsteriskPermission) {
             for (Metadata.DelegatablePermission p : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
-                delegationType.getPermission().add(toPermission(p.getPermissionCode(), p.getPermissionDescription()));
+                if(p.isDelegatable()) {
+                    delegationType.getPermission().add(toPermission(p.getPermissionCode(), p.getPermissionDescription()));
+                }
             }
         } else {
             for (DelegationPermission permission : delegation.getDelegationPermissions()) {
