@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 
 import com.trifork.dgws.annotations.EnableDgwsProtection;
+import com.trifork.dgws.sosi.SOSISecurityInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,9 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -36,6 +39,14 @@ import java.util.Properties;
 public class WebConfig extends WebMvcConfigurationSupport {
     @Inject
     ApplicationRootConfig applicationRootConfig;
+
+    @Inject
+    SOSISecurityInterceptor securityInterceptor;
+
+    @PostConstruct
+    public void init() {
+        securityInterceptor.setSkipMethods(Arrays.asList("getMetadata"));
+    }
 
     @Bean
     public WsdlDefinition serviceDefinition_20160101() {
