@@ -10,8 +10,8 @@ class PutMetadataITCase extends WebServiceSupport {
         def response = sendAsSystem("PutMetadata") {
             "bms20170801:PutMetadataRequest" {
                 "bms20170801:Domain"('trifork-test')
-                "bms20170801:SystemId"('testsys')
-                "bms20170801:SystemLongName"('Trifork testsystem')
+                "bms20170801:SystemId"('testsys2')
+                "bms20170801:SystemLongName"('Trifork testsystem 2')
                 "bms20170801:Permission" {
                     "bms20170801:PermissionId"('Read')
                     "bms20170801:PermissionDescription"('Læse i journal')
