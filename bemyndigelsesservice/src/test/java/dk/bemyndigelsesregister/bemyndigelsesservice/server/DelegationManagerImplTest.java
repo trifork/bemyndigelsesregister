@@ -8,6 +8,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.DaoUnitTestSupport;
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -39,6 +40,11 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     final DateTime date0 = new DateTime(2014, 1, 1, 10, 0, 0);
     final DateTime date1 = new DateTime(2015, 1, 1, 10, 0, 0);
     final DateTime date2 = new DateTime(2015, 1, 10, 10, 0, 0);
+
+    @Before
+    public void setUp() throws Exception {
+        metadataManager.clearCache();
+    }
 
     @Test
     public void testCreateOverlappingDelegation() throws Exception {

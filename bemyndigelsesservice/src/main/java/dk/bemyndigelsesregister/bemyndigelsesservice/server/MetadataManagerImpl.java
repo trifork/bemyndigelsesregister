@@ -269,4 +269,10 @@ public class MetadataManagerImpl implements MetadataManager {
 
         return metadata;
     }
+
+    @Override
+    public void clearCache() {
+        metadataCache.clear();
+        logger.info("metadataCache cleared");
+    }
 }

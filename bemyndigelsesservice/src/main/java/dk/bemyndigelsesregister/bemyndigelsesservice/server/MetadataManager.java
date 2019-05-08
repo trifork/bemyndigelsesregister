@@ -18,4 +18,8 @@ public interface MetadataManager {
      * @return
      */
     Metadata getMetadata(String domainCode, String systemCode);
+
+
+
+    void clearCache();
 }

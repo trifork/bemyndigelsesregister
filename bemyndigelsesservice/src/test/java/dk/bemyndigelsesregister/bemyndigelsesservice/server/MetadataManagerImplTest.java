@@ -4,6 +4,7 @@ import com.avaje.ebean.EbeanServer;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.DaoUnitTestSupport;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -20,6 +21,11 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
 
     @Inject
     EbeanServer ebeanServer;
+
+    @Before
+    public void setUp() throws Exception {
+        manager.clearCache();
+    }
 
     @Test
     public void canClearExistingMetadata() {
