@@ -38,7 +38,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             assertEquals(0, g.getPermissions().size());
             assertEquals(0, g.getDelegatablePermissions().size());
         } finally {
-            ebeanServer.endTransaction();
+            ebeanServer.rollbackTransaction();
         }
     }
 
@@ -53,7 +53,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
 
             assertEquals(p.getSystem().getDescription(), g.getSystem().getDescription());
         } finally {
-            ebeanServer.endTransaction();
+            ebeanServer.rollbackTransaction();
         }
     }
 
@@ -76,7 +76,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             assertEquals(0, g.getPermissions().size());
             assertEquals(0, g.getDelegatablePermissions().size());
         } finally {
-            ebeanServer.endTransaction();
+            ebeanServer.rollbackTransaction();
         }
     }
 
@@ -95,7 +95,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             assertEquals(p.getRoles().get(0).getCode(), g.getRoles().get(0).getCode());
             assertEquals(p.getRoles().get(0).getDescription(), g.getRoles().get(0).getDescription());
         } finally {
-            ebeanServer.endTransaction();
+            ebeanServer.rollbackTransaction();
         }
     }
 
@@ -117,7 +117,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
                 assertEquals(p.getPermissions().get(i).getDescription(), g.getPermissions().get(i).getDescription());
             }
         } finally {
-            ebeanServer.endTransaction();
+            ebeanServer.rollbackTransaction();
         }
     }
 
@@ -138,7 +138,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
             assertEquals(p.getDelegatablePermissions().get(0).getRoleCode(), g.getDelegatablePermissions().get(0).getRoleCode());
             assertEquals(p.getDelegatablePermissions().get(0).getPermissionCode(), g.getDelegatablePermissions().get(0).getPermissionCode());
         } finally {
-            ebeanServer.endTransaction();
+            ebeanServer.rollbackTransaction();
         }
     }
 
