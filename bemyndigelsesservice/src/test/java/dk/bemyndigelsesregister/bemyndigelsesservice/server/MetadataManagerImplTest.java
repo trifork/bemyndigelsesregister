@@ -4,7 +4,6 @@ import com.avaje.ebean.EbeanServer;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.TestData;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean.DaoUnitTestSupport;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -22,7 +21,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
     @Inject
     EbeanServer ebeanServer;
 
-    @Ignore
     @Test
     public void canClearExistingMetadata() {
         try {
@@ -44,7 +42,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test
     public void canChangeSystemDescription() {
         try {
@@ -60,7 +57,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test
     public void canCreateNewMetadata() {
         try {
@@ -84,7 +80,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test
     public void canUpdateRoles() {
         try {
@@ -104,7 +99,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test
     public void canUpdatePermissions() {
         try {
@@ -127,7 +121,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test
     public void canUpdateDelegatablePermission() {
         try {
@@ -149,7 +142,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test(expected = IllegalArgumentException.class)
     public void cannotReferenceUnknownRole() {
         try {
@@ -163,7 +155,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test(expected = IllegalArgumentException.class)
     public void cannotReferenceUnknownPermission() {
         try {
@@ -177,7 +168,6 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
         }
     }
 
-    @Ignore
     @Test(expected = IllegalArgumentException.class)
     public void cannotGetUnknownMetadata() {
         manager.getMetadata("Unknown", "Unknown");

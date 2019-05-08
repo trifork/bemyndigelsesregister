@@ -195,5 +195,3 @@ REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', '', '20921897');
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-COMMIT;
