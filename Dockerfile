@@ -1,4 +1,4 @@
-FROM tomcat:7.0.94-jre8-alpine
+FROM tomcat:7-jre8-slim
 
 ENV TZ Europe/Copenhagen
 
