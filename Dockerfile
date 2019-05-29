@@ -17,8 +17,8 @@ RUN rm -rf webapps/docs
 RUN rm -rf webapps/examples
 
 COPY ./bemyndigelse-integration-test/target/cargo/configurations/tomcat7x/webapps/ROOT.war ./webapps/
-RUN apt-get update
-RUN apt-get install wget
+RUN apt-get -y update
+RUN apt-get -y install wget
 RUN wget http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/1.6.1/jolokia-jvm-1.6.1-agent.jar
 
 # Configure tomcat
