@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <repositories>
-        <repository>
-            <id>trifork-public</id>
-            <name>Trifork public Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>trifork-intranet</id>
-            <name>Trifork internal Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>trifork.snapshots</id>
-            <name>Trifork internal snapshot Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.bemyndigelsesregister</groupId>
     <artifactId>bemyndigelsesregister</artifactId>
@@ -48,17 +27,37 @@
         <url>https://ci82.trifork.com/job/Bemyndigelsesregister-develop/</url>
     </ciManagement>
 
+    <repositories>
+        <repository>
+            <id>trifork-public</id>
+            <name>Trifork public Nexus</name>
+            <url>http://ci.fmk.netic.dk/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>trifork-intranet</id>
+            <name>Trifork internal Nexus</name>
+            <url>http://ci.fmk.netic.dk/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>trifork.snapshots</id>
+            <name>Trifork internal snapshot Nexus</name>
+            <url>http://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <distributionManagement>
         <snapshotRepository>
             <id>trifork.snapshots</id>
             <name>Trifork internal snapshot Nexus</name>
-            <url>http://nexus.ci82.trifork.com/content/repositories/snapshots/</url>
+            <url>http://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
-
         <repository>
             <id>trifork.releases</id>
             <name>Trifork internal releases Nexus</name>
-            <url>http://nexus.ci82.trifork.com/content/repositories/releases</url>
+            <url>http://ci.fmk.netic.dk/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 
