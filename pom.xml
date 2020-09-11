@@ -29,37 +29,39 @@
     </ciManagement>
 
     <repositories>
-        <repository>
-            <id>trifork-public</id>
-            <name>Trifork public Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>trifork-intranet</id>
-            <name>Trifork internal Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>trifork.snapshots</id>
-            <name>Trifork internal snapshot Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
+		<repository>
+			<id>trifork-public</id>
+			<name>Trifork public Nexus</name>
+			<url>https://ci.fmk.netic.dk/nexus/content/groups/public/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>trifork.snapshots</id>
+			<name>Trifork internal snapshot Nexus</name>
+			<url>https://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
+			<snapshots>
+				<updatePolicy>never</updatePolicy>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
     </repositories>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>trifork.snapshots</id>
-            <name>Trifork internal snapshot Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>trifork.releases</id>
-            <name>Trifork internal releases Nexus</name>
-            <url>http://ci.fmk.netic.dk/nexus/content/repositories/releases</url>
-        </repository>
+		<snapshotRepository>
+			<id>trifork.snapshots</id>
+			<name>Trifork internal snapshot Nexus</name>
+			<url>https://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>trifork.releases</id>
+			<name>Trifork internal releases Nexus</name>
+			<url>https://ci.fmk.netic.dk/nexus/content/repositories/releases</url>
+		</repository>
     </distributionManagement>
 
     <modules>
