@@ -62,6 +62,12 @@ public class MedcomRetransmissionRegisterImpl implements MedcomRetransmissionReg
 
         MessageRetransmission messageRetransmission = new MessageRetransmission(messageID, result.toString(), systemService.getImplementationBuild());
 
-        messageRetransmissionDao.save(messageRetransmission);
+        try {
+            messageRetransmissionDao.save(messageRetransmission);
+        } catch (Exception e) {
+            logger.warn("Fail to save message replay", e);
+            // If it fails to save the message, then just ignore it and move on
+            // This mostly fails on ExpirationWarnings, because the response is bigger than MEDIUMBLOB
+        }
     }
 }
