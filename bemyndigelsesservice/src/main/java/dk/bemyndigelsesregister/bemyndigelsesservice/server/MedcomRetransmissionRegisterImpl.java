@@ -7,11 +7,13 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.RequestContext
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpMethod;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
 import java.io.IOException;
 
@@ -24,6 +26,9 @@ public class MedcomRetransmissionRegisterImpl implements MedcomRetransmissionReg
 
     @Inject
     Unmarshaller unmarshaller;
+
+    @Inject
+    HttpServletRequest request;
 
     @Inject
     MessageRetransmissionDao messageRetransmissionDao;
@@ -62,6 +67,16 @@ public class MedcomRetransmissionRegisterImpl implements MedcomRetransmissionReg
 
         MessageRetransmission messageRetransmission = new MessageRetransmission(messageID, result.toString(), systemService.getImplementationBuild());
 
-        messageRetransmissionDao.save(messageRetransmission);
+        try {
+            messageRetransmissionDao.save(messageRetransmission);
+        } catch (Exception e) {
+            boolean isGet = HttpMethod.GET.matches(request.getMethod());
+            if (!isGet) {
+                throw e;
+            }
+            logger.warn("Fail to save message replay", e);
+            // If it fails to save the message, then just ignore it and move on
+            // This mostly fails on ExpirationWarnings, because the response is bigger than MEDIUMBLOB
+        }
     }
 }
