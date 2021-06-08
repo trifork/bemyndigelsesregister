@@ -85,7 +85,7 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
-        RequestContext.get().setRequestType(RequestType.GET_METADATA);
+        RequestContext.get().setRequestType(RequestType.GET);
 
         logCallOfOldService("Hent bemyndigelser");
 
