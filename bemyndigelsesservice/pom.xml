@@ -131,7 +131,7 @@
         <dependency>
             <groupId>dk.nsi.fmk.auditlogmodul</groupId>
             <artifactId>fmk-auditlog-modul-client</artifactId>
-            <version>2.2.0-20180125125611-5f554</version>
+            <version>2.8.1-20191010094822-cbd08</version>
         </dependency>
     </dependencies>
 

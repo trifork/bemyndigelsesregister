@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server.audit;
 
 import com.trifork.dgws.DgwsRequestContext;
 import com.trifork.dgws.IdCardUserLog;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.fmk.auditlog.client.AuditLogKafkaClient;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog.AuditLogEntry;

@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.bemyndigelsesservice.server.audit;
+package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 /**
  * Holder for request specific data
@@ -7,6 +7,7 @@ public final class RequestContext {
     private static final ThreadLocal<RequestContext> currentRequestContext = new ThreadLocal<RequestContext>();
 
     private String messageId;
+    private RequestType requestType;
 
     public RequestContext() {
     }
@@ -19,7 +20,15 @@ public final class RequestContext {
         this.messageId = messageId;
     }
 
-/*
+    public RequestType getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
+    }
+
+    /*
         public static void setForTestPurposes(AuditLogVO auditlogVo) {
             RequestContext context = currentRequestContext.get();
             if (context == null){

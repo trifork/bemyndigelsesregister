@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.audit;
 
 import com.trifork.dgws.*;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog;
 import dk.nsi.fmk.moduleframework.data.ModuleFramework;

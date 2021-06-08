@@ -3,11 +3,9 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import com.trifork.dgws.MedcomRetransmission;
 import com.trifork.dgws.MedcomRetransmissionRegister;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.MessageRetransmission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.RequestContext;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.MessageRetransmissionDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpMethod;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
@@ -70,13 +68,12 @@ public class MedcomRetransmissionRegisterImpl implements MedcomRetransmissionReg
         try {
             messageRetransmissionDao.save(messageRetransmission);
         } catch (Exception e) {
-            boolean isGet = HttpMethod.GET.matches(request.getMethod());
-            if (!isGet) {
+            if (RequestContext.get().getRequestType() != RequestType.GET) {
                 throw e;
             }
-            logger.warn("Fail to save message replay", e);
+            logger.warn("Failed to save message replay", e);
             // If it fails to save the message, then just ignore it and move on
-            // This mostly fails on ExpirationWarnings, because the response is bigger than MEDIUMBLOB
+            // This can fails on getDelegations when user has tons of delegations, and response gets bigger than MEDIUMBLOB
         }
     }
 }

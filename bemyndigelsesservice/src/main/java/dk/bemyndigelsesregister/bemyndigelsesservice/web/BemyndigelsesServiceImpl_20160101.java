@@ -5,6 +5,8 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestType;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ServiceTypeMapper_20160101;
 import dk.nsi.bemyndigelse._2016._01._01.*;
 import org.apache.log4j.Logger;
@@ -35,6 +37,8 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
+        RequestContext.get().setRequestType(RequestType.CREATE);
+
         // auditlog call - one for each delegatee
         Set<String> delegateeCprs = new HashSet<>();
         for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
@@ -81,6 +85,8 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
+        RequestContext.get().setRequestType(RequestType.GET_METADATA);
+
         logCallOfOldService("Hent bemyndigelser");
 
         Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId());
@@ -97,6 +103,8 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
+        RequestContext.get().setRequestType(RequestType.DELETE);
+
         logCallOfOldService("Slet bemyndigelser");
 
         List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate());
@@ -109,8 +117,10 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @Override
     @Transactional
     @ResponsePayload
-    @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
+    // @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
+        RequestContext.get().setRequestType(RequestType.PUT_METADATA);
+
         auditLogger.log("Indlæs metadata", null);
 
         String domainCode = request.getDomain();
@@ -190,6 +200,8 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     @Override
     @ResponsePayload
     public GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader) {
+        RequestContext.get().setRequestType(RequestType.GET_METADATA);
+
         Metadata metadata = metadataManager.getMetadata(request.getDomain(), request.getSystemId());
 
         GetMetadataResponse response = new GetMetadataResponse();
