@@ -11,7 +11,6 @@ import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
 import java.io.IOException;
 
@@ -24,9 +23,6 @@ public class MedcomRetransmissionRegisterImpl implements MedcomRetransmissionReg
 
     @Inject
     Unmarshaller unmarshaller;
-
-    @Inject
-    HttpServletRequest request;
 
     @Inject
     MessageRetransmissionDao messageRetransmissionDao;
