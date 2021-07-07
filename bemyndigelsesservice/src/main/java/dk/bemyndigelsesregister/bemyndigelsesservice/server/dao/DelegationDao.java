@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.ExpirationInfo;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import org.joda.time.DateTime;
 
@@ -20,9 +21,9 @@ public interface DelegationDao {
 
     Delegation findByCode(String code);
 
-    List<Delegation> findByDelegatorCpr(String delegatorCpr);
+    List<Delegation> findByDelegatorCpr(String delegatorCpr, DateTime effectiveFrom, DateTime effectiveTo);
 
-    List<Delegation> findByDelegateeCpr(String delegateeCpr);
+    List<Delegation> findByDelegateeCpr(String delegateeCpr, DateTime effectiveFrom, DateTime effectiveTo);
 
     List<Delegation> findInPeriod(String system, String delegatorCpr, String delegateeCpr, String delegateeCvr, String role, Status state, DateTime effectiveFrom, DateTime effectiveTo);
 
@@ -38,4 +39,6 @@ public interface DelegationDao {
      * @return list of delegation ids
      */
     List<Long> findWithAsterisk(String systemCode, DateTime validDate);
+
+    ExpirationInfo getExpirationInfo(String delegatorCpr, int days);
 }

@@ -3,6 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService_20170801;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.ExpirationInfo;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
@@ -86,7 +87,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.GET);
 
-        Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId());
+        Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId(), request.getEffectiveFrom(), request.getEffectiveTo());
 
         final GetDelegationsResponse response = new GetDelegationsResponse();
         for (Delegation delegation : delegations) {
@@ -195,6 +196,22 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
 
     @Override
     @ResponsePayload
+    public GetExpirationInfoResponse getExpirationInfo(@RequestPayload GetExpirationInfoRequest request, SoapHeader soapHeader) {
+        ExpirationInfo info = delegationManager.getExpirationInfo(request.getDelegatorCpr(), request.getDays());
+
+        GetExpirationInfoResponse response = new GetExpirationInfoResponse();
+        response.setDelegatorCpr(request.getDelegatorCpr());
+        response.setDelegationCount(info.getDelegationCount());
+        response.setDelegateeCount(info.getDelegateeCount());
+        response.setDaysToFirstExpiration(info.getDaysToFirstExpiration());
+        response.setFirstExpiryDelegationCount(info.getFirstExpiryDelegationCount());
+        response.setFirstExpiryDelegateeCount(info.getFirstExpiryDelegateeCount());
+
+        return response;
+    }
+
+    @Override
+    @ResponsePayload
     public GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.GET_METADATA);
 
@@ -246,6 +263,72 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
                 }
 
                 response.getRole().add(role);
+            }
+        }
+
+        return response;
+    }
+
+    @Override
+    @ResponsePayload
+    public GetAllMetadataResponse getAllMetadata(@RequestPayload GetAllMetadataRequest request, SoapHeader soapHeader) {
+        RequestContext.get().setRequestType(RequestType.GET_METADATA);
+
+        List<Metadata> metadataList = metadataManager.getAllMetadata(request.getDomain());
+
+        GetAllMetadataResponse response = new GetAllMetadataResponse();
+        response.setDomain(request.getDomain());
+
+        if (metadataList != null) {
+            for (Metadata metadata : metadataList) {
+                GetAllMetadataResponse.Metadata m = new GetAllMetadataResponse.Metadata();
+
+                DelegatingSystem system = new DelegatingSystem();
+                system.setSystemId(metadata.getSystem().getCode());
+                system.setSystemLongName(metadata.getSystem().getDescription());
+                m.setSystem(system);
+
+                boolean asteriskPermission = false;
+                if (metadata.getPermissions() != null) {
+                    for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
+                        if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
+                            asteriskPermission = true;
+                        }
+                        SystemPermission permission = new SystemPermission();
+                        permission.setPermissionId(c.getCode());
+                        permission.setPermissionDescription(c.getDescription());
+                        m.getPermission().add(permission);
+                    }
+                }
+                m.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
+
+                if (metadata.getRoles() != null) {
+                    for (Metadata.CodeAndDescription c : metadata.getRoles()) {
+                        DelegatingRole role = new DelegatingRole();
+                        role.setRoleId(c.getCode());
+                        role.setRoleDescription(c.getDescription());
+
+                        if (metadata.getDelegatablePermissions() != null) {
+                            for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
+                                if (dp.isDelegatable()) {
+                                    if (role.getDelegatablePermissions() == null) {
+                                        role.setDelegatablePermissions(new DelegatingRole.DelegatablePermissions());
+                                    }
+                                    role.getDelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
+                                } else {
+                                    if (role.getUndelegatablePermissions() == null) {
+                                        role.setUndelegatablePermissions(new DelegatingRole.UndelegatablePermissions());
+                                    }
+                                    role.getUndelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
+                                }
+                            }
+                        }
+
+                        m.getRole().add(role);
+                    }
+                }
+
+                response.getMetadata().add(m);
             }
         }
 

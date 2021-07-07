@@ -17,6 +17,11 @@ public class DelegatingSystemDaoEBean extends SupportDao<DelegatingSystem> imple
     }
 
     @Override
+    public List<DelegatingSystem> findAll() {
+        return query().findList();
+    }
+
+    @Override
     public List<DelegatingSystem> findByLastModifiedGreaterThanOrEquals(DateTime lastModified) {
         return query().where().ge("lastModified", lastModified).findList();
     }

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceTypeMapperImplTest {
     @InjectMocks
-    private ServiceTypeMapperImpl_20160101 typeMapper = new ServiceTypeMapperImpl_20160101();
+    private ServiceTypeMapperImpl_20170801 typeMapper = new ServiceTypeMapperImpl_20170801();
 
     @Mock
     RoleDao roleDao;
@@ -68,14 +68,14 @@ public class ServiceTypeMapperImplTest {
         p2.setDescription("Second Permission");
         when(permissionDao.findByCode(systemCode, permissionCode2)).thenReturn(p2);
 
-        dk.nsi.bemyndigelse._2016._01._01.Delegation d = typeMapper.toDelegationType(createDelegation());
+        dk.nsi.bemyndigelse._2017._08._01.Delegation d = typeMapper.toDelegationType(createDelegation());
 
         assertNotNull(d);
         assertEquals(code, d.getDelegationId());
         assertEquals(delegatorCpr, d.getDelegatorCpr());
         assertEquals(delegateeCpr, d.getDelegateeCpr());
         assertEquals(delegateeCvr, d.getDelegateeCvr());
-        assertEquals(dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT, d.getState());
+        assertEquals(dk.nsi.bemyndigelse._2017._08._01.State.GODKENDT, d.getState());
         assertEquals(2, d.getPermission().size());
         assertNotNull(d.getCreated());
         assertNotNull(d.getEffectiveFrom());
@@ -90,7 +90,7 @@ public class ServiceTypeMapperImplTest {
         when(permissionDao.findByCode(systemCode, permissionCode1)).thenReturn(p1);
         when(metadataManager.getMetadata(null, systemCode)).thenReturn(new Metadata(null, systemCode, systemDescription));
 
-        dk.nsi.bemyndigelse._2016._01._01.Delegation d = typeMapper.toDelegationType(createDelegation());
+        dk.nsi.bemyndigelse._2017._08._01.Delegation d = typeMapper.toDelegationType(createDelegation());
 
         assertNotNull(d);
         assertEquals("Mappet bemyndigelse skal kun indeholde én rettighed, da kun én er defineret", 1, d.getPermission().size());

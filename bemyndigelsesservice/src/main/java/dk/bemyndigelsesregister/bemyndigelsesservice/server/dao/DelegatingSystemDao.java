@@ -15,5 +15,7 @@ public interface DelegatingSystemDao {
 
     DelegatingSystem findByCode(String code);
 
+    List<DelegatingSystem> findAll();
+
     List<DelegatingSystem> findByLastModifiedGreaterThanOrEquals(DateTime lastModified);
 }

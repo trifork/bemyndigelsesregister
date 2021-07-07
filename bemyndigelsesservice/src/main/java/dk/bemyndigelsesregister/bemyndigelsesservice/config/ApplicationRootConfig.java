@@ -124,7 +124,6 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     public Jaxb2Marshaller serviceMarshaller() {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
         bean.setContextPaths(
-                "dk.nsi.bemyndigelse._2016._01._01",
                 "dk.nsi.bemyndigelse._2017._08._01",
                 "dk.medcom.dgws._2006._04.dgws_1_0",
                 "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_secext_1_0",

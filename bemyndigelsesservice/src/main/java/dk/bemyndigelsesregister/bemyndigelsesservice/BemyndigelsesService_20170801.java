@@ -31,8 +31,18 @@ public interface BemyndigelsesService_20170801 {
     @ResponsePayload
     GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader);
 
+    @PayloadRoot(localPart = "GetAllMetadataRequest", namespace = "http://nsi.dk/bemyndigelse/2017/08/01/")
+    @Action("http://nsi.dk/bemyndigelse/2017/08/01/getAllMetadata")
+    @ResponsePayload
+    GetAllMetadataResponse getAllMetadata(@RequestPayload GetAllMetadataRequest request, SoapHeader soapHeader);
+
     @PayloadRoot(localPart = "PutMetadataRequest", namespace = "http://nsi.dk/bemyndigelse/2017/08/01/")
     @Action("http://nsi.dk/bemyndigelse/2017/08/01/putMetadata")
     @ResponsePayload
     PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader);
+
+    @PayloadRoot(localPart = "GetExpirationInfoRequest", namespace = "http://nsi.dk/bemyndigelse/2017/08/01/")
+    @Action("http://nsi.dk/bemyndigelse/2017/08/01/getExpirationInfo")
+    @ResponsePayload
+    GetExpirationInfoResponse getExpirationInfo(@RequestPayload GetExpirationInfoRequest request, SoapHeader soapHeader);
 }
