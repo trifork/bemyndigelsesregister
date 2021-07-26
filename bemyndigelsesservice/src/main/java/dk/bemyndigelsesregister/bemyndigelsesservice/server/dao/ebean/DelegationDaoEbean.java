@@ -95,7 +95,7 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
     }
 
     @Override
-    public ExpirationInfo getExpirationInfo(String delegatorCpr, int days) {
+    public ExpirationInfo getExpirationInfo(String cpr, int days) {
         int delegationCount = 0;
         int daysToExpiration = 0;
         Set<String> delegateeCprs = new HashSet<>();
@@ -103,17 +103,27 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
         DateTime effectiveFrom = DateTime.now();
         DateTime effectiveTo = effectiveFrom.plusDays(days);
 
-        List<Delegation> delegations = query().where().eq("delegatorCpr", delegatorCpr).lt("effectiveFrom", effectiveFrom).gt("effectiveTo", effectiveFrom).lt("effectiveTo", effectiveTo).eq("state", Status.GODKENDT.value()).findList();
+        List<Delegation> delegations = new LinkedList<>();
 
-        // find no. of days to first delegation will expire
-        if (delegations != null) {
-            for (Delegation delegation : delegations) {
-                delegationCount++;
-                delegateeCprs.add(delegation.getDelegateeCpr());
-                int d = 1 + Days.daysBetween(effectiveFrom, delegation.getEffectiveTo()).getDays();
-                if (daysToExpiration == 0 || d < daysToExpiration) {
-                    daysToExpiration = d;
-                }
+        // valid delegations by person that will soon expire
+        List<Delegation> delegatorDelegations = query().where().eq("delegatorCpr", cpr).lt("effectiveFrom", effectiveFrom).gt("effectiveTo", effectiveFrom).lt("effectiveTo", effectiveTo).eq("state", Status.GODKENDT.value()).findList();
+        if (delegatorDelegations != null) {
+            delegations.addAll(delegatorDelegations);
+        }
+
+        // delegations to person that will soon expire
+        List<Delegation> delegateeDelegations = query().where().eq("delegateeCpr", cpr).lt("effectiveFrom", effectiveFrom).gt("effectiveTo", effectiveFrom).lt("effectiveTo", effectiveTo).eq("state", Status.GODKENDT.value()).findList();
+        if (delegateeDelegations != null) {
+            delegations.addAll(delegateeDelegations);
+        }
+
+        // find no. of days until first delegation will expire
+        for (Delegation delegation : delegations) {
+            delegationCount++;
+            delegateeCprs.add(delegation.getDelegateeCpr());
+            int d = 1 + Days.daysBetween(effectiveFrom, delegation.getEffectiveTo()).getDays();
+            if (daysToExpiration == 0 || d < daysToExpiration) {
+                daysToExpiration = d;
             }
         }
 
@@ -125,15 +135,15 @@ public class DelegationDaoEbean extends SupportDao<Delegation> implements Delega
         // identify number of delegations/delegatees that expires on that day
         delegationCount = 0;
         delegateeCprs.clear();
-        if (delegations != null) {
-            for (Delegation delegation : delegations) {
-                int d = 1 + Days.daysBetween(effectiveFrom, delegation.getEffectiveTo()).getDays();
-                if (d == daysToExpiration) {
-                    delegationCount++;
-                    delegateeCprs.add(delegation.getDelegateeCpr());
-                }
+
+        for (Delegation delegation : delegations) {
+            int d = 1 + Days.daysBetween(effectiveFrom, delegation.getEffectiveTo()).getDays();
+            if (d == daysToExpiration) {
+                delegationCount++;
+                delegateeCprs.add(delegation.getDelegateeCpr());
             }
         }
+
         info.setFirstExpiryDelegationCount(delegationCount);
         info.setFirstExpiryDelegateeCount(delegateeCprs.size());
 
