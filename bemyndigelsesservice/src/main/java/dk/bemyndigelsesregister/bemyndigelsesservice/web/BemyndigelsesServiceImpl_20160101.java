@@ -1,6 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
@@ -33,7 +32,6 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     }
 
     @Override
-    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
@@ -45,9 +43,9 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
             delegateeCprs.add(createDelegation.getDelegateeCpr());
         }
         for (String delegateeCpr : delegateeCprs) {
-            auditLogger.log("Opret bemyndigelser", delegateeCpr);
+            auditLogger.log("Opret bemyndigelser", delegateeCpr, null);
         }
-        logCallOfOldService("Opret bemyndigelser");
+//        logCallOfOldService("Opret bemyndigelser");
 
         Collection<Delegation> delegations = new ArrayList<>();
 
@@ -81,15 +79,14 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     }
 
     @Override
-    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.GET);
 
-        logCallOfOldService("Hent bemyndigelser");
+//        logCallOfOldService("Hent bemyndigelser");
 
-        Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId());
+        Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId(), null);
 
         final GetDelegationsResponse response = new GetDelegationsResponse();
         for (Delegation delegation : delegations) {
@@ -99,15 +96,14 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     }
 
     @Override
-    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.DELETE);
 
-        logCallOfOldService("Slet bemyndigelser");
+//        logCallOfOldService("Slet bemyndigelser");
 
-        List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate());
+        List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate(), null);
 
         final DeleteDelegationsResponse response = new DeleteDelegationsResponse();
         response.getDelegationId().addAll(result);
@@ -121,7 +117,7 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.PUT_METADATA);
 
-        auditLogger.log("Indlæs metadata", null);
+        auditLogger.log("Indlæs metadata", null, null);
 
         String domainCode = request.getDomain();
         if (domainCode == null || domainCode.trim().isEmpty())
@@ -255,10 +251,10 @@ public class BemyndigelsesServiceImpl_20160101 extends AbstractServiceImpl imple
 
         return response;
     }
-
-    private void logCallOfOldService(String method) {
-        if (dgwsRequestContext != null && dgwsRequestContext.getIdCardSystemLog() != null) {
-            logger.warn("bemyndigelse_2016_01_01 called. Method=" + method + " System=" + dgwsRequestContext.getIdCardSystemLog().getItSystemName() + " Careprovider=" + dgwsRequestContext.getIdCardSystemLog().getCareProviderId() + " " + dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
-        }
-    }
+//
+//    private void logCallOfOldService(String method) {
+//        if (dgwsRequestContext != null && dgwsRequestContext.getIdCardSystemLog() != null) {
+//            logger.warn("bemyndigelse_2016_01_01 called. Method=" + method + " System=" + dgwsRequestContext.getIdCardSystemLog().getItSystemName() + " Careprovider=" + dgwsRequestContext.getIdCardSystemLog().getCareProviderId() + " " + dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
+//        }
+//    }
 }

@@ -1,1 +1,1 @@
-DROP TABLE bemyndigelse.bemyndigelse;
+DROP TABLE bemyndigelse;

@@ -1,0 +1,82 @@
+version: "3.9"
+
+networks:
+  # To create this run:
+  # > docker network create bem_net
+  bem_net:
+    external: true
+
+services:
+  cradb:
+    image: registry.nspop.dk/playground/cradb:latest
+    networks:
+      - bem_net
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+  bemdb:
+    image: mariadb:10.2
+    # Expose database on a port on the host for debugging purpose
+    ports:
+      - "8085:3306"
+    networks:
+      - bem_net
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ../database/db/create_db.sql:/docker-entrypoint-initdb.d/00-create_db.sql
+    command: "--max-connections=1000"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  flyway_bem:
+    image: flyway/flyway:6.0
+    networks:
+      - bem_net
+    command: -url=jdbc:mysql://bemdb:3306 -schemas=bemyndigelse -user=root -connectRetries=60 migrate
+    volumes:
+      - ../database/db/migration/bem/V1__Initial_schema.sql:/flyway/sql/V1__Initial_schema.sql
+      - ../database/db/migration/bem/V2__Status_as_string.sql:/flyway/sql/V2__Status_as_string.sql
+      - ../database/db/migration/bem/V3__Extended_whitelist.sql:/flyway/sql/V3__Extended_whitelist.sql
+      - ../database/db/migration/bem/V4__Unique_delegerbar_rettigheder.sql:/flyway/sql/V4__Unique_delegerbar_rettigheder.sql
+      - ../database/db/migration/bem/V5__Use_medium_blob_for_message_retransmassion.sql:/flyway/sql/V5__Use_medium_blob_for_message_retransmassion.sql
+      - ../database/db/migration/bem/V6__Domain_cleanup_and_fixes.sql:/flyway/sql/V6__Domain_cleanup_and_fixes.sql
+      - ../database/db/migration/bem/V7__Afkoble_bemyndigelser_fra_metadata.sql:/flyway/sql/V7__Afkoble_bemyndigelser_fra_metadata.sql
+      - ../database/db/migration/bem/V8__BEM2_additions.sql:/flyway/sql/V8__BEM2_additions.sql
+      - ../database/db/migration/bem/V9__BEM2_indexes.sql:/flyway/sql/V9__BEM2_indexes.sql
+      - ../database/db/migration/bem/V10__BEM2_undelegatable_flag.sql:/flyway/sql/V10__BEM2_undelegatable_flag.sql
+      - ../database/db/migration/bem/V11__BEM2_rettighed_uuid.sql:/flyway/sql/V11__BEM2_rettighed_uuid.sql
+      - ../database/db/migration/bem/V12__Retransmission_table_indexes.sql:/flyway/sql/V12__Retransmission_table_indexes.sql
+      - ../database/db/migration/bem/V13__Drop_BEM1_table.sql:/flyway/sql/V13__Drop_BEM1_table.sql
+    depends_on:
+      - bemdb
+  bem:
+    build: ../..
+    image: bem:latest
+    # Expose service on a port on the host for debugging purpose
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      cradb:
+        condition: service_started
+      bemdb:
+        condition: service_healthy
+    networks:
+      - bem_net
+    environment:
+      - LOG_MAX_FILE_SIZE=10MB
+      - LOG_MAX_BACKUP_INDEX=5
+      - NSP_TEST_FEDERATION=true
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
+    volumes:
+      # Logging
+      - ../target/wildfly/log/:/pack/wildfly8/standalone/log/
+      # Application
+      - ../configuration/bemyndigelse.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/bemyndigelse.properties
+      - ../configuration/log4j-bem.xml:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/log4j-bem.xml
+      - ../configuration/FMK-KRS-TEST.jks:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/FMK-KRS-TEST.jks
+      - ../configuration/log4j-nspslalog.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/log4j-nspslalog.properties
+      - ../configuration/nspslalog-bem.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
+      # Datasources
+      - ../configuration/datasources/bem-ds.xml:/pack/wildfly8/standalone/deployments/bem-ds.xml

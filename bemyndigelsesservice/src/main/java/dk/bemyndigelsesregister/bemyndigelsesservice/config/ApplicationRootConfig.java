@@ -69,19 +69,19 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     public AuditLogger auditLogger() {
         return new AuditLogger(Boolean.valueOf(auditLogEnabled), Boolean.valueOf(auditLogUseMock));
     }
-
-    @Bean(initMethod = "migrate")
-    public Flyway flyway(DataSource dataSource) {
-        if (Boolean.valueOf(flywayEnabled)) {
-            Flyway flyway = new Flyway();
-            flyway.setDataSource(dataSource);
-            flyway.setCleanOnValidationError(false);
-            return flyway;
-        } else {
-            logger.info("Skipped FlyWay");
-            return null;
-        }
-    }
+//
+//    @Bean(initMethod = "migrate")
+//    public Flyway flyway(DataSource dataSource) {
+//        if (Boolean.valueOf(flywayEnabled)) {
+//            Flyway flyway = new Flyway();
+//            flyway.setDataSource(dataSource);
+//            flyway.setCleanOnValidationError(false);
+//            return flyway;
+//        } else {
+//            logger.info("Skipped FlyWay");
+//            return null;
+//        }
+//    }
 
     @Bean
     public DataSource dataSource() {
@@ -127,10 +127,10 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
                 "dk.nsi.bemyndigelse._2016._01._01",
                 "dk.nsi.bemyndigelse._2017._08._01",
                 "dk.medcom.dgws._2006._04.dgws_1_0",
-                "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_secext_1_0",
-                "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_utility_1_0",
-                "org.w3._2000._09.xmldsig",
-                "oasis.names.tc.saml._2_0.assertion",
+//                "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_secext_1_0",
+//                "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_utility_1_0",
+//                "org.w3._2000._09.xmldsig",
+//                "oasis.names.tc.saml._2_0.assertion",
                 "dk.oio.rep.cpr_dk.xml.schemas.core._2005._03._18",
                 "dk.oio.rep.cvr_dk.xml.schemas._2005._03._22"
         );

@@ -35,8 +35,8 @@ abstract class WebServiceSupport {
     }
 
     protected SOAPClient getClient() {
-        println "Creating client for ${urlPrefix()}"
-        def client = new SOAPClient(urlPrefix() + "/")
+        println "Creating client for ${urlPrefix()}/bem/"
+        def client = new SOAPClient(urlPrefix() + "/bem/")
         client.httpClient.proxy = createHttpProxy() ?: Proxy.NO_PROXY
         client
     }

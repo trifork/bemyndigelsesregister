@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+    <deployment>
+        <exclude-subsystems>
+            <subsystem name="logging"/>
+        </exclude-subsystems>
+        <dependencies>
+            <module name="dk.bemyndigelsesregister.bem" export="true"/> <!-- Module containing application property files -->
+            <module name="dk.sds.nsp.audit"/>
+            <module name="dk.sds.nsp.security"/>
+            <module name="org.apache.cxf"/>
+            <module name="org.apache.cxf.impl"/>
+            <module name="dk.sds.nsp.seal"/>
+            <module name="dk.sds.nsp.kafka.clients"/>
+            <module name="org.apache.kafka.clients"/>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

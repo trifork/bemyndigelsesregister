@@ -1,11 +1,11 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import com.trifork.dgws.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.sds.nsp.security.SecurityContext;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -25,10 +25,6 @@ public abstract class AbstractServiceImpl {
     @Inject
     MetadataManager metadataManager;
     @Inject
-    DgwsRequestContext dgwsRequestContext;
-    @Inject
-    WhitelistChecker whitelistChecker;
-    @Inject
     AuditLogger auditLogger;
 
     private Logger logger;
@@ -38,34 +34,35 @@ public abstract class AbstractServiceImpl {
     }
 
     protected void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
-        Set<String> authorizedCprSet = new HashSet<>(Arrays.asList(authorizedCprs));
-        IdCardData idCardData = dgwsRequestContext.getIdCardData();
-        if (idCardData.getIdCardType() == IdCardType.SYSTEM) {
-            IdCardSystemLog systemLog = dgwsRequestContext.getIdCardSystemLog();
-            if (systemLog.getCareProviderIdType() != CareProviderIdType.CVR_NUMBER) {
-                throw new IllegalAccessError("Attempted to access operation using system id card, but the CareProviderIdType was not CVR, it was " + systemLog.getCareProviderIdType());
-            }
-            String cvr = systemLog.getCareProviderId();
-            if (!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
-                throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR [" + cvr + "]");
-            }
-        } else if (idCardData.getIdCardType() == IdCardType.USER) {
-            IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
-            if (userLog == null || !authorizedCprSet.contains(userLog.cpr)) {
-                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: [" + (userLog != null ? userLog.cpr : null) + "]");
-                throw new IllegalAccessError(errorMessage);
-            }
-        } else {
-            throw new IllegalAccessError("Could not authorize ID card, it was neither a user or system id card");
-        }
+        // TODO: Redo with new Security Context
+//        Set<String> authorizedCprSet = new HashSet<>(Arrays.asList(authorizedCprs));
+//        IdCardData idCardData = dgwsRequestContext.getIdCardData();
+//        if (idCardData.getIdCardType() == IdCardType.SYSTEM) {
+//            IdCardSystemLog systemLog = dgwsRequestContext.getIdCardSystemLog();
+//            if (systemLog.getCareProviderIdType() != CareProviderIdType.CVR_NUMBER) {
+//                throw new IllegalAccessError("Attempted to access operation using system id card, but the CareProviderIdType was not CVR, it was " + systemLog.getCareProviderIdType());
+//            }
+//            String cvr = systemLog.getCareProviderId();
+//            if (!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
+//                throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR [" + cvr + "]");
+//            }
+//        } else if (idCardData.getIdCardType() == IdCardType.USER) {
+//            IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
+//            if (userLog == null || !authorizedCprSet.contains(userLog.cpr)) {
+//                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: [" + (userLog != null ? userLog.cpr : null) + "]");
+//                throw new IllegalAccessError(errorMessage);
+//            }
+//        } else {
+//            throw new IllegalAccessError("Could not authorize ID card, it was neither a user or system id card");
+//        }
     }
 
     protected DateTime nullableDateTime(XMLGregorianCalendar xmlDate) {
         return xmlDate != null ? new DateTime(xmlDate.toGregorianCalendar(), DateTimeZone.UTC) : null;
     }
 
-    protected List<Delegation> getDelegationsCommon(String delegatorCpr, String delegateeCpr, String delegationId) {
-        auditLogger.log("Hent bemyndigelser", delegateeCpr);
+    protected List<Delegation> getDelegationsCommon(String delegatorCpr, String delegateeCpr, String delegationId, SecurityContext securityContext) {
+        auditLogger.log("Hent bemyndigelser", delegateeCpr, securityContext);
 
         List<Delegation> delegations = new LinkedList<>();
 
@@ -108,8 +105,8 @@ public abstract class AbstractServiceImpl {
         return result;
     }
 
-    protected List<String> deleteDelegationsCommon(String delegatorCpr, String delegateeCpr, List<String> delegationIds, XMLGregorianCalendar xmlDate) {
-        auditLogger.log("Slet bemyndigelser", delegateeCpr);
+    protected List<String> deleteDelegationsCommon(String delegatorCpr, String delegateeCpr, List<String> delegationIds, XMLGregorianCalendar xmlDate, SecurityContext securityContext) {
+        auditLogger.log("Slet bemyndigelser", delegateeCpr, securityContext);
 
         DateTime deletionDate = xmlDate == null ? null : new DateTime(xmlDate.toGregorianCalendar().getTimeInMillis());
 

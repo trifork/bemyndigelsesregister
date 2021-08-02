@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <!-- ================================= -->
+   <!-- Preserve messages in a local file -->
+   <!-- ================================= -->
+
+   <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+      <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+      <param name="File" value="${jboss.server.log.dir}/bem.log"/>
+      <param name="Append" value="true"/>
+
+      <param name="MaxFileSize" value="${dk.nsp.log.MaxFileSize}"/>
+      <param name="MaxBackupIndex" value="${dk.nsp.log.MaxBackupIndex}"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="timestamp=&quot;%d&quot; threadId=&quot;%t&quot; priority=&quot;%p&quot; category=&quot;%c&quot; requestId=&quot;%X{RequestId}&quot; message=&quot;%m&quot;%n"/>
+      </layout>
+   </appender>
+
+   <!-- ========== -->
+   <!-- Categories -->
+   <!-- ========== -->
+
+   <category name="dk.bemyndigelsesregister">
+      <priority value="DEBUG"/>
+   </category>
+
+
+   <!-- ======================= -->
+   <!-- Setup the Root category -->
+   <!-- ======================= -->
+
+   <root>
+      <priority value="INFO"/>
+      <appender-ref ref="FILE"/>
+   </root>
+
+</log4j:configuration>

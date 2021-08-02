@@ -1,6 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ebean;
 
-import com.trifork.dgws.DgwsRequestContext;
 import dk.bemyndigelsesregister.bemyndigelsesservice.config.ApplicationRootConfig;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import org.junit.runner.RunWith;
@@ -40,11 +39,6 @@ public abstract class DaoUnitTestSupport extends AbstractJUnit4SpringContextTest
         @Bean
         public ServletContext servletContext() {
             return mock(ServletContext.class);
-        }
-
-        @Bean
-        public DgwsRequestContext dgwsRequestContext() {
-            return mock(DgwsRequestContext.class);
         }
 
         @Bean

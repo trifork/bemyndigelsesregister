@@ -1,6 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import com.trifork.dgws.annotations.Protected;
 import dk.bemyndigelsesregister.bemyndigelsesservice.BemyndigelsesService_20170801;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
@@ -9,6 +8,8 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestType;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ServiceTypeMapper_20170801;
 import dk.nsi.bemyndigelse._2017._08._01.*;
+import dk.sds.nsp.security.Security;
+import dk.sds.nsp.security.SecurityContext;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,11 +34,12 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     }
 
     @Override
-    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.CREATE);
+        SecurityContext securityContext = Security.getSecurityContext();
+        checkSecurityTicket(securityContext);
 
         // auditlog call - one for each delegatee
         Set<String> delegateeCprs = new HashSet<>();
@@ -45,7 +47,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             delegateeCprs.add(createDelegation.getDelegateeCpr());
         }
         for (String delegateeCpr : delegateeCprs) {
-            auditLogger.log("Opret bemyndigelser", delegateeCpr);
+            auditLogger.log("Opret bemyndigelser", delegateeCpr, securityContext);
         }
 
         Collection<Delegation> delegations = new ArrayList<>();
@@ -80,13 +82,14 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     }
 
     @Override
-    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.GET);
+        SecurityContext securityContext = Security.getSecurityContext();
+        checkSecurityTicket(securityContext);
 
-        Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId());
+        Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId(), securityContext);
 
         final GetDelegationsResponse response = new GetDelegationsResponse();
         for (Delegation delegation : delegations) {
@@ -96,13 +99,14 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     }
 
     @Override
-    @Protected(minAuthLevel = 4)
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.DELETE);
+        SecurityContext securityContext = Security.getSecurityContext();
+        checkSecurityTicket(securityContext);
 
-        List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate());
+        List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate(), securityContext);
 
         final DeleteDelegationsResponse response = new DeleteDelegationsResponse();
         response.getDelegationId().addAll(result);
@@ -113,11 +117,12 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @Override
     @Transactional
     @ResponsePayload
-    @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.PUT_METADATA);
+        SecurityContext securityContext = Security.getSecurityContext();
+        checkSecurityTicket(securityContext);
 
-        auditLogger.log("Indlæs metadata", null);
+        auditLogger.log("Indlæs metadata", null, securityContext);
 
         String domainCode = request.getDomain();
         if (domainCode == null || domainCode.trim().isEmpty())
@@ -197,6 +202,8 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     public GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader) {
         RequestContext.get().setRequestType(RequestType.GET_METADATA);
+        SecurityContext securityContext = Security.getSecurityContext();
+        checkSecurityTicket(securityContext);
 
         Metadata metadata = metadataManager.getMetadata(request.getDomain(), request.getSystemId());
 
@@ -250,5 +257,16 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
         }
 
         return response;
+    }
+
+    private void checkSecurityTicket(SecurityContext securityContext) {
+        Optional<SecurityContext.Ticket> ticketOptional = securityContext.getTicket();
+        if (!ticketOptional.isPresent()) {
+            throw new RuntimeException("No security ticket is present");
+        }
+        SecurityContext.Ticket ticket = ticketOptional.get();
+        if (!ticket.isValid()) {
+            throw new RuntimeException("No security ticket is present");
+        }
     }
 }

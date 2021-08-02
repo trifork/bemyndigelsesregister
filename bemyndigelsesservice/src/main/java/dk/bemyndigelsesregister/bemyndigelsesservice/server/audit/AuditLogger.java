@@ -1,19 +1,19 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.audit;
 
-import com.trifork.dgws.DgwsRequestContext;
-import com.trifork.dgws.IdCardUserLog;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.nsi.fmk.auditlog.client.AuditLogKafkaClient;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog.AuditLogEntry;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog.AuditLogEntryId;
 import dk.nsi.fmk.moduleframework.data.ModuleFramework;
+import dk.sds.nsp.security.SecurityContext;
 import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -25,9 +25,6 @@ public class AuditLogger {
 
     @Inject
     SystemService systemService;
-
-    @Inject
-    DgwsRequestContext dgwsRequestContext;
 
     // instance
     private boolean loggingEnabled;
@@ -87,7 +84,7 @@ public class AuditLogger {
         }
     }
 
-    public AuditLogEntryId log(String method, String delegateeCpr) {
+    public AuditLogEntryId log(String method, String delegateeCpr, SecurityContext securityContext) {
         if (configured) {
             log.debug("AuditLogging configured - starting logging.");
 
@@ -101,41 +98,84 @@ public class AuditLogger {
             entryBuilder.setMessageId(messageId);
             entryBuilder.setMethod(method);
             entryBuilder.setTimestamp(System.currentTimeMillis());
-            int authLevel = dgwsRequestContext.getIdCardData().getAuthenticationLevel();
-            entryBuilder.setAuthLevel(authLevel);
 
-            log.debug("authLevel =" + authLevel);
-            if (authLevel > 3) {
-                IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
-                entryBuilder.setCpr(userLog.cpr);
+            Optional<SecurityContext.User> actingUser = securityContext.getActingUser();
+            if (actingUser.isPresent()) {
+                entryBuilder.setCpr(actingUser.get().getIdentifier());
                 if (delegateeCpr != null) {
                     entryBuilder.setPersonCPR(delegateeCpr);
                 }
-                if (userLog.role != null) {
-                    entryBuilder.setRole(userLog.role);
+                if (actingUser.get().getCredentials().isPresent() && actingUser.get().getCredentials().get().getUnverifiedRole().isPresent()) {
+                    entryBuilder.setRole(actingUser.get().getCredentials().get().getUnverifiedRole().get());
                 }
-                if (userLog.authorisationCode != null) {
-                    entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
+                if (actingUser.get().getCredentials().isPresent() && actingUser.get().getCredentials().get().getAuthorizationCode().isPresent()) {
+                    entryBuilder.setAuthorizationNumber(actingUser.get().getCredentials().get().getAuthorizationCode().get());
                 }
 
                 StringBuilder b = new StringBuilder();
-                if (userLog.givenName != null) {
-                    b.append(userLog.givenName);
+                if (actingUser.get().getGivenName().isPresent()) {
+                    b.append(actingUser.get().getGivenName().get());
                 }
-                if (userLog.surname != null && !userLog.surname.isEmpty()) {
+                if (actingUser.get().getSurname().isPresent()) {
                     if (b.length() > 0) {
                         b.append(" ");
                     }
-                    b.append(userLog.surname);
+                    b.append(actingUser.get().getSurname().get());
                 }
                 if (b.length() > 0) {
                     entryBuilder.setUserName(b.toString());
                 }
             }
 
-            entryBuilder.setCvr(dgwsRequestContext.getIdCardSystemLog().getCareProviderId());
-            entryBuilder.setOrganisationName(dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
-            entryBuilder.setSystem(dgwsRequestContext.getIdCardSystemLog().getItSystemName());
+            Optional<SecurityContext.Organisation> organisation = securityContext.getOrganisation();
+            if (organisation.isPresent()) {
+                entryBuilder.setCvr(organisation.get().getIdentifier());
+                if (organisation.get().getName().isPresent()) {
+                    entryBuilder.setOrganisationName(organisation.get().getName().get());
+                }
+            }
+
+            Optional<SecurityContext.Client> client = securityContext.getClient();
+            if (client.isPresent() && client.get().getName().isPresent()) {
+                entryBuilder.setSystem(client.get().getName().get());
+            }
+
+            // TODO: Redo with new security context
+//            int authLevel = dgwsRequestContext.getIdCardData().getAuthenticationLevel();
+//            entryBuilder.setAuthLevel(authLevel);
+//
+//            log.debug("authLevel =" + authLevel);
+//            if (authLevel > 3) {
+//                IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
+//                entryBuilder.setCpr(userLog.cpr);
+//                if (delegateeCpr != null) {
+//                    entryBuilder.setPersonCPR(delegateeCpr);
+//                }
+//                if (userLog.role != null) {
+//                    entryBuilder.setRole(userLog.role);
+//                }
+//                if (userLog.authorisationCode != null) {
+//                    entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
+//                }
+//
+//                StringBuilder b = new StringBuilder();
+//                if (userLog.givenName != null) {
+//                    b.append(userLog.givenName);
+//                }
+//                if (userLog.surname != null && !userLog.surname.isEmpty()) {
+//                    if (b.length() > 0) {
+//                        b.append(" ");
+//                    }
+//                    b.append(userLog.surname);
+//                }
+//                if (b.length() > 0) {
+//                    entryBuilder.setUserName(b.toString());
+//                }
+//            }
+//
+//            entryBuilder.setCvr(dgwsRequestContext.getIdCardSystemLog().getCareProviderId());
+//            entryBuilder.setOrganisationName(dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
+//            entryBuilder.setSystem(dgwsRequestContext.getIdCardSystemLog().getItSystemName());
 
             AuditLogEntry logEntry = entryBuilder.build();
             log.debug("built logEntry");
