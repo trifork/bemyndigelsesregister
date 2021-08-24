@@ -48,6 +48,7 @@ services:
       - ../database/db/migration/bem/V11__BEM2_rettighed_uuid.sql:/flyway/sql/V11__BEM2_rettighed_uuid.sql
       - ../database/db/migration/bem/V12__Retransmission_table_indexes.sql:/flyway/sql/V12__Retransmission_table_indexes.sql
       - ../database/db/migration/bem/V13__Drop_BEM1_table.sql:/flyway/sql/V13__Drop_BEM1_table.sql
+      - ../database/db/migration/bem/V14__Drop_retransmission_table.sql:/flyway/sql/V14__Drop_retransmission_table.sql
     depends_on:
       - bemdb
   bem:

@@ -25,9 +25,7 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -38,26 +36,9 @@ public class WebConfig extends WebMvcConfigurationSupport {
     ApplicationRootConfig applicationRootConfig;
 
     @Bean
-    public WsdlDefinition serviceDefinition_20160101() {
-        final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
-        bean.setSchema(schema1XsdSchema());
-        //bean.setSchemaCollection(schemaCollection()); //this will inline the defs from the schemas in the collections
-        bean.setPortTypeName("BemyndigelsesService");
-        bean.setLocationUri("http://localhost:8080/BemyndigelsesService");
-        Properties soapActions = new Properties();
-        soapActions.put("GetDelegations", "http://nsi.dk/bemyndigelse/2016/01/01/GetDelegations");
-        soapActions.put("CreateDelegations", "http://nsi.dk/bemyndigelse/2016/01/01/CreateDelegations");
-        soapActions.put("DeleteDelegations", "http://nsi.dk/bemyndigelse/2016/01/01/DeleteDelegations");
-        soapActions.put("GetMetadata", "http://nsi.dk/bemyndigelse/2016/01/01/GetMetadata");
-        soapActions.put("PutMetadata", "http://nsi.dk/bemyndigelse/2016/01/01/PutMetadata");
-        bean.setSoapActions(soapActions);
-        return bean;
-    }
-
-    @Bean
     public WsdlDefinition serviceDefinition_20170801() {
         final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
-        bean.setSchema(schema2XsdSchema());
+        bean.setSchema(xsdSchema());
         //bean.setSchemaCollection(schemaCollection()); //this will inline the defs from the schemas in the collections
         bean.setPortTypeName("BemyndigelsesService");
         bean.setLocationUri("http://localhost:8080/BemyndigelsesService_20170801");
@@ -76,7 +57,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
         final Resource[] resources = {
                 new ClassPathResource("/schema/2005_03_18/CPR_PersonCivilRegistrationIdentifier.xsd"),
                 new ClassPathResource("/schema/2005_03_22/CVR_CVRnumberIdentifier.xsd"),
-                new ClassPathResource("/schema/2016_01_01/bemyndigelsesservice.xsd"),
                 new ClassPathResource("/schema/2017_08_01/bemyndigelsesservice.xsd")
         };
         for (Resource resource : resources) {
@@ -88,12 +68,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public SimpleXsdSchema schema1XsdSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("schema/2016_01_01/bemyndigelsesservice.xsd"));
-    }
-
-    @Bean
-    public SimpleXsdSchema schema2XsdSchema() {
+    public SimpleXsdSchema xsdSchema() {
         return new SimpleXsdSchema(new ClassPathResource("schema/2017_08_01/bemyndigelsesservice.xsd"));
     }
 
@@ -132,7 +107,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
         final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setOrder(2);
         final HashMap<String, Object> urlMap = new HashMap<String, Object>();
-        urlMap.put("bemyndigelsesservice_2016_01_01.wsdl", serviceDefinition_20160101());
         urlMap.put("bemyndigelsesservice_2017_08_01.wsdl", serviceDefinition_20170801());
         mapping.setUrlMap(urlMap);
         return mapping;
@@ -180,7 +154,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public EndpointInterceptor payloadValidationEndpointInterceptor() {
         final PayloadValidatingInterceptor interceptor = new PayloadValidatingInterceptor();
         interceptor.setSchemas(new Resource[]{
-                new ClassPathResource("schema/2016_01_01/bemyndigelsesservice.xsd"),
                 new ClassPathResource("schema/2017_08_01/bemyndigelsesservice.xsd")
         });
         interceptor.setValidateRequest(true);

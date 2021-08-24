@@ -3,11 +3,11 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
 import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
-import com.googlecode.flyway.core.Flyway;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Role;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.*;
@@ -20,9 +20,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-import javax.persistence.Entity;
 import javax.sql.DataSource;
-import java.util.ArrayList;
 
 import static java.lang.System.getProperty;
 
@@ -69,19 +67,6 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     public AuditLogger auditLogger() {
         return new AuditLogger(Boolean.valueOf(auditLogEnabled), Boolean.valueOf(auditLogUseMock));
     }
-//
-//    @Bean(initMethod = "migrate")
-//    public Flyway flyway(DataSource dataSource) {
-//        if (Boolean.valueOf(flywayEnabled)) {
-//            Flyway flyway = new Flyway();
-//            flyway.setDataSource(dataSource);
-//            flyway.setCleanOnValidationError(false);
-//            return flyway;
-//        } else {
-//            logger.info("Skipped FlyWay");
-//            return null;
-//        }
-//    }
 
     @Bean
     public DataSource dataSource() {
@@ -112,7 +97,17 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         final EbeanServerFactoryBean factoryBean = new EbeanServerFactoryBean();
         final ServerConfig serverConfig = new ServerConfig();
         serverConfig.setName("localhostConfig");
-        serverConfig.setClasses(new ArrayList<Class<?>>(new Reflections("dk.bemyndigelsesregister.bemyndigelsesservice.domain").getTypesAnnotatedWith(Entity.class)));
+
+        serverConfig.addClass(DelegatablePermission.class);
+        serverConfig.addClass(DelegatingSystem.class);
+        serverConfig.addClass(Delegation.class);
+        serverConfig.addClass(DelegationPermission.class);
+        serverConfig.addClass(Domain.class);
+        serverConfig.addClass(Permission.class);
+        serverConfig.addClass(Role.class);
+        serverConfig.addClass(SystemVariable.class);
+        serverConfig.addClass(Whitelist.class);
+
         serverConfig.setDataSource(dataSource);
         serverConfig.setExternalTransactionManager(new SpringAwareJdbcTransactionManager());
         factoryBean.setServerConfig(serverConfig);
@@ -124,7 +119,6 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
     public Jaxb2Marshaller serviceMarshaller() {
         final Jaxb2Marshaller bean = new Jaxb2Marshaller();
         bean.setContextPaths(
-                "dk.nsi.bemyndigelse._2016._01._01",
                 "dk.nsi.bemyndigelse._2017._08._01",
                 "dk.medcom.dgws._2006._04.dgws_1_0",
 //                "org.oasis_open.docs.wss._2004._01.oasis_200401_wss_wssecurity_secext_1_0",

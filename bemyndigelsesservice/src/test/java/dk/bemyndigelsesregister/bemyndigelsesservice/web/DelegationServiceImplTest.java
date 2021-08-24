@@ -8,7 +8,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
 import dk.bemyndigelsesregister.shared.service.SystemService;
-import dk.nsi.bemyndigelse._2016._01._01.*;
+import dk.nsi.bemyndigelse._2017._08._01.*;
 import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class DelegationServiceImplTest {
     @InjectMocks
-    BemyndigelsesServiceImpl_20160101 service = new BemyndigelsesServiceImpl_20160101();
+    BemyndigelsesServiceImpl_20170801 service = new BemyndigelsesServiceImpl_20170801();
 
     @Mock
     DelegationManager delegationManager;
@@ -118,7 +118,7 @@ public class DelegationServiceImplTest {
                 ListOfPermissionIds pIds = new ListOfPermissionIds();
                 pIds.getPermissionId().addAll(permissionCodes);
                 setListOfPermissionIds(pIds);
-                setState(dk.nsi.bemyndigelse._2016._01._01.State.GODKENDT);
+                setState(dk.nsi.bemyndigelse._2017._08._01.State.GODKENDT);
             }});
         }};
 

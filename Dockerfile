@@ -9,5 +9,5 @@ COPY bemyndigelsesservice/target/bem.war /pack/wildfly8/standalone/deployments/
 
 RUN echo "#Skip nothing" > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
 
-#RUN echo '.*/(isalive|dksconfig|wsdl|task)$' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
-RUN echo '.*' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
+RUN echo '.*/(health|dksconfig)$' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
+#RUN echo '.*' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
