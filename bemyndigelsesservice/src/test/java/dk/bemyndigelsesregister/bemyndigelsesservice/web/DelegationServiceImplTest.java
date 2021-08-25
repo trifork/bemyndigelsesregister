@@ -54,7 +54,7 @@ public class DelegationServiceImplTest {
     @Mock
     SystemService systemService;
     @Mock
-    ServiceTypeMapper_20160101 typeMapper;
+    ServiceTypeMapper_20170801 typeMapper;
     @Mock
     MetadataManager metadataManager;
     @Mock

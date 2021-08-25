@@ -1,1 +1,0 @@
-ALTER TABLE delegerbar_rettighed ADD CONSTRAINT delegerbar_rettighed_unique UNIQUE (arbejdsfunktion_id, rettighedskode_id);

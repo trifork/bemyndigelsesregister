@@ -3,6 +3,7 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.config;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.springsupport.factory.EbeanServerFactoryBean;
 import com.avaje.ebean.springsupport.txn.SpringAwareJdbcTransactionManager;
+import com.googlecode.flyway.core.Flyway;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Role;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
@@ -68,6 +69,19 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         return new AuditLogger(Boolean.valueOf(auditLogEnabled), Boolean.valueOf(auditLogUseMock));
     }
 
+    @Bean(initMethod = "migrate")
+    public Flyway flyway(DataSource dataSource) {
+        if (Boolean.valueOf(flywayEnabled)) {
+            Flyway flyway = new Flyway();
+            flyway.setDataSource(dataSource);
+            flyway.setCleanOnValidationError(false);
+            return flyway;
+        } else {
+            logger.info("Skipped FlyWay");
+            return null;
+        }
+    }
+
     @Bean
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
@@ -111,6 +125,7 @@ public class ApplicationRootConfig implements TransactionManagementConfigurer {
         serverConfig.setDataSource(dataSource);
         serverConfig.setExternalTransactionManager(new SpringAwareJdbcTransactionManager());
         factoryBean.setServerConfig(serverConfig);
+
         return factoryBean;
     }
 

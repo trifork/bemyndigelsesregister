@@ -98,6 +98,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
@@ -277,7 +283,7 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                <srcFile>${basedir}/src/test/resources/db/testdata/Testdata.sql</srcFile>
+                                <srcFile>${basedir}/src/test/resources/db/testdata/V2__Create_testdata.sql</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>

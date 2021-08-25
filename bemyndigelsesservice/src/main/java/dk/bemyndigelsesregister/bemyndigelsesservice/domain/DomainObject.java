@@ -2,13 +2,12 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 
 import org.joda.time.DateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 @MappedSuperclass
 public abstract class DomainObject {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "sidst_modificeret")

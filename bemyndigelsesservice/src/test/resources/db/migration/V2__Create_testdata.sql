@@ -1,5 +1,3 @@
-SET FOREIGN_KEY_CHECKS = 0;
-
 REPLACE INTO domaene(kode) VALUES ('trifork-test');
 
 REPLACE INTO linked_system(domaene_id, kode, beskrivelse) VALUES (1, 'testsys', 'Trifork test system');
@@ -14,7 +12,6 @@ REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES 
 REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES (1, 2);
 REPLACE INTO delegerbar_rettighed(arbejdsfunktion_id, rettighedskode_id) VALUES (1, 3);
 
-##Bemyndigelser
 REPLACE INTO `bemyndigelse20` (
   `id`,
   `kode`,
@@ -184,14 +181,10 @@ REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'test', '2');
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('USER_CVR_CPR', 'test', 'CVR:1-CPR:2');
 
-/* Testdata for integration test */
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.indlaesMetadata', '25520041');
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.hentMetadata', '25520041');
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', '', '25520041');
 
-/* Testdata for bemyndigelse-indlaes-tool */
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.indlaesMetadata', '20921897');
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.hentMetadata', '20921897');
 REPLACE INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', '', '20921897');
-
-SET FOREIGN_KEY_CHECKS = 1;
