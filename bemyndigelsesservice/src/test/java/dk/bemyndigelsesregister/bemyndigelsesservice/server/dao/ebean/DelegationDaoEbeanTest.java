@@ -153,14 +153,28 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
     public void testFindByDelegator() throws Exception {
-        final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010");
+        final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010", null, null);
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }
 
     @Test
+    public void testFindByDelegatorAndFromDate() throws Exception {
+        final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010", new DateTime(2011, 5, 22, 0, 0), null);
+
+        assertEquals("Unexpected no. of delegations found", 1, delegations.size());
+    }
+
+    @Test
+    public void testFindByDelegatorAndToDate() throws Exception {
+        final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010", null, new DateTime(2011, 5, 22, 0, 0));
+
+        assertEquals("Unexpected no. of delegations found", 1, delegations.size());
+    }
+
+    @Test
     public void testFindByDelegatee() throws Exception {
-        final List<Delegation> delegations = dao.findByDelegateeCpr("1010101012");
+        final List<Delegation> delegations = dao.findByDelegateeCpr("1010101012", null, null);
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }

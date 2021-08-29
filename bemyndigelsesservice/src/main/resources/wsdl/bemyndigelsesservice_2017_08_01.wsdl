@@ -49,6 +49,12 @@
 	<wsdl:message name="GetMetadataResponse_2017_08_01">
 		<wsdl:part element="bms20170801:GetMetadataResponse" name="GetMetadataResponse"/>
 	</wsdl:message>
+	<wsdl:message name="GetAllMetadataRequest_2017_08_01">
+		<wsdl:part element="bms20170801:GetAllMetadataRequest" name="GetAllMetadataRequest"/>
+	</wsdl:message>
+	<wsdl:message name="GetAllMetadataResponse_2017_08_01">
+		<wsdl:part element="bms20170801:GetAllMetadataResponse" name="GetAllMetadataResponse"/>
+	</wsdl:message>
 	<wsdl:message name="GetDelegationsRequest_2017_08_01">
 		<wsdl:part element="bms20170801:GetDelegationsRequest" name="GetDelegationsRequest"/>
 	</wsdl:message>
@@ -67,6 +73,12 @@
 	<wsdl:message name="DeleteDelegationsResponse_2017_08_01">
 		<wsdl:part element="bms20170801:DeleteDelegationsResponse" name="DeleteDelegationsResponse"/>
 	</wsdl:message>
+	<wsdl:message name="GetExpirationInfoRequest_2017_08_01">
+		<wsdl:part element="bms20170801:GetExpirationInfoRequest" name="GetExpirationInfoRequest"/>
+	</wsdl:message>
+	<wsdl:message name="GetExpirationInfoResponse_2017_08_01">
+		<wsdl:part element="bms20170801:GetExpirationInfoResponse" name="GetExpirationInfoResponse"/>
+	</wsdl:message>
 
 	<wsdl:message name="DGWSFault">
 		<wsdl:part name="fault" element="medcom:FaultCode" />
@@ -83,6 +95,11 @@
 			<wsdl:output message="tns:GetMetadataResponse_2017_08_01" name="GetMetadataResponse_2017_08_01"/>
 			<wsdl:fault name="DGWSFault" message="tns:DGWSFault" />
 		</wsdl:operation>
+		<wsdl:operation name="GetAllMetadata_2017_08_01">
+			<wsdl:input message="tns:GetAllMetadataRequest_2017_08_01" name="GetAllMetadataRequest_2017_08_01"/>
+			<wsdl:output message="tns:GetAllMetadataResponse_2017_08_01" name="GetAllMetadataResponse_2017_08_01"/>
+			<wsdl:fault name="DGWSFault" message="tns:DGWSFault" />
+		</wsdl:operation>
 		<wsdl:operation name="GetDelegations_2017_08_01">
 			<wsdl:input message="tns:GetDelegationsRequest_2017_08_01" name="GetDelegationsRequest_2017_08_01"/>
 			<wsdl:output message="tns:GetDelegationsResponse_2017_08_01" name="GetDelegationsResponse_2017_08_01"/>
@@ -96,6 +113,11 @@
 		<wsdl:operation name="DeleteDelegations_2017_08_01">
 			<wsdl:input message="tns:DeleteDelegationsRequest_2017_08_01" name="DeleteDelegationsRequest_2017_08_01"/>
 			<wsdl:output message="tns:DeleteDelegationsResponse_2017_08_01" name="DeleteDelegationsResponse_2017_08_01"/>
+			<wsdl:fault name="DGWSFault" message="tns:DGWSFault" />
+		</wsdl:operation>
+		<wsdl:operation name="GetExpirationInfo_2017_08_01">
+			<wsdl:input message="tns:GetExpirationInfoRequest_2017_08_01" name="GetExpirationInfoRequest_2017_08_01"/>
+			<wsdl:output message="tns:GetExpirationInfoResponse_2017_08_01" name="GetExpirationInfoResponse_2017_08_01"/>
 			<wsdl:fault name="DGWSFault" message="tns:DGWSFault" />
 		</wsdl:operation>
 	</wsdl:portType>
@@ -125,6 +147,20 @@
 				<soap:body use="literal"/>
 			</wsdl:input>
 			<wsdl:output name="GetMetadataResponse_2017_08_01">
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="DGWSFault">
+				<soap:fault name="DGWSFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="GetAllMetadata_2017_08_01">
+			<soap:operation soapAction="http://nsi.dk/bemyndigelse/2017/08/01#GetAllMetadata"/>
+			<wsdl:input name="GetAllMetadataRequest_2017_08_01">
+				&bemStandardSOAPRequestHeaders;
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="GetAllMetadataResponse_2017_08_01">
 				<soap:body use="literal"/>
 			</wsdl:output>
 			<wsdl:fault name="DGWSFault">
@@ -167,6 +203,20 @@
 				<soap:body use="literal"/>
 			</wsdl:input>
 			<wsdl:output name="DeleteDelegationsResponse_2017_08_01">
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="DGWSFault">
+				<soap:fault name="DGWSFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+
+		<wsdl:operation name="GetExpirationInfo_2017_08_01">
+			<soap:operation soapAction="http://nsi.dk/bemyndigelse/2017/08/01#GetExpirationInfo"/>
+			<wsdl:input name="GetExpirationInfoRequest_2017_08_01">
+				&bemStandardSOAPRequestHeaders;
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="GetExpirationInfoResponse_2017_08_01">
 				<soap:body use="literal"/>
 			</wsdl:output>
 			<wsdl:fault name="DGWSFault">

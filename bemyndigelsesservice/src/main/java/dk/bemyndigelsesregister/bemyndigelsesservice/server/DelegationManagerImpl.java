@@ -1,9 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.DelegationPermission;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
-import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatablePermissionDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
@@ -82,12 +79,23 @@ public class DelegationManagerImpl implements DelegationManager {
 
     @Override
     public List<Delegation> getDelegationsByDelegatorCpr(String cpr) {
-        return delegationDao.findByDelegatorCpr(cpr);
+        return getDelegationsByDelegatorCpr(cpr, null, null);
+    }
+
+    @Override
+    public List<Delegation> getDelegationsByDelegatorCpr(String cpr, DateTime effectiveFrom, DateTime effectiveTo) {
+        logger.debug("  Get delegations [" + cpr + "] currently valid [" + effectiveFrom + "]-[" + effectiveTo + "]");
+        return delegationDao.findByDelegatorCpr(cpr, effectiveFrom, effectiveTo);
     }
 
     @Override
     public List<Delegation> getDelegationsByDelegateeCpr(String cpr) {
-        return delegationDao.findByDelegateeCpr(cpr);
+        return getDelegationsByDelegateeCpr(cpr, null, null);
+    }
+
+    @Override
+    public List<Delegation> getDelegationsByDelegateeCpr(String cpr, DateTime effectiveFrom, DateTime effectiveTo) {
+        return delegationDao.findByDelegateeCpr(cpr, effectiveFrom, effectiveTo);
     }
 
     @Override
@@ -119,6 +127,11 @@ public class DelegationManagerImpl implements DelegationManager {
 
         delegationDao.save(delegation);
         return delegation.getCode();
+    }
+
+    @Override
+    public ExpirationInfo getExpirationInfo(String delegatorCpr, int days) {
+        return delegationDao.getExpirationInfo(delegatorCpr, days);
     }
 
     private Delegation createDelegationObject(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, Status state, List<String> permissionCodes, DateTime effectiveFrom, DateTime effectiveTo) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bms20160101:CreateDelegationsRequest
-        xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
+<bms20170801:CreateDelegationsRequest
+        xmlns:bms20170801="http://nsi.dk/bemyndigelse/2017/08/01/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
+        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2017/08/01 ../../../main/resources/schema/2017_08_01/bemyndigelsesservice.xsd">
     <Create>
         <DelegatorCpr>2005511871</DelegatorCpr>
         <DelegateeCpr>0304838140</DelegateeCpr>
@@ -28,4 +28,4 @@
         </ListOfPermissions>
         <EffectiveTo>2017-01-31T00:00:00Z</EffectiveTo>
     </Create>
-</bms20160101:CreateDelegationsRequest>
+</bms20170801:CreateDelegationsRequest>

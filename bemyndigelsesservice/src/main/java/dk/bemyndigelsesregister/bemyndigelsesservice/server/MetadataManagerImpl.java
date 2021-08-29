@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -234,7 +235,6 @@ public class MetadataManagerImpl implements MetadataManager {
     public Metadata getMetadata(String domainCode, String systemCode) {
         Metadata metadata = metadataCache.get(systemCode);
         if (metadata != null) {
-            logger.info("Metadata found in cache, system=[" + systemCode + "]");
             return metadata;
         }
 
@@ -248,7 +248,42 @@ public class MetadataManagerImpl implements MetadataManager {
         if (delegatingSystem == null)
             throw new IllegalArgumentException("System [" + systemCode + "] not found");
 
-        metadata = new Metadata(delegatingSystem.getDomain().getCode(), delegatingSystem.getCode(), delegatingSystem.getDescription());
+        metadata = getMetadata(delegatingSystem);
+        metadataCache.put(delegatingSystem.getCode(), metadata);
+
+        return metadata;
+    }
+
+    @Override
+    public List<Metadata> getAllMetadata(String domainCode) {
+        List<Metadata> result = new LinkedList<>();
+
+        if (domainCode != null) {
+            Domain domain = domainDao.findByCode(domainCode);
+            if (domain == null)
+                throw new IllegalArgumentException("Domain [" + domainCode + "] not found");
+        }
+
+        List<DelegatingSystem> systems = delegatingSystemDao.findAll();
+        if (systems != null) {
+            for (DelegatingSystem delegatingSystem : systems) {
+                if (delegatingSystem.getDomain().getCode().equals(domainCode)) {
+                    Metadata metadata = metadataCache.get(delegatingSystem.getCode());
+                    if (metadata == null) {
+                        metadata = getMetadata(delegatingSystem);
+                        metadataCache.put(delegatingSystem.getCode(), metadata);
+                    }
+
+                    result.add(metadata);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private Metadata getMetadata(DelegatingSystem delegatingSystem) {
+        Metadata metadata = new Metadata(delegatingSystem.getDomain().getCode(), delegatingSystem.getCode(), delegatingSystem.getDescription());
 
         List<Role> roles = roleDao.findBySystem(delegatingSystem.getId());
         if (roles != null)
@@ -265,7 +300,7 @@ public class MetadataManagerImpl implements MetadataManager {
             for (DelegatablePermission delegatablePermission : delegatablePermissions)
                 metadata.addDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode(), delegatablePermission.getPermission().getDescription(), delegatablePermission.isDelegatable());
 
-        metadataCache.put(systemCode, metadata);
+        logger.info("Metadata loaded from database, system=[" + delegatingSystem.getCode() + "]");
 
         return metadata;
     }

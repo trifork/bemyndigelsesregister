@@ -40,6 +40,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     final DateTime date0 = new DateTime(2014, 1, 1, 10, 0, 0);
     final DateTime date1 = new DateTime(2015, 1, 1, 10, 0, 0);
     final DateTime date2 = new DateTime(2015, 1, 10, 10, 0, 0);
+    final DateTime date3 = new DateTime(2016, 1, 10, 10, 0, 0);
 
     @Before
     public void setUp() throws Exception {
@@ -217,6 +218,54 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
 
             assertNotNull("Der skal returneres en liste af bemyndigelser for bemyndigende cpr " + delegatorCpr, list);
             assertEquals("Der skal findes 2 bemyndigelser for bemyndigende cpr " + delegatorCpr, 2, list.size());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testFindDelegationByDelegatorAndFromDate() {
+        try {
+            ebeanServer.beginTransaction();
+
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, date2);
+            List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr, date1, null);
+
+            assertNotNull("Der skal returneres en liste af bemyndigelser for bemyndigende cpr " + delegatorCpr, list);
+            assertEquals("Der skal findes 1 bemyndigelse for bemyndigende cpr " + delegatorCpr + ", som er gyldig efter " + date1, 1, list.size());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testFindDelegationByDelegatorAndToDate() {
+        try {
+            ebeanServer.beginTransaction();
+
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, date3);
+            List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr, null, date1);
+
+            assertNotNull("Der skal returneres en liste af bemyndigelser for bemyndigende cpr " + delegatorCpr, list);
+            assertEquals("Der skal findes 1 bemyndigelse for bemyndigende cpr " + delegatorCpr + ", som er gyldig indtil " + date1, 1, list.size());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    @Test
+    public void testFindDelegationByDelegatorAndPeriod() {
+        try {
+            ebeanServer.beginTransaction();
+
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+            manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, date3);
+            List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr, date0, date3);
+
+            assertNotNull("Der skal returneres en liste af bemyndigelser for bemyndigende cpr " + delegatorCpr, list);
+            assertEquals("Der skal findes 2 bemyndigelser for bemyndigende cpr " + delegatorCpr + ", som er gyldige fra " + date0 + " til " + date3, 2, list.size());
         } finally {
             ebeanServer.endTransaction();
         }

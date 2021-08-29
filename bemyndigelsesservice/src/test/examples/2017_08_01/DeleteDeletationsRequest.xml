@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bms20160101:DeleteDelegationsRequest
-        xmlns:bms20160101="http://nsi.dk/bemyndigelse/2016/01/01/"
+<bms20170801:DeleteDelegationsRequest
+        xmlns:bms20170801="http://nsi.dk/bemyndigelse/2017/08/01/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2016/01/01 ../../../main/resources/schema/2016_01_01/bemyndigelsesservice.xsd">
+        xsi:schemaLocation="http://nsi.dk/bemyndigelse/2017/08/01 ../../../main/resources/schema/2017_08_01/bemyndigelsesservice.xsd">
     <DelegatorCpr>2005511871</DelegatorCpr>
     <ListOfDelegationIds>
         <DelegationId>9DD1BC7E-76AF-43BC-9C2C-ABAE4257E64F</DelegationId>
@@ -10,4 +10,4 @@
         <DelegationId>2079412A-FC09-4072-A5DA-039B80357369</DelegationId>
     </ListOfDelegationIds>
     <DeletionDate>2016-03-31T23:59:59Z</DeletionDate>
-</bms20160101:DeleteDelegationsRequest>
+</bms20170801:DeleteDelegationsRequest>

@@ -1,8 +1,8 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.ExpirationInfo;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
-import dk.nsi.bemyndigelse._2016._01._01.State;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -33,6 +33,7 @@ public interface DelegationManager {
      */
     Delegation createDelegation(String systemCode, String delegatorCpr, String delegateeCpr, String delegateeCvr, String roleCode, Status state, List<String> permissions, DateTime effectiveFrom, DateTime effectiveTo);
 
+
     /**
      * Henter bemyndigelser uddelegeret af en person
      *
@@ -42,12 +43,32 @@ public interface DelegationManager {
     List<Delegation> getDelegationsByDelegatorCpr(String cpr);
 
     /**
+     * Henter bemyndigelser uddelegeret af en person
+     *
+     * @param cpr cprnr på delegerende person
+     * @param effectiveFrom start på periode, der anvendes til filtrering
+     * @param effectiveTo slut på periode, der anvendes til filtrering
+     * @return liste af bemyndigelser
+     */
+    List<Delegation> getDelegationsByDelegatorCpr(String cpr, DateTime effectiveFrom, DateTime effectiveTo);
+
+    /**
      * Henter bemyndigelser uddelegeret til en person
      *
      * @param cpr cprnr på person
      * @return liste af bemyndigelser
      */
     List<Delegation> getDelegationsByDelegateeCpr(String cpr);
+
+    /**
+     * Henter bemyndigelser uddelegeret til en person
+     *
+     * @param cpr cprnr på person
+     * @param effectiveFrom start på periode, der anvendes til filtrering
+     * @param effectiveTo slut på periode, der anvendes til filtrering
+     * @return liste af bemyndigelser
+     */
+    List<Delegation> getDelegationsByDelegateeCpr(String cpr, DateTime effectiveFrom, DateTime effectiveTo);
 
     /**
      * Henter bemyndigelser fra kode/uuid
@@ -62,7 +83,6 @@ public interface DelegationManager {
      * Sletningen foregår i praksis ved at sætte slutdato til det aktuelle tidspunkt.
      * Kan også bruges til at afvise en anmodning om bemyndigelse
      *
-     *
      * @param delegatorCpr   Bemyndigende CPR
      * @param delegateeCpr   Bemyndigede CPR
      * @param delegationCode kode på på bemyndigelse (uuid)
@@ -70,4 +90,6 @@ public interface DelegationManager {
      * @return delegationId
      */
     String deleteDelegation(String delegatorCpr, String delegateeCpr, String delegationCode, DateTime deletionDate);
+
+    ExpirationInfo getExpirationInfo(String delegatorCpr, int days);
 }

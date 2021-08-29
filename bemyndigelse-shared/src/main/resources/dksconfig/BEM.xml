@@ -3,34 +3,8 @@
     <dksVersion>1</dksVersion>
     <timestamp>TIMESTAMP</timestamp>
     <name>BemyndigelsesService</name>
-    <endpoint>http://ENDPOINT_SERVERNAME_PLACEHOLDER/BemyndigelsesService</endpoint>
+    <endpoint>ENDPOINT_SERVERNAME_PLACEHOLDER</endpoint>
     <operations>
-        <action name="http://nsi.dk/bemyndigelse/2016/01/01#GetDelegations">
-            <timeoutMillis>30000</timeoutMillis>
-            <idCardLevel>MOCES</idCardLevel>
-            <idCardMaxAgeMins>540</idCardMaxAgeMins>
-        </action>
-        <action name="http://nsi.dk/bemyndigelse/2016/01/01#CreateDelegations">
-            <timeoutMillis>30000</timeoutMillis>
-            <idCardLevel>MOCES</idCardLevel>
-            <idCardMaxAgeMins>540</idCardMaxAgeMins>
-        </action>
-        <action name="http://nsi.dk/bemyndigelse/2016/01/01#DeleteDelegations">
-            <timeoutMillis>30000</timeoutMillis>
-            <idCardLevel>MOCES</idCardLevel>
-            <idCardMaxAgeMins>540</idCardMaxAgeMins>
-        </action>
-        <action name="http://nsi.dk/bemyndigelse/2016/01/01#GetMetadata">
-            <timeoutMillis>30000</timeoutMillis>
-            <idCardLevel>MOCES</idCardLevel>
-            <idCardMaxAgeMins>540</idCardMaxAgeMins>
-        </action>
-        <action name="http://nsi.dk/bemyndigelse/2016/01/01#PutMetadata">
-            <timeoutMillis>30000</timeoutMillis>
-            <idCardLevel>VOCES</idCardLevel>
-            <idCardMaxAgeMins>540</idCardMaxAgeMins>
-        </action>
-
         <action name="http://nsi.dk/bemyndigelse/2017/08/01#GetDelegations">
             <timeoutMillis>30000</timeoutMillis>
             <idCardLevel>MOCES</idCardLevel>
@@ -54,6 +28,16 @@
         <action name="http://nsi.dk/bemyndigelse/2017/08/01#PutMetadata">
             <timeoutMillis>30000</timeoutMillis>
             <idCardLevel>VOCES</idCardLevel>
+            <idCardMaxAgeMins>540</idCardMaxAgeMins>
+        </action>
+        <action name="http://nsi.dk/bemyndigelse/2017/08/01#GetAllMetadata">
+            <timeoutMillis>30000</timeoutMillis>
+            <idCardLevel>MOCES</idCardLevel>
+            <idCardMaxAgeMins>540</idCardMaxAgeMins>
+        </action>
+        <action name="http://nsi.dk/bemyndigelse/2017/08/01#GetExpirationInfo">
+            <timeoutMillis>30000</timeoutMillis>
+            <idCardLevel>MOCES</idCardLevel>
             <idCardMaxAgeMins>540</idCardMaxAgeMins>
         </action>
     </operations>

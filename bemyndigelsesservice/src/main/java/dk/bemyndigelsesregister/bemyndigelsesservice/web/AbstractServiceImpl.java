@@ -61,7 +61,7 @@ public abstract class AbstractServiceImpl {
         return xmlDate != null ? new DateTime(xmlDate.toGregorianCalendar(), DateTimeZone.UTC) : null;
     }
 
-    protected List<Delegation> getDelegationsCommon(String delegatorCpr, String delegateeCpr, String delegationId, SecurityContext securityContext) {
+    protected List<Delegation> getDelegationsCommon(String delegatorCpr, String delegateeCpr, String delegationId, XMLGregorianCalendar effectiveFrom, XMLGregorianCalendar effectiveTo, SecurityContext securityContext) {
         auditLogger.log("Hent bemyndigelser", delegateeCpr, securityContext);
 
         List<Delegation> delegations = new LinkedList<>();
@@ -79,12 +79,12 @@ public abstract class AbstractServiceImpl {
 
         // invoke correct method on manager
         if (delegatorCpr != null) {
-            List<Delegation> list = delegationManager.getDelegationsByDelegatorCpr(delegatorCpr);
+            List<Delegation> list = delegationManager.getDelegationsByDelegatorCpr(delegatorCpr, nullableDateTime(effectiveFrom), nullableDateTime(effectiveTo));
             if (list != null) {
                 delegations.addAll(list);
             }
         } else if (delegateeCpr != null) {
-            List<Delegation> list = delegationManager.getDelegationsByDelegateeCpr(delegateeCpr);
+            List<Delegation> list = delegationManager.getDelegationsByDelegateeCpr(delegateeCpr, nullableDateTime(effectiveFrom), nullableDateTime(effectiveTo));
             if (list != null) {
                 delegations.addAll(list);
             }
@@ -139,5 +139,4 @@ public abstract class AbstractServiceImpl {
         }
         return result;
     }
-
 }

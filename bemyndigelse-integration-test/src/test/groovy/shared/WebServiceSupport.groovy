@@ -62,8 +62,7 @@ abstract class WebServiceSupport {
         client.send(
                 SOAPAction: "http://nsi.dk/bemyndigelse/2016/01/01/$action",
         ) {
-            envelopeAttributes 'xmlns:bms20160101': 'http://nsi.dk/bemyndigelse/2016/01/01/',
-                    'xmlns:bms20170801': 'http://nsi.dk/bemyndigelse/2017/08/01/',
+            envelopeAttributes 'xmlns:bms20170801': 'http://nsi.dk/bemyndigelse/2017/08/01/',
                     'xmlns:sosi': "http://www.sosi.dk/sosi/2006/04/sosi-1.0.xsd"
             header {
                 NodeList header = (asSystem ? sosiUtil.getSystemIdCard() : sosiUtil.getIdCard()).getElementsByTagNameNS("http://schemas.xmlsoap.org/soap/envelope/", "Header")
