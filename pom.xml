@@ -56,17 +56,14 @@
 
     <modules>
         <module>schemas</module>
-        <module>bemyndigelsesservice</module>
-        <module>bemyndigelse-shared</module>
-        <module>bemyndigelse-shared-test</module>
-        <module>bemyndigelse-integration-test</module>
+        <module>common</module>
+        <module>service</module>
+        <module>integrationtest</module>
     </modules>
 
     <properties>
         <functionaltest.serverport>8080</functionaltest.serverport>
         <functionaltest.urlprefix>http://localhost:${functionaltest.serverport}</functionaltest.urlprefix>
-        <deployment.cargo.hostname>localhost</deployment.cargo.hostname>
-        <deployment.pingURL>http://${deployment.cargo.hostname}:8085/health</deployment.pingURL>
         <deployment.serversettings>bms.localhost</deployment.serversettings>
         <nsp-util.version>1.0.11</nsp-util.version>
         <security-api.version>1.0.3</security-api.version>

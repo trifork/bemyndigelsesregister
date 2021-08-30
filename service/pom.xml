@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bemyndigelsesservice</artifactId>
+    <artifactId>service</artifactId>
 
     <packaging>war</packaging>
 
@@ -60,21 +60,6 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>javax.servlet</groupId>-->
-            <!--<artifactId>servlet-api</artifactId>-->
-            <!--<version>2.4</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>net.sourceforge.collections</groupId>-->
-            <!--<artifactId>collections-generic</artifactId>-->
-            <!--<version>4.01</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
-            <!--<version>1.2.16</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -88,25 +73,12 @@
 
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>bemyndigelse-shared</artifactId>
+            <artifactId>common</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>bemyndigelse-shared-test</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.200</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ws</groupId>
@@ -123,11 +95,6 @@
             <artifactId>flyway-core</artifactId>
             <version>2.0.2</version>
         </dependency>
-        <!--dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.2.8</version>
-        </dependency-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -174,13 +141,6 @@
             <artifactId>jsch</artifactId>
             <version>0.1.49</version>
         </dependency>
-        <!-- in-memory sshd/sftp-server for test purposes -->
-        <dependency>
-            <groupId>org.apache.sshd</groupId>
-            <artifactId>sshd-core</artifactId>
-            <version>0.8.0</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
@@ -191,13 +151,6 @@
             <artifactId>ehcache</artifactId>
             <version>2.9.0</version>
         </dependency>
-<!-- use this with DriverSpy
-        <dependency>
-            <groupId>com.googlecode.log4jdbc</groupId>
-            <artifactId>log4jdbc</artifactId>
-            <version>1.2</version> 
-        </dependency>
--->
         <dependency>
             <groupId>com.trifork</groupId>
             <artifactId>xmlobject</artifactId>
@@ -207,6 +160,38 @@
             <groupId>dk.nsi.fmk.auditlogmodul</groupId>
             <artifactId>fmk-auditlog-modul-client</artifactId>
             <version>2.8.1-20191010094822-cbd08</version>
+        </dependency>
+
+		<!-- test dependencies -->
+
+        <!-- in-memory sshd/sftp-server for test purposes -->
+        <dependency>
+            <groupId>org.apache.sshd</groupId>
+            <artifactId>sshd-core</artifactId>
+            <version>0.8.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.0</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -253,43 +238,6 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
-<!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.26</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <driver>com.mysql.jdbc.Driver</driver>
-                    <url>jdbc:mysql://127.0.0.1:8085/bemyndigelse</url>
-                    <username>bemyndigelse</username>
-                    <password />
-                    <forceMojoExecution>true</forceMojoExecution>
-                    <skip>${skipTests}</skip>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>loadtestdata</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>${basedir}/src/test/resources/db/testdata/V2__Create_testdata.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
--->
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
@@ -342,50 +290,6 @@
                     </archive>
                 </configuration>
             </plugin>
-<!-- disabled - as it still executes during release:perform - even if it shouldnt             
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.1.4</version>
-                <executions>
-                    <execution>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deployer-redeploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <container>
-                        <containerId>tomcat7x</containerId>
-                        <type>remote</type>
-                    </container>
-                    <configuration>
-                        <type>runtime</type>
-                        <properties>
-                            <cargo.server.settings>${deployment.serversettings}</cargo.server.settings>
-                            <cargo.hostname>${deployment.cargo.hostname}</cargo.hostname>
-                        </properties>
-                    </configuration>
-
-                    <deployer>
-                        <type>remote</type>
-                        <deployables>
-                            <deployable>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>${project.artifactId}</artifactId>
-                                <type>war</type>
-                                <properties>
-                                    <context>/</context>
-                                </properties>
-                                <pingURL>${deployment.pingURL}</pingURL>
-                                <pingTimeout>120000</pingTimeout>
-                            </deployable>
-                        </deployables>
-                    </deployer>
-                </configuration>
-            </plugin>
--->            
         </plugins>
     </build>
 </project>

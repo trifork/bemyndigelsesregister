@@ -1,19 +1,14 @@
 Kendte udeståender:
 
-OK - Der oprettes både en bemyndigelse og en bemyndigelsetest database i docker db'en. Sidstnævnte er unødvendig
-OK - Tabellen message_retransmission fjernes - dette droppes helt.
-- Migration tabeller findes både i resources og under compose
-- Der bliver ikke indlæst testdata, som ellers bruges til unittests. Men dette er heller ikke nødvendigt at indlæse i bemdb, det er bedre med en H2 memory-database, som bruges til unittsts
 - Fix integrationstests
 - Test IDWS services og lav en integrationstest
 - Indarbejd ændringer fra develop-branch
-- Fejl: PersistenceException: dk.bemyndigelsesregister.bemyndigelsesservice.domain.SystemVariable is NOT an Entity Bean registered with this server
 
 Tests:
 
 health endpoint: OK
 health/version endpoint: OK
-dksconfig endpoint: OK, men mangler ændringer fra develop-branch
+dksconfig endpoint: OK
 DGWS services: Fixet, nu OK
 IDWS services: ?
 DelegationExport job: ?

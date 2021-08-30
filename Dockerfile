@@ -5,7 +5,7 @@ FROM registry.nspop.dk/platform/nsp:${BASE_TAG}
 COPY etc/wildfly /pack/wildfly8/
 
 # Copy the war file to the deployment directory
-COPY bemyndigelsesservice/target/bem.war /pack/wildfly8/standalone/deployments/
+COPY service/target/bem.war /pack/wildfly8/standalone/deployments/
 
 RUN echo "#Skip nothing" > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
 

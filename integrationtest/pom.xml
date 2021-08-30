@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bemyndigelse-integration-test</artifactId>
+    <artifactId>integrationtest</artifactId>
 
     <build>
 
@@ -61,88 +61,24 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.cargo</groupId>-->
-                <!--<artifactId>cargo-maven2-plugin</artifactId>-->
-                <!--<version>1.1.4</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>start-container</id>-->
-                        <!--<phase>pre-integration-test</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>start</goal>-->
-                            <!--<goal>deploy</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                    <!--<execution>-->
-                        <!--<id>stop-container</id>-->
-                        <!--<phase>post-integration-test</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>stop</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<configuration>-->
-                    <!--<container>-->
-                        <!--<containerId>tomcat7x</containerId>-->
-                        <!--<zipUrlInstaller>-->
-                            <!--<url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.zip</url>-->
-                        <!--</zipUrlInstaller>-->
-                    <!--</container>-->
-                    <!--<deployer>-->
-                        <!--<deployables>-->
-                            <!--<deployable>-->
-                                <!--<groupId>${project.groupId}</groupId>-->
-                                <!--<artifactId>bemyndigelsesservice</artifactId>-->
-                                <!--<type>war</type>-->
-                                <!--<properties>-->
-                                    <!--<context>ROOT</context>-->
-                                <!--</properties>-->
-                                <!--<pingURL>${functionaltest.urlprefix}/health</pingURL>-->
-                                <!--<pingTimeout>60000</pingTimeout>-->
-                            <!--</deployable>-->
-                        <!--</deployables>-->
-                    <!--</deployer>-->
-                    <!--<configuration>-->
-                        <!--<properties>-->
-                            <!--<cargo.servlet.port>${functionaltest.serverport}</cargo.servlet.port>-->
-                            <!--<cargo.jvmargs>-Dbemyndigelse.home=${project.parent.basedir}/bemyndigelse-shared/src/main/resources/bemyndigelse.properties -Dlog4j.configuration=${project.parent.basedir}/bemyndigelse-shared/src/main/resources/log4j.xml</cargo.jvmargs>-->
-                        <!--</properties>-->
-                    <!--</configuration>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 
     <dependencies>
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>bemyndigelsesservice</artifactId>
+            <artifactId>service</artifactId>
             <version>${project.parent.version}</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>bemyndigelse-shared-test</artifactId>
+            <artifactId>common</artifactId>
             <version>${project.parent.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.18</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.flyway</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>2.0.2</version>
-            <scope>test</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -169,13 +105,16 @@
             <artifactId>seal</artifactId>
             <version>2.1.1</version>
         </dependency>
-        <!-- in-memory sshd/sftp-server for test purposes -->
         <dependency>
             <groupId>org.apache.sshd</groupId>
             <artifactId>sshd-core</artifactId>
             <version>0.8.0</version>
-            <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.mockftpserver</groupId>
+            <artifactId>MockFtpServer</artifactId>
+            <version>2.3</version>
+        </dependency>
+		
     </dependencies>
 </project>
