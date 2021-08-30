@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class PermissionDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test
-    public void canFindPermissionBySystem() throws Exception {
+    public void canFindPermissionBySystem() {
         List<Permission> permissions = permissionDao.findBySystem(delegatingSystemDao.get(1).getId());
 
         assertEquals(3, permissions.size());
@@ -27,7 +27,7 @@ public class PermissionDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void canFindPermissionByCode() throws Exception {
+    public void canFindPermissionByCode() {
         Permission permission = permissionDao.findByCode(TestData.systemCode, TestData.permissionCode1);
 
         assertEquals(TestData.permissionCode1, permission.getCode());

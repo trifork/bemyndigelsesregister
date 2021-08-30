@@ -56,7 +56,7 @@ public class ServiceTypeMapperImplTest {
     }
 
     @Test
-    public void willMapToDelegation() throws Exception {
+    public void willMapToDelegation() {
         Permission p1 = new Permission();
         p1.setCode(permissionCode1);
         p1.setDescription("First Permission");
@@ -83,7 +83,7 @@ public class ServiceTypeMapperImplTest {
     }
 
     @Test
-    public void willNotMapPermissionsWithoutMetadata() throws Exception {
+    public void willNotMapPermissionsWithoutMetadata() {
         Permission p1 = new Permission();
         p1.setCode(permissionCode1);
         p1.setDescription("First Permission");

@@ -43,12 +43,12 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     final DateTime date3 = new DateTime(2016, 1, 10, 10, 0, 0);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         metadataManager.clearCache();
     }
 
     @Test
-    public void testCreateOverlappingDelegation() throws Exception {
+    public void testCreateOverlappingDelegation() {
         try {
             ebeanServer.beginTransaction();
 
@@ -67,7 +67,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testCreateApprovedClosesOverlappingRequested() throws Exception {
+    public void testCreateApprovedClosesOverlappingRequested() {
         try {
             ebeanServer.beginTransaction();
 
@@ -82,7 +82,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testCreateApprovedClosesOverlappingApproved() throws Exception {
+    public void testCreateApprovedClosesOverlappingApproved() {
         try {
             ebeanServer.beginTransaction();
 
@@ -97,7 +97,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testCreateRequestedDoesNotCloseOverlappingApproved() throws Exception {
+    public void testCreateRequestedDoesNotCloseOverlappingApproved() {
         try {
             ebeanServer.beginTransaction();
 
@@ -115,7 +115,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testCreateDelegationWithAsteriskPermission() throws Exception {
+    public void testCreateDelegationWithAsteriskPermission() {
         try {
             ebeanServer.beginTransaction();
 
@@ -131,7 +131,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testDeleteDelegationAsDelegator() throws Exception {
+    public void testDeleteDelegationAsDelegator() {
         try {
             ebeanServer.beginTransaction();
 
@@ -146,7 +146,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testDeleteDelegationAsDelegatee() throws Exception {
+    public void testDeleteDelegationAsDelegatee() {
         try {
             ebeanServer.beginTransaction();
 
@@ -161,7 +161,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testDeleteNonExistingDelegation() throws Exception {
+    public void testDeleteNonExistingDelegation() {
         try {
             ebeanServer.beginTransaction();
 
@@ -174,7 +174,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testDeleteThirdPartyDelegation() throws Exception {
+    public void testDeleteThirdPartyDelegation() {
         try {
             ebeanServer.beginTransaction();
 
@@ -196,7 +196,7 @@ public class DelegationManagerImplTest extends DaoUnitTestSupport {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDeleteDelegationBadDate() throws Exception {
+    public void testDeleteDelegationBadDate() {
         try {
             ebeanServer.beginTransaction();
 

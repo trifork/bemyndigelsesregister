@@ -33,7 +33,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     String jdbcUrl;
 
     @Test
-    public void testCreateDelegation() throws Exception {
+    public void testCreateDelegation() {
         try {
             ebeanServer.beginTransaction();
 
@@ -70,7 +70,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testCreateDelegationWithTwoPermissions() throws Exception {
+    public void testCreateDelegationWithTwoPermissions() {
         final String testCode = "testCode1";
 
         try {
@@ -120,7 +120,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testUpdateDelegation() throws Exception {
+    public void testUpdateDelegation() {
         try {
             ebeanServer.beginTransaction();
 
@@ -136,14 +136,14 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testGetDelegation() throws Exception {
+    public void testGetDelegation() {
         Delegation delegation = dao.get(1);
         System.out.println(delegation);
         assertNotNull(delegation);
     }
 
     @Test
-    public void testListDelegations() throws Exception {
+    public void testListDelegations() {
         final List<Delegation> delegations = dao.list();
 
         assertEquals("Unexpected no. of delegations found", 5, delegations.size());
@@ -152,49 +152,49 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testFindByDelegator() throws Exception {
+    public void testFindByDelegator() {
         final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010", null, null);
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }
 
     @Test
-    public void testFindByDelegatorAndFromDate() throws Exception {
+    public void testFindByDelegatorAndFromDate() {
         final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010", new DateTime(2011, 5, 22, 0, 0), null);
 
         assertEquals("Unexpected no. of delegations found", 1, delegations.size());
     }
 
     @Test
-    public void testFindByDelegatorAndToDate() throws Exception {
+    public void testFindByDelegatorAndToDate() {
         final List<Delegation> delegations = dao.findByDelegatorCpr("1010101010", null, new DateTime(2011, 5, 22, 0, 0));
 
         assertEquals("Unexpected no. of delegations found", 1, delegations.size());
     }
 
     @Test
-    public void testFindByDelegatee() throws Exception {
+    public void testFindByDelegatee() {
         final List<Delegation> delegations = dao.findByDelegateeCpr("1010101012", null, null);
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }
 
     @Test
-    public void testFindByCodes() throws Exception {
+    public void testFindByCodes() {
         final List<Delegation> delegations = dao.findByCodes(Arrays.asList("TestKode1", "TestKode3"));
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }
 
     @Test
-    public void testFindByLastModifiedGreaterThanOrEquals() throws Exception {
+    public void testFindByLastModifiedGreaterThanOrEquals() {
         final List<Long> delegations = dao.findByModifiedInPeriod(new DateTime(2011, 1, 1, 0, 0), null);
 
         assertEquals("Unexpected no. of delegations found", 2, delegations.size());
     }
 
     @Test
-    public void testFindWithAsterisk() throws Exception {
+    public void testFindWithAsterisk() {
         final List<Long> delegationIds = dao.findWithAsterisk("FMK", DateTime.now());
 
         System.out.println(delegationIds);

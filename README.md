@@ -28,8 +28,6 @@ To build version 1.6 e.g.:
     </settings>
 
 
-Husk at inkludere filen bemyndigelsesservice/src/main/resources/db/manual/trifork_data.sql når der releases til systemer der skal køre bemyndigelse for FMK eller DDV fra Trifork.
-
 Running with MySQL
 ===
 

@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  */
 public class RoleDaoEbeanTest extends DaoUnitTestSupport {
     @Test
-    public void testFindRoleByCode() throws Exception {
+    public void testFindRoleByCode() {
         DelegatingSystem system = delegatingSystemDao.findByCode(TestData.systemCode);
 
         Role role = roleDao.findByCode(system.getId(), TestData.roleCode);
@@ -24,7 +24,7 @@ public class RoleDaoEbeanTest extends DaoUnitTestSupport {
     }
 
     @Test
-    public void testFindRoleBySystem() throws Exception {
+    public void testFindRoleBySystem() {
         DelegatingSystem system = delegatingSystemDao.findByCode(TestData.systemCode);
 
         List<Role> roles = roleDao.findBySystem(system.getId());

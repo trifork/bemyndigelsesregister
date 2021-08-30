@@ -12,7 +12,7 @@ import static org.junit.Assert.assertFalse;
  */
 public class SystemDaoEbeanTest extends DaoUnitTestSupport {
     @Test
-    public void testFindSystemByCode() throws Exception {
+    public void testFindSystemByCode() {
         DelegatingSystem system = delegatingSystemDao.findByCode(TestData.systemCode);
         System.out.println(system);
 

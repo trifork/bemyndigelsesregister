@@ -34,7 +34,7 @@ public class NspManagerFtpTest {
     private FakeFtpServer ftpServer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         ftpServer = new FakeFtpServer();
         ftpServer.setServerControlPort(21213);
         ftpServer.addUserAccount(new UserAccount("nsp", "password", "/"));
@@ -74,7 +74,7 @@ public class NspManagerFtpTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         ftpServer.stop();
     }
 }

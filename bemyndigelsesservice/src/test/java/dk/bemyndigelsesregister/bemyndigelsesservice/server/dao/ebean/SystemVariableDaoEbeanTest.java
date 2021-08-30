@@ -14,12 +14,12 @@ public class SystemVariableDaoEbeanTest extends DaoUnitTestSupport {
     SystemVariableDao systemVariableDao;
 
     @Test
-    public void canReadGetVariableByName() throws Exception {
+    public void canReadGetVariableByName() {
         assertEquals("den gode test", systemVariableDao.getByName("testVariable").getValue());
     }
 
     @Test
-    public void canUpdateVariable() throws Exception {
+    public void canUpdateVariable() {
         SystemVariable sv = systemVariableDao.getByName("testVariable");
         sv.setValue("Den Rigtigt Gode Test");
         systemVariableDao.save(sv);

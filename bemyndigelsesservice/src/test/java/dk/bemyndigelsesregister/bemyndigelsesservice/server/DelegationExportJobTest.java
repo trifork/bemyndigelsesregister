@@ -33,7 +33,7 @@ public class DelegationExportJobTest {
     private final SystemService systemService = Mockito.mock(SystemService.class);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         job.nspManager = nspManager;
         job.delegationDao = delegationDao;
         job.systemVariableDao = systemVariableDao;
@@ -70,7 +70,7 @@ public class DelegationExportJobTest {
     }
 
     @Test
-    public void canRunCompleteExport() throws Exception {
+    public void canRunCompleteExport() {
         final DateTime startTime = new DateTime();
         final Long id1 = 1L, id2 = 2L;
         final Delegation delegation1 = createDelegation("bemyndigede cpr 1"), delegation2 = createDelegation("bemyndigede cpr 2");

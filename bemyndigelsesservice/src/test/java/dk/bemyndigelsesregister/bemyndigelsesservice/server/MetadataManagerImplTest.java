@@ -23,7 +23,7 @@ public class MetadataManagerImplTest extends DaoUnitTestSupport {
     EbeanServer ebeanServer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         manager.clearCache();
     }
 
