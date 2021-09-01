@@ -68,7 +68,6 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
                         createDelegation.getListOfPermissionIds().getPermissionId(),
                         nullableDateTime(createDelegation.getEffectiveFrom()),
                         nullableDateTime(createDelegation.getEffectiveTo()));
-                // logger.debug("Got delegation with code = [" + delegation.getCode() + "]");
 
                 delegations.add(delegation);
             }

@@ -26,9 +26,9 @@ public class AuditLogger {
     @Inject
     SystemService systemService;
 
-    // instance
-    private boolean loggingEnabled;
-    private boolean useMock;
+    private final boolean loggingEnabled;
+    private final boolean useMock;
+
     private boolean configured = false;
     private AuditLogKafkaClient auditLogKafkaClient;
 
@@ -139,43 +139,6 @@ public class AuditLogger {
             if (client.isPresent() && client.get().getName().isPresent()) {
                 entryBuilder.setSystem(client.get().getName().get());
             }
-
-            // TODO: Redo with new security context
-//            int authLevel = dgwsRequestContext.getIdCardData().getAuthenticationLevel();
-//            entryBuilder.setAuthLevel(authLevel);
-//
-//            log.debug("authLevel =" + authLevel);
-//            if (authLevel > 3) {
-//                IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
-//                entryBuilder.setCpr(userLog.cpr);
-//                if (delegateeCpr != null) {
-//                    entryBuilder.setPersonCPR(delegateeCpr);
-//                }
-//                if (userLog.role != null) {
-//                    entryBuilder.setRole(userLog.role);
-//                }
-//                if (userLog.authorisationCode != null) {
-//                    entryBuilder.setAuthorizationNumber(userLog.authorisationCode);
-//                }
-//
-//                StringBuilder b = new StringBuilder();
-//                if (userLog.givenName != null) {
-//                    b.append(userLog.givenName);
-//                }
-//                if (userLog.surname != null && !userLog.surname.isEmpty()) {
-//                    if (b.length() > 0) {
-//                        b.append(" ");
-//                    }
-//                    b.append(userLog.surname);
-//                }
-//                if (b.length() > 0) {
-//                    entryBuilder.setUserName(b.toString());
-//                }
-//            }
-//
-//            entryBuilder.setCvr(dgwsRequestContext.getIdCardSystemLog().getCareProviderId());
-//            entryBuilder.setOrganisationName(dgwsRequestContext.getIdCardSystemLog().getCareProviderName());
-//            entryBuilder.setSystem(dgwsRequestContext.getIdCardSystemLog().getItSystemName());
 
             AuditLogEntry logEntry = entryBuilder.build();
             log.debug("built logEntry");
