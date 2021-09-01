@@ -79,7 +79,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             }
 
             return response;
-        } catch (SecurityException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
             throw createException(ex, false);
@@ -102,7 +102,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             }
 
             return response;
-        } catch (SecurityException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
             throw createException(ex, false);
@@ -123,7 +123,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             response.getDelegationId().addAll(result);
 
             return response;
-        } catch (SecurityException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
             throw createException(ex, false);
@@ -213,7 +213,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             metadataManager.putMetadata(metadata);
 
             return new PutMetadataResponse();
-        } catch (SecurityException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
             throw createException(ex, false);
@@ -235,7 +235,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             response.setFirstExpiryDelegateeCount(info.getFirstExpiryDelegateeCount());
 
             return response;
-        } catch (SecurityException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
             throw createException(ex, false);
@@ -300,7 +300,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             }
 
             return response;
-        } catch (SecurityException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
             throw createException(ex, false);
@@ -371,7 +371,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
             }
 
             return response;
-        } catch (SecurityException ex) {
+        } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
             throw createException(ex, false);
