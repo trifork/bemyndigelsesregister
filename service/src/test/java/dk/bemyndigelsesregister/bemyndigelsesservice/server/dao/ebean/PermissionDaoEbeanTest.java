@@ -8,9 +8,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by obj on 08-02-2016.
- */
 public class PermissionDaoEbeanTest extends DaoUnitTestSupport {
 
     @Test

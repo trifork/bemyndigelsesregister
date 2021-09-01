@@ -21,7 +21,6 @@ import static org.junit.Assert.*;
 
 /**
  * BEM 2.0 bemyndigelse
- * Created by obj on 03-02-2016.
  */
 public class DelegationManagerImplTest extends DaoUnitTestSupport {
     @Inject

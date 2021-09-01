@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * BEM 2.0 bemyndigelse
- * Created by obj on 02-02-2016.
  */
 public interface DelegationDao {
     Delegation get(long id);

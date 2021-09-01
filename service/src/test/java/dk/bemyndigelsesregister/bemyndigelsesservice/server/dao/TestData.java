@@ -1,8 +1,5 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.dao;
 
-/**
- * Created by obj on 11-02-2016.
- */
 public final class TestData {
     public static final String permissionCode1 = "R01";
     public static final String permissionDescription1 = "Laegemiddelordination";

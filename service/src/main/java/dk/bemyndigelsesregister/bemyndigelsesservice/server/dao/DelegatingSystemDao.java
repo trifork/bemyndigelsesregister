@@ -5,9 +5,6 @@ import org.joda.time.DateTime;
 
 import java.util.List;
 
-/**
- * Created by obj on 05-02-2016.
- */
 public interface DelegatingSystemDao {
     DelegatingSystem get(long id);
 

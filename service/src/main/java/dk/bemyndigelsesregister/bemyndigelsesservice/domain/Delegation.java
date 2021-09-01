@@ -9,9 +9,7 @@ import java.util.Set;
 
 /**
  * BEM 2.0 bemyndigelse
- * Created by obj on 02-02-2016.
  */
-
 @Entity
 @Table(name = "bemyndigelse20")
 public class Delegation extends ExternalIdentifiedDomainObject {

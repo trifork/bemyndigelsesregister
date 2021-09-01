@@ -11,9 +11,6 @@ import javax.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by obj on 12-02-2016.
- */
 @Repository
 public class MetadataManagerImpl implements MetadataManager {
     private static Logger logger = Logger.getLogger(MetadataManagerImpl.class);

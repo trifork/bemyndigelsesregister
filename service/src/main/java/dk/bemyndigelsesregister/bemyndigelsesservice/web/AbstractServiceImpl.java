@@ -1,9 +1,11 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
+import dk.bemyndigelsesregister.bemyndigelsesservice.domain.WhitelistType;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.WhitelistDao;
 import dk.bemyndigelsesregister.shared.service.SystemService;
 import dk.sds.nsp.security.SecurityContext;
 import org.apache.log4j.Logger;
@@ -14,9 +16,6 @@ import javax.inject.Inject;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
-/**
- * Created by obj on 17-08-2017.
- */
 public abstract class AbstractServiceImpl {
     @Inject
     SystemService systemService;
@@ -26,6 +25,8 @@ public abstract class AbstractServiceImpl {
     MetadataManager metadataManager;
     @Inject
     AuditLogger auditLogger;
+    @Inject
+    WhitelistDao whitelistDao;
 
     private Logger logger;
 
@@ -33,28 +34,50 @@ public abstract class AbstractServiceImpl {
         this.logger = logger;
     }
 
-    protected void authorizeOperationForCpr(String whitelist, String errorMessage, String... authorizedCprs) {
-        // TODO: Redo with new Security Context
-//        Set<String> authorizedCprSet = new HashSet<>(Arrays.asList(authorizedCprs));
-//        IdCardData idCardData = dgwsRequestContext.getIdCardData();
-//        if (idCardData.getIdCardType() == IdCardType.SYSTEM) {
-//            IdCardSystemLog systemLog = dgwsRequestContext.getIdCardSystemLog();
-//            if (systemLog.getCareProviderIdType() != CareProviderIdType.CVR_NUMBER) {
-//                throw new IllegalAccessError("Attempted to access operation using system id card, but the CareProviderIdType was not CVR, it was " + systemLog.getCareProviderIdType());
-//            }
-//            String cvr = systemLog.getCareProviderId();
-//            if (!whitelistChecker.isSystemWhitelisted(whitelist, cvr)) {
-//                throw new IllegalAccessError("Attempted to access operation using system id card, but the whitelist " + whitelist + " did not contain id card CVR [" + cvr + "]");
-//            }
-//        } else if (idCardData.getIdCardType() == IdCardType.USER) {
-//            IdCardUserLog userLog = dgwsRequestContext.getIdCardUserLog();
-//            if (userLog == null || !authorizedCprSet.contains(userLog.cpr)) {
-//                logger.info("Failed to authorize user id card. Authorized CPRs: " + authorizedCprSet + ". CPR in ID card: [" + (userLog != null ? userLog.cpr : null) + "]");
-//                throw new IllegalAccessError(errorMessage);
-//            }
-//        } else {
-//            throw new IllegalAccessError("Could not authorize ID card, it was neither a user or system id card");
-//        }
+    protected void checkSecurityTicket(SecurityContext securityContext) {
+        checkSecurityTicket(securityContext, true, null);
+    }
+
+    protected void checkSecurityTicket(SecurityContext securityContext, boolean userRequired, String whitelist) {
+        Optional<SecurityContext.Ticket> ticketOptional = securityContext.getTicket();
+        if (!ticketOptional.isPresent()) {
+            throw new SecurityException("No security ticket is present");
+        }
+        SecurityContext.Ticket ticket = ticketOptional.get();
+        if (!ticket.isValid()) {
+            throw new SecurityException("Invalid security ticket");
+        }
+        if (userRequired && !securityContext.getActingUser().isPresent()) {
+            throw new SecurityException("Calling user not found in security context");
+        }
+        if (whitelist != null) {
+            if (!securityContext.getOrganisation().isPresent()) {
+                throw new SecurityException("Calling organisation not found in security context");
+            }
+
+            SecurityContext.Organisation organisation = securityContext.getOrganisation().get();
+            if (organisation.getIdentifierFormat() != SecurityContext.Organisation.OrganisationIdentifierFormat.CVR) {
+                throw new SecurityException("Unsupported organisation identifier format " + organisation.getIdentifierFormat() + ". Only CVR is supported");
+            }
+
+            if (!whitelistDao.exists(whitelist, WhitelistType.SYSTEM_CVR, organisation.getIdentifier())) {
+                throw new SecurityException("Organisation " + organisation.getIdentifier() + " not whitelisted for " + whitelist);
+            }
+        }
+    }
+
+    protected void authorizeOperationForCpr(SecurityContext securityContext, String errorMessage, String... authorizedCprs) {
+        Set<String> authorizedCprSet = new HashSet<>(Arrays.asList(authorizedCprs));
+
+        if (!securityContext.getActingUser().isPresent()) {
+            throw new SecurityException("Calling user not found in security context");
+        }
+
+        String cprnr = securityContext.getActingUser().get().getIdentifier();
+        if (!authorizedCprSet.contains(cprnr)) {
+            logger.info("Failed to authorize user. Authorized CPRs: " + authorizedCprSet + ". CPR in securityContext: [" + cprnr + "]");
+            throw new SecurityException(errorMessage);
+        }
     }
 
     protected DateTime nullableDateTime(XMLGregorianCalendar xmlDate) {
@@ -73,9 +96,9 @@ public abstract class AbstractServiceImpl {
 
         // authorize
         if (delegatorCpr != null)
-            authorizeOperationForCpr("getDelegations", "IDCard CPR was different from DelegatorCpr", delegatorCpr);
+            authorizeOperationForCpr(securityContext, "CPR for calling user was different from DelegatorCpr", delegatorCpr);
         else if (delegateeCpr != null)
-            authorizeOperationForCpr("getDelegations", "IDCard CPR was different from DelegateeCpr", delegateeCpr);
+            authorizeOperationForCpr(securityContext, "CPR for calling user was different from DelegateeCpr", delegateeCpr);
 
         // invoke correct method on manager
         if (delegatorCpr != null) {
@@ -127,9 +150,9 @@ public abstract class AbstractServiceImpl {
 
         // authorize
         if (delegatorCpr != null)
-            authorizeOperationForCpr("deleteDelegations", "IDCard CPR was different from DelegatorCpr", delegatorCpr);
+            authorizeOperationForCpr(securityContext, "CPR for calling user was different from DelegatorCpr", delegatorCpr);
         else
-            authorizeOperationForCpr("deleteDelegations", "IDCard CPR was different from DelegateeCpr", delegateeCpr);
+            authorizeOperationForCpr(securityContext, "CPR for calling user was different from DelegateeCpr", delegateeCpr);
 
         // invoke manager
         List<String> result = new LinkedList<>();

@@ -14,7 +14,6 @@ import java.util.*;
 
 /**
  * BEM 2.0 bemyndigelse
- * Created by obj on 02-02-2016.
  */
 @Repository
 public class DelegationDaoEbean extends SupportDao<Delegation> implements DelegationDao {

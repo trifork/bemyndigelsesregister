@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 /**
  * BEM 2.0 rettighed til bemyndigelse
- * Created by obj on 02-02-2016.
  */
 @Entity
 @Table(name = "bemyndigelse20_rettighed")

@@ -7,9 +7,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-/**
- * Created by obj on 05-02-2016.
- */
 public class DelegatingSystemDaoEbeanTest extends DaoUnitTestSupport {
     @Test
     public void testFindDelegatingSystem() {

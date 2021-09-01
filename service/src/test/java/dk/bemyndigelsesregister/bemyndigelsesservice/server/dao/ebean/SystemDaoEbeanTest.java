@@ -7,9 +7,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-/**
- * Created by obj on 05-02-2016.
- */
 public class SystemDaoEbeanTest extends DaoUnitTestSupport {
     @Test
     public void testFindSystemByCode() {

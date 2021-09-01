@@ -20,9 +20,6 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-/**
- * Created by obj on 05-07-2016.
- */
 @Component
 @RequestMapping
 public class DKSServlet {

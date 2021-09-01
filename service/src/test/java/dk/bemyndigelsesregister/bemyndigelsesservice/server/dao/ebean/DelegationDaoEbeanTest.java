@@ -20,7 +20,6 @@ import static org.junit.Assert.*;
 
 /**
  * BEM 2.0 rettighed til bemyndigelse
- * Created by obj on 02-02-2016.
  */
 public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
     @Inject

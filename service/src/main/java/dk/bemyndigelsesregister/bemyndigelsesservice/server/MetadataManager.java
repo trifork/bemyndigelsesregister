@@ -5,9 +5,6 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 
 import java.util.List;
 
-/**
- * Created by obj on 12-02-2016.
- */
 public interface MetadataManager {
 
     /**

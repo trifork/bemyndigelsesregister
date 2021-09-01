@@ -9,9 +9,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by obj on 05-02-2016.
- */
 public class RoleDaoEbeanTest extends DaoUnitTestSupport {
     @Test
     public void testFindRoleByCode() {

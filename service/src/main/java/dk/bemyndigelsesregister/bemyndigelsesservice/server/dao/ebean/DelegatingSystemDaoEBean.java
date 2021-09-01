@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Created by obj on 05-02-2016.
- */
 @Repository
 public class DelegatingSystemDaoEBean extends SupportDao<DelegatingSystem> implements DelegatingSystemDao {
     protected DelegatingSystemDaoEBean() {

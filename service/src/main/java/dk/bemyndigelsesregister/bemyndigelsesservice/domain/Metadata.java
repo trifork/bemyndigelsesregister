@@ -3,9 +3,6 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.domain;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by obj on 15-02-2016.
- */
 public class Metadata {
     public static final String ASTERISK_PERMISSION_CODE = "*";
     public static final String ASTERISK_PERMISSION_DESCRIPTION = "Alle delegerbare rettigheder (inkl. fremtidige)";
