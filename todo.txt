@@ -1,15 +1,10 @@
 Kendte udeståender:
 
-- Fix og test @Transactional - det skal foregå på manager-niveau
 - Fix integrationstests
 - Test IDWS services og lav en integrationstest
 
 Tests:
 
-health endpoint: OK
-health/version endpoint: OK
-dksconfig endpoint: OK
-DGWS services: Fixet, nu OK
 IDWS services: ?
 DelegationExport job: ?
 MetadataChangeHandler job: ?

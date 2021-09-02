@@ -223,10 +223,20 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     public GetExpirationInfoResponse getExpirationInfo(@RequestPayload GetExpirationInfoRequest request, SoapHeader soapHeader) {
         try {
-            ExpirationInfo info = delegationManager.getExpirationInfo(request.getDelegatorCpr(), request.getDays());
+            SecurityContext securityContext = Security.getSecurityContext();
+            checkSecurityTicket(securityContext);
+
+            auditLogger.log("Hent information om udløbne bemyndigelser", null, securityContext);
+
+            String delegatorCpr = request.getDelegatorCpr();
+
+            // authorize
+            authorizeOperationForCpr(securityContext, "CPR for calling user was different from DelegatorCpr", delegatorCpr);
+
+            ExpirationInfo info = delegationManager.getExpirationInfo(delegatorCpr, request.getDays());
 
             GetExpirationInfoResponse response = new GetExpirationInfoResponse();
-            response.setDelegatorCpr(request.getDelegatorCpr());
+            response.setDelegatorCpr(delegatorCpr);
             response.setDelegationCount(info.getDelegationCount());
             response.setDelegateeCount(info.getDelegateeCount());
             response.setDaysToFirstExpiration(info.getDaysToFirstExpiration());
