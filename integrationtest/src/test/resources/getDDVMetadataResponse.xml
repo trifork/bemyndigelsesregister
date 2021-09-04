@@ -1,0 +1,66 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:GetMetadataResponse xmlns:ns2="http://nsi.dk/bemyndigelse/2017/08/01/">
+            <ns2:Domain>Trifork</ns2:Domain>
+            <ns2:System>
+                <ns2:SystemId>DDV</ns2:SystemId>
+                <ns2:SystemLongName>Det Danske Vaccinationsregister</ns2:SystemLongName>
+            </ns2:System>
+            <ns2:Permission>
+                <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                <ns2:PermissionDescription>Se Vaccinationer</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
+                <ns2:PermissionDescription>Opret, ret eller slet vaccinationer</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>VaccinationVedligeholdAnbefalet</ns2:PermissionId>
+                <ns2:PermissionDescription>Opret, ret eller slet anbefalede vaccinationer</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>VaccinationGodkend</ns2:PermissionId>
+                <ns2:PermissionDescription>Godkend Vaccinationer</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>NogetIngenHar</ns2:PermissionId>
+                <ns2:PermissionDescription>En rettighed ingen kan delegere</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>*</ns2:PermissionId>
+                <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:EnableAsteriskPermission>true</ns2:EnableAsteriskPermission>
+            <ns2:Role>
+                <ns2:RoleId>Læge</ns2:RoleId>
+                <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                <ns2:DelegatablePermissions>
+                    <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                    <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
+                    <ns2:PermissionId>VaccinationVedligeholdAnbefalet</ns2:PermissionId>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                </ns2:DelegatablePermissions>
+            </ns2:Role>
+            <ns2:Role>
+                <ns2:RoleId>Tandlæge</ns2:RoleId>
+                <ns2:RoleDescription>Tandlæge</ns2:RoleDescription>
+                <ns2:DelegatablePermissions>
+                    <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                    <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
+                    <ns2:PermissionId>VaccinationVedligeholdAnbefalet</ns2:PermissionId>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                </ns2:DelegatablePermissions>
+            </ns2:Role>
+            <ns2:Role>
+                <ns2:RoleId>Sygeplejerske</ns2:RoleId>
+                <ns2:RoleDescription>Sygeplejerske</ns2:RoleDescription>
+                <ns2:DelegatablePermissions>
+                    <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                    <ns2:PermissionId>VaccinationGodkend</ns2:PermissionId>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                </ns2:DelegatablePermissions>
+            </ns2:Role>
+        </ns2:GetMetadataResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

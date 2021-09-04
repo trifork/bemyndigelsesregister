@@ -1,0 +1,60 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:GetMetadataResponse xmlns:ns2="http://nsi.dk/bemyndigelse/2017/08/01/">
+            <ns2:Domain>Trifork</ns2:Domain>
+            <ns2:System>
+                <ns2:SystemId>TAS</ns2:SystemId>
+                <ns2:SystemLongName>Tilskudsansøgningsservicen</ns2:SystemLongName>
+            </ns2:System>
+            <ns2:Permission>
+                <ns2:PermissionId>LæsKladder</ns2:PermissionId>
+                <ns2:PermissionDescription>Vise kladder for tilskudsansøgninger</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>SkrivKladder</ns2:PermissionId>
+                <ns2:PermissionDescription>Rette og slette kladder for tilskudsansøgninger</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>LæsSager</ns2:PermissionId>
+                <ns2:PermissionDescription>Vise indsendte tilskudsansøgninger</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>SkrivSager</ns2:PermissionId>
+                <ns2:PermissionDescription>Indsende tilskudsansøgninger og YO-svar</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:Permission>
+                <ns2:PermissionId>*</ns2:PermissionId>
+                <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+            </ns2:Permission>
+            <ns2:EnableAsteriskPermission>true</ns2:EnableAsteriskPermission>
+            <ns2:Role>
+                <ns2:RoleId>Læge</ns2:RoleId>
+                <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                <ns2:DelegatablePermissions>
+                    <ns2:PermissionId>LæsKladder</ns2:PermissionId>
+                    <ns2:PermissionId>SkrivKladder</ns2:PermissionId>
+                    <ns2:PermissionId>LæsSager</ns2:PermissionId>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                </ns2:DelegatablePermissions>
+            </ns2:Role>
+            <ns2:Role>
+                <ns2:RoleId>Tandlæge</ns2:RoleId>
+                <ns2:RoleDescription>Tandlæge</ns2:RoleDescription>
+                <ns2:DelegatablePermissions>
+                    <ns2:PermissionId>LæsKladder</ns2:PermissionId>
+                    <ns2:PermissionId>SkrivKladder</ns2:PermissionId>
+                    <ns2:PermissionId>LæsSager</ns2:PermissionId>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                </ns2:DelegatablePermissions>
+            </ns2:Role>
+            <ns2:Role>
+                <ns2:RoleId>Sygeplejerske</ns2:RoleId>
+                <ns2:RoleDescription>Sygeplejerske</ns2:RoleDescription>
+                <ns2:DelegatablePermissions>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                </ns2:DelegatablePermissions>
+            </ns2:Role>
+        </ns2:GetMetadataResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

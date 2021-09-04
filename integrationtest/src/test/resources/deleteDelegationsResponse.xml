@@ -1,0 +1,8 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:DeleteDelegationsResponse xmlns:ns2="http://nsi.dk/bemyndigelse/2017/08/01/">
+            <ns2:DelegationId>DELEGATION_ID</ns2:DelegationId>
+        </ns2:DeleteDelegationsResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
