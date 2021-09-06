@@ -1,6 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import dk.bemyndigelsesregister.bemyndigelsesservice.AbstractServiceTest;
+import dk.bemyndigelsesregister.bemyndigelsesservice.AbstractServiceITCase;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class BemyndigelsesServiceTest extends AbstractServiceTest {
+public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
 
     private static final String GET_METADATA_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#GetMetadata";
     private static final String PUT_METADATA_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#PutMetadata";
@@ -24,7 +24,7 @@ public class BemyndigelsesServiceTest extends AbstractServiceTest {
 
     private static final Set<String> metadataLoaded = new HashSet<>();
 
-    public BemyndigelsesServiceTest() throws Exception {
+    public BemyndigelsesServiceITCase() throws Exception {
     }
 
     @Test

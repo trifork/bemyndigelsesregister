@@ -20,13 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public abstract class AbstractServiceTest {
+public abstract class AbstractServiceITCase {
     protected String host = "localhost";
     protected String port = "8080";
 
     private final SosiUtil sosiUtil;
 
-    public AbstractServiceTest() throws Exception {
+    public AbstractServiceITCase() throws Exception {
         this.sosiUtil = new SosiUtil();
     }
 

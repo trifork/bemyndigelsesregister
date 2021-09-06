@@ -10,7 +10,7 @@ import java.net.URLConnection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ServletTest {
+public class ServletITCase {
     private static final String urlPrefix = "http://localhost:8080/bem";
 
     @Test

@@ -53,4 +53,29 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!-- Profile for running integration tests (ITs) on local auto configured environment -->
+    <profiles>
+        <profile>
+            <id>ITs</id>
+            <build>
+                <plugins>
+                    <!-- Integration tests -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.21.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
