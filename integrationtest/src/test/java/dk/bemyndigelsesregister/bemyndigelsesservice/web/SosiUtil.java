@@ -55,7 +55,6 @@ import java.security.cert.X509Certificate;
 import java.util.Properties;
 
 public class SosiUtil {
-    private static final String KEYSTORE_FILENAME = "/validMocesVault.jks";
     private static final String KEYSTORE_PASSWORD = "Test1234";
     private static final String CERTIFICATE_ALIAS = "sosi:alias_system";
     private static final String CERTIFICATE_CVR = "20921897";
@@ -64,9 +63,12 @@ public class SosiUtil {
     private static final String STS_URL = "http://test1-cnsp.ekstern-test.nspop.dk:8080/sts/services/SecurityTokenService";
 
     private final Properties props;
-    private final CredentialVault vault;
+    private final CredentialVault mocesVault;
+    private final CredentialVault vocesVault;
 
-    private final SOSIFactory factory;
+    private final SOSIFactory mocesFactory;
+    private final SOSIFactory vocesFactory;
+
     private IDCard idCard;
 
     public SosiUtil() throws Exception {
@@ -74,20 +76,22 @@ public class SosiUtil {
         System.setProperty(SOSIFactory.PROPERTYNAME_SOSI_DO_NOT_REGISTER_STR_TRANSFORM, Boolean.TRUE.toString());
         props = SignatureUtil.setupCryptoProviderForJVM();
 
-        System.out.println("Getting Credential Vault");
-        vault = getCredentialVault();
+        System.out.println("Getting Credential Vaults");
+        mocesVault = getCredentialVault("/validMocesVault.jks");
+        vocesVault = getCredentialVault("/test_voces1.jks");
 
         System.out.println("Instantiating SOSITestFederation");
         SOSITestFederation federation = new SOSITestFederation(props);
 
-        System.out.println("Instantiating SOSIFactory");
-        factory = new SOSIFactory(federation, vault, props);
+        System.out.println("Instantiating SOSIFactories");
+        mocesFactory = new SOSIFactory(federation, mocesVault, props);
+        vocesFactory = new SOSIFactory(federation, vocesVault, props);
     }
 
-    private CredentialVault getCredentialVault() throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
+    private CredentialVault getCredentialVault(String filename) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
         CredentialVault result = new GenericCredentialVault(props, KEYSTORE_PASSWORD);
 
-        InputStream keyInputStream = getClass().getResourceAsStream(KEYSTORE_FILENAME);
+        InputStream keyInputStream = getClass().getResourceAsStream(filename);
         result.getKeyStore().load(keyInputStream, KEYSTORE_PASSWORD.toCharArray());
         keyInputStream.close();
 
@@ -107,8 +111,8 @@ public class SosiUtil {
      * @throws Exception
      */
     @SuppressWarnings("deprecation")
-    public IDCard getIdCard(AuthenticationLevel authLevel) throws Exception {
-        if ((idCard != null) && (idCard.isValidInTime()))
+    public IDCard getIdCard(SOSIFactory factory, CredentialVault vault, AuthenticationLevel authLevel) throws Exception {
+        if (idCard != null && idCard.isValidInTime() && idCard.getAuthenticationLevel() == authLevel)
             return idCard;
 
         CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, CERTIFICATE_CVR, CERTIFICATE_ORGANISATION);
@@ -191,7 +195,10 @@ public class SosiUtil {
 
     public void addSoapHeader(SOAPMessage soapMessage, AuthenticationLevel level) throws Exception {
         // create headers to insert in message
-        IDCard card = getIdCard(level);
+        SOSIFactory factory = level == AuthenticationLevel.MOCES_TRUSTED_USER ? mocesFactory : vocesFactory;
+        CredentialVault vault = level == AuthenticationLevel.MOCES_TRUSTED_USER ? mocesVault : vocesVault;
+
+        IDCard card = getIdCard(factory, vault, level);
 
         Request req = factory.createNewRequest(false, null);
         req.setIDCard(card);

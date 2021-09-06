@@ -34,14 +34,14 @@ public abstract class AbstractServiceITCase {
         return HttpClientBuilder.create().build().execute(new HttpGet(uri), new BasicHttpContext());
     }
 
-    protected String httpWrite(String soapAction, String xmldata, boolean useDGWS) throws Exception {
+    protected String httpWrite(String soapAction, String xmldata, CallMode callMode) throws Exception {
 
         System.out.println("Request: " + xmldata);
 
-        if (useDGWS) { // transform to DGWS message
+        if (callMode == CallMode.DGWS_LEVEL_3 || callMode == CallMode.DGWS_LEVEL_4) { // transform to DGWS message
             ByteArrayInputStream bais = new ByteArrayInputStream(xmldata.getBytes(StandardCharsets.UTF_8));
             SOAPMessage soapMessage = MessageFactory.newInstance().createMessage(null, bais);
-            sosiUtil.addSoapHeader(soapMessage, AuthenticationLevel.MOCES_TRUSTED_USER);
+            sosiUtil.addSoapHeader(soapMessage, callMode == CallMode.DGWS_LEVEL_4 ? AuthenticationLevel.MOCES_TRUSTED_USER : AuthenticationLevel.VOCES_TRUSTED_SYSTEM);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             soapMessage.writeTo(baos);
