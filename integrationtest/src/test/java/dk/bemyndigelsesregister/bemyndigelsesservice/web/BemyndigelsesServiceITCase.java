@@ -14,12 +14,12 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
     private static final String GET_METADATA_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#GetMetadata";
     private static final String PUT_METADATA_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#PutMetadata";
     private static final String GET_ALL_METADATA_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#GetAllMetadata";
-
     private static final String CREATE_DELEGATIONS_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#CreateDelegations";
     private static final String GET_DELEGATIONS_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#GetDelegations";
     private static final String DELETE_DELEGATIONS_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#DeleteDelegations";
-
     private static final String GET_EXPIRATION_INFO_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#GetExpirationInfo";
+
+    private static final String USER_NOT_FOUND_ERROR = "Calling user not found in security context";
 
     private static final String FMK_NAME = "Det Fælles Medicinkort";
 
@@ -56,6 +56,16 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
         checkResponse("/getTASMetadataResponse.xml", response);
     }
 
+    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    public void cannotPutMetadataUsingPlainSOAP() throws Exception {
+        httpWrite(PUT_METADATA_SOAPACTION, loadXML("/putTASMetadataRequest.xml"), CallMode.PLAIN);
+    }
+
+    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    public void cannotGetMetadataUsingPlainSOAP() throws Exception {
+        httpWrite(GET_METADATA_SOAPACTION, loadXML("/getTASMetadataRequest.xml"), CallMode.PLAIN);
+    }
+
     @Test
     public void canGetAllMetadata() throws Exception {
         putMetadata("FMK");
@@ -83,11 +93,14 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
     }
 
     @Test
-    public void cannotCreateDelegationsWithVOCES() throws Exception {
+    public void cannotCreateDelegationsUsingVOCES() throws Exception {
         String response = httpWrite(CREATE_DELEGATIONS_SOAPACTION, loadXML("/createDelegationsRequest.xml"), CallMode.DGWS_LEVEL_3);
+        assertTrue(response.contains(USER_NOT_FOUND_ERROR));
+    }
 
-        System.out.println("GetMetadata response: " + response);
-        assertTrue(response.contains("Calling user not found in security context"));
+    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    public void cannotCreateDelegationsUsingPlainSOAP() throws Exception {
+        httpWrite(CREATE_DELEGATIONS_SOAPACTION, loadXML("/createDelegationsRequest.xml"), CallMode.PLAIN);
     }
 
     @Test
@@ -119,9 +132,15 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
     }
 
     @Test
-    public void cannotDeleteDelegationsWithVOCES() throws Exception {
+    public void cannotDeleteDelegationsUsingVOCES() throws Exception {
         String response = httpWrite(DELETE_DELEGATIONS_SOAPACTION, loadXML("/deleteDelegationsRequest.xml"), CallMode.DGWS_LEVEL_3);
-        assertTrue(response.contains("Calling user not found in security context"));
+        assertTrue(response.contains(USER_NOT_FOUND_ERROR));
+    }
+
+
+    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    public void cannotDeleteDelegationsUsingPlainSOAP() throws Exception {
+        httpWrite(DELETE_DELEGATIONS_SOAPACTION, loadXML("/deleteDelegationsRequest.xml"), CallMode.PLAIN);
     }
 
     @Test
@@ -139,9 +158,14 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
     }
 
     @Test
-    public void cannotGetExpirationInfoWithVOCES() throws Exception {
+    public void cannotGetExpirationInfoUsingVOCES() throws Exception {
         String response = httpWrite(GET_EXPIRATION_INFO_SOAPACTION, loadXML("/getExpirationInfoRequest.xml"), CallMode.DGWS_LEVEL_3);
-        assertTrue(response.contains("Calling user not found in security context"));
+        assertTrue(response.contains(USER_NOT_FOUND_ERROR));
+    }
+
+    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    public void cannotGetExpirationInfoUsingPlainSOAP() throws Exception {
+        httpWrite(GET_EXPIRATION_INFO_SOAPACTION, loadXML("/getExpirationInfoRequest.xml"), CallMode.PLAIN);
     }
 
     private void putMetadata(String systemId) throws Exception {
