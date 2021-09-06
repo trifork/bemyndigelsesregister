@@ -6,7 +6,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.WhitelistDao;
-import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
 import dk.sds.nsp.security.SecurityContext;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;

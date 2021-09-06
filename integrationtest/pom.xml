@@ -46,12 +46,14 @@
             <version>0.8.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.mockftpserver</groupId>
-            <artifactId>MockFtpServer</artifactId>
-            <version>2.3</version>
-            <scope>test</scope>
-        </dependency>
+        <!--
+                <dependency>
+                    <groupId>org.mockftpserver</groupId>
+                    <artifactId>MockFtpServer</artifactId>
+                    <version>2.3</version>
+                    <scope>test</scope>
+                </dependency>
+        -->
     </dependencies>
 
     <!-- Profile for running integration tests (ITs) on local auto configured environment -->

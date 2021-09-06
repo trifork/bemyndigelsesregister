@@ -1,7 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
-import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;

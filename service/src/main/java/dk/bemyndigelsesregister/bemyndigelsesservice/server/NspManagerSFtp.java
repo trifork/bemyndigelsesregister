@@ -1,7 +1,6 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
-import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;

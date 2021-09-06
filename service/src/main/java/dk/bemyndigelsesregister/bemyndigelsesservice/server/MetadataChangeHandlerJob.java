@@ -4,7 +4,6 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatingSystemDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
-import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;

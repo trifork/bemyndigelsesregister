@@ -3,7 +3,6 @@ package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.*;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatablePermissionDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
-import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;

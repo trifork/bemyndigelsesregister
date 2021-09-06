@@ -1,6 +1,6 @@
-package dk.bemyndigelsesregister.shared.web;
+package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;

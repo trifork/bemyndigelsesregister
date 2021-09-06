@@ -56,7 +56,6 @@
 
     <modules>
         <module>schemas</module>
-        <module>common</module>
         <module>service</module>
         <module>integrationtest</module>
     </modules>

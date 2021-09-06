@@ -5,7 +5,6 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegatingSystem
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.SystemVariableDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.exportmodel.Delegations;
-import dk.bemyndigelsesregister.shared.service.SystemService;
 import org.hamcrest.Description;
 import org.joda.time.DateTime;
 import org.junit.Before;

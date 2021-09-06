@@ -72,11 +72,6 @@
         </dependency>
 
         <dependency>
-            <groupId>dk.bemyndigelsesregister</groupId>
-            <artifactId>common</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
         </dependency>
@@ -116,6 +111,11 @@
             <version>2.2</version>
         </dependency>
         <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
             <groupId>org.mockftpserver</groupId>
             <artifactId>MockFtpServer</artifactId>
             <version>2.3</version>
@@ -133,6 +133,11 @@
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.1</version>
         </dependency>
 
         <!-- Support for SFTP protocol -->

@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.shared.web;
+package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
@@ -16,9 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 
 @Component
 @RequestMapping

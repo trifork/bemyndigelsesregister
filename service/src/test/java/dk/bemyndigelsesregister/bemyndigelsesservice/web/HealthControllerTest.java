@@ -1,11 +1,11 @@
-package dk.bemyndigelsesregister.shared.web;
+package dk.bemyndigelsesregister.bemyndigelsesservice.web;
 
-import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class HealthControllerTest {
     SystemService systemService = Mockito.mock(SystemService.class);

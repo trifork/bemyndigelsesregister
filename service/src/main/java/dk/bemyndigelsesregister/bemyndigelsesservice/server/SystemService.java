@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.shared.service;
+package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import org.joda.time.DateTime;
 

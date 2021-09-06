@@ -1,4 +1,4 @@
-package dk.bemyndigelsesregister.shared.service;
+package dk.bemyndigelsesregister.bemyndigelsesservice.server;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;

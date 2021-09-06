@@ -7,7 +7,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.*;
-import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
 import dk.nsi.bemyndigelse._2017._08._01.*;
 import dk.sds.nsp.security.Security;
 import org.hamcrest.Description;

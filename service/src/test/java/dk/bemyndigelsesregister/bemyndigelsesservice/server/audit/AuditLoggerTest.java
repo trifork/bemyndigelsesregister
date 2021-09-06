@@ -1,7 +1,7 @@
 package dk.bemyndigelsesregister.bemyndigelsesservice.server.audit;
 
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
-import dk.bemyndigelsesregister.shared.service.SystemService;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog;
 import dk.nsi.fmk.moduleframework.data.ModuleFramework;
 import dk.sds.nsp.security.SecurityContext;
