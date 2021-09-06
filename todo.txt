@@ -1,7 +1,7 @@
 Kendte udeståender:
 
-- Fix integrationstests
 - Test IDWS services og lav en integrationstest
+- SFTP it-testcase - docker-host vs. localhost gør at det ikke virker.
 
 Tests:
 

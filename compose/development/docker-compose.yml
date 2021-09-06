@@ -74,6 +74,7 @@ services:
     volumes:
       # Logging
       - ../target/wildfly/log/:/pack/wildfly8/standalone/log/
+      - ../target/wildfly/tmp/:/tmp/
       # Application
       - ../configuration/bemyndigelse.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/bemyndigelse.properties
       - ../configuration/log4j-bem.xml:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/log4j-bem.xml
