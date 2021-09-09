@@ -38,46 +38,50 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
-        RequestContext.get().setRequestType(RequestType.CREATE);
+        try {
+            RequestContext.get().setRequestType(RequestType.CREATE);
 
-        // auditlog call - one for each delegatee
-        Set<String> delegateeCprs = new HashSet<>();
-        for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
-            delegateeCprs.add(createDelegation.getDelegateeCpr());
-        }
-        for (String delegateeCpr : delegateeCprs) {
-            auditLogger.log("Opret bemyndigelser", delegateeCpr);
-        }
-
-        Collection<Delegation> delegations = new ArrayList<>();
-
-        for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
-            if (createDelegation.getState().equals(State.ANMODET)) {
-                authorizeOperationForCpr("createDelegation", "IDCard CPR was different from both DelegatorCpr and DelegateeCpr", createDelegation.getDelegatorCpr(), createDelegation.getDelegateeCpr());
-            } else {
-                authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
+            // auditlog call - one for each delegatee
+            Set<String> delegateeCprs = new HashSet<>();
+            for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
+                delegateeCprs.add(createDelegation.getDelegateeCpr());
             }
-            logger.debug("Creating Delegation: " + createDelegation.toString());
-            final Delegation delegation = delegationManager.createDelegation(
-                    createDelegation.getSystemId(),
-                    createDelegation.getDelegatorCpr(),
-                    createDelegation.getDelegateeCpr(),
-                    createDelegation.getDelegateeCvr(),
-                    createDelegation.getRoleId(),
-                    Status.fromValue(createDelegation.getState().value()),
-                    createDelegation.getListOfPermissionIds().getPermissionId(),
-                    nullableDateTime(createDelegation.getEffectiveFrom()),
-                    nullableDateTime(createDelegation.getEffectiveTo()));
-            logger.debug("Got delegation with code = [" + delegation.getCode() + "]");
+            for (String delegateeCpr : delegateeCprs) {
+                auditLogger.log("Opret bemyndigelser", delegateeCpr);
+            }
 
-            delegations.add(delegation);
-        }
+            Collection<Delegation> delegations = new ArrayList<>();
 
-        final CreateDelegationsResponse response = new CreateDelegationsResponse();
-        for (Delegation delegation : delegations) {
-            response.getDelegation().add(typeMapper.toDelegationType(delegation));
+            for (CreateDelegationsRequest.Create createDelegation : request.getCreate()) {
+                if (createDelegation.getState().equals(State.ANMODET)) {
+                    authorizeOperationForCpr("createDelegation", "IDCard CPR was different from both DelegatorCpr and DelegateeCpr", createDelegation.getDelegatorCpr(), createDelegation.getDelegateeCpr());
+                } else {
+                    authorizeOperationForCpr("createDelegation", "IDCard CPR was different from DelegatorCpr", createDelegation.getDelegatorCpr());
+                }
+                logger.debug("Creating Delegation: " + createDelegation.toString());
+                final Delegation delegation = delegationManager.createDelegation(
+                        createDelegation.getSystemId(),
+                        createDelegation.getDelegatorCpr(),
+                        createDelegation.getDelegateeCpr(),
+                        createDelegation.getDelegateeCvr(),
+                        createDelegation.getRoleId(),
+                        Status.fromValue(createDelegation.getState().value()),
+                        createDelegation.getListOfPermissionIds().getPermissionId(),
+                        nullableDateTime(createDelegation.getEffectiveFrom()),
+                        nullableDateTime(createDelegation.getEffectiveTo()));
+                logger.debug("Got delegation with code = [" + delegation.getCode() + "]");
+
+                delegations.add(delegation);
+            }
+
+            final CreateDelegationsResponse response = new CreateDelegationsResponse();
+            for (Delegation delegation : delegations) {
+                response.getDelegation().add(typeMapper.toDelegationType(delegation));
+            }
+            return response;
+        } catch (Exception ex) {
+            throw createException(ex);
         }
-        return response;
     }
 
     @Override
@@ -85,15 +89,20 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
-        RequestContext.get().setRequestType(RequestType.GET);
+        try {
+            RequestContext.get().setRequestType(RequestType.GET);
 
-        Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId(), request.getEffectiveFrom(), request.getEffectiveTo());
+            Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId(), request.getEffectiveFrom(), request.getEffectiveTo());
 
-        final GetDelegationsResponse response = new GetDelegationsResponse();
-        for (Delegation delegation : delegations) {
-            response.getDelegation().add(typeMapper.toDelegationType(delegation));
+            final GetDelegationsResponse response = new GetDelegationsResponse();
+            for (Delegation delegation : delegations) {
+                response.getDelegation().add(typeMapper.toDelegationType(delegation));
+            }
+            return response;
+        } catch (Exception ex) {
+            throw createException(ex);
         }
-        return response;
+
     }
 
     @Override
@@ -101,13 +110,17 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @Transactional
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
-        RequestContext.get().setRequestType(RequestType.DELETE);
+        try {
+            RequestContext.get().setRequestType(RequestType.DELETE);
 
-        List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate());
+            List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate());
 
-        final DeleteDelegationsResponse response = new DeleteDelegationsResponse();
-        response.getDelegationId().addAll(result);
-        return response;
+            final DeleteDelegationsResponse response = new DeleteDelegationsResponse();
+            response.getDelegationId().addAll(result);
+            return response;
+        } catch (Exception ex) {
+            throw createException(ex);
+        }
     }
 
 
@@ -116,222 +129,248 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     @Protected(whitelist = "bemyndigelsesservice.indlaesMetadata")
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
-        RequestContext.get().setRequestType(RequestType.PUT_METADATA);
+        try {
+            RequestContext.get().setRequestType(RequestType.PUT_METADATA);
 
-        auditLogger.log("Indlæs metadata", null);
+            auditLogger.log("Indlæs metadata", null);
 
-        String domainCode = request.getDomain();
-        if (domainCode == null || domainCode.trim().isEmpty())
-            throw new IllegalArgumentException("Domain must be specified in the request");
+            String domainCode = request.getDomain();
+            if (domainCode == null || domainCode.trim().isEmpty())
+                throw new IllegalArgumentException("Domain must be specified in the request");
 
-        String systemCode = request.getSystemId();
-        if (systemCode == null || systemCode.trim().isEmpty())
-            throw new IllegalArgumentException("System must be specified in the request");
+            String systemCode = request.getSystemId();
+            if (systemCode == null || systemCode.trim().isEmpty())
+                throw new IllegalArgumentException("System must be specified in the request");
 
-        Metadata metadata = new Metadata(domainCode, systemCode, request.getSystemLongName());
+            Metadata metadata = new Metadata(domainCode, systemCode, request.getSystemLongName());
 
-        if (request.getPermission() != null) {
-            for (SystemPermission permission : request.getPermission()) {
-                if (permission.getPermissionId().contains(Metadata.ASTERISK_PERMISSION_CODE))
-                    throw new IllegalArgumentException("Permission [*] for system [" + systemCode + "]: All current and future permissions are supported, but must be specified as EnableAsteriskPermission=true in request");
+            if (request.getPermission() != null) {
+                for (SystemPermission permission : request.getPermission()) {
+                    if (permission.getPermissionId().contains(Metadata.ASTERISK_PERMISSION_CODE))
+                        throw new IllegalArgumentException("Permission [*] for system [" + systemCode + "]: All current and future permissions are supported, but must be specified as EnableAsteriskPermission=true in request");
 
-                metadata.addPermission(permission.getPermissionId(), permission.getPermissionDescription());
-            }
-        }
-
-        if (request.getRole() != null) {
-            for (DelegatingRole role : request.getRole()) {
-                metadata.addRole(role.getRoleId(), role.getRoleDescription());
-
-                if (role.getDelegatablePermissions() != null) {
-                    for (String permissionCode : role.getDelegatablePermissions().getPermissionId()) {
-                        if (permissionCode.contains(Metadata.ASTERISK_PERMISSION_CODE))
-                            throw new IllegalArgumentException("DelegatablePermission [" + permissionCode + "] for role [" + role.getRoleId() + "]: All current and future permissions are supported, but if used, delegation of this permission is implied for all roles, and cannot be explicitly specified as delegatable.");
-
-                        String permissionDescription = null;
-                        if (request.getPermission() != null) {
-                            for (SystemPermission c : request.getPermission()) {
-                                if (c.getPermissionId().equals(permissionCode)) {
-                                    permissionDescription = c.getPermissionDescription();
-                                    break;
-                                }
-                            }
-                        }
-                        metadata.addDelegatablePermission(role.getRoleId(), permissionCode, permissionDescription, true);
-                    }
-                }
-
-                if (role.getUndelegatablePermissions() != null) {
-                    for (String permissionCode : role.getUndelegatablePermissions().getPermissionId()) {
-                        if (permissionCode.contains(Metadata.ASTERISK_PERMISSION_CODE))
-                            throw new IllegalArgumentException("UndelegatablePermission [" + permissionCode + "] for role [" + role.getRoleId() + "]: All current and future permissions are supported, but if used, delegation of this permission is implied for all roles, and cannot be explicitly specified as undelegatable.");
-
-                        String permissionDescription = null;
-                        if (request.getPermission() != null) {
-                            for (SystemPermission c : request.getPermission()) {
-                                if (c.getPermissionId().equals(permissionCode)) {
-                                    permissionDescription = c.getPermissionDescription();
-                                    break;
-                                }
-                            }
-                        }
-                        metadata.addDelegatablePermission(role.getRoleId(), permissionCode, permissionDescription, false);
-                    }
+                    metadata.addPermission(permission.getPermissionId(), permission.getPermissionDescription());
                 }
             }
-        }
 
-        if (request.isEnableAsteriskPermission()) {
-            // create asterisk permission and add it as delegatable to all roles
-            metadata.addPermission(Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION);
-            for (DelegatingRole role : request.getRole()) {
-                metadata.addDelegatablePermission(role.getRoleId(), Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION, true);
+            if (request.getRole() != null) {
+                for (DelegatingRole role : request.getRole()) {
+                    metadata.addRole(role.getRoleId(), role.getRoleDescription());
+
+                    if (role.getDelegatablePermissions() != null) {
+                        for (String permissionCode : role.getDelegatablePermissions().getPermissionId()) {
+                            if (permissionCode.contains(Metadata.ASTERISK_PERMISSION_CODE))
+                                throw new IllegalArgumentException("DelegatablePermission [" + permissionCode + "] for role [" + role.getRoleId() + "]: All current and future permissions are supported, but if used, delegation of this permission is implied for all roles, and cannot be explicitly specified as delegatable.");
+
+                            String permissionDescription = null;
+                            if (request.getPermission() != null) {
+                                for (SystemPermission c : request.getPermission()) {
+                                    if (c.getPermissionId().equals(permissionCode)) {
+                                        permissionDescription = c.getPermissionDescription();
+                                        break;
+                                    }
+                                }
+                            }
+                            metadata.addDelegatablePermission(role.getRoleId(), permissionCode, permissionDescription, true);
+                        }
+                    }
+
+                    if (role.getUndelegatablePermissions() != null) {
+                        for (String permissionCode : role.getUndelegatablePermissions().getPermissionId()) {
+                            if (permissionCode.contains(Metadata.ASTERISK_PERMISSION_CODE))
+                                throw new IllegalArgumentException("UndelegatablePermission [" + permissionCode + "] for role [" + role.getRoleId() + "]: All current and future permissions are supported, but if used, delegation of this permission is implied for all roles, and cannot be explicitly specified as undelegatable.");
+
+                            String permissionDescription = null;
+                            if (request.getPermission() != null) {
+                                for (SystemPermission c : request.getPermission()) {
+                                    if (c.getPermissionId().equals(permissionCode)) {
+                                        permissionDescription = c.getPermissionDescription();
+                                        break;
+                                    }
+                                }
+                            }
+                            metadata.addDelegatablePermission(role.getRoleId(), permissionCode, permissionDescription, false);
+                        }
+                    }
+                }
             }
+
+            if (request.isEnableAsteriskPermission()) {
+                // create asterisk permission and add it as delegatable to all roles
+                metadata.addPermission(Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION);
+                for (DelegatingRole role : request.getRole()) {
+                    metadata.addDelegatablePermission(role.getRoleId(), Metadata.ASTERISK_PERMISSION_CODE, Metadata.ASTERISK_PERMISSION_DESCRIPTION, true);
+                }
+            }
+
+            metadataManager.putMetadata(metadata);
+
+            return new PutMetadataResponse();
+        } catch (Exception ex) {
+            throw createException(ex);
         }
-
-        metadataManager.putMetadata(metadata);
-
-        return new PutMetadataResponse();
     }
 
     @Override
     @ResponsePayload
     public GetExpirationInfoResponse getExpirationInfo(@RequestPayload GetExpirationInfoRequest request, SoapHeader soapHeader) {
-        ExpirationInfo info = delegationManager.getExpirationInfo(request.getDelegatorCpr(), request.getDays());
+        try {
+            ExpirationInfo info = delegationManager.getExpirationInfo(request.getDelegatorCpr(), request.getDays());
 
-        GetExpirationInfoResponse response = new GetExpirationInfoResponse();
-        response.setDelegatorCpr(request.getDelegatorCpr());
-        response.setDelegationCount(info.getDelegationCount());
-        response.setDelegateeCount(info.getDelegateeCount());
-        response.setDaysToFirstExpiration(info.getDaysToFirstExpiration());
-        response.setFirstExpiryDelegationCount(info.getFirstExpiryDelegationCount());
-        response.setFirstExpiryDelegateeCount(info.getFirstExpiryDelegateeCount());
+            GetExpirationInfoResponse response = new GetExpirationInfoResponse();
+            response.setDelegatorCpr(request.getDelegatorCpr());
+            response.setDelegationCount(info.getDelegationCount());
+            response.setDelegateeCount(info.getDelegateeCount());
+            response.setDaysToFirstExpiration(info.getDaysToFirstExpiration());
+            response.setFirstExpiryDelegationCount(info.getFirstExpiryDelegationCount());
+            response.setFirstExpiryDelegateeCount(info.getFirstExpiryDelegateeCount());
 
-        return response;
+            return response;
+        } catch (Exception ex) {
+            throw createException(ex);
+        }
     }
 
     @Override
     @ResponsePayload
     public GetMetadataResponse getMetadata(@RequestPayload GetMetadataRequest request, SoapHeader soapHeader) {
-        RequestContext.get().setRequestType(RequestType.GET_METADATA);
+        try {
+            RequestContext.get().setRequestType(RequestType.GET_METADATA);
 
-        Metadata metadata = metadataManager.getMetadata(request.getDomain(), request.getSystemId());
+            Metadata metadata = metadataManager.getMetadata(request.getDomain(), request.getSystemId());
 
-        GetMetadataResponse response = new GetMetadataResponse();
+            GetMetadataResponse response = new GetMetadataResponse();
 
-        response.setDomain(metadata.getDomainCode());
+            response.setDomain(metadata.getDomainCode());
 
-        DelegatingSystem system = new DelegatingSystem();
-        system.setSystemId(metadata.getSystem().getCode());
-        system.setSystemLongName(metadata.getSystem().getDescription());
-        response.setSystem(system);
+            DelegatingSystem system = new DelegatingSystem();
+            system.setSystemId(metadata.getSystem().getCode());
+            system.setSystemLongName(metadata.getSystem().getDescription());
+            response.setSystem(system);
 
-        boolean asteriskPermission = false;
-        if (metadata.getPermissions() != null) {
-            for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
-                if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
-                    asteriskPermission = true;
+            boolean asteriskPermission = false;
+            if (metadata.getPermissions() != null) {
+                for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
+                    if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
+                        asteriskPermission = true;
+                    }
+                    SystemPermission permission = new SystemPermission();
+                    permission.setPermissionId(c.getCode());
+                    permission.setPermissionDescription(c.getDescription());
+                    response.getPermission().add(permission);
                 }
-                SystemPermission permission = new SystemPermission();
-                permission.setPermissionId(c.getCode());
-                permission.setPermissionDescription(c.getDescription());
-                response.getPermission().add(permission);
             }
-        }
-        response.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
+            response.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
 
-        if (metadata.getRoles() != null) {
-            for (Metadata.CodeAndDescription c : metadata.getRoles()) {
-                DelegatingRole role = new DelegatingRole();
-                role.setRoleId(c.getCode());
-                role.setRoleDescription(c.getDescription());
+            if (metadata.getRoles() != null) {
+                for (Metadata.CodeAndDescription c : metadata.getRoles()) {
+                    DelegatingRole role = new DelegatingRole();
+                    role.setRoleId(c.getCode());
+                    role.setRoleDescription(c.getDescription());
 
-                if (metadata.getDelegatablePermissions() != null) {
-                    for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
-                        if (dp.isDelegatable()) {
-                            if (role.getDelegatablePermissions() == null) {
-                                role.setDelegatablePermissions(new DelegatingRole.DelegatablePermissions());
+                    if (metadata.getDelegatablePermissions() != null) {
+                        for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
+                            if (dp.isDelegatable()) {
+                                if (role.getDelegatablePermissions() == null) {
+                                    role.setDelegatablePermissions(new DelegatingRole.DelegatablePermissions());
+                                }
+                                role.getDelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
+                            } else {
+                                if (role.getUndelegatablePermissions() == null) {
+                                    role.setUndelegatablePermissions(new DelegatingRole.UndelegatablePermissions());
+                                }
+                                role.getUndelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
                             }
-                            role.getDelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
-                        } else {
-                            if (role.getUndelegatablePermissions() == null) {
-                                role.setUndelegatablePermissions(new DelegatingRole.UndelegatablePermissions());
-                            }
-                            role.getUndelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
                         }
                     }
+
+                    response.getRole().add(role);
                 }
-
-                response.getRole().add(role);
             }
-        }
 
-        return response;
+            return response;
+        } catch (Exception ex) {
+            throw createException(ex);
+        }
     }
 
     @Override
     @ResponsePayload
     public GetAllMetadataResponse getAllMetadata(@RequestPayload GetAllMetadataRequest request, SoapHeader soapHeader) {
-        RequestContext.get().setRequestType(RequestType.GET_METADATA);
+        try {
+            RequestContext.get().setRequestType(RequestType.GET_METADATA);
 
-        List<Metadata> metadataList = metadataManager.getAllMetadata(request.getDomain());
+            List<Metadata> metadataList = metadataManager.getAllMetadata(request.getDomain());
 
-        GetAllMetadataResponse response = new GetAllMetadataResponse();
-        response.setDomain(request.getDomain());
+            GetAllMetadataResponse response = new GetAllMetadataResponse();
+            response.setDomain(request.getDomain());
 
-        if (metadataList != null) {
-            for (Metadata metadata : metadataList) {
-                GetAllMetadataResponse.Metadata m = new GetAllMetadataResponse.Metadata();
+            if (metadataList != null) {
+                for (Metadata metadata : metadataList) {
+                    GetAllMetadataResponse.Metadata m = new GetAllMetadataResponse.Metadata();
 
-                DelegatingSystem system = new DelegatingSystem();
-                system.setSystemId(metadata.getSystem().getCode());
-                system.setSystemLongName(metadata.getSystem().getDescription());
-                m.setSystem(system);
+                    DelegatingSystem system = new DelegatingSystem();
+                    system.setSystemId(metadata.getSystem().getCode());
+                    system.setSystemLongName(metadata.getSystem().getDescription());
+                    m.setSystem(system);
 
-                boolean asteriskPermission = false;
-                if (metadata.getPermissions() != null) {
-                    for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
-                        if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
-                            asteriskPermission = true;
+                    boolean asteriskPermission = false;
+                    if (metadata.getPermissions() != null) {
+                        for (Metadata.CodeAndDescription c : metadata.getPermissions()) {
+                            if (Metadata.ASTERISK_PERMISSION_CODE.equals(c.getCode())) {
+                                asteriskPermission = true;
+                            }
+                            SystemPermission permission = new SystemPermission();
+                            permission.setPermissionId(c.getCode());
+                            permission.setPermissionDescription(c.getDescription());
+                            m.getPermission().add(permission);
                         }
-                        SystemPermission permission = new SystemPermission();
-                        permission.setPermissionId(c.getCode());
-                        permission.setPermissionDescription(c.getDescription());
-                        m.getPermission().add(permission);
                     }
-                }
-                m.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
+                    m.setEnableAsteriskPermission(asteriskPermission); // it's optional in the response, but set anyway, for sake of completeness
 
-                if (metadata.getRoles() != null) {
-                    for (Metadata.CodeAndDescription c : metadata.getRoles()) {
-                        DelegatingRole role = new DelegatingRole();
-                        role.setRoleId(c.getCode());
-                        role.setRoleDescription(c.getDescription());
+                    if (metadata.getRoles() != null) {
+                        for (Metadata.CodeAndDescription c : metadata.getRoles()) {
+                            DelegatingRole role = new DelegatingRole();
+                            role.setRoleId(c.getCode());
+                            role.setRoleDescription(c.getDescription());
 
-                        if (metadata.getDelegatablePermissions() != null) {
-                            for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
-                                if (dp.isDelegatable()) {
-                                    if (role.getDelegatablePermissions() == null) {
-                                        role.setDelegatablePermissions(new DelegatingRole.DelegatablePermissions());
+                            if (metadata.getDelegatablePermissions() != null) {
+                                for (Metadata.DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
+                                    if (dp.isDelegatable()) {
+                                        if (role.getDelegatablePermissions() == null) {
+                                            role.setDelegatablePermissions(new DelegatingRole.DelegatablePermissions());
+                                        }
+                                        role.getDelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
+                                    } else {
+                                        if (role.getUndelegatablePermissions() == null) {
+                                            role.setUndelegatablePermissions(new DelegatingRole.UndelegatablePermissions());
+                                        }
+                                        role.getUndelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
                                     }
-                                    role.getDelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
-                                } else {
-                                    if (role.getUndelegatablePermissions() == null) {
-                                        role.setUndelegatablePermissions(new DelegatingRole.UndelegatablePermissions());
-                                    }
-                                    role.getUndelegatablePermissions().getPermissionId().add(dp.getPermissionCode());
                                 }
                             }
+
+                            m.getRole().add(role);
                         }
-
-                        m.getRole().add(role);
                     }
-                }
 
-                response.getMetadata().add(m);
+                    response.getMetadata().add(m);
+                }
             }
+
+            return response;
+        } catch (Exception ex) {
+            throw createException(ex);
+        }
+    }
+
+    private RuntimeException createException(Exception ex) {
+        logger.error(ex.getMessage(), ex);
+
+        if (ex instanceof RuntimeException) {
+            return (RuntimeException) ex;
         }
 
-        return response;
+        return new RuntimeException(ex.getMessage(), ex);
     }
 }

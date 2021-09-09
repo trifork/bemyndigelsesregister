@@ -20,6 +20,19 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+<!-- Remove comment to enable request/Response logging
+    <filter>
+        <filter-name>RequestResponseLoggerFilter</filter-name>
+        <filter-class>dk.bemyndigelsesregister.bemyndigelsesservice.config.LoggerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RequestResponseLoggerFilter</filter-name>
+        <url-pattern>/bem/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+-->
+
     <servlet>
         <servlet-name>appServlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

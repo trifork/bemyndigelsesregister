@@ -45,7 +45,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     @PostConstruct
     public void init() {
-        securityInterceptor.setSkipMethods(Arrays.asList("getMetadata"));
+        securityInterceptor.setSkipMethods(Arrays.asList("getMetadata", "getAllMetadata"));
     }
 
     @Bean
@@ -113,7 +113,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
         handlerMapping.setInterceptors(getInterceptors());
         return handlerMapping;
     }
-
 
     @Bean
     public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
