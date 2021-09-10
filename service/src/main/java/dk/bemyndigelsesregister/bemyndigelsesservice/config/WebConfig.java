@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web", "dk.bemyndigelsesregister.shared.web"})
+@ComponentScan({"dk.bemyndigelsesregister.bemyndigelsesservice.web"})
 public class WebConfig extends WebMvcConfigurationSupport {
     @Inject
     ApplicationRootConfig applicationRootConfig;
@@ -39,7 +39,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public WsdlDefinition serviceDefinition_20170801() {
         final DefaultWsdl11Definition bean = new DefaultWsdl11Definition();
         bean.setSchema(xsdSchema());
-        //bean.setSchemaCollection(schemaCollection()); //this will inline the defs from the schemas in the collections
         bean.setPortTypeName("BemyndigelsesService");
         bean.setLocationUri("http://localhost:8080/BemyndigelsesService_20170801");
         Properties soapActions = new Properties();
@@ -92,7 +91,6 @@ public class WebConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("*.xsd").addResourceLocations("classpath:/schema/");
     }
 
-
     @Bean
     public RequestMappingHandlerMapping requestMappingHandlerMapping() {
         RequestMappingHandlerMapping handlerMapping = super.requestMappingHandlerMapping();
@@ -101,12 +99,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
         return handlerMapping;
     }
 
-
     @Bean
     public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
         final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setOrder(2);
-        final HashMap<String, Object> urlMap = new HashMap<String, Object>();
+        final HashMap<String, Object> urlMap = new HashMap<>();
         urlMap.put("bemyndigelsesservice_2017_08_01.wsdl", serviceDefinition_20170801());
         mapping.setUrlMap(urlMap);
         return mapping;

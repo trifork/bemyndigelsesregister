@@ -7,12 +7,14 @@ networks:
     external: true
 
 services:
-  cradb:
-    image: registry.nspop.dk/playground/cradb:latest
-    networks:
-      - bem_net
-    environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+#  cradb:
+#    image: registry.nspop.dk/playground/cradb:latest
+#    ports:
+#      - "8086:3306"
+#    networks:
+#      - bem_net
+#    environment:
+#      - MYSQL_RANDOM_ROOT_PASSWORD=yes
   bemdb:
     image: mariadb:10.2
     # Expose database on a port on the host for debugging purpose
@@ -50,6 +52,7 @@ services:
       - ../database/db/migration/bem/V13__Drop_BEM1_table.sql:/flyway/sql/V13__Drop_BEM1_table.sql
       - ../database/db/migration/bem/V14__Drop_retransmission_table.sql:/flyway/sql/V14__Drop_retransmission_table.sql
       - ../database/db/migration/bem/V15__Whitelist_Trifork_CVR.sql:/flyway/sql/V15__Whitelist_Trifork_CVR.sql
+      - ../database/db/migration/bem/V16__CraDB_simili.sql:/flyway/sql/V16__CraDB_simili.sql
     depends_on:
       - bemdb
   bem:
@@ -60,8 +63,8 @@ services:
       - "8080:8080"
       - "5005:5005"
     depends_on:
-      cradb:
-        condition: service_started
+#      cradb:
+ #       condition: service_started
       bemdb:
         condition: service_healthy
     networks:
@@ -83,3 +86,4 @@ services:
       - ../configuration/nspslalog-bem.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
       # Datasources
       - ../configuration/datasources/bem-ds.xml:/pack/wildfly8/standalone/deployments/bem-ds.xml
+      - ../configuration/datasources/cra-ds.xml:/pack/wildfly8/standalone/deployments/cra-ds.xml
