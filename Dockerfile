@@ -11,3 +11,5 @@ RUN echo "#Skip nothing" > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/
 
 RUN echo '.*/(health|dksconfig)$' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
 #RUN echo '.*' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
+
+RUN echo '.*' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/crl.skip

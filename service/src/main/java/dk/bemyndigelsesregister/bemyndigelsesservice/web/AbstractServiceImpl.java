@@ -39,7 +39,12 @@ public abstract class AbstractServiceImpl {
     }
 
     protected void checkSecurityTicket(SecurityContext securityContext, boolean userRequired, String whitelist) {
-        Optional<SecurityContext.Ticket> ticketOptional = securityContext.getTicket();
+        Optional<SecurityContext.Ticket> ticketOptional;
+        try {
+            ticketOptional = securityContext.getTicket();
+        } catch (Exception ex) { // avoid NPE in NspSecurityContext.java:113
+            throw new SecurityException("No security ticket is present");
+        }
         if (!ticketOptional.isPresent()) {
             throw new SecurityException("No security ticket is present");
         }
