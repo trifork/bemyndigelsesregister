@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ServletITCase {
-    private static final String urlPrefix = "http://localhost:8080/bem";
+    private static final String urlPrefix = "http://localhost:8087/bem";
 
     @Test
     public void canAccessHealthServlet() throws IOException {

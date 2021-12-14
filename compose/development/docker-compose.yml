@@ -19,7 +19,7 @@ services:
     image: mariadb:10.2
     # Expose database on a port on the host for debugging purpose
     ports:
-      - "8085:3306"
+      - "8086:3306"
     networks:
       - bem_net
     environment:
@@ -60,7 +60,7 @@ services:
     image: bem:latest
     # Expose service on a port on the host for debugging purpose
     ports:
-      - "8080:8080"
+      - "8087:8080"
       - "5005:5005"
     depends_on:
 #      cradb:

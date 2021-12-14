@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class AbstractServiceITCase {
     protected String host = "localhost";
-    protected String port = "8080";
+    protected String port = "8087";
 
     private final SosiUtil sosiUtil;
 
