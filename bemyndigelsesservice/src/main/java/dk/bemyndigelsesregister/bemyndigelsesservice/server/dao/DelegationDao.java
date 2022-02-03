@@ -41,4 +41,6 @@ public interface DelegationDao {
     List<Long> findWithAsterisk(String systemCode, DateTime validDate);
 
     ExpirationInfo getExpirationInfo(String cpr, int days);
+
+    int cleanup(DateTime beforeDate, int maxRecords);
 }

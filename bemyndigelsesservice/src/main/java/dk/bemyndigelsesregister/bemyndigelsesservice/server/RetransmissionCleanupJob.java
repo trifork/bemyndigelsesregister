@@ -15,7 +15,8 @@ import javax.inject.Inject;
 @Repository
 public class RetransmissionCleanupJob {
     private static final Logger logger = Logger.getLogger(RetransmissionCleanupJob.class);
-    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+
+    private final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     @Value("${retransmissioncleanupjob.enabled:false}")
     private String jobEnabled;

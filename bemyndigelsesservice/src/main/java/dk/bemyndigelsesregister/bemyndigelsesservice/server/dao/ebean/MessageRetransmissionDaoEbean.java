@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class MessageRetransmissionDaoEbean extends SupportDao<MessageRetransmission> implements MessageRetransmissionDao {
-    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     public MessageRetransmissionDaoEbean() {
         super(MessageRetransmission.class);
