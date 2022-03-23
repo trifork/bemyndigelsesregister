@@ -111,7 +111,7 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
             assertEquals("Delegation should contain the right number of permissions", 2, retrievedDelegation.getDelegationPermissions().size());
             for (DelegationPermission dp : retrievedDelegation.getDelegationPermissions()) {
                 assertTrue("Delegation should contain the right permissions", dp.getPermissionCode().equals(delegationPermission1.getPermissionCode())
-                                                                || dp.getPermissionCode().equals(delegationPermission2.getPermissionCode()));
+                        || dp.getPermissionCode().equals(delegationPermission2.getPermissionCode()));
             }
         } finally {
             ebeanServer.endTransaction();
@@ -197,5 +197,67 @@ public class DelegationDaoEbeanTest extends DaoUnitTestSupport {
         final List<Long> delegationIds = dao.findWithAsterisk("FMK", DateTime.now());
 
         System.out.println(delegationIds);
+    }
+
+    @Test
+    public void testCleanupDelegations() {
+        try {
+            ebeanServer.beginTransaction();
+
+            final DateTime oldDate = new DateTime(1990, 1, 1, 10, 0, 0);
+
+            int n = dao.list().size();
+            for (int i = 0; i < 10; i++) {
+                Delegation d = createDelegation(new DateTime(System.currentTimeMillis()), new DateTime(System.currentTimeMillis() + 20000000));
+                dao.save(d);
+                d = createDelegation(oldDate, oldDate);
+                dao.save(d);
+            }
+            assertEquals("After save the no. of delegations should increase by 20", n + 20, dao.list().size());
+
+            final DateTime cleanupDate = new DateTime(1991, 1, 1, 10, 0, 0);
+            int cleanCount = dao.cleanup(cleanupDate, 4);
+            assertEquals("Cleanup should delete 4 old delegations", 4, cleanCount);
+
+            cleanCount = dao.cleanup(cleanupDate, 100);
+            assertEquals("Cleanup should delete 6 old delegations", 6, cleanCount);
+
+            assertEquals("After clean the no. of delegations should be decreased by 10", n + 10, dao.list().size());
+        } finally {
+            ebeanServer.endTransaction();
+        }
+    }
+
+    private Delegation createDelegation(DateTime effectiveFrom, DateTime effectiveTo) {
+        Delegation d = new Delegation();
+        d.setCode("testId1");
+        d.setDelegatorCpr("0101010AB1");
+        d.setDelegateeCpr("0202020AB2");
+        d.setDelegateeCvr("12345678");
+        d.setEffectiveFrom(effectiveFrom);
+        d.setEffectiveTo(effectiveTo);
+        d.setSystemCode(systemDao.get(1).getCode());
+        d.setRoleCode(roleDao.get(1).getCode());
+        d.setState(Status.GODKENDT);
+
+        Set<DelegationPermission> permissions = new HashSet<>();
+
+        Permission p1 = permissionDao.get(1);
+        DelegationPermission delegationPermission1 = new DelegationPermission();
+        delegationPermission1.setDelegation(d);
+        delegationPermission1.setPermissionCode(p1.getCode());
+        delegationPermission1.setCode("testCode2");
+        permissions.add(delegationPermission1);
+
+        Permission p2 = permissionDao.get(2);
+        DelegationPermission delegationPermission2 = new DelegationPermission();
+        delegationPermission2.setDelegation(d);
+        delegationPermission2.setPermissionCode(p2.getCode());
+        delegationPermission2.setCode("testCode3");
+        permissions.add(delegationPermission2);
+
+        d.setDelegationPermissions(permissions);
+
+        return d;
     }
 }
