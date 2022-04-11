@@ -32,3 +32,13 @@ Integration tests are running against service running in docker. After bringing 
 	mvn clean install -rf :integrationtest -PITs
 
 
+CRA service
+===
+Endpoints:
+
+    http://localhost:8089/cra/version
+    http://localhost:8089/cra/status
+    http://localhost:8089/cra/job/revokeUpdate/start
+    http://localhost:8089/cra/job/revokeUpdate/status
+    http://localhost:8089/cra/job/cleanupRevocationLists/start
+    http://localhost:8089/cra/job/cleanupRevocationLists/status

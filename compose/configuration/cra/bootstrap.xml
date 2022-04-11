@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.2.xsd
+                           http://www.springframework.org/schema/jee
+                           http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                           http://www.springframework.org/schema/task
+                           http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+    <!-- Add certificate revocation sources here -->
+    <util:list id="certificateRevocationSources" value-type="dk.nsi.nsp.cra.CertificateRevocationSource">
+        <ref bean="systemtestOCES3CertificateRevocationSource"/>
+        <ref bean="systemtest8CertificateRevocationSource"/>
+        <ref bean="systemtest19CertificateRevocationSource"/>
+    </util:list>
+
+    <bean id="systemtestOCES3CertificateRevocationSource" class="dk.nsi.nsp.cra.bootstrap.RemoteCertificateRevocationSource">
+        <constructor-arg value="http://ca1.cti-gov.dk/oces/issuing/1/cacert/issuing.cer" type="java.lang.String" />
+        <constructor-arg value="http://ca1.cti-gov.dk/oces/issuing/1/crl/issuing.crl" type="java.lang.String" />
+        <constructor-arg ref="certificateStore"/>
+        <constructor-arg ref="certificateResolver"/>
+    </bean>
+
+    <bean id="systemtest8CertificateRevocationSource" class="dk.nsi.nsp.cra.bootstrap.RemoteCertificateRevocationSource">
+        <constructor-arg value="http://m.aia.systemtest8.trust2408.com/systemtest8-ca.cer" type="java.lang.String" />
+        <constructor-arg value="http://crl.systemtest8.trust2408.com/systemtest8.crl" type="java.lang.String" />
+        <constructor-arg ref="certificateStore"/>
+        <constructor-arg ref="certificateResolver"/>
+    </bean>
+
+    <bean id="systemtest19CertificateRevocationSource" class="dk.nsi.nsp.cra.bootstrap.RemoteCertificateRevocationSource">
+        <constructor-arg value="http://m.aia.systemtest19.trust2408.com/systemtest19-ca.cer" type="java.lang.String" />
+        <constructor-arg value="http://crl.systemtest19.trust2408.com/systemtest19.crl" type="java.lang.String" />
+        <constructor-arg ref="certificateStore"/>
+        <constructor-arg ref="certificateResolver"/>
+    </bean>
+
+</beans>

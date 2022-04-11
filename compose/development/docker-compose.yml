@@ -7,14 +7,14 @@ networks:
     external: true
 
 services:
-#  cradb:
-#    image: registry.nspop.dk/playground/cradb:latest
-#    ports:
-#      - "8086:3306"
-#    networks:
-#      - bem_net
-#    environment:
-#      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+  cradb:
+    image: registry.nspop.dk/playground/cradb:latest
+    ports:
+      - "8088:3306"
+    networks:
+      - bem_net
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
   bemdb:
     image: mariadb:10.2
     # Expose database on a port on the host for debugging purpose
@@ -52,19 +52,45 @@ services:
       - ../database/db/migration/bem/V13__Drop_BEM1_table.sql:/flyway/sql/V13__Drop_BEM1_table.sql
       - ../database/db/migration/bem/V14__Drop_retransmission_table.sql:/flyway/sql/V14__Drop_retransmission_table.sql
       - ../database/db/migration/bem/V15__Whitelist_Trifork_CVR.sql:/flyway/sql/V15__Whitelist_Trifork_CVR.sql
-      - ../database/db/migration/bem/V16__CraDB_simili.sql:/flyway/sql/V16__CraDB_simili.sql
     depends_on:
       - bemdb
+  cra:
+    image: registry.nspop.dk/components/cra:1.1.14.1
+    ports:
+      - "8089:8080"
+      - "5009:5005"
+    depends_on:
+      cradb:
+        condition: service_started
+    networks:
+      - bem_net
+    environment:
+      - LOG_MAX_FILE_SIZE=10MB
+      - LOG_MAX_BACKUP_INDEX=5
+      - NSP_TEST_FEDERATION=true
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
+    volumes:
+      # Logging
+      - ../target/wildfly/cra/log/:/pack/wildfly8/standalone/log/
+      - ../target/wildfly/cra/tmp/:/tmp/
+      # Application
+      - ../configuration/cra/log4j-cra.xml:/pack/wildfly/standalone/configuration/log4j-cra.xml
+      - ../configuration/cra/config.xml:/pack/wildfly/standalone/configuration/cra/config.xml
+      - ../configuration/cra/seal.xml:/pack/wildfly/standalone/configuration/cra/seal.xml
+      - ../configuration/cra/bootstrap.xml:/pack/wildfly/standalone/configuration/cra/bootstrap.xml
+      - ../configuration/cra/services.xml:/pack/wildfly/standalone/configuration/cra/services.xml
+      # Datasources
+      - ../configuration/datasources/cra-ds.xml:/pack/wildfly/standalone/deployments/cra-ds.xml
   bem:
     build: ../..
     image: bem:latest
     # Expose service on a port on the host for debugging purpose
     ports:
       - "8087:8080"
-      - "5005:5005"
+      - "5007:5005"
     depends_on:
-#      cradb:
- #       condition: service_started
+      cradb:
+        condition: service_started
       bemdb:
         condition: service_healthy
     networks:
@@ -76,8 +102,8 @@ services:
       - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
     volumes:
       # Logging
-      - ../target/wildfly/log/:/pack/wildfly8/standalone/log/
-      - ../target/wildfly/tmp/:/tmp/
+      - ../target/wildfly/bem/log/:/pack/wildfly8/standalone/log/
+      - ../target/wildfly/bem/tmp/:/tmp/
       # Application
       - ../configuration/bemyndigelse.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/bemyndigelse.properties
       - ../configuration/log4j-bem.xml:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/log4j-bem.xml

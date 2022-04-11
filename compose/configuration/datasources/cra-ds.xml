@@ -1,21 +1,21 @@
-<datasources xmlns="http://www.jboss.org/ironjacamar/schema"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_1.xsd">
-    <datasource jndi-name="java:jboss/datasources/CRARO" pool-name="craDS" enabled="true" spy="true">
-        <connection-url>jdbc:mysql://bemdb:3306/bemyndigelse?autoReconnect=true</connection-url>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<datasources>
+    <datasource jndi-name="java:jboss/datasources/CRA" pool-name="craDS" enabled="true" spy="true">
+        <connection-url>jdbc:mysql://cradb/cra?autoReconnect=true</connection-url>
         <driver>mysql</driver>
-        <pool>
-            <max-pool-size>30</max-pool-size>
-        </pool>
         <security>
-            <user-name>root</user-name>
-            <password></password>
+            <user-name>cra</user-name>
+            <password>cra</password>
         </security>
         <validation>
             <check-valid-connection-sql>select 1</check-valid-connection-sql>
-            <validate-on-match>false</validate-on-match>
+            <validate-on-match>true</validate-on-match>
             <background-validation>true</background-validation>
             <background-validation-millis>10000</background-validation-millis>
         </validation>
+        <connection-property name="useServerPrepStmts">false</connection-property>
+        <connection-property name="rewriteBatchedStatements">true</connection-property>
     </datasource>
 </datasources>
+
