@@ -110,6 +110,3 @@ services:
       - ../configuration/FMK-KRS-TEST.jks:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/FMK-KRS-TEST.jks
       - ../configuration/log4j-nspslalog.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/log4j-nspslalog.properties
       - ../configuration/nspslalog-bem.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
-      # Datasources
-      - ../configuration/datasources/bem-ds.xml:/pack/wildfly8/standalone/deployments/bem-ds.xml
-      - ../configuration/datasources/cra-ds.xml:/pack/wildfly8/standalone/deployments/cra-ds.xml
