@@ -21,6 +21,7 @@
         <ref bean="systemtestOCES3CertificateRevocationSource"/>
         <ref bean="systemtest8CertificateRevocationSource"/>
         <ref bean="systemtest19CertificateRevocationSource"/>
+        <ref bean="systemtest34CertificateRevocationSource"/>
     </util:list>
 
     <bean id="systemtestOCES3CertificateRevocationSource" class="dk.nsi.nsp.cra.bootstrap.RemoteCertificateRevocationSource">
@@ -44,4 +45,10 @@
         <constructor-arg ref="certificateResolver"/>
     </bean>
 
+    <bean id="systemtest34CertificateRevocationSource" class="dk.nsi.nsp.cra.bootstrap.RemoteCertificateRevocationSource">
+        <constructor-arg value="http://m.aia.systemtest34.trust2408.com/systemtest34-ca.cer" type="java.lang.String" />
+        <constructor-arg value="http://crl.systemtest34.trust2408.com/systemtest34.crl" type="java.lang.String" />
+        <constructor-arg ref="certificateStore"/>
+        <constructor-arg ref="certificateResolver"/>
+    </bean>
 </beans>
