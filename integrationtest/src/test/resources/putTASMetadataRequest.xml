@@ -1,0 +1,49 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dgws="http://www.medcom.dk/dgws/2006/04/dgws-1.0.xsd" xmlns:oas="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <PutMetadataRequest xmlns="http://nsi.dk/bemyndigelse/2017/08/01/">
+            <Domain>Trifork</Domain>
+            <SystemId>TAS</SystemId>
+            <SystemLongName>Tilskudsansøgningsservicen</SystemLongName>
+            <Permission>
+                <PermissionId>LæsKladder</PermissionId>
+                <PermissionDescription>Vise kladder for tilskudsansøgninger</PermissionDescription>
+            </Permission>
+            <Permission>
+                <PermissionId>SkrivKladder</PermissionId>
+                <PermissionDescription>Rette og slette kladder for tilskudsansøgninger</PermissionDescription>
+            </Permission>
+            <Permission>
+                <PermissionId>LæsSager</PermissionId>
+                <PermissionDescription>Vise indsendte tilskudsansøgninger</PermissionDescription>
+            </Permission>
+            <Permission>
+                <PermissionId>SkrivSager</PermissionId>
+                <PermissionDescription>Indsende tilskudsansøgninger og YO-svar</PermissionDescription>
+            </Permission>
+            <EnableAsteriskPermission>true</EnableAsteriskPermission>
+            <Role>
+                <RoleId>Læge</RoleId>
+                <RoleDescription>Læge</RoleDescription>
+                <DelegatablePermissions>
+                    <PermissionId>LæsKladder</PermissionId>
+                    <PermissionId>SkrivKladder</PermissionId>
+                    <PermissionId>LæsSager</PermissionId>
+                </DelegatablePermissions>
+            </Role>
+            <Role>
+                <RoleId>Tandlæge</RoleId>
+                <RoleDescription>Tandlæge</RoleDescription>
+                <DelegatablePermissions>
+                    <PermissionId>LæsKladder</PermissionId>
+                    <PermissionId>SkrivKladder</PermissionId>
+                    <PermissionId>LæsSager</PermissionId>
+                </DelegatablePermissions>
+            </Role>
+            <Role>
+                <RoleId>Sygeplejerske</RoleId>
+                <RoleDescription>Sygeplejerske</RoleDescription>
+            </Role>
+        </PutMetadataRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

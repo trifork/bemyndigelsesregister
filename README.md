@@ -1,44 +1,44 @@
 Bemyndigelsesservice
 ===
 
-Build Release
+Bemyndigelsesservicen (BEM) anvendes til at oprette bemyndigelser fra en person, som har ret til at anvende et IT-system, til en anden person. En bemyndigelse giver en person ret til at handle på den bemyndigendes vegne og gælder som udgangspunkt 2 år. En bemyndigelse angiver systemet, arbejdsfunktionen, den gyldige tidsperiode og de specifikke rettigheder den gælder til. Den bemyndigede og den bemyndigende angives ved deres CPR-numre, endvidere kan bemyndigelsen begrænses til et bestemt CVR-nummer.
+
+
+Development build
 ===
-To build version 1.6 e.g.:
+To build, run Maven command:
 
-	mvn -DreleaseVersion=1.6 -DdevelopmentVersion=1.7-SNAPSHOT -DautoVersionSubmodules=true -Dtag=bemyndigelsesregister-1.6 --batch-mode -Dresume=false release:prepare flyway:clean compile flyway:migrate release:perform -s settings.xml
+	mvn clean install
 
+This will compile, build the war-file and run unit tests. 
 
-	hvor settings.xml indeholder følgende:
-	<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-    	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                          https://maven.apache.org/xsd/settings-1.0.0.xsd">
-    	<servers>
-    		<server>
-    			<id>trifork.snapshots</id>
-    			<username>fmk</username>
-    			<password>fmk123</password>
-    		</server>
-    		<server>
-    			<id>trifork.releases</id>
-    			<username>fmk</username>
-    			<password>fmk123</password>
-    		</server>
-    	</servers>
-    </settings>
-
-
-Husk at inkludere filen bemyndigelsesservice/src/main/resources/db/manual/trifork_data.sql når der releases til systemer der skal køre bemyndigelse for FMK eller DDV fra Trifork.
-
-Running with MySQL
+Docker deployment
 ===
+To run service in Docker, run Docker command:
 
-```
-CREATE USER 'bemyndigelse'@'localhost' IDENTIFIED BY '';
-CREATE DATABASE bemyndigelse;
-GRANT ALL PRIVILEGES ON bemyndigelse.* TO 'bemyndigelse'@'%';
+	cd compose/development
+	docker-compose up -d --build
 
-CREATE DATABASE bemyndigelsetest;
-GRANT ALL PRIVILEGES ON bemyndigelsetest.* TO 'bemyndigelse'@'%';
-```
+This will build docker images, including MariaDB, initialize database using FlyWay, and bring up the BEM service.
 
+To check if service is running, open this URL in a browser:
+
+    http://localhost:8080/bem/health
+
+Running integration tests
+===
+Integration tests are running against service running in docker. After bringing up Docker as described above, run the integrationtests using Maven: 
+
+	mvn clean install -rf :integrationtest -PITs
+
+
+CRA service
+===
+Endpoints:
+
+    http://localhost:8089/cra/version
+    http://localhost:8089/cra/status
+    http://localhost:8089/cra/job/revokeUpdate/start
+    http://localhost:8089/cra/job/revokeUpdate/status
+    http://localhost:8089/cra/job/cleanupRevocationLists/start
+    http://localhost:8089/cra/job/cleanupRevocationLists/status

@@ -1,0 +1,2343 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:GetDelegationsResponse xmlns:ns2="http://nsi.dk/bemyndigelse/2017/08/01/">
+            <ns2:Delegation>
+                <ns2:DelegationId>b54b5817-6b15-412b-8608-ebd87e421226</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111111112</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-08-31T09:43:33.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-08-31T09:43:33.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-01T09:28:17.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>d4fb2323-ebeb-4256-85cf-ae3cc7f952c9</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-08-31T09:43:33.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-08-31T09:43:33.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-01T09:28:17.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>48ba5057-132b-4c19-a928-51ef3da93b08</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111111112</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-01T09:28:17.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-01T09:28:17.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-01T13:33:59.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>5bdb89cb-fbd0-432b-ae36-ef59a641938c</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-01T09:28:17.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-01T09:28:17.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-01T13:33:59.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>4fbe4262-2f3e-4335-89c4-b3c79f41e647</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111111112</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-01T13:33:59.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-01T13:33:59.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-01T13:34:17.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>ff48e015-e7a1-4867-98b3-b04d92988bb7</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-01T13:33:59.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-01T13:33:59.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-01T13:34:17.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>7fef0dbd-8d43-4689-8e97-cb60981d9ff8</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111111112</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-01T13:34:17.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-01T13:34:17.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2023-09-01T13:34:17.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>f755fa32-d7b2-4647-9f38-54422cb921be</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-01T13:34:17.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-01T13:34:17.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:02:07.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>d52f2c6a-406c-4419-a345-6eaf97536f7e</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:02:07.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:02:07.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:04:28.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>fc225f63-0918-4024-88a8-624a8306d60f</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:02:07.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:02:07.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:04:28.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>6eade033-cb4b-4887-8a54-fe7c2ef47303</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:04:28.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:04:28.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:53:01.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>df77c172-3924-48c4-862d-157f23e8979e</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:04:28.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:04:28.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:53:01.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>f757df85-6908-47ce-8c6f-65e2d9ce3329</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:53:01.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:53:01.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:55:58.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>fc62a152-4458-4f7b-b72a-fea02a4d9c77</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:53:01.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:53:01.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:55:58.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>2a103343-244a-4fc3-9973-f5ff4acba7de</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:55:58.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:55:58.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:59:34.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>0a0ba5e2-9271-4a2c-80af-166319a5b7d2</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:55:58.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:55:58.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T11:59:34.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>620e9052-7569-41c3-8097-ddf6ec365ddc</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:59:34.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:59:34.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:00:16.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>52b94e5d-08cb-430e-bc9e-1b2e6826ca10</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T11:59:34.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T11:59:34.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:00:16.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>fb230721-0708-47e3-852f-25d208a3bbbe</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:00:16.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:00:16.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:05:10.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>36f4abfc-4c05-4630-af26-f058e9402e6e</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:00:16.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:00:16.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:05:10.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>4b490d35-8672-4591-be06-d8999c043117</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:05:10.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:05:10.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:05:55.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>a697738c-efa6-4435-8ce3-130f3ad9fb63</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:05:10.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:05:10.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:05:55.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>dafc2f39-b407-4160-9336-f2dcd0663e49</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:05:55.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:05:55.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:07:44.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>0b84c8d9-1823-4f97-9e45-860aba531973</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:05:55.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:05:55.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:07:44.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>4a54a650-1bf1-429e-a50c-afa11ea15ed1</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:07:44.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:07:44.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:08:39.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>b9a7b652-1065-4e38-896e-be2b17eb40f8</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:07:44.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:07:44.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:08:39.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>f4b185aa-5e42-47fb-b826-281489941949</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:08:39.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:08:39.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:12:12.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>1a430841-20e5-4650-bfc8-34d107305586</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:08:39.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:08:39.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:12:12.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>9c30ca76-341a-4bfc-bc35-e7b2ae46773c</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:12:12.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:12:12.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:14:01.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>1d001290-197d-45ad-97fc-9ffd30c1f224</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:12:12.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:12:12.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2021-09-04T12:14:01.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>34b78921-44e1-4a22-bfba-7f091e5eec5d</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>1111112222</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:14:01.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:14:01.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2023-09-04T12:14:01.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+            <ns2:Delegation>
+                <ns2:DelegationId>99a75ae7-f4ec-4d10-bdb8-9c6f8dd3a20e</ns2:DelegationId>
+                <ns2:DelegatorCpr>0501792275</ns2:DelegatorCpr>
+                <ns2:DelegateeCpr>0101010101</ns2:DelegateeCpr>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                </ns2:Role>
+                <ns2:State>Godkendt</ns2:State>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Created>2021-09-04T12:14:01.000Z</ns2:Created>
+                <ns2:EffectiveFrom>2021-09-04T12:14:01.000Z</ns2:EffectiveFrom>
+                <ns2:EffectiveTo>2023-09-04T12:14:01.000Z</ns2:EffectiveTo>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:NotDelegatedPermission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:NotDelegatedPermission>
+                <ns2:UndelegatablePermission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:UndelegatablePermission>
+            </ns2:Delegation>
+        </ns2:GetDelegationsResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

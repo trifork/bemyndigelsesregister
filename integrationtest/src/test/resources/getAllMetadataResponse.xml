@@ -1,0 +1,382 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:GetAllMetadataResponse xmlns:ns2="http://nsi.dk/bemyndigelse/2017/08/01/">
+            <ns2:Domain>Trifork</ns2:Domain>
+            <ns2:Metadata>
+                <ns2:System>
+                    <ns2:SystemId>FMK</ns2:SystemId>
+                    <ns2:SystemLongName>Det Fælles Medicinkort</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Permission>
+                    <ns2:PermissionId>BorgerOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Borger opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sundhedsfagligt opslag</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Recept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret eller annuller recept</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller seponer lægemiddelordination</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet effektuering (indgivelse/udlevering af et lægemiddel)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt/fjern privatmarkering</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med værdispring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vis privatmarkeret med samtykke</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indlæg/udskriv via FMK-snitflade 1.4.0</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Sæt markering for ajourføring</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                    <ns2:PermissionDescription>Ændring af status for løs recept (Opret ordination på baggrund af løs recept eller marker løs recept ”ikke aktuel”)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                    <ns2:PermissionDescription>Bestil udlevering eller ny recept</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret tilknytning til medicinadministration og Indlæg/udskriv fra FMK 1.4.2 og 1.4.4</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                    <ns2:PermissionDescription>Registrer klinisk stamdata</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:EnableAsteriskPermission>true</ns2:EnableAsteriskPermission>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                        <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                        <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                        <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                        <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                        <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                        <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                        <ns2:PermissionId>RegistrerKliniskStamdata</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                    <ns2:UndelegatablePermissions>
+                        <ns2:PermissionId>Recept</ns2:PermissionId>
+                    </ns2:UndelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Tandlæge</ns2:RoleId>
+                    <ns2:RoleDescription>Tandlæge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                        <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
+                        <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                        <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                        <ns2:PermissionId>Afstemning</ns2:PermissionId>
+                        <ns2:PermissionId>LøsRecept</ns2:PermissionId>
+                        <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                    <ns2:UndelegatablePermissions>
+                        <ns2:PermissionId>Recept</ns2:PermissionId>
+                    </ns2:UndelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Jordemoder</ns2:RoleId>
+                    <ns2:RoleDescription>Jordemoder</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                        <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                        <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                        <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Sygeplejerske</ns2:RoleId>
+                    <ns2:RoleDescription>Sygeplejerske</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                        <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                        <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                        <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Social- og sundhedsassistent</ns2:RoleId>
+                    <ns2:RoleDescription>Social- og sundhedsassistent</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                        <ns2:PermissionId>Effektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretVærdispring</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                        <ns2:PermissionId>Suspendering</ns2:PermissionId>
+                        <ns2:PermissionId>BestilEffektuering</ns2:PermissionId>
+                        <ns2:PermissionId>Tilknytning</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Social- og sundhedshjælper</ns2:RoleId>
+                    <ns2:RoleDescription>Social- og sundhedshjælper</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Sundhedsplejerske</ns2:RoleId>
+                    <ns2:RoleDescription>Sundhedsplejerske</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Farmaceut</ns2:RoleId>
+                    <ns2:RoleDescription>Farmaceut</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Farmakonom</ns2:RoleId>
+                    <ns2:RoleDescription>Farmakonom</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Assistent for Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Assistent for Læge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Assistent for Tandlæge</ns2:RoleId>
+                    <ns2:RoleDescription>Assistent for Tandlæge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Assistent for Jordemoder</ns2:RoleId>
+                    <ns2:RoleDescription>Assistent for Jordemoder</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Assistent for Sygeplejer</ns2:RoleId>
+                    <ns2:RoleDescription>Assistent for Sygeplejer</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Assistent for Social- og sundhedsassistent</ns2:RoleId>
+                    <ns2:RoleDescription>Assistent for Social- og sundhedsassistent</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Borger</ns2:RoleId>
+                    <ns2:RoleDescription>Borger</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Forældermyndighed</ns2:RoleId>
+                    <ns2:RoleDescription>Forældermyndighed</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Værge</ns2:RoleId>
+                    <ns2:RoleDescription>Værge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Web administrator</ns2:RoleId>
+                    <ns2:RoleDescription>Web administrator</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Apoteker</ns2:RoleId>
+                    <ns2:RoleDescription>Apoteker</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
+                        <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
+                        <ns2:PermissionId>VisPrivatmarkeretSamtykke</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+            </ns2:Metadata>
+            <ns2:Metadata>
+                <ns2:System>
+                    <ns2:SystemId>DDV</ns2:SystemId>
+                    <ns2:SystemLongName>Det Danske Vaccinationsregister</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Permission>
+                    <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                    <ns2:PermissionDescription>Se Vaccinationer</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet vaccinationer</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VaccinationVedligeholdAnbefalet</ns2:PermissionId>
+                    <ns2:PermissionDescription>Opret, ret eller slet anbefalede vaccinationer</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>VaccinationGodkend</ns2:PermissionId>
+                    <ns2:PermissionDescription>Godkend Vaccinationer</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>NogetIngenHar</ns2:PermissionId>
+                    <ns2:PermissionDescription>En rettighed ingen kan delegere</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:EnableAsteriskPermission>true</ns2:EnableAsteriskPermission>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                        <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
+                        <ns2:PermissionId>VaccinationVedligeholdAnbefalet</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Tandlæge</ns2:RoleId>
+                    <ns2:RoleDescription>Tandlæge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                        <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
+                        <ns2:PermissionId>VaccinationVedligeholdAnbefalet</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Sygeplejerske</ns2:RoleId>
+                    <ns2:RoleDescription>Sygeplejerske</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
+                        <ns2:PermissionId>VaccinationGodkend</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+            </ns2:Metadata>
+            <ns2:Metadata>
+                <ns2:System>
+                    <ns2:SystemId>TAS</ns2:SystemId>
+                    <ns2:SystemLongName>Tilskudsansøgningsservicen</ns2:SystemLongName>
+                </ns2:System>
+                <ns2:Permission>
+                    <ns2:PermissionId>LæsKladder</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vise kladder for tilskudsansøgninger</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SkrivKladder</ns2:PermissionId>
+                    <ns2:PermissionDescription>Rette og slette kladder for tilskudsansøgninger</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>LæsSager</ns2:PermissionId>
+                    <ns2:PermissionDescription>Vise indsendte tilskudsansøgninger</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>SkrivSager</ns2:PermissionId>
+                    <ns2:PermissionDescription>Indsende tilskudsansøgninger og YO-svar</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:Permission>
+                    <ns2:PermissionId>*</ns2:PermissionId>
+                    <ns2:PermissionDescription>Alle delegerbare rettigheder (inkl. fremtidige)</ns2:PermissionDescription>
+                </ns2:Permission>
+                <ns2:EnableAsteriskPermission>true</ns2:EnableAsteriskPermission>
+                <ns2:Role>
+                    <ns2:RoleId>Læge</ns2:RoleId>
+                    <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>LæsKladder</ns2:PermissionId>
+                        <ns2:PermissionId>SkrivKladder</ns2:PermissionId>
+                        <ns2:PermissionId>LæsSager</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Tandlæge</ns2:RoleId>
+                    <ns2:RoleDescription>Tandlæge</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>LæsKladder</ns2:PermissionId>
+                        <ns2:PermissionId>SkrivKladder</ns2:PermissionId>
+                        <ns2:PermissionId>LæsSager</ns2:PermissionId>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+                <ns2:Role>
+                    <ns2:RoleId>Sygeplejerske</ns2:RoleId>
+                    <ns2:RoleDescription>Sygeplejerske</ns2:RoleDescription>
+                    <ns2:DelegatablePermissions>
+                        <ns2:PermissionId>*</ns2:PermissionId>
+                    </ns2:DelegatablePermissions>
+                </ns2:Role>
+            </ns2:Metadata>
+        </ns2:GetAllMetadataResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

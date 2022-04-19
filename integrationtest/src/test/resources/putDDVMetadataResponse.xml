@@ -1,0 +1,6 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:PutMetadataResponse xmlns:ns2="http://nsi.dk/bemyndigelse/2017/08/01/"/>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

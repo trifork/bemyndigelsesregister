@@ -1,30 +1,13 @@
-FROM tomcat:7-jre8-slim
+ARG BASE_TAG=latest
+FROM registry.nspop.dk/platform/nsp:${BASE_TAG}
 
-ENV TZ Europe/Copenhagen
+# Copy configuration files
+COPY etc/wildfly /pack/wildfly8/
 
-ENV HTTP_PORT "8080"
-ENV AJP_PORT "8009"
-ENV SHUTDOWN_PORT "8005"
-ENV CATALINA_OPTS "-Xms768m -Xmx768m -XX:MaxMetaspaceSize=456m -XX:CompressedClassSpaceSize=64m  -Dhttp.port=${HTTP_PORT} -Dajp.port=${AJP_PORT} -Dshutdown.port=${SHUTDOWN_PORT} -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n -javaagent:/usr/local/tomcat/jolokia-agent.jar=port=8888,config=/usr/local/tomcat/conf/agent.properties -Dbemyndigelse.home=/usr/local/tomcat/conf/bemyndigelse.properties -Dlog4j.configuration=file:///usr/local/tomcat/conf/log4j.xml"
+# Copy the war file to the deployment directory
+COPY service/target/bem.war /pack/wildfly8/standalone/deployments/
 
-# FROM TEST1: 
-# /pack/jdk/bin/java -Djava.util.logging.config.file=/pack/tomcat/conf/logging.properties -Xms768m -Xmx768m -XX:MaxMetaspaceSize=456m -XX:CompressedClassSpaceSize=64m -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Dbemyndigelse.home=/pack/tomcat/conf/bemyndigelse.properties -Dlog4j.configuration=file:///pack/tomcat/conf/log4j.xml -Djava.endorsed.dirs=/pack/tomcat/endorsed -classpath /pack/tomcat/bin/bootstrap.jar:/pack/tomcat/bin/tomcat-juli.jar -Dcatalina.base=/pack/tomcat -Dcatalina.home=/pack/tomcat -Djava.io.tmpdir=/pack/tomcat/temp org.apache.catalina.startup.Bootstrap start
+RUN echo "#Skip nothing" > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
 
-WORKDIR /usr/local/tomcat
-
-RUN rm -rf webapps/ROOT
-RUN rm -rf webapps/docs
-RUN rm -rf webapps/examples
-
-COPY ./bemyndigelse-integration-test/target/cargo/configurations/tomcat7x/webapps/ROOT.war ./webapps/
-RUN apt-get -y update
-RUN apt-get -y install wget
-RUN wget http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/1.6.1/jolokia-jvm-1.6.1-agent.jar -O jolokia-agent.jar
-
-# Configure tomcat
-COPY ./bemyndigelse-shared/src/main/resources/bemyndigelse.properties ./conf/
-COPY ./bemyndigelse-shared/src/main/resources/log4j.xml ./conf/
-
-EXPOSE ${HTTP_PORT}
-
-ENTRYPOINT ["catalina.sh", "run"]
+RUN echo '.*/(health|dksconfig)$' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
+#RUN echo '.*' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
