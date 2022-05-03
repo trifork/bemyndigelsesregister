@@ -4,6 +4,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Delegation;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.WhitelistType;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.WhitelistDao;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
@@ -67,6 +68,13 @@ public abstract class AbstractServiceImpl {
 
             if (!whitelistDao.exists(whitelist, WhitelistType.SYSTEM_CVR, organisation.getIdentifier())) {
                 throw new SecurityException("Organisation " + organisation.getIdentifier() + " not whitelisted for " + whitelist);
+            }
+        }
+
+        if (securityContext.getMessage().isPresent()) {
+            SecurityContext.Message message = securityContext.getMessage().get();
+            if (message.getIdentifier().isPresent()) {
+                RequestContext.get().setMessageId(message.getIdentifier().get());
             }
         }
     }
