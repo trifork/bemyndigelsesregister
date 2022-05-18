@@ -20,13 +20,13 @@ public class HealthController {
     @Value("${github.home}")
     String githubHome;
 
-    @RequestMapping("/health")
+    @RequestMapping(value = {"/health", "/bem/health"})
     public @ResponseBody
     String health() {
         return "OK";
     }
 
-    @RequestMapping("/health/version")
+    @RequestMapping(value = {"/health/version", "/bem/health/version"})
     @ResponseBody
     public String version() {
         return systemService.getImplementationBuild();

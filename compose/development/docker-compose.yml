@@ -54,33 +54,6 @@ services:
       - ../database/db/migration/bem/V15__Whitelist_Trifork_CVR.sql:/flyway/sql/V15__Whitelist_Trifork_CVR.sql
     depends_on:
       - bemdb
-  cra:
-    image: registry.nspop.dk/components/cra:1.1.14.1
-    ports:
-      - "8089:8080"
-      - "5009:5005"
-    depends_on:
-      cradb:
-        condition: service_started
-    networks:
-      - bem_net
-    environment:
-      - LOG_MAX_FILE_SIZE=10MB
-      - LOG_MAX_BACKUP_INDEX=5
-      - NSP_TEST_FEDERATION=true
-      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
-    volumes:
-      # Logging
-      - ../target/wildfly/cra/log/:/pack/wildfly8/standalone/log/
-      - ../target/wildfly/cra/tmp/:/tmp/
-      # Application
-      - ../configuration/cra/log4j-cra.xml:/pack/wildfly/standalone/configuration/log4j-cra.xml
-      - ../configuration/cra/config.xml:/pack/wildfly/standalone/configuration/cra/config.xml
-      - ../configuration/cra/seal.xml:/pack/wildfly/standalone/configuration/cra/seal.xml
-      - ../configuration/cra/bootstrap.xml:/pack/wildfly/standalone/configuration/cra/bootstrap.xml
-      - ../configuration/cra/services.xml:/pack/wildfly/standalone/configuration/cra/services.xml
-      # Datasources
-      - ../configuration/datasources/cra-ds.xml:/pack/wildfly/standalone/deployments/cra-ds.xml
   bem:
     build: ../..
     image: bem:latest
@@ -110,3 +83,5 @@ services:
       - ../configuration/FMK-KRS-TEST.jks:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/FMK-KRS-TEST.jks
       - ../configuration/log4j-nspslalog.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/log4j-nspslalog.properties
       - ../configuration/nspslalog-bem.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
+      # Wildfly servlet container (set allow-non-standard-wrappers="true" for servlet container if debug level with LoggerFilter.java)
+      - ../configuration/standalone.xml:/pack/wildfly8/standalone/configuration/standalone.xml

@@ -31,7 +31,7 @@ public class DKSServlet {
     @Value("${dcc.endpoint}")
     private String dccEndpoint;
 
-    @RequestMapping("/dksconfig")
+    @RequestMapping(value = {"/dksconfig", "/bem/dksconfig"})
     @ResponseBody
     public ModelAndView handleRequest(HttpServletRequest req, HttpServletResponse res) throws Exception {
         String env = req.getParameter("Env");
