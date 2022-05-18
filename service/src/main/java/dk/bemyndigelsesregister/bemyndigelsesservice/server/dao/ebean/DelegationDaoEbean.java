@@ -8,10 +8,7 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.DelegationDao;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -20,8 +17,6 @@ import java.util.*;
  */
 @Repository
 public class DelegationDaoEbean extends SupportDao<Delegation> implements DelegationDao {
-    private final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-
     protected DelegationDaoEbean() {
         super(Delegation.class);
     }
