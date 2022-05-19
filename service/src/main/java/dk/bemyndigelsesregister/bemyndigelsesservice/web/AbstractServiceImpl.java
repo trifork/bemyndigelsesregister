@@ -5,9 +5,10 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.WhitelistType;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.DelegationManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.MetadataManager;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.RequestContext;
+import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.audit.AuditLogger;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.WhitelistDao;
-import dk.bemyndigelsesregister.bemyndigelsesservice.server.SystemService;
+import dk.sds.nsp.security.Security;
 import dk.sds.nsp.security.SecurityContext;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -29,10 +30,18 @@ public abstract class AbstractServiceImpl {
     @Inject
     WhitelistDao whitelistDao;
 
-    private Logger logger;
+    private final Logger logger;
 
     public AbstractServiceImpl(Logger logger) {
         this.logger = logger;
+    }
+
+    protected SecurityContext getSecurityContext() {
+        try {
+            return Security.getSecurityContext();
+        } catch (Exception ex) {
+            throw new SecurityException("Service must be called with DGWS security");
+        }
     }
 
     protected void checkSecurityTicket(SecurityContext securityContext) {

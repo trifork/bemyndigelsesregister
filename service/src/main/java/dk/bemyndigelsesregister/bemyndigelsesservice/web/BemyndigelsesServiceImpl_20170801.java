@@ -7,7 +7,6 @@ import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Metadata;
 import dk.bemyndigelsesregister.bemyndigelsesservice.domain.Status;
 import dk.bemyndigelsesregister.bemyndigelsesservice.server.dao.ServiceTypeMapper_20170801;
 import dk.nsi.bemyndigelse._2017._08._01.*;
-import dk.sds.nsp.security.Security;
 import dk.sds.nsp.security.SecurityContext;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -23,7 +22,7 @@ import java.util.*;
 @Repository("bemyndigelsesService_2017_08_01")
 @Endpoint
 public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl implements BemyndigelsesService_20170801 {
-    private static Logger logger = Logger.getLogger(BemyndigelsesServiceImpl_20170801.class);
+    private static final Logger logger = Logger.getLogger(BemyndigelsesServiceImpl_20170801.class);
 
     @Inject
     ServiceTypeMapper_20170801 typeMapper;
@@ -37,7 +36,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     public CreateDelegationsResponse createDelegations(@RequestPayload CreateDelegationsRequest request, SoapHeader soapHeader) {
         try {
-            SecurityContext securityContext = Security.getSecurityContext();
+            SecurityContext securityContext = getSecurityContext();
             checkSecurityTicket(securityContext);
 
             // auditlog call - one for each delegatee
@@ -90,7 +89,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     public GetDelegationsResponse getDelegations(@RequestPayload GetDelegationsRequest request, SoapHeader soapHeader) {
         try {
-            SecurityContext securityContext = Security.getSecurityContext();
+            SecurityContext securityContext = getSecurityContext();
             checkSecurityTicket(securityContext);
 
             Collection<Delegation> delegations = getDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getDelegationId(), request.getEffectiveFrom(), request.getEffectiveTo(), securityContext);
@@ -113,7 +112,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     public DeleteDelegationsResponse deleteDelegations(@RequestPayload DeleteDelegationsRequest request, SoapHeader soapHeader) {
         try {
-            SecurityContext securityContext = Security.getSecurityContext();
+            SecurityContext securityContext = getSecurityContext();
             checkSecurityTicket(securityContext);
 
             List<String> result = deleteDelegationsCommon(request.getDelegatorCpr(), request.getDelegateeCpr(), request.getListOfDelegationIds().getDelegationId(), request.getDeletionDate(), securityContext);
@@ -135,7 +134,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     public PutMetadataResponse putMetadata(@RequestPayload PutMetadataRequest request, SoapHeader soapHeader) {
         try {
-            SecurityContext securityContext = Security.getSecurityContext();
+            SecurityContext securityContext = getSecurityContext();
             checkSecurityTicket(securityContext, false, "bemyndigelsesservice.indlaesMetadata");
 
             auditLogger.log("Indlæs metadata", null, securityContext);
@@ -223,7 +222,7 @@ public class BemyndigelsesServiceImpl_20170801 extends AbstractServiceImpl imple
     @ResponsePayload
     public GetExpirationInfoResponse getExpirationInfo(@RequestPayload GetExpirationInfoRequest request, SoapHeader soapHeader) {
         try {
-            SecurityContext securityContext = Security.getSecurityContext();
+            SecurityContext securityContext = getSecurityContext();
             checkSecurityTicket(securityContext);
 
             auditLogger.log("Hent information om udløbne bemyndigelser", null, securityContext);
