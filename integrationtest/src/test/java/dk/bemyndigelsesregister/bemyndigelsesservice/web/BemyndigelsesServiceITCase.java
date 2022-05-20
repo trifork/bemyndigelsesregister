@@ -20,6 +20,7 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
     private static final String GET_EXPIRATION_INFO_SOAPACTION = "http://nsi.dk/bemyndigelse/2017/08/01#GetExpirationInfo";
 
     private static final String USER_NOT_FOUND_ERROR = "Calling user not found in security context";
+    private static final String NO_SECURITY_ERROR = "Service must be called with DGWS or IDWS security";
 
     private static final String FMK_NAME = "Det Fælles Medicinkort";
 
@@ -33,7 +34,7 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
         putMetadata("FMK");
 
         String request = loadXML("/getFMKMetadataRequest.xml");
-        String response = httpWrite(GET_METADATA_SOAPACTION, request, CallMode.DGWS_LEVEL_3);
+        String response = httpWrite(GET_METADATA_SOAPACTION, request, CallMode.PLAIN);
         checkResponse("/getFMKMetadataResponse.xml", response);
     }
 
@@ -43,7 +44,7 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
         putMetadata("DDV");
 
         String request = loadXML("/getDDVMetadataRequest.xml");
-        String response = httpWrite(GET_METADATA_SOAPACTION, request, CallMode.DGWS_LEVEL_3);
+        String response = httpWrite(GET_METADATA_SOAPACTION, request, CallMode.PLAIN);
         checkResponse("/getDDVMetadataResponse.xml", response);
     }
 
@@ -52,18 +53,20 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
         putMetadata("TAS");
 
         String request = loadXML("/getTASMetadataRequest.xml");
-        String response = httpWrite(GET_METADATA_SOAPACTION, request, CallMode.DGWS_LEVEL_3);
+        String response = httpWrite(GET_METADATA_SOAPACTION, request, CallMode.PLAIN);
         checkResponse("/getTASMetadataResponse.xml", response);
     }
 
-    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    @Test
     public void cannotPutMetadataUsingPlainSOAP() throws Exception {
-        httpWrite(PUT_METADATA_SOAPACTION, loadXML("/putTASMetadataRequest.xml"), CallMode.PLAIN);
+        String response = httpWrite(PUT_METADATA_SOAPACTION, loadXML("/putTASMetadataRequest.xml"), CallMode.PLAIN);
+        assertTrue(response.contains(NO_SECURITY_ERROR));
     }
 
-    @Test(expected = org.apache.http.NoHttpResponseException.class)
-    public void cannotGetMetadataUsingPlainSOAP() throws Exception {
-        httpWrite(GET_METADATA_SOAPACTION, loadXML("/getTASMetadataRequest.xml"), CallMode.PLAIN);
+    @Test
+    public void canGetMetadataUsingPlainSOAP() throws Exception {
+        String response = httpWrite(GET_METADATA_SOAPACTION, loadXML("/getTASMetadataRequest.xml"), CallMode.PLAIN);
+        checkResponse("/getTASMetadataResponse.xml", response);
     }
 
     @Test
@@ -72,9 +75,11 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
         putMetadata("DDV");
         putMetadata("TAS");
 
-        String response = httpWrite(GET_ALL_METADATA_SOAPACTION, loadXML("/getAllMetadataRequest.xml"), CallMode.DGWS_LEVEL_3);
+        String response = httpWrite(GET_ALL_METADATA_SOAPACTION, loadXML("/getAllMetadataRequest.xml"), CallMode.PLAIN);
 
-        checkResponse("/getAllMetadataResponse.xml", response);
+        assertTrue(response.contains("Det Fælles Medicinkort"));
+        assertTrue(response.contains("Det Danske Vaccinationsregister"));
+        assertTrue(response.contains("Tilskudsansøgningsservicen"));
     }
 
     @Test
@@ -83,7 +88,7 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
 
         String response = httpWrite(CREATE_DELEGATIONS_SOAPACTION, loadXML("/createDelegationsRequest.xml"), CallMode.DGWS_LEVEL_4);
 
-        System.out.println("GetMetadata response: " + response);
+        System.out.println("CreateDelegationsResponse: " + response);
         assertTrue(response.contains("CreateDelegationsResponse"));
         assertTrue(response.contains(FMK_NAME));
 
@@ -98,9 +103,10 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
         assertTrue(response.contains(USER_NOT_FOUND_ERROR));
     }
 
-    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    @Test
     public void cannotCreateDelegationsUsingPlainSOAP() throws Exception {
-        httpWrite(CREATE_DELEGATIONS_SOAPACTION, loadXML("/createDelegationsRequest.xml"), CallMode.PLAIN);
+        String response = httpWrite(CREATE_DELEGATIONS_SOAPACTION, loadXML("/createDelegationsRequest.xml"), CallMode.PLAIN);
+        assertTrue(response.contains(NO_SECURITY_ERROR));
     }
 
     @Test
@@ -109,7 +115,7 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
 
         String response = httpWrite(CREATE_DELEGATIONS_SOAPACTION, loadXML("/createDelegationsRequest.xml"), CallMode.DGWS_LEVEL_4);
 
-        System.out.println("GetMetadata response: " + response);
+        System.out.println("CreateDelegationsResponse: " + response);
         assertTrue(response.contains("CreateDelegationsResponse"));
         assertTrue(response.contains(FMK_NAME));
 
@@ -138,9 +144,10 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
     }
 
 
-    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    @Test
     public void cannotDeleteDelegationsUsingPlainSOAP() throws Exception {
-        httpWrite(DELETE_DELEGATIONS_SOAPACTION, loadXML("/deleteDelegationsRequest.xml"), CallMode.PLAIN);
+        String response = httpWrite(DELETE_DELEGATIONS_SOAPACTION, loadXML("/deleteDelegationsRequest.xml"), CallMode.PLAIN);
+        assertTrue(response.contains(NO_SECURITY_ERROR));
     }
 
     @Test
@@ -149,7 +156,7 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
 
         String response = httpWrite(CREATE_DELEGATIONS_SOAPACTION, loadXML("/createDelegationsRequest.xml"), CallMode.DGWS_LEVEL_4);
 
-        System.out.println("GetMetadata response: " + response);
+        System.out.println("CreateDelegationsResponse: " + response);
         assertTrue(response.contains("CreateDelegationsResponse"));
         assertTrue(response.contains(FMK_NAME));
 
@@ -163,9 +170,10 @@ public class BemyndigelsesServiceITCase extends AbstractServiceITCase {
         assertTrue(response.contains(USER_NOT_FOUND_ERROR));
     }
 
-    @Test(expected = org.apache.http.NoHttpResponseException.class)
+    @Test
     public void cannotGetExpirationInfoUsingPlainSOAP() throws Exception {
-        httpWrite(GET_EXPIRATION_INFO_SOAPACTION, loadXML("/getExpirationInfoRequest.xml"), CallMode.PLAIN);
+        String response = httpWrite(GET_EXPIRATION_INFO_SOAPACTION, loadXML("/getExpirationInfoRequest.xml"), CallMode.PLAIN);
+        assertTrue(response.contains(NO_SECURITY_ERROR));
     }
 
     private void putMetadata(String systemId) throws Exception {

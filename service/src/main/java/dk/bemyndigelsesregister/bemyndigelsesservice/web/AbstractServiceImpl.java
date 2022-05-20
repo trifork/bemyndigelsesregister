@@ -40,7 +40,7 @@ public abstract class AbstractServiceImpl {
         try {
             return Security.getSecurityContext();
         } catch (Exception ex) {
-            throw new SecurityException("Service must be called with DGWS security");
+            throw new SecurityException("Service must be called with DGWS or IDWS security");
         }
     }
 

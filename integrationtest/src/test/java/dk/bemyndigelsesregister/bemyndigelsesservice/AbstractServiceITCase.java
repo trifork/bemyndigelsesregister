@@ -50,7 +50,10 @@ public abstract class AbstractServiceITCase {
 
         HttpClient httpClient = HttpClientBuilder.create().build();
 
-        String endpoint = "http://" + host + ":" + port + "/bem/BemyndigelsesService";
+        String endpoint = "http://" + host + ":" + port;
+        if (callMode == CallMode.PLAIN) {
+            endpoint += "/u";
+        }
         System.out.println(" Calling " + endpoint + ", SOAPAction=" + soapAction);
         HttpPost request = new HttpPost(endpoint);
         request.addHeader("SOAPAction", "\"" + soapAction + "\"");
