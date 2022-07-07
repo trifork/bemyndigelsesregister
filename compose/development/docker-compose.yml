@@ -84,4 +84,4 @@ services:
       - ../configuration/log4j-nspslalog.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/log4j-nspslalog.properties
       - ../configuration/nspslalog-bem.properties:/pack/wildfly8/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
       # Wildfly servlet container (set allow-non-standard-wrappers="true" for servlet container if debug level with LoggerFilter.java)
-      - ../configuration/standalone.xml:/pack/wildfly8/standalone/configuration/standalone.xml
+      # - ../configuration/standalone.xml:/pack/wildfly8/standalone/configuration/standalone.xml

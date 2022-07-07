@@ -157,18 +157,21 @@
             <logger category="dk.sds.nsp.accesshandler" use-parent-handlers="false">
                 <level name="${dk.nsp.log.handler.Level}" />
                 <handlers>
+                    <handler name="CONSOLE"/>
                     <handler name="ACCESSHANDLER_APP"/>
                 </handlers>
             </logger>
             <logger category="dk.sds.nsp.access.log" use-parent-handlers="false">
                 <level name="${dk.nsp.log.access.Level}" />
                 <handlers>
+                    <handler name="CONSOLE"/>
                     <handler name="ACCESSLOG"/>
                 </handlers>
             </logger>
             <logger category="dk.sds.nsp.audit.log" use-parent-handlers="false">
                 <level name="${dk.nsp.log.audit.Level}" />
                 <handlers>
+                    <handler name="CONSOLE"/>
                     <handler name="AUDITLOG"/>
                 </handlers>
             </logger>
