@@ -39,6 +39,7 @@ public class DelegationExportJobTest {
         job.systemService = systemService;
         job.jobEnabled = "true";
         job.batchSize = 5000;
+        job.retentionDays = 180;
     }
 
     @Test

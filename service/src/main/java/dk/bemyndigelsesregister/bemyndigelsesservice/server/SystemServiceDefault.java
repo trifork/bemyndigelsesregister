@@ -14,6 +14,9 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.UUID;
 import java.util.jar.Manifest;
 
@@ -121,6 +124,27 @@ public class SystemServiceDefault implements SystemService {
             throw new RuntimeException("Could not write to file=" + file.getAbsolutePath(), e);
         }
         return file;
+    }
+
+    @Override
+    public int cleanupTempDir(int retentionDays) {
+        Date olderThanDate = Date.from(LocalDateTime.now().minusDays(retentionDays).atZone(ZoneId.systemDefault()).toInstant());
+
+        File tempDir = new File(tempDirLocation);
+        if (tempDir.exists() && tempDir.isDirectory()) {
+            File[] files = tempDir.listFiles(file -> file.isFile() && file.getName().endsWith(".bemyndigelse") && FileUtils.isFileOlder(file, olderThanDate));
+            if (files != null && files.length > 0) {
+                int count = 0;
+                for (File file : files) {
+                    if (file.delete()) {
+                        count++;
+                    }
+                }
+                logger.info("Deleted " + count + " old delegation upload files");
+            }
+        }
+
+        return 0;
     }
 
     @Override

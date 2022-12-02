@@ -8,7 +8,7 @@ networks:
 
 services:
   cradb:
-    image: registry.nspop.dk/playground/cradb:latest
+    image: registry.nspop.dk/platform/cradb:latest
     ports:
       - "8088:3306"
     networks:

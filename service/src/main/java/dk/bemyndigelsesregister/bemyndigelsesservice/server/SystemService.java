@@ -19,5 +19,7 @@ public interface SystemService {
 
     File writeToTempDir(String filename, String data);
 
+    int cleanupTempDir(int retentionDays);
+
     String createUUIDString();
 }

@@ -43,6 +43,9 @@ public class DelegationExportJob {
     @Value("${bemyndigelsesexportjob.batchsize:5000}")
     Integer batchSize;
 
+    @Value("${bemyndigelsesexportjob.retentiondays:180}")
+    Integer retentionDays;
+
     private int batchNo;
 
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
@@ -64,6 +67,9 @@ public class DelegationExportJob {
             exportChangedDelegations(startTime, delegationDao.findByModifiedInPeriod(fromIncluding, toExcluding));
 
             updateLastRun(lastRun, startTime);
+
+            systemService.cleanupTempDir(retentionDays);
+
             logger.info("DelegationExport job ended");
         } else
             logger.info("DelegationExport job disabled");
