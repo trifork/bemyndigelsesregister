@@ -43,7 +43,7 @@ pipeline {
                                                                                         version = sh script: "cd bemyndigelsesregister && mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true
                                                                                         version = version.trim()
 											sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin registry.fmk.netic.dk"
-											sh "cd bemyndigelsesregister && mvn --fail-at-end -Pdev,test clean deploy -DargLine="-Dspring.profiles.active=test -Dcatalina.base=${WORKSPACE} -Dftp.enabled=true"
+											sh "cd bemyndigelsesregister && mvn --fail-at-end -Pdev,test clean deploy -DargLine='-Dspring.profiles.active=test -Dcatalina.base=${WORKSPACE} -Dftp.enabled=true'"
 											bem_image = docker.build("registry.fmk.netic.dk/fmk/bemyndigelsesregister:$version", "--build-arg VERSION=$version --build-arg USERID=$userid ./bemyndigelsesregister")
 											bem_image.push()
 											bem_image.push('latest')
