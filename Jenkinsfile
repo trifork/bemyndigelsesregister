@@ -38,6 +38,7 @@ pipeline {
 								withCredentials([usernamePassword(credentialsId: 'ci_nexus', passwordVariable: 'ORG_GRADLE_PROJECT_mavenPassword', usernameVariable: 'ORG_GRADLE_PROJECT_mavenUser')]) {
 									withCredentials([usernamePassword(credentialsId: 'ci_docker', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
 										configFileProvider([configFile(fileId: 'unique_userid', targetLocation: 'uniqueUserid.py')]) {
+                                                                                     configFileProvider([configFile(fileId: 'trifork-ci-fmk-settings', variable: 'MAVEN_SETTINGS')]) {
 											userid = sh script: "python3 uniqueUserid.py bemyndigelsesregister", returnStdout: true
 											userid = userid.trim()
                                                                                         version = sh script: "cd bemyndigelsesregister && mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true
@@ -47,6 +48,7 @@ pipeline {
 											bem_image = docker.build("registry.fmk.netic.dk/fmk/bemyndigelsesregister:$version", "--build-arg VERSION=$version --build-arg USERID=$userid ./bemyndigelsesregister")
 											bem_image.push()
 											bem_image.push('latest')
+                                                                                     }
 										}
 									}
 								}
