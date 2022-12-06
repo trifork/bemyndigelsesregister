@@ -45,12 +45,12 @@
 		<snapshotRepository>
 			<id>trifork.snapshots</id>
 			<name>Trifork internal snapshot Nexus</name>
-			<url>https://ci.fmk.netic.dk/nexus/content/repositories/snapshots/</url>
+			<url>https://ci.fmk.netic.dk/nexus/repository/snapshots/</url>
 		</snapshotRepository>
 		<repository>
 			<id>trifork.releases</id>
 			<name>Trifork internal releases Nexus</name>
-			<url>https://ci.fmk.netic.dk/nexus/content/repositories/releases</url>
+			<url>https://ci.fmk.netic.dk/nexus/repository/releases</url>
 		</repository>
     </distributionManagement>
 
