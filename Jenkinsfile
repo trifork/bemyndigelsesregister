@@ -18,11 +18,11 @@ pipeline {
 	stages {
 		stage('Checkout') {
 			steps {
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'bemyndigelsesregister']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:trifork/bemyndigelsesregister.git']]])
+				checkout([$class: 'GitSCM', branches: [[name: '*/develop']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'bemyndigelsesregister']], submoduleCfg: [], userRemoteConfigs: [[url: 'git@github.com:trifork/bemyndigelsesregister.git']]])
 				script {
 					GIT_COMMIT = sh(returnStdout: true, script: "cd bemyndigelsesregister && git log -n 1 --pretty=format:'%h'").trim()
 					echo GIT_COMMIT
-					GIT_BRANCH = 'origin/master'
+					GIT_BRANCH = 'origin/develop'
 				}
 			}
 		}
