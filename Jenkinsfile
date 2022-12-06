@@ -42,7 +42,7 @@ pipeline {
                                                                                      configFileProvider([configFile(fileId: 'trifork-ci-fmk-settings', variable: 'MAVEN_SETTINGS')]) {
                                                                                         version = sh script: "cd bemyndigelsesregister && mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true
                                                                                         version = version.trim()
-											sh "cd bemyndigelsesregister && mvn --fail-at-end -Pdev,test clean deploy -DargLine='-Dspring.profiles.active=test -Dcatalina.base=${WORKSPACE} -Dftp.enabled=true'"
+											sh "cd bemyndigelsesregister && mvn -s $MAVEN_SETTINGS --fail-at-end -Pdev,test clean deploy -DargLine='-Dspring.profiles.active=test -Dcatalina.base=${WORKSPACE} -Dftp.enabled=true'"
                                                                                      }
 									             withCredentials([usernamePassword(credentialsId: 'ci_docker', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
 											sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin registry.fmk.netic.dk"
