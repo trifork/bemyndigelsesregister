@@ -26,6 +26,14 @@ RUN echo "=> Starting WildFly server" && \
       /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-class-name=com.mysql.jdbc.Driver)"
      #  /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.cj.jdbc.MysqlXADataSource)"
 
+RUN echo "=> Starting WildFly server" && \
+      bash -c '/opt/jboss/wildfly/bin/standalone.sh &' && \
+    echo "=> Waiting for the server to boot" && \
+      bash -c 'until `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
+    echo "=> Downloading Resteasy-spring driver" && \
+      curl --location --output /tmp/resteasy-spring.jar --url https://search.maven.org/artifact/org.jboss.resteasy.spring/resteasy-spring/3.0.0.Final/jar && \
+    echo "=> Adding resteasy-spring module" && \
+      /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="module add --name=org.jboss.resteasy.resteasy-spring --resources=/tmp/resteasy-spring.jar"
 
 # Copy the war file to the deployment directory
 ADD service/target/bem.war /opt/jboss/wildfly/standalone/deployments/
