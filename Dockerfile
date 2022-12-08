@@ -2,10 +2,8 @@ FROM registry.nspop.dk/platform/nsp:latest AS nspbuilder
 
 FROM quay.io/wildfly/wildfly:latest
 
-RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/
-#RUN mkdir -p /opt/jboss/wildfly/modules/com/mysql/main/
-COPY --from=nspbuilder /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/* /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/
-#COPY --from=nspbuilder /pack/wildfly8/modules/com/mysql/main/* /opt/jboss/wildfly/modules/com/mysql/main/
+RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/dk/sds/
+COPY --from=nspbuilder /pack/wildfly8/modules/system/layers/base/dk/sds/* /opt/jboss/wildfly/modules/system/layers/base/dk/sds/
 
 ENV MYSQL_VERSION 6.0.6
 
