@@ -1,13 +1,13 @@
-ARG BASE_TAG=latest
-FROM registry.nspop.dk/platform/nsp:${BASE_TAG}
+FROM registry.nspop.dk/platform/nsp:latest AS nspbuilder
 
-# Copy configuration files
-COPY etc/wildfly /pack/wildfly8/
+FROM quay.io/wildfly/wildfly:latest
+
+RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/
+COPY --from=nspbuilder /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/* /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/
 
 # Copy the war file to the deployment directory
-COPY service/target/bem.war /pack/wildfly8/standalone/deployments/
+ADD service/target/bem.war /opt/jboss/wildfly/standalone/deployments/
 
-RUN echo "#Skip nothing" > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
+#RUN echo "#Skip nothing" > /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
 
-RUN echo '.*/(health|dksconfig|u)$' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
-#RUN echo '.*' > /pack/wildfly8/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
+#RUN echo '.*/(health|dksconfig|u)$' > /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
