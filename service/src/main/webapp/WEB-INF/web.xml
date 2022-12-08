@@ -11,6 +11,11 @@
         <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
     </context-param>
 
+    <context-param> 
+        <param-name>org.jboss.as.jaxrs.enableSpringIntegration</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>dk.bemyndigelsesregister.bemyndigelsesservice.config</param-value>
