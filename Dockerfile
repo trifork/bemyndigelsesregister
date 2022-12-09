@@ -7,9 +7,8 @@ COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/dk
 COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/org/apache/james /opt/jboss/wildfly/modules/system/layers/base/org/apache/james
 
 #Fix kafka driver
-RUN sed sed -i.bak s/org.apache.kafka.clients/org.apache.kafka.client/g /opt/jboss/wildfly/modules/system/layers/base/dk/nsp/minlog/producer/main/module.xml && rm /opt/jboss/wildfly/modules/system/layers/base/dk/nsp/minlog/producer/main/module.xml.bak
-RUN sed sed -i.bak s/org.apache.kafka.clients/org.apache.kafka.client/g /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/clients/main/module.xml && rm /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/clients/main/module.xml.bak
-RUN sed sed -i.bak s/org.apache.kafka.clients/org.apache.kafka.client/g /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/provider/main/module.xml && rm /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/provider/main/module.xml.bak
+RUN sed -i.bak s/org.apache.kafka.clients/org.apache.kafka.client/g /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/clients/main/module.xml && rm /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/clients/main/module.xml.bak
+RUN sed -i.bak s/org.apache.kafka.clients/org.apache.kafka.client/g /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/provider/main/module.xml && rm /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/kafka/provider/main/module.xml.bak
 
 ENV MYSQL_VERSION 6.0.6
 
