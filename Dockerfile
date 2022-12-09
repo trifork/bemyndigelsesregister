@@ -33,9 +33,17 @@ RUN echo "=> Starting WildFly server" && \
     echo "=> Adding resteasy-spring module" && \
       /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="module add --name=org.jboss.resteasy.resteasy-spring --resources=/tmp/resteasy-spring.jar"
 
+RUN mkdir -p /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main
+COPY /configuration/bemyndigelse.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/bemyndigelse.properties
+COPY /configuration/log4j-bem.xml /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/log4j-bem.xml
+COPY /configuration/FMK-KRS-TEST.jks /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/FMK-KRS-TEST.jks
+COPY /etc/wildfly/modules/dk/bemyndigelsesregister/bem/main/module.xml /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/module.xml
+#COPY /configuration/log4j-nspslalog.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/log4j-nspslalog.properties
+#COPY /configuration/nspslalog-bem.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
+
 # Copy the war file to the deployment directory
 ADD service/target/bem.war /opt/jboss/wildfly/standalone/deployments/
 
-#RUN echo "#Skip nothing" > /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
+RUN echo "#Skip nothing" > /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
 
-#RUN echo '.*/(health|dksconfig|u)$' > /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
+RUN echo '.*/(health|dksconfig|u)$' > /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/handler.skip
