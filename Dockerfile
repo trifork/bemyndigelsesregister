@@ -5,6 +5,7 @@ FROM quay.io/wildfly/wildfly:latest
 RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp
 COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/dk/sds/nsp /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp
 COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/dk/nsp /opt/jboss/wildfly/modules/system/layers/base/dk/nsp
+COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/org/apache/james /opt/jboss/wildfly/modules/system/layers/base/org/apache/james
 
 ENV MYSQL_VERSION 6.0.6
 
