@@ -2,8 +2,8 @@ FROM registry.nspop.dk/platform/nsp:latest AS nspbuilder
 
 FROM quay.io/wildfly/wildfly:latest
 
-RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/dk/sds/
-COPY --from=nspbuilder /pack/wildfly8/modules/system/layers/base/dk/sds/* /opt/jboss/wildfly/modules/system/layers/base/dk/sds/
+RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp
+COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/dk/sds/nsp /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp
 
 ENV MYSQL_VERSION 6.0.6
 
@@ -34,15 +34,15 @@ RUN echo "=> Starting WildFly server" && \
       /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="module add --name=org.jboss.resteasy.resteasy-spring --resources=/tmp/resteasy-spring.jar"
 
 RUN mkdir -p /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main
-COPY /configuration/bemyndigelse.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/bemyndigelse.properties
-COPY /configuration/log4j-bem.xml /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/log4j-bem.xml
-COPY /configuration/FMK-KRS-TEST.jks /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/FMK-KRS-TEST.jks
-COPY /etc/wildfly/modules/dk/bemyndigelsesregister/bem/main/module.xml /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/module.xml
-#COPY /configuration/log4j-nspslalog.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/log4j-nspslalog.properties
-#COPY /configuration/nspslalog-bem.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
+COPY --chown=1000 /compose/configuration/bemyndigelse.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/bemyndigelse.properties
+COPY --chown=1000 /compose/configuration/log4j-bem.xml /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/log4j-bem.xml
+COPY --chown=1000 /compose/configuration/FMK-KRS-TEST.jks /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/FMK-KRS-TEST.jks
+COPY --chown=1000 /etc/wildfly/modules/dk/bemyndigelsesregister/bem/main/module.xml /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/module.xml
+#COPY /compose/configuration/log4j-nspslalog.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/log4j-nspslalog.properties
+#COPY /compose/configuration/nspslalog-bem.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/nspslalog-bem.properties
 
 # Copy the war file to the deployment directory
-ADD service/target/bem.war /opt/jboss/wildfly/standalone/deployments/
+COPY --chown=1000 service/target/bem.war /opt/jboss/wildfly/standalone/deployments/
 
 RUN echo "#Skip nothing" > /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp/accesshandler/main/security.skip
 
