@@ -4,6 +4,7 @@ FROM quay.io/wildfly/wildfly:latest
 
 RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp
 COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/dk/sds/nsp /opt/jboss/wildfly/modules/system/layers/base/dk/sds/nsp
+COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/dk/nsp /opt/jboss/wildfly/modules/system/layers/base/dk/nsp
 
 ENV MYSQL_VERSION 6.0.6
 
@@ -32,6 +33,13 @@ RUN echo "=> Starting WildFly server" && \
       curl --location --output /tmp/resteasy-spring.jar --url https://search.maven.org/remotecontent?filepath=org/jboss/resteasy/spring/resteasy-spring/3.0.0.Final/resteasy-spring-3.0.0.Final.jar && \
     echo "=> Adding resteasy-spring module" && \
       /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="module add --name=org.jboss.resteasy.resteasy-spring --resources=/tmp/resteasy-spring.jar"
+
+RUN echo "=> Starting WildFly server" && \
+      bash -c '/opt/jboss/wildfly/bin/standalone.sh &' && \
+    echo "=> Waiting for the server to boot" && \
+      bash -c 'until `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
+    echo "=> Registring global module" && \
+      /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=ee:write-attribute(name="global-modules",value=[{"name" => "dk.sds.nsp.accesshandler","slot" => "main","services" => "true","meta-inf"="true"},{"name" => "dk.sds.nsp.kafka.provider","slot" => "main","services" => "true","meta-inf"="true"},{"name" => "dk.nsp.minlog.producer","slot" => "main","services" => "true","meta-inf"="true"}])"
 
 RUN mkdir -p /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main
 COPY --chown=1000 /compose/configuration/bemyndigelse.properties /opt/jboss/wildfly/modules/dk/bemyndigelsesregister/bem/main/bemyndigelse.properties
