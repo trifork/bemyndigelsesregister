@@ -8,7 +8,7 @@ COPY --from=nspbuilder --chown=1000 /pack/wildfly8/modules/system/layers/base/dk
 
 ENV MYSQL_VERSION 6.0.6
 
-RUN echo "=> Starting WildFly server" && \
+RUN echo "=> Starting WildFly server to add mysql jdbc connector" && \
       bash -c '/opt/jboss/wildfly/bin/standalone.sh &' && \
     echo "=> Waiting for the server to boot" && \
       bash -c 'until `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
@@ -17,7 +17,7 @@ RUN echo "=> Starting WildFly server" && \
     echo "=> Adding mysql module" && \
       /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="module add --name=com.mysql --resources=/tmp/mysql-connector-java-${MYSQL_VERSION}.jar --dependencies=javax.api,javax.transaction.api"
 
-RUN echo "=> Starting WildFly server" && \
+RUN echo "=> Starting WildFly server to add mysql module" && \
       bash -c '/opt/jboss/wildfly/bin/standalone.sh &' && \
     echo "=> Waiting for the server to boot" && \
       bash -c 'until `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
@@ -25,7 +25,7 @@ RUN echo "=> Starting WildFly server" && \
       /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-class-name=com.mysql.jdbc.Driver)"
      #  /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.cj.jdbc.MysqlXADataSource)"
 
-RUN echo "=> Starting WildFly server" && \
+RUN echo "=> Starting WildFly server to install resteasy-spring" && \
       bash -c '/opt/jboss/wildfly/bin/standalone.sh &' && \
     echo "=> Waiting for the server to boot" && \
       bash -c 'until `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
@@ -33,6 +33,15 @@ RUN echo "=> Starting WildFly server" && \
       curl --location --output /tmp/resteasy-spring.jar --url https://search.maven.org/remotecontent?filepath=org/jboss/resteasy/spring/resteasy-spring/3.0.0.Final/resteasy-spring-3.0.0.Final.jar && \
     echo "=> Adding resteasy-spring module" && \
       /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="module add --name=org.jboss.resteasy.resteasy-spring --resources=/tmp/resteasy-spring.jar"
+
+RUN echo "=> Starting WildFly server to install apache commons pool" && \
+      bash -c '/opt/jboss/wildfly/bin/standalone.sh &' && \
+    echo "=> Waiting for the server to boot" && \
+      bash -c 'until `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null | grep -q running`; do echo `/opt/jboss/wildfly/bin/jboss-cli.sh -c ":read-attribute(name=server-state)" 2> /dev/null`; sleep 1; done' && \
+    echo "=> Downloading apache commons pool" && \
+      curl --location --output /tmp/apache_commons_pool.jar --url https://search.maven.org/remotecontent?filepath=org/apache/directory/studio/org.apache.commons.pool/1.6/org.apache.commons.pool-1.6.jar && \
+    echo "=> Adding apache ommons pool module" && \
+      /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="module add --name=org.apache.commons.pool --resources=/tmp/apache_commons_pool.jar"
 
 RUN echo "=> Starting WildFly server" && \
       bash -c '/opt/jboss/wildfly/bin/standalone.sh &' && \
