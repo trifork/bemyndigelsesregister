@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.oxm.Marshaller;
 
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.when;
 /**
  *
  */
+@Ignore("TBD:Apache sshd needs to be upgraded for this to work")
 public class NspManagerSFtpTest {
     private static final String TEST_USER = "test";
     private static final String TEST_PASSWORD = "Test1234";
