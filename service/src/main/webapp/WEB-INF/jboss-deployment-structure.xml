@@ -12,7 +12,7 @@
             <module name="org.apache.cxf.impl"/>
             <module name="dk.sds.nsp.seal"/>
             <module name="dk.sds.nsp.kafka.clients"/>
-            <module name="org.apache.kafka.client"/>
+            <module name="org.apache.kafka.clients"/>
         </dependencies>
     </deployment>
 </jboss-deployment-structure>
