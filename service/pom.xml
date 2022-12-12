@@ -141,11 +141,11 @@
         </dependency>
 
         <!-- Support for SFTP protocol -->
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-            <version>0.1.55</version>
-        </dependency>
+<dependency>
+  <groupId>com.github.mwiede</groupId>
+  <artifactId>jsch</artifactId>
+  <version>0.2.5</version>
+</dependency>
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
