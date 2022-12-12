@@ -69,7 +69,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.version>4.3.23.RELEASE</spring.version>
+        <spring.version>5.2.21.RELEASE</spring.version>
         <seal.version>2.5.7</seal.version>
         <jackson.version>2.10.5</jackson.version>
     </properties>
