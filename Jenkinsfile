@@ -44,7 +44,7 @@ pipeline {
                                                                                         version = version.trim()
 											sh "cd bemyndigelsesregister && mvn -s $MAVEN_SETTINGS --fail-at-end -Pdev,test clean deploy -DargLine='-Dspring.profiles.active=test -Dcatalina.base=${WORKSPACE} -Dftp.enabled=true'"
                                                                                      }
-									             withCredentials([usernamePassword(credentialsId: 'ci_docker', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                                                                                     docker.withRegistry('https://registry.fmk.netic.dk', 'ci_docker') {
 											sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin registry.fmk.netic.dk"
 											bem_image = docker.build("registry.fmk.netic.dk/fmk/bemyndigelsesregister:$version", "--build-arg VERSION=$version --build-arg USERID=$userid ./bemyndigelsesregister")
 											bem_image.push()
