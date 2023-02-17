@@ -186,6 +186,32 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="GetAllMetadataRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="Domain" type="tns:Domain"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetAllMetadataResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="Domain" type="tns:Domain"/>
+                <xs:element maxOccurs="unbounded" name="Metadata">
+                    <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                            <xs:element name="System" type="tns:DelegatingSystem"/>
+                            <xs:element name="Permission" minOccurs="0" maxOccurs="unbounded" type="tns:SystemPermission"/>
+                            <xs:element name="EnableAsteriskPermission" type="xs:boolean"/>
+                            <xs:element name="Role" minOccurs="0" maxOccurs="unbounded" type="tns:DelegatingRole"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="CreateDelegationsRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -227,11 +253,15 @@
 
     <xs:element name="GetDelegationsRequest" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
-            <xs:choice xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
-                <xs:element name="DelegationId" type="tns:DelegationId"/>
-            </xs:choice>
+            <xs:sequence>
+                <xs:choice xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                    <xs:element name="DelegateeCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                    <xs:element name="DelegationId" type="tns:DelegationId"/>
+                </xs:choice>
+                <xs:element maxOccurs="1" minOccurs="0" name="EffectiveFrom" type="tns:EffectiveFromDateTime"/>
+                <xs:element maxOccurs="1" minOccurs="0" name="EffectiveTo" type="tns:EffectiveToDateTime"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
@@ -267,6 +297,28 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="DelegationId" type="tns:DelegationId" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetExpirationInfoRequest">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="Days" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetExpirationInfoResponse">
+        <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="DelegatorCpr" type="cpr:PersonCivilRegistrationIdentifierType"/>
+                <xs:element name="DelegationCount" type="xs:int"/>
+                <xs:element name="DelegateeCount" type="xs:int"/>
+                <xs:element name="DaysToFirstExpiration" type="xs:int"/>
+                <xs:element name="FirstExpiryDelegationCount" type="xs:int"/>
+                <xs:element name="FirstExpiryDelegateeCount" type="xs:int"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

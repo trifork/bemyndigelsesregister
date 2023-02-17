@@ -8,12 +8,6 @@
 
     <jaxb:globalBindings generateMixedExtensions="true" generateValueClass="true">
         <xjc:simple />
-<!--
-       <xjc:javaType name="org.joda.time.LocalDate" xmlType="xs:date"
-                      adapter="dk.fmkonline.tilskud.server.adapters.LocalDateAdapter" />
-
-        <xjc:javaType name="org.joda.time.DateTime" xmlType="xs:dateTime"
-                      adapter="dk.fmkonline.tilskud.server.adapters.DateTimeAdapter" /> -->
     </jaxb:globalBindings>
 </jaxb:bindings>
 

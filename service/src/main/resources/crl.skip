@@ -1,0 +1,5 @@
+##############################################################################"#
+# Each line that is added here will be used to match against the request URI.  #
+# If any line matches, the Certificate Revokation Check is skipped.            #
+################################################################################
+

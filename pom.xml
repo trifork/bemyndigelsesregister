@@ -1,24 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.bemyndigelsesregister</groupId>
-    <artifactId>parent</artifactId>
-    <version>4.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<modelVersion>4.0.0</modelVersion>
 
-    <scm>
-        <url>scm:git:git@github.com:trifork/bemyndigelsesregister</url>
-        <connection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</connection>
-        <developerConnection>scm:git:git@github.com:trifork/bemyndigelsesregister.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.6.3</version>
+		<relativePath/>
+	</parent>
 
-    <repositories>
-        <repository>
-            <id>nsp-nexus</id>
-            <name>NSP repository</name>
-            <url>https://nexus.nspop.dk/nexus/content/groups/public/</url>
-        </repository>
+	<groupId>dk.bemyndigelsesregister</groupId>
+	<artifactId>parent</artifactId>
+	<version>5.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<security-api.version>1.0.3</security-api.version>
+		<nsp-util.version>1.0.11</nsp-util.version>
+		<apache.cxf.version>3.3.0</apache.cxf.version>
+		<jaxb-core.version>2.3.0</jaxb-core.version>
+		<jaxb-impl.version>2.3.0</jaxb-impl.version>
+		<jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
+		<!--https://stackoverflow.com/questions/50237516/proper-fix-for-java-10-complaining-about-illegal-reflection-access-by-jaxb-impl-->
+		<jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>
+		<java.version>11</java.version>
+		<spring-boot.version>2.6.3</spring-boot.version>
+		<log4j2.version>2.17.1</log4j2.version>
+		<h2.version>1.4.200</h2.version>
+		<mariadb.version>3.1.2</mariadb.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub</name>
+			<url>https://maven.pkg.github.com/trifork/sosi-ws-commons</url>
+		</repository>
+		<repository>
+			<id>nsp-nexus-releases</id>
+			<name>NSP releases</name>
+			<url>https://nexus.nspop.dk/nexus/content/repositories/releases/</url>
+		</repository>
 		<repository>
 			<id>trifork-public</id>
 			<name>Trifork public Nexus</name>
@@ -39,108 +66,25 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
-    </repositories>
+	</repositories>
 
-    <distributionManagement>
-		<snapshotRepository>
-			<id>trifork.snapshots</id>
-			<name>Trifork internal snapshot Nexus</name>
-			<url>https://ci.fmk.netic.dk/nexus/repository/snapshots/</url>
-		</snapshotRepository>
-		<repository>
-			<id>trifork.releases</id>
-			<name>Trifork internal releases Nexus</name>
-			<url>https://ci.fmk.netic.dk/nexus/repository/releases</url>
-		</repository>
-    </distributionManagement>
+	<dependencies>
+		<!-- test dependencies -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <modules>
-        <module>schemas</module>
-        <module>service</module>
-        <module>integrationtest</module>
-    </modules>
-
-    <properties>
-        <functionaltest.serverport>8080</functionaltest.serverport>
-        <functionaltest.urlprefix>http://localhost:${functionaltest.serverport}</functionaltest.urlprefix>
-        <deployment.serversettings>bms.localhost</deployment.serversettings>
-        <nsp-util.version>1.0.11</nsp-util.version>
-        <security-api.version>1.0.3</security-api.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.version>4.3.23.RELEASE</spring.version>
-        <seal.version>2.5.7</seal.version>
-        <jackson.version>2.10.5</jackson.version>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-expression</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-tx</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-oxm</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>2.6</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<modules>
+		<module>schemas</module>
+		<module>service</module>
+	</modules>
 </project>

@@ -1,100 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>dk.bemyndigelsesregister</groupId>
-        <artifactId>parent</artifactId>
-        <version>4.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>dk.bemyndigelsesregister</groupId>
+		<artifactId>parent</artifactId>
+		<version>5.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>schemas</artifactId>
 
-    <artifactId>schemas</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>dk.sosi.seal</groupId>
-            <artifactId>seal</artifactId>
-            <version>2.5.7</version>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>2.3.3</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.jws</groupId>
+            <artifactId>jakarta.jws-api</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>2.1.12</version>
-            <scope>provided</scope>
+            <version>4.0.0</version>
+            <scope>runtime</scope>
         </dependency>
+
+		<!--dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.19.0</version>
+			<scope>test</scope>
+		</dependency -->
+
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxws-maven-plugin</artifactId>
-                <version>2.5</version>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <version>${apache.cxf.version}</version>
                 <executions>
                     <execution>
-                        <id>bemyndigelse</id>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
+                        <id>generate</id>
+                        <phase>generate-sources</phase>
                         <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>${basedir}/src/main/resources/wsdl/bemyndigelsesservice_2017_08_01.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <bindingFiles>
-                                <bindingFile>${basedir}/src/main/resources/bindings.xjb</bindingFile>
-                            </bindingFiles>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>
+                                        ${basedir}/src/main/resources/wsdl/bemyndigelsesservice-inline_2017_08_01.wsdl
+                                    </wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/bindings.xjb</bindingFile>
+                                    </bindingFiles>
+                                    <wsdlLocation>classpath:wsdl/bemyndigelsesservice-inline_2017_08_01.wsdl 
+                                    </wsdlLocation>
+                                </wsdlOption>
+                            </wsdlOptions>
                         </configuration>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
-<!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <executions>
-                    <execution>
-                        <id>dgws</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>dk.sundhedsdatastyrelsen.xmlschema.SchemaLoader</mainClass>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>target.dir</key>
-                                    <value>${project.basedir}/target/classes</value>
-                                </systemProperty>
-                                <systemProperty>
-                                    <key>source.dir</key>
-                                    <value>${basedir}/src/main/resources/schema/2017_08_01</value>
-                                </systemProperty>
-                                <systemProperty>
-                                    <key>wsdl.dir</key>
-                                    <value>${basedir}/src/main/resources/wsdl</value>
-                                </systemProperty>
-                                <systemProperty>
-                                    <key>VersionDate</key>
-                                    <value>2017_08_+1</value>
-                                </systemProperty>
-                                <systemProperty>
-                                    <key>WsdlName</key>
-                                    <value>bemyndigelseservice</value>
-                                </systemProperty>
-                            </systemProperties>
-                        </configuration>
-                    </execution>
-
-                </executions>
-            </plugin>
-            -->
-        </plugins>
+		</plugins>
     </build>
-
 </project>

@@ -1,0 +1,8 @@
+##############################################################################"#
+# Each line that is added here will be used to match against the request URI.  #
+# If any line matches, every aspekt of the Access Handler will be skipped.     #
+# If only a single aspekt needs to be skipped, the line should be added        #
+# to one of the other skip lists.                                              #
+################################################################################
+
+.*/(health|dksconfig|u)$
