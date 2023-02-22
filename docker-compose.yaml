@@ -57,7 +57,7 @@ services:
   bem:
     build:
       context: .
-      dockerfile: DockerfileDev
+      dockerfile: Dockerfile
     image: bem:latest
     # Expose service on a port on the host for debugging purpose
     ports:
