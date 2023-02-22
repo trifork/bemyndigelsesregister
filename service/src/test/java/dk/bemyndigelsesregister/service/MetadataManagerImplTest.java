@@ -13,11 +13,11 @@ public class MetadataManagerImplTest {
     @Autowired
     MetadataManager manager;
 
+    private static final String domain = "MyExampleDomain";
+    private static final String system = "MyExampleSystem";
+
     @Test
     public void canClearExistingMetadata() {
-        String domain = "MyExampleDomain";
-        String system = "MyExampleSystem";
-
         Metadata p = new Metadata(domain, system, system);
 
         p.addRole("MyRoleCode", "MyRoleDescription");
@@ -51,20 +51,20 @@ public class MetadataManagerImplTest {
     public void canChangeSystemDescription() {
         String newDescription = "Changed system description";
 
-        Metadata p = manager.getMetadata(TestData.domainCode, TestData.systemCode);
-        p.getSystem().setDescription(newDescription);
-        manager.putMetadata(p);
+        Metadata p1 = new Metadata(domain, system, system);
+        manager.putMetadata(p1);
 
-        Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
+        Metadata p2 = manager.getMetadata(domain, system);
+        p2.getSystem().setDescription(newDescription);
+        manager.putMetadata(p2);
+
+        Metadata g = manager.getMetadata(domain, system);
 
         assertEquals(newDescription, g.getSystem().getDescription());
     }
 
     @Test
     public void canCreateNewMetadata() {
-        String domain = "MyDomain";
-        String system = "MySystem";
-
         Metadata p = new Metadata(domain, system, system);
         manager.putMetadata(p);
         Metadata g = manager.getMetadata(domain, system);
@@ -79,10 +79,10 @@ public class MetadataManagerImplTest {
 
     @Test
     public void canUpdateRoles() {
-        Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
-        p.addRole(TestData.roleCode, TestData.roleDescription);
+        Metadata p = new Metadata(domain, system, system);
+        p.addRole("MyRole", "MyRoleDescription");
         manager.putMetadata(p);
-        Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
+        Metadata g = manager.getMetadata(domain, system);
 
         assertNotNull(g);
         assertEquals(1, g.getRoles().size());
@@ -92,11 +92,11 @@ public class MetadataManagerImplTest {
 
     @Test
     public void canUpdatePermissions() {
-        Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
+        Metadata p = new Metadata(domain, system, system);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
         p.addPermission(TestData.permissionCode2, TestData.permissionDescription2);
         manager.putMetadata(p);
-        Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
+        Metadata g = manager.getMetadata(domain, system);
 
         assertNotNull(g);
         assertEquals(2, g.getPermissions().size());
@@ -108,12 +108,12 @@ public class MetadataManagerImplTest {
 
     @Test
     public void canUpdateDelegatablePermission() {
-        Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
+        Metadata p = new Metadata(domain, system, system);
         p.addRole(TestData.roleCode, TestData.roleDescription);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
         p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
         manager.putMetadata(p);
-        Metadata g = manager.getMetadata(TestData.domainCode, TestData.systemCode);
+        Metadata g = manager.getMetadata(domain, system);
 
         assertNotNull(g);
         assertEquals(1, g.getDelegatablePermissions().size());
@@ -124,7 +124,7 @@ public class MetadataManagerImplTest {
     @Test
     public void cannotReferenceUnknownRole() {
         try {
-            Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
+            Metadata p = new Metadata(domain, system, system);
             p.addDelegatablePermission("Unknown", TestData.permissionCode1, TestData.permissionDescription1, true);
             manager.putMetadata(p);
 
@@ -136,7 +136,7 @@ public class MetadataManagerImplTest {
     @Test
     public void cannotReferenceUnknownPermission() {
         try {
-            Metadata p = new Metadata(TestData.domainCode, TestData.systemCode, TestData.systemDescription);
+            Metadata p = new Metadata(domain, system, system);
             p.addDelegatablePermission(TestData.roleCode, "Unknown", "Unknown", true);
             manager.putMetadata(p);
 
