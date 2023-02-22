@@ -37,11 +37,6 @@
 			<url>https://repo1.maven.org/maven2</url>
 		</repository>
 		<repository>
-			<id>github</id>
-			<name>GitHub</name>
-			<url>https://maven.pkg.github.com/trifork/sosi-ws-commons</url>
-		</repository>
-		<repository>
 			<id>nsp-nexus-releases</id>
 			<name>NSP releases</name>
 			<url>https://nexus.nspop.dk/nexus/content/repositories/releases/</url>
@@ -67,6 +62,19 @@
 			</releases>
 		</repository>
 	</repositories>
+
+    <distributionManagement>
+		<snapshotRepository>
+			<id>trifork.snapshots</id>
+			<name>Trifork internal snapshot Nexus</name>
+			<url>https://ci.fmk.netic.dk/nexus/repository/snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>trifork.releases</id>
+			<name>Trifork internal releases Nexus</name>
+			<url>https://ci.fmk.netic.dk/nexus/repository/releases</url>
+		</repository>
+    </distributionManagement>
 
 	<dependencies>
 		<!-- test dependencies -->
