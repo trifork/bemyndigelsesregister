@@ -14,3 +14,4 @@ COPY ${PROPERTIES_FILE} application.properties
 
 ARG LOG4J2_FILE
 COPY ${LOG4J2_FILE} log4j2.xml
+CMD ["java", "-jar", "application.jar"]
