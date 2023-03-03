@@ -5,7 +5,6 @@ import dk.bemyndigelsesregister.domain.*;
 import dk.bemyndigelsesregister.mapper.ServiceTypeMapper;
 import dk.bemyndigelsesregister.service.DelegationManager;
 import dk.bemyndigelsesregister.service.MetadataManager;
-import dk.bemyndigelsesregister.util.DateUtils;
 import dk.nsi.bemyndigelse._2017._08._01.DelegatingSystem;
 import dk.nsi.bemyndigelse._2017._08._01.*;
 import dk.sds.nsp.security.SecurityContext;
@@ -17,7 +16,6 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import org.springframework.ws.soap.server.endpoint.annotation.SoapAction;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 import java.util.*;
 
@@ -68,8 +66,8 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                         createDelegation.getRoleId(),
                         Status.fromValue(createDelegation.getState().value()),
                         createDelegation.getListOfPermissionIds().getPermissionIds(),
-                        DateUtils.toInstant(createDelegation.getEffectiveFrom()),
-                        DateUtils.toInstant(createDelegation.getEffectiveTo()));
+                        createDelegation.getEffectiveFrom(),
+                        createDelegation.getEffectiveTo());
 
                 delegations.add(delegation);
             }
@@ -114,7 +112,7 @@ public class DelegationWebService extends AbstractWebService implements Delegati
         }
     }
 
-    private List<Delegation> getDelegationsCommon(String delegatorCpr, String delegateeCpr, String delegationId, XMLGregorianCalendar effectiveFrom, XMLGregorianCalendar effectiveTo, SecurityContext securityContext) {
+    private List<Delegation> getDelegationsCommon(String delegatorCpr, String delegateeCpr, String delegationId, Instant effectiveFrom, Instant effectiveTo, SecurityContext securityContext) {
         auditLog("Hent bemyndigelser", delegateeCpr, securityContext);
 
         List<Delegation> delegations = new LinkedList<>();
@@ -132,12 +130,12 @@ public class DelegationWebService extends AbstractWebService implements Delegati
 
         // invoke correct method on manager
         if (delegatorCpr != null) {
-            List<Delegation> list = delegationManager.getDelegationsByDelegatorCpr(delegatorCpr, DateUtils.toInstant(effectiveFrom), DateUtils.toInstant(effectiveTo));
+            List<Delegation> list = delegationManager.getDelegationsByDelegatorCpr(delegatorCpr, effectiveFrom, effectiveTo);
             if (list != null) {
                 delegations.addAll(list);
             }
         } else if (delegateeCpr != null) {
-            List<Delegation> list = delegationManager.getDelegationsByDelegateeCpr(delegateeCpr, DateUtils.toInstant(effectiveFrom), DateUtils.toInstant(effectiveTo));
+            List<Delegation> list = delegationManager.getDelegationsByDelegateeCpr(delegateeCpr, effectiveFrom, effectiveTo);
             if (list != null) {
                 delegations.addAll(list);
             }
@@ -182,10 +180,8 @@ public class DelegationWebService extends AbstractWebService implements Delegati
         }
     }
 
-    private List<String> deleteDelegationsCommon(String delegatorCpr, String delegateeCpr, List<String> delegationIds, XMLGregorianCalendar xmlDate, SecurityContext securityContext) {
+    private List<String> deleteDelegationsCommon(String delegatorCpr, String delegateeCpr, List<String> delegationIds, Instant deletionDate, SecurityContext securityContext) {
         auditLog("Slet bemyndigelser", delegateeCpr, securityContext);
-
-        Instant deletionDate = DateUtils.toInstant(xmlDate);
 
         // check arguments
         if (delegatorCpr == null) {

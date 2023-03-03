@@ -2,7 +2,6 @@ package dk.bemyndigelsesregister.mapper;
 
 import dk.bemyndigelsesregister.domain.*;
 import dk.bemyndigelsesregister.service.MetadataManager;
-import dk.bemyndigelsesregister.util.DateUtils;
 import dk.nsi.bemyndigelse._2017._08._01.ObjectFactory;
 import dk.nsi.bemyndigelse._2017._08._01.State;
 import dk.nsi.bemyndigelse._2017._08._01.SystemPermission;
@@ -28,13 +27,13 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         delegationType.setDelegatorCpr(delegation.getDelegatorCpr());
         delegationType.setDelegateeCpr(delegation.getDelegateeCpr());
         delegationType.setDelegateeCvr(delegation.getDelegateeCvr());
-        delegationType.setCreated(DateUtils.toXmlGregorianCalendar(delegation.getCreated()));
+        delegationType.setCreated(delegation.getCreated());
         delegationType.setState(State.fromValue(delegation.getState().value()));
         delegationType.setDelegationId(delegation.getCode());
         delegationType.setRole(toRole(metadata, delegation.getRoleCode()));
         delegationType.setSystem(toDelegatingSystem(metadata));
-        delegationType.setEffectiveFrom(DateUtils.toXmlGregorianCalendar(delegation.getEffectiveFrom()));
-        delegationType.setEffectiveTo(DateUtils.toXmlGregorianCalendar(delegation.getEffectiveTo()));
+        delegationType.setEffectiveFrom(delegation.getEffectiveFrom());
+        delegationType.setEffectiveTo(delegation.getEffectiveTo());
 
         boolean hasAsteriskPermission = delegation.hasAsteriskPermission();
 

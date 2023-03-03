@@ -8,6 +8,9 @@
 
     <jaxb:globalBindings generateMixedExtensions="true" generateValueClass="true">
         <xjc:simple />
+
+        <xjc:javaType name="java.time.Instant" xmlType="xs:dateTime"
+                      adapter="dk.bemyndigelsesregister.adapters.InstantAdapter" />
     </jaxb:globalBindings>
 </jaxb:bindings>
 

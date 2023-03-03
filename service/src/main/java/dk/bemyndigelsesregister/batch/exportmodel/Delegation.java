@@ -1,9 +1,12 @@
 package dk.bemyndigelsesregister.batch.exportmodel;
 
-import dk.bemyndigelsesregister.util.DateUtils;
+import dk.bemyndigelsesregister.adapters.InstantAdapter;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.Instant;
 
 /**
@@ -37,20 +40,20 @@ public class Delegation {
     protected String permission;
 
     @XmlElement(name = "godkendelsesdato")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar approvalDate;
+    @XmlJavaTypeAdapter(value = InstantAdapter.class)
+    protected Instant approvalDate;
 
     @XmlElement(name = "ModifiedDate")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar modifiedDate;
+    @XmlJavaTypeAdapter(value = InstantAdapter.class)
+    protected Instant modifiedDate;
 
     @XmlElement(name = "ValidFrom")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar effectiveFrom;
+    @XmlJavaTypeAdapter(value = InstantAdapter.class)
+    protected Instant effectiveFrom;
 
     @XmlElement(name = "ValidTo")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar effectiveTo;
+    @XmlJavaTypeAdapter(value = InstantAdapter.class)
+    protected Instant effectiveTo;
 
     public Delegation() {
     }
@@ -64,9 +67,9 @@ public class Delegation {
         this.status = status;
         this.role = role;
         this.permission = permission;
-        this.approvalDate = DateUtils.toXmlGregorianCalendar(approvalDate);
-        this.modifiedDate = DateUtils.toXmlGregorianCalendar(modifiedDate);
-        this.effectiveFrom = DateUtils.toXmlGregorianCalendar(effectiveFrom);
-        this.effectiveTo = DateUtils.toXmlGregorianCalendar(effectiveTo);
+        this.approvalDate = approvalDate;
+        this.modifiedDate = modifiedDate;
+        this.effectiveFrom = effectiveFrom;
+        this.effectiveTo = effectiveTo;
     }
 }
