@@ -21,7 +21,7 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
     public String marshal(Instant instant) throws Exception {
         if (instant == null) {
             return null;
-
+        }
         return formatter.format(instant);
     }
 }
