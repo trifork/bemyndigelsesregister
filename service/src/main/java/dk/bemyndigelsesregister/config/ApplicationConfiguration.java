@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -36,15 +37,19 @@ public class ApplicationConfiguration {
         return new DataSourceProperties();
     }
 
-    @Bean
+    @Bean(name="bemDataSource")
     @FlywayDataSource
+    @ConfigurationProperties("spring.datasource.bem")
     public DataSource bemDataSource() {
-        return bemDataSourceProperties().initializeDataSourceBuilder().build();
+        //return bemDataSourceProperties().initializeDataSourceBuilder().build();
+        return DataSourceBuilder.create().build();
     }
 
-    @Bean
+    @Bean(name="craDataSource")
+    @ConfigurationProperties("spring.datasource.cra")
     public DataSource craDataSource() {
-        return craDataSourceProperties().initializeDataSourceBuilder().build();
+        //return craDataSourceProperties().initializeDataSourceBuilder().build();
+        return DataSourceBuilder.create().build();
     }
 
     @Bean
