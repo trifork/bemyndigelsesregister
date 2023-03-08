@@ -85,8 +85,12 @@ public class DelegationDAOImpl extends AbstractDAOImpl<Delegation> implements De
                 " WHERE linked_system_kode = :linked_system_kode" +
                 " AND bemyndigende_cpr = :bemyndigende_cpr" +
                 " AND bemyndigede_cpr = :bemyndigede_cpr" +
-                " AND bemyndigede_cvr = :bemyndigede_cvr" +
                 " AND arbejdsfunktion_kode = :arbejdsfunktion_kode";
+        if (delegateeCvr != null) {
+            sql += " AND bemyndigede_cvr = :bemyndigede_cvr";
+        } else {
+            sql += " AND bemyndigede_cvr IS NULL";
+        }
         if (effectiveFrom != null) {
             sql += " AND gyldig_til > :gyldig_fra";
         }

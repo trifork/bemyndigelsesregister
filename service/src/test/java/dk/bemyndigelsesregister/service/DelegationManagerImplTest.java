@@ -24,19 +24,36 @@ public class DelegationManagerImplTest {
     private final Instant date1 = DateUtils.toInstant(2015, 1, 1);
     private final Instant date2 = DateUtils.toInstant(2015, 1, 10);
     private final Instant date3 = DateUtils.toInstant(2016, 1, 10);
+    private final String CVR_NUMBER = "3333333333";
 
     private static int cprGenerator = 1000000000;
-    
+
     @Test
     public void testCreateOverlappingDelegation() {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
         // create delegation valid from date1
-        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
 
         // create delegation valid from date2
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
+
+        delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
+
+        assertEquals(date2, delegation.getEffectiveTo());
+    }
+
+    @Test
+    public void testCreateOverlappingDelegationWithoutCVR() {
+        String delegatorCpr = generateCpr();
+        String delegateeCpr = generateCpr();
+
+        // create delegation valid from date1
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, null, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+
+        // create delegation valid from date2
+        createDelegation(delegatorCpr, delegateeCpr, null, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
 
         delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
 
@@ -48,8 +65,8 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
-        createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
         delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
 
         assertEquals(date2, delegation.getEffectiveTo());
@@ -60,8 +77,8 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
-        createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
         delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
 
         assertEquals(date2, delegation.getEffectiveTo());
@@ -72,11 +89,11 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
         delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
         Instant effectiveTo = delegation.getEffectiveTo();
 
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
         delegation = manager.getDelegation(delegation.getCode()); // reload first delegation
 
         assertEquals(effectiveTo, delegation.getEffectiveTo());
@@ -87,7 +104,7 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(Metadata.ASTERISK_PERMISSION_CODE, TestData.permissionCode1), date1, null);
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(Metadata.ASTERISK_PERMISSION_CODE, TestData.permissionCode1), date1, null);
         delegation = manager.getDelegation(delegation.getCode()); // reload delegation
 
         assertNotNull(delegation);
@@ -100,7 +117,7 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
         String uuid = manager.deleteDelegation(delegatorCpr, null, delegation.getCode(), date2);
         delegation = manager.getDelegation(uuid); // reload delegation
 
@@ -112,7 +129,7 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
         String uuid = manager.deleteDelegation(null, delegateeCpr, delegation.getCode(), date2);
         delegation = manager.getDelegation(uuid); // reload delegation
 
@@ -133,7 +150,7 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        Delegation delegation = createDelegation("another", delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        Delegation delegation = createDelegation("another", delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
         String delegationId = delegation.getCode();
 
         Delegation loadedDelegation = manager.getDelegation(delegationId); // reload delegation
@@ -153,7 +170,7 @@ public class DelegationManagerImplTest {
             String delegatorCpr = generateCpr();
             String delegateeCpr = generateCpr();
 
-            Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+            Delegation delegation = createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
             manager.deleteDelegation(delegatorCpr, null, delegation.getCode(), date2); // should fail because date2 is after date1
 
             fail("Create delegation with wrong date order should not be possible");
@@ -166,8 +183,8 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
-        createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
         List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr);
 
         assertNotNull(list);
@@ -181,8 +198,8 @@ public class DelegationManagerImplTest {
 
         List<Delegation> before = manager.getDelegationsByDelegatorCpr(delegatorCpr, date1, null);
 
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
-        createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, date2);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, date2);
         List<Delegation> after = manager.getDelegationsByDelegatorCpr(delegatorCpr, date1, null);
 
         assertNotNull(after);
@@ -194,8 +211,8 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
-        createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, date3);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, date3);
         List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr, null, date1);
 
         assertNotNull(list);
@@ -207,8 +224,8 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
-        createDelegation(delegatorCpr, delegateeCpr, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, date3);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date0, date1);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.GODKENDT, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, date3);
         List<Delegation> list = manager.getDelegationsByDelegatorCpr(delegatorCpr, date0, date3);
 
         assertNotNull(list);
@@ -220,8 +237,8 @@ public class DelegationManagerImplTest {
         String delegatorCpr = generateCpr();
         String delegateeCpr = generateCpr();
 
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
-        createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date1, null);
+        createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), date2, null);
         List<Delegation> list = manager.getDelegationsByDelegateeCpr(delegateeCpr);
 
         assertNotNull(list);
@@ -236,8 +253,8 @@ public class DelegationManagerImplTest {
 
         int n = manager.getDelegationsByDelegatorCpr(delegatorCpr).size();
         for (int i = 0; i < 10; i++) {
-            createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), Instant.now(), DateUtils.plusDays(Instant.now(), 2));
-            createDelegation(delegatorCpr, delegateeCpr, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), oldDate, DateUtils.plusDays(oldDate, 2));
+            createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), Instant.now(), DateUtils.plusDays(Instant.now(), 2));
+            createDelegation(delegatorCpr, delegateeCpr, CVR_NUMBER, Status.ANMODET, Arrays.asList(TestData.permissionCode1, TestData.permissionCode2), oldDate, DateUtils.plusDays(oldDate, 2));
         }
         assertEquals(n + 20, manager.getDelegationsByDelegatorCpr(delegatorCpr).size());
 
@@ -251,8 +268,8 @@ public class DelegationManagerImplTest {
         assertEquals(n + 10, manager.getDelegationsByDelegatorCpr(delegatorCpr).size());
     }
 
-    private Delegation createDelegation(String delegatorCpr, String delegateeCpr, Status state, List<String> permissions, Instant effectiveFrom, Instant effectiveTo) {
-        return manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, "3333333333", TestData.roleCode, state, permissions, effectiveFrom, effectiveTo);
+    private Delegation createDelegation(String delegatorCpr, String delegateeCpr, String delegateeCvr, Status state, List<String> permissions, Instant effectiveFrom, Instant effectiveTo) {
+        return manager.createDelegation(TestData.systemCode, delegatorCpr, delegateeCpr, delegateeCvr, TestData.roleCode, state, permissions, effectiveFrom, effectiveTo);
     }
    
     private String generateCpr() {
