@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.TransactionManager;
@@ -25,30 +26,17 @@ public class ApplicationConfiguration {
         System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");
     }
 
-    @Bean
-    @ConfigurationProperties("spring.datasource.bem")
-    public DataSourceProperties bemDataSourceProperties() {
-        return new DataSourceProperties();
-    }
-
-    @Bean
-    @ConfigurationProperties("spring.datasource.cra")
-    public DataSourceProperties craDataSourceProperties() {
-        return new DataSourceProperties();
-    }
-
     @Bean(name="bemDataSource")
+    @Primary
+    @ConfigurationProperties(prefix = "spring.datasource.bem")
     @FlywayDataSource
-    @ConfigurationProperties("spring.datasource.bem")
     public DataSource bemDataSource() {
-        //return bemDataSourceProperties().initializeDataSourceBuilder().build();
         return DataSourceBuilder.create().build();
     }
 
+    @ConfigurationProperties(prefix = "spring.datasource.cra")
     @Bean(name="craDataSource")
-    @ConfigurationProperties("spring.datasource.cra")
     public DataSource craDataSource() {
-        //return craDataSourceProperties().initializeDataSourceBuilder().build();
         return DataSourceBuilder.create().build();
     }
 
