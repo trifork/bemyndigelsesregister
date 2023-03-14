@@ -9,11 +9,11 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DKSControllerTest extends WebEnvironmentTest {
+public class HealthControllerTest extends WebEnvironmentTest {
     @Test
     public void testDKSServlet() throws IOException {
-        URLConnection urlConnection = getUrl("dksconfig").openConnection();
+        URLConnection urlConnection = getUrl("actuator/health").openConnection();
         String content = IOUtils.toString(urlConnection.getInputStream(), StandardCharsets.UTF_8);
-        assertTrue(content.contains("dksVersion"));
+        assertTrue(content.contains("\"status\":\"UP\""));
     }
 }

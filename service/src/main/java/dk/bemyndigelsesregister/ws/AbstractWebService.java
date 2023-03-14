@@ -24,7 +24,11 @@ public abstract class AbstractWebService {
     private WhitelistDAO whitelistDAO;
 
     protected SecurityContext getSecurityContext() {
-        return Security.getSecurityContext();
+        try {
+            return Security.getSecurityContext();
+        } catch (Exception ex) {
+            throw new SecurityException("Service must be called with DGWS or IDWS security");
+        }
     }
 
     protected void checkSecurityTicket(SecurityContext securityContext) {
