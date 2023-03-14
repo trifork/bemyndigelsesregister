@@ -11,6 +11,8 @@ public interface DelegatablePermissionDAO {
 
     DelegatablePermission findByPermissionAndRole(Long permissionId, Long roleId);
 
+    List<DelegatablePermission> findByPermission(Long permissionId);
+
     List<DelegatablePermission> findBySystem(Long systemId);
 
     List<DelegatablePermission> findBySystemAndRole(Long systemId, Long roleId);

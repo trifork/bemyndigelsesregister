@@ -177,6 +177,10 @@ public class MetadataManagerImpl implements MetadataManager {
                     if (!metadata.containsPermission(permission.getCode())) {
                         logger.info("  Permission [" + permission.getCode() + "] removed");
 
+                        List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findByPermission(permission.getId());
+                        for (DelegatablePermission d : delegatablePermissions) {
+                            delegatablePermissionDao.remove(d.getId());
+                        }
                         permissionDao.remove(permission.getId());
                     }
                 }

@@ -5,6 +5,7 @@ import dk.bemyndigelsesregister.dao.DelegationDAO;
 import dk.bemyndigelsesregister.dao.SystemVariableDAO;
 import dk.bemyndigelsesregister.domain.*;
 import dk.bemyndigelsesregister.service.DelegationManager;
+import dk.bemyndigelsesregister.service.MetadataCache;
 import dk.bemyndigelsesregister.service.MetadataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +43,9 @@ public class MetadataChangeHandlerJob {
     @Autowired
     private DelegationManager delegationManager;
 
+    @Autowired
+    private MetadataCache metadataCache;
+
     @Value("${metadatachangehandlerjob.enabled}")
     private String jobEnabled;
 
@@ -49,6 +53,8 @@ public class MetadataChangeHandlerJob {
     public void start() {
         if (Boolean.valueOf(jobEnabled)) {
             logger.info("MetadataChangeHandler job started");
+
+            metadataCache.clear();
 
             SystemVariable lastRun = systemVariableDAO.getByName(LAST_RUN_SYSTEM_VARIABLE);
             if (lastRun == null) {
@@ -82,7 +88,7 @@ public class MetadataChangeHandlerJob {
                 String oldHash = hashSystemVariable != null ? hashSystemVariable.getValue() : "";
 
                 if (newHash.equals(oldHash)) {
-                    logger.info("Role/permission metadata hash [" + newHash + "] unchanged for system [" + system.getCode() + "], skipping delegation export");
+                    logger.info("Role/permission metadata hash [" + newHash + "] unchanged for system [" + system.getCode() + "], skipping delegation updates");
                 } else {
                     updateDelegationsWithAsteriskForSystem(startTime, system.getCode());
 
@@ -186,8 +192,8 @@ public class MetadataChangeHandlerJob {
             Metadata metadata = metadataManager.getMetadata(Domain.DEFAULT_DOMAIN, systemCode);
             if (metadata != null && metadata.getDelegatablePermissions() != null) {
                 for (DelegatablePermission dp : metadata.getDelegatablePermissions()) {
-                    if (dp.isDelegatable() && !dp.getPermission().getCode().equals(Metadata.ASTERISK_PERMISSION_CODE)) { // asterisk permissions are not exported
-                        Set<String> permissionCodes = rolePermissionMap.get(dp.getPermission().getCode());
+                    if (dp.isDelegatable() && !dp.getPermission().getCode().equals(Metadata.ASTERISK_PERMISSION_CODE)) {
+                        Set<String> permissionCodes = rolePermissionMap.get(dp.getRole().getCode());
                         if (permissionCodes == null) {
                             permissionCodes = new HashSet<>();
                             rolePermissionMap.put(dp.getRole().getCode(), permissionCodes);

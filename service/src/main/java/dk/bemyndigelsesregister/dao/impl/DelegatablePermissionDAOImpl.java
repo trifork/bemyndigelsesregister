@@ -34,6 +34,12 @@ public class DelegatablePermissionDAOImpl extends AbstractDAOImpl<DelegatablePer
     }
 
     @Override
+    public List<DelegatablePermission> findByPermission(Long permissionId) {
+        return queryForList(new MapSqlParameterSource()
+                .addValue("rettighedskode_id", permissionId));
+    }
+
+    @Override
     public List<DelegatablePermission> findBySystemAndRole(Long systemId, Long roleId) {
         String sql = "SELECT d.* from delegerbar_rettighed d, rettighed r WHERE d.rettighedskode_id = r.id AND r.linked_system_id = :systemId AND d.arbejdsfunktion_id = :roleId";
 
