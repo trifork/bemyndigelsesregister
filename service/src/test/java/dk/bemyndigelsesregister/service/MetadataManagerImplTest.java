@@ -91,6 +91,35 @@ public class MetadataManagerImplTest {
     }
 
     @Test
+    public void canRemoveRole() {
+        Metadata p = new Metadata(domain, system, system);
+        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addRole("RoleToRemove", "RoleToRemoveDescription");
+        p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
+        p.addPermission(TestData.permissionCode2, TestData.permissionDescription2);
+        p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
+        p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode2, TestData.permissionDescription2, true);
+        p.addDelegatablePermission("RoleToRemove", TestData.permissionCode1, TestData.permissionDescription1, true);
+        p.addDelegatablePermission("RoleToRemove", TestData.permissionCode2, TestData.permissionDescription2, true);
+        manager.putMetadata(p);
+
+        p = new Metadata(domain, system, system);
+        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
+        p.addPermission(TestData.permissionCode2, TestData.permissionDescription2);
+        p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
+        p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode2, TestData.permissionDescription2, true);
+        manager.putMetadata(p);
+
+        Metadata g = manager.getMetadata(domain, system);
+
+        assertNotNull(g);
+        assertEquals(1, g.getRoles().size());
+        assertEquals(TestData.roleCode, g.getRoles().get(0).getCode());
+        assertEquals(TestData.roleDescription, g.getRoles().get(0).getDescription());
+    }
+
+    @Test
     public void canUpdatePermissions() {
         Metadata p = new Metadata(domain, system, system);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
@@ -104,6 +133,30 @@ public class MetadataManagerImplTest {
             assertEquals(p.getPermissions().get(i).getCode(), g.getPermissions().get(i).getCode());
             assertEquals(p.getPermissions().get(i).getDescription(), g.getPermissions().get(i).getDescription());
         }
+    }
+
+    @Test
+    public void canRemovePermission() {
+        Metadata p = new Metadata(domain, system, system);
+        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
+        p.addPermission(TestData.permissionCode2, TestData.permissionDescription2);
+        p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
+        p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode2, TestData.permissionDescription2, true);
+        manager.putMetadata(p);
+
+        p = new Metadata(domain, system, system);
+        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
+        p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
+        manager.putMetadata(p);
+
+        Metadata g = manager.getMetadata(domain, system);
+
+        assertNotNull(g);
+        assertEquals(1, g.getPermissions().size());
+        assertEquals(TestData.permissionCode1, g.getPermissions().get(0).getCode());
+        assertEquals(TestData.permissionDescription1, g.getPermissions().get(0).getDescription());
     }
 
     @Test
