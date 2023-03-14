@@ -54,8 +54,6 @@ public class MetadataChangeHandlerJob {
         if (Boolean.valueOf(jobEnabled)) {
             logger.info("MetadataChangeHandler job started");
 
-            metadataCache.clear();
-
             SystemVariable lastRun = systemVariableDAO.getByName(LAST_RUN_SYSTEM_VARIABLE);
             if (lastRun == null) {
                 lastRun = new SystemVariable(LAST_RUN_SYSTEM_VARIABLE, Instant.now());
@@ -81,6 +79,8 @@ public class MetadataChangeHandlerJob {
             logger.info("No metadata changed");
         } else {
             for (DelegatingSystem system : systems) {
+                metadataCache.clear(Domain.DEFAULT_DOMAIN, system.getCode());
+
                 String hashSystemVariableName = system.getCode() + "Hash";
                 String newHash = getRolePermissionHash(system.getCode());
 
