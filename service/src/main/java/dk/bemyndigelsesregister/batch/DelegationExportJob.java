@@ -41,7 +41,7 @@ public class DelegationExportJob {
     private UploadManager uploadManager;
 
     @Value("${nsp.schema.version}")
-    String nspSchemaVersion;
+    private String nspSchemaVersion;
 
     @Value("${bemyndigelsesexportjob.enabled}")
     String jobEnabled;
@@ -86,21 +86,9 @@ public class DelegationExportJob {
             logger.info("DelegationExport job disabled");
     }
 
-    @Transactional
-    public void completeExport() {
-        logger.info("Complete DelegationExport started");
+    public int exportChangedDelegations(Instant startTime, List<Long> delegationIds) {
+        int exportCount = 0;
 
-        batchNo = 1;
-        SystemVariable lastRun = systemVariableDAO.getByName("lastRun");
-        Instant startTime = Instant.now();
-
-        exportChangedDelegations(startTime, delegationDAO.findByModifiedInPeriod(null, null));
-        updateLastRun(lastRun, startTime);
-
-        logger.info("Complete DelegationExport ended");
-    }
-
-    public void exportChangedDelegations(Instant startTime, List<Long> delegationIds) {
         if (delegationIds == null || delegationIds.size() == 0) {
             logger.info("No changed delegations to export");
         } else {
@@ -114,14 +102,16 @@ public class DelegationExportJob {
                     endIndex = delegationIds.size();
 
                 logger.info("  Exporting batch " + batchNo + " (index " + startIndex + " - " + endIndex + ")");
-                exportBatch(startTime, delegationIds.subList(startIndex, endIndex));
+                exportCount += exportBatch(startTime, delegationIds.subList(startIndex, endIndex));
 
                 startIndex = endIndex;
             }
         }
+
+        return exportCount;
     }
 
-    public void exportBatch(Instant startTime, List<Long> delegationIds) {
+    public int exportBatch(Instant startTime, List<Long> delegationIds) {
         int exportCount = 0;
 
         Delegations exportData = new Delegations();
@@ -148,6 +138,8 @@ public class DelegationExportJob {
 
             batchNo++; // Note: batchNo will only increase when delegations were actually exported
         }
+
+        return exportCount;
     }
 
     private void updateLastRun(SystemVariable lastRun, Instant startTime) {
