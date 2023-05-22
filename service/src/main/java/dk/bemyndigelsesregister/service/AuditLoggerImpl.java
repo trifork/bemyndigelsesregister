@@ -44,10 +44,9 @@ public class AuditLoggerImpl implements AuditLogger {
             try {
                 Properties props = new Properties();
 
-                File configDir = new File(System.getProperty("catalina.base"), "conf");
-                File configFile = new File(configDir, "bem-kafka-producer.properties");
+                File configFile = new File("bem-kafka-producer.properties");
                 if (configFile.exists() && configFile.canRead()) {
-                    log.info("Loading kafka properties from tomcat conf");
+                    log.info("Loading kafka properties from " + configFile.getAbsolutePath());
                     InputStream is = new FileInputStream(configFile);
                     props.load(is);
                 } else {
