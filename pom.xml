@@ -16,7 +16,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<security-api.version>1.0.3</security-api.version>
+		<security-api.version>1.0.5</security-api.version>
 		<nsp-util.version>1.0.11</nsp-util.version>
 		<apache.cxf.version>3.3.0</apache.cxf.version>
 		<jaxb-core.version>2.3.0</jaxb-core.version>
