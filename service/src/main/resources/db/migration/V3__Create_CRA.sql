@@ -26,6 +26,7 @@ INSERT INTO crl (url, lastmodified, nextupdate) VALUES ('http://crl.systemtest17
 INSERT INTO crl (url, lastmodified, nextupdate) VALUES ('http://crl.systemtest19.trust2408.com/systemtest19.crl', 0, 2408449693000);
 INSERT INTO crl (url, lastmodified, nextupdate) VALUES ('http://crl.systemtest22.trust2408.com/systemtest221.crl', 0, 2408449693000);
 INSERT INTO crl (url, lastmodified, nextupdate) VALUES ('http://crl.systemtest34.trust2408.com/systemtest34.crl', 0, 2408449693000);
+INSERT INTO crl (url, lastmodified, nextupdate) VALUES ('http://ca1.cti-gov.dk/oces/issuing/1/crl/issuing.crl', 0, 2408449693000);
 
 
 -- oces2/PP/MOCES_spaerret.p12
