@@ -24,6 +24,8 @@ public class SFtpClientImpl implements SFtpClient {
     private static final JSch jsch = new JSch();
     static {
         JSch.setLogger(new Log4jJSchLogger());
+        JSch.setConfig("server_host_key", JSch.getConfig("server_host_key") + ",ssh-rsa");
+        JSch.setConfig("PubkeyAcceptedAlgorithms", JSch.getConfig("PubkeyAcceptedAlgorithms") + ",ssh-rsa");
     }
 
     @Value("${sftp.hostname}")
