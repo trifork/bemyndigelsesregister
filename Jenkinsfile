@@ -46,7 +46,7 @@ pipeline {
                                                                                      }
                                                                                      docker.withRegistry('https://registry.fmk.netic.dk', 'ci_docker') {
 											sh "echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin registry.fmk.netic.dk"
-											bem_image = docker.build("registry.fmk.netic.dk/fmk/bemyndigelsesregister:$version", "--build-arg VERSION=$version --build-arg USERID=$userid ./bemyndigelsesregister")
+											bem_image = docker.build("registry.fmk.netic.dk/fmkonline/bemyndigelsesregister:$version", "--build-arg VERSION=$version --build-arg USERID=$userid ./bemyndigelsesregister")
 											bem_image.push()
 											bem_image.push('latest')
                                                                                      }
