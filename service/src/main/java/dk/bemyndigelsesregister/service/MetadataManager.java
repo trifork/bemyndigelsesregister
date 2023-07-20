@@ -10,7 +10,12 @@ public interface MetadataManager {
     /**
      * Updates metadata
      */
-    void putMetadata(Metadata metadata);
+    String putMetadata(Metadata metadata);
+
+    /**
+     * Updates metadata
+     */
+    String putMetadata(Metadata metadata, Boolean dryRun);
 
     /**
      * returns metadata

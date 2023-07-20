@@ -1093,13 +1093,16 @@ This element allows a creation time to be applied anywhere element wildcards are
                 <xs:element maxOccurs="unbounded" minOccurs="0" name="Permission" type="bms20170801:SystemPermission"/>
                 <xs:element name="EnableAsteriskPermission" type="xs:boolean"/>
                 <xs:element maxOccurs="unbounded" name="Role" type="bms20170801:DelegatingRole"/>
+                <xs:element name="DryRun" minOccurs="0" type="xs:boolean"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
     <xs:element name="PutMetadataResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
-            <xs:sequence/>
+            <xs:sequence>
+                <xs:element name="Result" minOccurs="0" type="xs:string"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 

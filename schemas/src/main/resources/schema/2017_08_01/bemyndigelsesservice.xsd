@@ -155,13 +155,16 @@
                 <xs:element name="Permission"  minOccurs="0" maxOccurs="unbounded" type="tns:SystemPermission"/>
                 <xs:element name="EnableAsteriskPermission" type="xs:boolean"/>
                 <xs:element name="Role" maxOccurs="unbounded" type="tns:DelegatingRole"/>
+                <xs:element name="DryRun" minOccurs="0" type="xs:boolean"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
     <xs:element name="PutMetadataResponse" xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
-            <xs:sequence/>
+            <xs:sequence>
+                <xs:element name="Result" minOccurs="0" type="xs:string"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 

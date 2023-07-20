@@ -46,8 +46,20 @@ public class MetadataManagerImpl implements MetadataManager {
 
     @Override
     @Transactional
-    public void putMetadata(Metadata metadata) {
-        logger.info("putMetadata started, domain=[" + metadata.getDomain().getCode() + "], system=[" + metadata.getSystem().getCode() + "]");
+    public String putMetadata(Metadata metadata) {
+        return this.putMetadata(metadata, false);
+    }
+
+    @Override
+    @Transactional
+    public String putMetadata(Metadata metadata, Boolean dryRun) {
+        StringBuilder result = new StringBuilder();
+
+        String msg = "putMetadata started, domain=[" + metadata.getDomain().getCode() + "], system=[" + metadata.getSystem().getCode() + ", DryRun=" + dryRun + "]";
+        result.append(msg).append('\n');
+        logger.info(msg);
+
+        boolean doSave = Boolean.TRUE != dryRun;
 
         // domain
         Domain domain = domainDao.findByCode(metadata.getDomain().getCode());
@@ -55,8 +67,13 @@ public class MetadataManagerImpl implements MetadataManager {
             domain = new Domain();
             domain.setCode(metadata.getDomain().getCode());
 
-            domainDao.save(domain);
-            logger.info("  Domain [" + metadata.getDomain().getCode() + "] created");
+            if (doSave) {
+                domainDao.save(domain);
+            }
+
+            msg = "  Domain [" + metadata.getDomain().getCode() + "] created";
+            result.append(msg).append('\n');
+            logger.info(msg);
         }
 
         boolean systemUpdated = false;
@@ -66,7 +83,10 @@ public class MetadataManagerImpl implements MetadataManager {
         if (system == null) {
             system = new DelegatingSystem();
             system.setCode(metadata.getSystem().getCode());
-            logger.info("  System [" + metadata.getSystem() + "] created");
+
+            msg = "  System [" + metadata.getSystem() + "] created";
+            result.append(msg).append('\n');
+            logger.info(msg);
         }
 
         String systemDescription = metadata.getSystem().getDescription();
@@ -78,10 +98,14 @@ public class MetadataManagerImpl implements MetadataManager {
             system.setDomain(domain);
             system.setDescription(systemDescription);
 
-            delegatingSystemDao.save(system);
-
+            if (doSave) {
+                delegatingSystemDao.save(system);
+            }
             systemUpdated = true;
-            logger.info("  System [" + metadata.getSystem() + "] updated, description=[" + systemDescription + "]");
+
+            msg = "  System [" + metadata.getSystem() + "] updated, description=[" + systemDescription + "]";
+            result.append(msg).append('\n');
+            logger.info(msg);
         }
 
         boolean delegatablePermissionChange = false;
@@ -92,9 +116,13 @@ public class MetadataManagerImpl implements MetadataManager {
             if (existingDelegatablePermissions != null) {
                 for (DelegatablePermission delegatablePermission : existingDelegatablePermissions) {
                     if (!metadata.containsDelegatablePermission(delegatablePermission.getRole().getCode(), delegatablePermission.getPermission().getCode())) {
-                        logger.info("  DelegatablePermission [" + delegatablePermission.getRole().getCode() + "]:[" + delegatablePermission.getPermission().getCode() + "] removed");
+                        msg = "  DelegatablePermission [" + delegatablePermission.getRole().getCode() + "]:[" + delegatablePermission.getPermission().getCode() + "] removed";
+                        result.append(msg).append('\n');
+                        logger.info(msg);
 
-                        delegatablePermissionDao.remove(delegatablePermission.getId());
+                        if (doSave) {
+                            delegatablePermissionDao.remove(delegatablePermission.getId());
+                        }
                         delegatablePermissionChange = true;
                     }
                 }
@@ -117,25 +145,35 @@ public class MetadataManagerImpl implements MetadataManager {
                     role.setCode(c.getCode());
                     role.setSystem(system);
 
-                    logger.info("  Role [" + c + "] created");
+                    msg = "  Role [" + c + "] created";
+                    result.append(msg).append('\n');
+                    logger.info(msg);
                 }
 
                 // check if update is necessary
                 if (!roleDescription.equals(role.getDescription())) {
                     role.setDescription(roleDescription);
 
-                    roleDao.save(role);
+                    if (doSave) {
+                        roleDao.save(role);
+                    }
 
-                    logger.info("  Role [" + c + "] updated, description=[" + roleDescription + "]");
+                    msg = "  Role [" + c + "] updated, description=[" + roleDescription + "]";
+                    result.append(msg).append('\n');
+                    logger.info(msg);
                 }
             }
 
             if (existingRoles != null) {
                 for (Role role : existingRoles) {
                     if (!metadata.containsRole(role.getCode())) {
-                        logger.info("  Role [" + role.getCode() + "] removed");
+                        msg = "  Role [" + role.getCode() + "] removed";
+                        result.append(msg).append('\n');
+                        logger.info(msg);
 
-                        roleDao.remove(role.getId());
+                        if (doSave) {
+                            roleDao.remove(role.getId());
+                        }
                     }
                 }
             }
@@ -159,7 +197,9 @@ public class MetadataManagerImpl implements MetadataManager {
                     permission.setCode(c.getCode());
                     permission.setSystem(system);
 
-                    logger.info("  Permission [" + c + "] created");
+                    msg = "  Permission [" + c + "] created";
+                    result.append(msg).append('\n');
+                    logger.info(msg);
                 }
 
                 // check if update is necessary
@@ -167,22 +207,30 @@ public class MetadataManagerImpl implements MetadataManager {
                     permission.setDescription(permissionDescription);
                     permission.setSystem(system);
 
-                    permissionDao.save(permission);
+                    if (doSave) {
+                        permissionDao.save(permission);
+                    }
 
-                    logger.info("  Permission [" + c + "] updated, description=[" + permissionDescription + "]");
+                    msg = "  Permission [" + c + "] updated, description=[" + permissionDescription + "]";
+                    result.append(msg).append('\n');
+                    logger.info(msg);
                 }
             }
 
             if (existingPermissions != null) {
                 for (Permission permission : existingPermissions) {
                     if (!metadata.containsPermission(permission.getCode())) {
-                        logger.info("  Permission [" + permission.getCode() + "] removed");
+                        msg = "  Permission [" + permission.getCode() + "] removed";
+                        result.append(msg).append('\n');
+                        logger.info(msg);
 
-                        List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findByPermission(permission.getId());
-                        for (DelegatablePermission d : delegatablePermissions) {
-                            delegatablePermissionDao.remove(d.getId());
+                        if (doSave) {
+                            List<DelegatablePermission> delegatablePermissions = delegatablePermissionDao.findByPermission(permission.getId());
+                            for (DelegatablePermission d : delegatablePermissions) {
+                                delegatablePermissionDao.remove(d.getId());
+                            }
+                            permissionDao.remove(permission.getId());
                         }
-                        permissionDao.remove(permission.getId());
                     }
                 }
             }
@@ -210,40 +258,58 @@ public class MetadataManagerImpl implements MetadataManager {
                     permission.getDelegatablePermissions().add(delegatablePermission);
                     delegatablePermission.setDelegatable(c.isDelegatable());
 
-                    delegatablePermissionDao.save(delegatablePermission);
-
+                    if (doSave) {
+                        delegatablePermissionDao.save(delegatablePermission);
+                    }
                     delegatablePermissionChange = true;
-                    logger.info("  DelegatablePermission [" + c.getRole().getCode() + "]:[" + c.getPermission().getCode() + "] added, delegatable=[" + c.isDelegatable() + "]");
+
+                    msg = "  DelegatablePermission [" + c.getRole().getCode() + "]:[" + c.getPermission().getCode() + "] added, delegatable=[" + c.isDelegatable() + "]";
+                    result.append(msg).append('\n');
+                    logger.info(msg);
                 } else {
                     if (delegatablePermission.isDelegatable() != c.isDelegatable()) {
                         delegatablePermission.setDelegatable(c.isDelegatable());
-                        delegatablePermissionDao.save(delegatablePermission);
-
+                        if (doSave) {
+                            delegatablePermissionDao.save(delegatablePermission);
+                        }
                         delegatablePermissionChange = true;
-                        logger.info("  DelegatablePermission [" + c.getRole().getCode() + "]:[" + c.getPermission().getCode() + "] updated to delegatable=[" + c.isDelegatable() + "]");
+
+                        msg = "  DelegatablePermission [" + c.getRole().getCode() + "]:[" + c.getPermission().getCode() + "] updated to delegatable=[" + c.isDelegatable() + "]";
+                        result.append(msg).append('\n');
+                        logger.info(msg);
                     }
                 }
             }
         }
 
         if (delegatablePermissionChange && !systemUpdated) { // update system timestamp to signal change in delegatable permissions to asterisk expander
-            delegatingSystemDao.save(system);
+            if (doSave) {
+                delegatingSystemDao.save(system);
+            }
 
-            logger.info("  System [" + metadata.getSystem() + "] marked as modified");
+            msg = "  System [" + metadata.getSystem() + "] marked as modified";
+            result.append(msg).append('\n');
+            logger.info(msg);
         }
 
-        metadataCache.clear(domain.getCode(), system.getCode());
+        if (doSave) {
+            metadataCache.clear(domain.getCode(), system.getCode());
 
-        // Let other servers know that metadata was updated
-        SystemVariable lastUpdate = systemVariableDAO.getByName(MetadataManager.LAST_METADATA_UPDATE_SYSTEM_VARIABLE);
-        if (lastUpdate == null) {
-            lastUpdate = new SystemVariable(MetadataManager.LAST_METADATA_UPDATE_SYSTEM_VARIABLE, Instant.now());
-        } else {
-            lastUpdate.setInstantValue(Instant.now());
+            // Let other servers know that metadata was updated
+            SystemVariable lastUpdate = systemVariableDAO.getByName(MetadataManager.LAST_METADATA_UPDATE_SYSTEM_VARIABLE);
+            if (lastUpdate == null) {
+                lastUpdate = new SystemVariable(MetadataManager.LAST_METADATA_UPDATE_SYSTEM_VARIABLE, Instant.now());
+            } else {
+                lastUpdate.setInstantValue(Instant.now());
+            }
+            systemVariableDAO.save(lastUpdate);
         }
-        systemVariableDAO.save(lastUpdate);
 
-        logger.info("putMetadata ended");
+        msg = "putMetadata " + (Boolean.TRUE == dryRun ? "dry run " : "") + "ended";
+        result.append(msg).append('\n');
+        logger.info(msg);
+
+        return result.toString();
     }
 
     @Override

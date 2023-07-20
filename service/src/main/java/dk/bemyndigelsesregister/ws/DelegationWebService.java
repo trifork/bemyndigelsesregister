@@ -292,9 +292,11 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                 }
             }
 
-            metadataManager.putMetadata(metadata);
+            String result = metadataManager.putMetadata(metadata, request.isDryRun());
 
-            return new PutMetadataResponse();
+            PutMetadataResponse response = new PutMetadataResponse();
+            response.setResult(result);
+            return response;
         } catch (SecurityException | IllegalArgumentException ex) {
             throw createException(ex, true);
         } catch (Exception ex) {
