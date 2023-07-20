@@ -165,6 +165,7 @@ public class MetadataManagerImpl implements MetadataManager {
                 // check if update is necessary
                 if (!permissionDescription.equals(permission.getDescription())) {
                     permission.setDescription(permissionDescription);
+                    permission.setSystem(system);
 
                     permissionDao.save(permission);
 
