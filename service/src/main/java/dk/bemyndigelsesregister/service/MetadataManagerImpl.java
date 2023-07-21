@@ -55,7 +55,7 @@ public class MetadataManagerImpl implements MetadataManager {
     public String putMetadata(Metadata metadata, Boolean dryRun) {
         StringBuilder result = new StringBuilder();
 
-        String msg = "putMetadata started, domain=[" + metadata.getDomain().getCode() + "], system=[" + metadata.getSystem().getCode() + ", DryRun=" + dryRun + "]";
+        String msg = "putMetadata started, domain=[" + metadata.getDomain().getCode() + "], system=[" + metadata.getSystem().getCode() + "], DryRun=[" + dryRun + "]";
         result.append(msg).append('\n');
         logger.info(msg);
 
