@@ -43,6 +43,9 @@ public class SFtpClientImpl implements SFtpClient {
     @Value("${sftp.knownhosts}")
     Resource knownHosts;
 
+    @Value("${sftp.connecttimeout}")
+    Integer connectTimeout;
+
     /**
      * Initialize knownhosts and make sure configureJSch hook is called so subclasses can provide further configuration
      */
@@ -90,7 +93,7 @@ public class SFtpClientImpl implements SFtpClient {
         try {
             session = getSession();
             channel = session.openChannel("sftp");
-            channel.connect();
+            channel.connect(connectTimeout);
             c = (ChannelSftp) channel;
 
             String fsrc = srcFile.getAbsolutePath();
@@ -130,7 +133,7 @@ public class SFtpClientImpl implements SFtpClient {
         session.setDaemonThread(true);
 
         session.setConfig("StrictHostKeyChecking", "no");
-        session.connect();
+        session.connect(connectTimeout);
 
         return session;
     }
