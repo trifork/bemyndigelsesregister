@@ -114,17 +114,18 @@ public class SosiUtil {
         if (idCard != null && idCard.isValidInTime() && idCard.getAuthenticationLevel() == authLevel)
             return idCard;
 
-        CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, CERTIFICATE_CVR, CERTIFICATE_ORGANISATION);
         IDCard requestCard = null;
 
         if (authLevel == AuthenticationLevel.VOCES_TRUSTED_SYSTEM) {
+            CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, "33257872", "Sundhedsdatastyrelsen");
             requestCard = factory.createNewSystemIDCard(CERTIFICATE_ORGANISATION, careProvider, authLevel, null, null, vault.getSystemCredentialPair().getCertificate(), null);
         } else if (authLevel == AuthenticationLevel.MOCES_TRUSTED_USER) {
+            CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, CERTIFICATE_CVR, CERTIFICATE_ORGANISATION);
             requestCard = factory.createNewUserIDCard(CERTIFICATE_ORGANISATION, CERTIFICATE_CPR, "Lars", "Larsen", "ll@trifork.com", "developer", "Doctor", careProvider, "J0184", authLevel, vault.getSystemCredentialPair().getCertificate(), null);
         }
 
         if (requestCard == null) {
-            throw new RuntimeException("Failed to create a new systemIDCard");
+            throw new RuntimeException("Failed to create a new IDCard");
         }
 
         SecurityTokenRequest request = factory.createNewSecurityTokenRequest();

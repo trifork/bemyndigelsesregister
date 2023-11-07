@@ -188,3 +188,7 @@ INSERT INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_C
 INSERT INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.indlaesMetadata', '20921897');
 INSERT INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.hentMetadata', '20921897');
 INSERT INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', '', '20921897');
+
+INSERT INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.indlaesMetadata', '33257872');
+INSERT INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', 'bemyndigelsesservice.hentMetadata', '33257872');
+INSERT INTO `whitelist` (whitelist_type, `name`, `subject_id`) VALUES ('SYSTEM_CVR', '', '33257872');
