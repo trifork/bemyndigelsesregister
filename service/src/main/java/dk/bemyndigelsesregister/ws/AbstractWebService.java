@@ -77,6 +77,24 @@ public abstract class AbstractWebService {
         RequestContext.get().setActingUser(getCallingUser(securityContext));
     }
 
+    protected void checkCallingRole(String roleId, SecurityContext securityContext) {
+        if (securityContext.getActingUser().isPresent()) {
+            SecurityContext.User user = securityContext.getActingUser().get();
+            if (user.getCredentials().isPresent()) {
+                SecurityContext.User.Credentials credentials = user.getCredentials().get();
+                if (credentials.getEducationCode().isPresent()) {
+                    String educationCode = credentials.getEducationCode().get();
+                    Education education = Education.fromEducationCode(educationCode);
+
+                    if (education != null && !education.getRoleId().equals(roleId)) {
+                        log.warn("Role/EducationCode mismatch: RoleId from request = " + roleId + ", EducationCode from SecurityContext = " + educationCode);
+                    }
+                }
+            }
+        }
+    }
+
+
     private String getCallingUser(SecurityContext securityContext) {
         StringBuilder b = new StringBuilder();
 

@@ -57,6 +57,10 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                 } else {
                     authorizeOperationForCpr(securityContext, "CPR for calling user was different from DelegatorCpr", createDelegation.getDelegatorCpr());
                 }
+
+                // check Role
+                checkCallingRole(createDelegation.getRoleId(), securityContext);
+
                 log.debug("Creating Delegation: " + createDelegation);
                 final Delegation delegation = delegationManager.createDelegation(
                         createDelegation.getSystemId(),
