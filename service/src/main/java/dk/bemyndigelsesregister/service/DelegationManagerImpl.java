@@ -133,6 +133,9 @@ public class DelegationManagerImpl implements DelegationManager {
 
         // update delegation
         delegation.setEffectiveTo(validTo);
+        if (validTo.isBefore(delegation.getEffectiveFrom())) {
+            delegation.setEffectiveFrom(validTo); // BEM-80 - ensures that delegation does not end up with validFrom after ValidTo
+        }
         delegation.setVersionsid(delegation.getVersionsid() + 1);
 
         delegationDAO.save(delegation);
