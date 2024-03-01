@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -20,7 +22,7 @@ public class MetadataManagerImplTest {
     public void canClearExistingMetadata() {
         Metadata p = new Metadata(domain, system, system);
 
-        p.addRole("MyRoleCode", "MyRoleDescription");
+        p.addRole("MyRoleCode", "MyRoleDescription", null);
         p.addPermission("MyPermissionCode", "MyPermissionDescription");
         p.addDelegatablePermission("MyRoleCode", "MyPermissionCode", "MyPermissionDescription", true);
 
@@ -80,7 +82,7 @@ public class MetadataManagerImplTest {
     @Test
     public void canUpdateRoles() {
         Metadata p = new Metadata(domain, system, system);
-        p.addRole("MyRole", "MyRoleDescription");
+        p.addRole("MyRole", "MyRoleDescription", List.of("0001", "0002"));
         manager.putMetadata(p);
         Metadata g = manager.getMetadata(domain, system);
 
@@ -88,13 +90,14 @@ public class MetadataManagerImplTest {
         assertEquals(1, g.getRoles().size());
         assertEquals(p.getRoles().get(0).getCode(), g.getRoles().get(0).getCode());
         assertEquals(p.getRoles().get(0).getDescription(), g.getRoles().get(0).getDescription());
+        assertEquals(p.getRoles().get(0).getEducationCodes(), g.getRoles().get(0).getEducationCodes());
     }
 
     @Test
     public void canRemoveRole() {
         Metadata p = new Metadata(domain, system, system);
-        p.addRole(TestData.roleCode, TestData.roleDescription);
-        p.addRole("RoleToRemove", "RoleToRemoveDescription");
+        p.addRole(TestData.roleCode, TestData.roleDescription, TestData.roleEducationCodes);
+        p.addRole("RoleToRemove", "RoleToRemoveDescription", null);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
         p.addPermission(TestData.permissionCode2, TestData.permissionDescription2);
         p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
@@ -104,7 +107,7 @@ public class MetadataManagerImplTest {
         manager.putMetadata(p);
 
         p = new Metadata(domain, system, system);
-        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addRole(TestData.roleCode, TestData.roleDescription, TestData.roleEducationCodes);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
         p.addPermission(TestData.permissionCode2, TestData.permissionDescription2);
         p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
@@ -117,6 +120,7 @@ public class MetadataManagerImplTest {
         assertEquals(1, g.getRoles().size());
         assertEquals(TestData.roleCode, g.getRoles().get(0).getCode());
         assertEquals(TestData.roleDescription, g.getRoles().get(0).getDescription());
+        assertEquals(TestData.roleEducationCodes, g.getRoles().get(0).getEducationCodes());
     }
 
     @Test
@@ -138,7 +142,7 @@ public class MetadataManagerImplTest {
     @Test
     public void canRemovePermission() {
         Metadata p = new Metadata(domain, system, system);
-        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addRole(TestData.roleCode, TestData.roleDescription, TestData.roleEducationCodes);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
         p.addPermission(TestData.permissionCode2, TestData.permissionDescription2);
         p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
@@ -146,7 +150,7 @@ public class MetadataManagerImplTest {
         manager.putMetadata(p);
 
         p = new Metadata(domain, system, system);
-        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addRole(TestData.roleCode, TestData.roleDescription, TestData.roleEducationCodes);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
         p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
         manager.putMetadata(p);
@@ -162,7 +166,7 @@ public class MetadataManagerImplTest {
     @Test
     public void canUpdateDelegatablePermission() {
         Metadata p = new Metadata(domain, system, system);
-        p.addRole(TestData.roleCode, TestData.roleDescription);
+        p.addRole(TestData.roleCode, TestData.roleDescription, TestData.roleEducationCodes);
         p.addPermission(TestData.permissionCode1, TestData.permissionDescription1);
         p.addDelegatablePermission(TestData.roleCode, TestData.permissionCode1, TestData.permissionDescription1, true);
         manager.putMetadata(p);

@@ -41,6 +41,13 @@
         <xs:sequence>
             <xs:element name="RoleId" type="tns:RoleId"/>
             <xs:element name="RoleDescription" type="tns:RoleDescription"/>
+            <xs:element name="EducationCodes" minOccurs="0" maxOccurs="1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element minOccurs="1" maxOccurs="unbounded" name="EducationCode" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="DelegatablePermissions" minOccurs="0" maxOccurs="1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
                     <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">

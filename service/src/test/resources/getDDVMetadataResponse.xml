@@ -35,6 +35,9 @@
             <ns2:Role>
                 <ns2:RoleId>Læge</ns2:RoleId>
                 <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>7170</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
                     <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
@@ -45,6 +48,9 @@
             <ns2:Role>
                 <ns2:RoleId>Tandlæge</ns2:RoleId>
                 <ns2:RoleDescription>Tandlæge</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5433</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
                     <ns2:PermissionId>VaccinationVedligehold</ns2:PermissionId>
@@ -55,6 +61,9 @@
             <ns2:Role>
                 <ns2:RoleId>Sygeplejerske</ns2:RoleId>
                 <ns2:RoleDescription>Sygeplejerske</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5166</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SeVaccinationer</ns2:PermissionId>
                     <ns2:PermissionId>VaccinationGodkend</ns2:PermissionId>

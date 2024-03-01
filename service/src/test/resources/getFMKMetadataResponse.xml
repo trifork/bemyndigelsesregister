@@ -71,6 +71,9 @@
             <ns2:Role>
                 <ns2:RoleId>Læge</ns2:RoleId>
                 <ns2:RoleDescription>Læge</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>7170</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
                     <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
@@ -93,6 +96,9 @@
             <ns2:Role>
                 <ns2:RoleId>Tandlæge</ns2:RoleId>
                 <ns2:RoleDescription>Tandlæge</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5433</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
                     <ns2:PermissionId>Lægemiddelordination</ns2:PermissionId>
@@ -114,6 +120,9 @@
             <ns2:Role>
                 <ns2:RoleId>Jordemoder</ns2:RoleId>
                 <ns2:RoleDescription>Jordemoder</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5175</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
                     <ns2:PermissionId>Effektuering</ns2:PermissionId>
@@ -129,6 +138,9 @@
             <ns2:Role>
                 <ns2:RoleId>Sygeplejerske</ns2:RoleId>
                 <ns2:RoleDescription>Sygeplejerske</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5166</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
                     <ns2:PermissionId>Effektuering</ns2:PermissionId>
@@ -144,6 +156,9 @@
             <ns2:Role>
                 <ns2:RoleId>Social- og sundhedsassistent</ns2:RoleId>
                 <ns2:RoleDescription>Social- og sundhedsassistent</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5152</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>SundhedsfagligOpslag</ns2:PermissionId>
                     <ns2:PermissionId>Effektuering</ns2:PermissionId>
@@ -159,6 +174,9 @@
             <ns2:Role>
                 <ns2:RoleId>Social- og sundhedshjælper</ns2:RoleId>
                 <ns2:RoleDescription>Social- og sundhedshjælper</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5147</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
                     <ns2:PermissionId>*</ns2:PermissionId>
@@ -167,6 +185,9 @@
             <ns2:Role>
                 <ns2:RoleId>Sundhedsplejerske</ns2:RoleId>
                 <ns2:RoleDescription>Sundhedsplejerske</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5168</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
                     <ns2:PermissionId>*</ns2:PermissionId>
@@ -175,6 +196,9 @@
             <ns2:Role>
                 <ns2:RoleId>Farmaceut</ns2:RoleId>
                 <ns2:RoleDescription>Farmaceut</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5425</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
                     <ns2:PermissionId>*</ns2:PermissionId>
@@ -183,6 +207,9 @@
             <ns2:Role>
                 <ns2:RoleId>Farmakonom</ns2:RoleId>
                 <ns2:RoleDescription>Farmakonom</ns2:RoleDescription>
+                <ns2:EducationCodes>
+                    <ns2:EducationCode>5177</ns2:EducationCode>
+                </ns2:EducationCodes>
                 <ns2:DelegatablePermissions>
                     <ns2:PermissionId>Privatmarkering</ns2:PermissionId>
                     <ns2:PermissionId>*</ns2:PermissionId>

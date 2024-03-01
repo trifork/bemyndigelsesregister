@@ -98,12 +98,13 @@ public class Metadata {
         roles.add(role);
     }
 
-    public void addRole(String roleCode, String roleDescription) {
+    public void addRole(String roleCode, String roleDescription, List<String> educationCodes) {
         Role role = new Role();
         role.setCode(roleCode);
         role.setDescription(roleDescription);
+        role.setEducationCodes(educationCodes);
 
-        addRole(role);;
+        addRole(role);
     }
 
     public void addPermission(Permission permission) {

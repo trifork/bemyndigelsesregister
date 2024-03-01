@@ -26,6 +26,7 @@ CREATE TABLE `arbejdsfunktion`
     `linked_system_id`     bigint(20) NOT NULL,
     `kode`                 varchar(255) NOT NULL,
     `beskrivelse`          varchar(255) NOT NULL,
+    `uddannelseskoder`     varchar(255) DEFAULT NULL,
     `sidst_modificeret`    datetime     DEFAULT NULL,
     `sidst_modificeret_af` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),

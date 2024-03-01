@@ -2,7 +2,7 @@ INSERT INTO domaene(kode) VALUES ('Trifork');
 
 INSERT INTO linked_system(domaene_id, kode, beskrivelse) VALUES (1, 'testsys', 'Trifork test system');
 
-INSERT INTO arbejdsfunktion(kode, beskrivelse, linked_system_id) values ('Laege', 'For unit test only', 1);
+INSERT INTO arbejdsfunktion(kode, beskrivelse, uddannelseskoder, linked_system_id) values ('Laege', 'For unit test only', '7170', 1);
 
 INSERT INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R01', 'Laegemiddelordination', 1);
 INSERT INTO rettighed(kode, beskrivelse, linked_system_id) VALUES ('R02', 'Testrettighed2', 1);

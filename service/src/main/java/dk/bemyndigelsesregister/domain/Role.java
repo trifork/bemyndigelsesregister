@@ -1,11 +1,13 @@
 package dk.bemyndigelsesregister.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Role extends ExternalIdentifiedDomainObject {
     private DelegatingSystem system;
     private String description;
+    private List<String> educationCodes;
     private Set<DelegatablePermission> delegatablePermissions;
 
     public Role() {
@@ -17,6 +19,14 @@ public class Role extends ExternalIdentifiedDomainObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getEducationCodes() {
+        return educationCodes;
+    }
+
+    public void setEducationCodes(List<String> educationCodes) {
+        this.educationCodes = educationCodes;
     }
 
     public void setSystem(DelegatingSystem system) {

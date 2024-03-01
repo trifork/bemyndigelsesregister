@@ -979,6 +979,13 @@ This element allows a creation time to be applied anywhere element wildcards are
         <xs:sequence>
             <xs:element name="RoleId" type="bms20170801:RoleId"/>
             <xs:element name="RoleDescription" type="bms20170801:RoleDescription"/>
+            <xs:element name="EducationCodes" minOccurs="0" maxOccurs="1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                    <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                        <xs:element minOccurs="1" maxOccurs="unbounded" name="EducationCode" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element maxOccurs="1" minOccurs="0" name="DelegatablePermissions" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
                     <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">

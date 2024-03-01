@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class MetadataManagerImpl implements MetadataManager {
@@ -135,6 +136,7 @@ public class MetadataManagerImpl implements MetadataManager {
 
             for (Role c : metadata.getRoles()) {
                 String roleDescription = c.getDescription();
+                List<String> roleEducationCodes = c.getEducationCodes();
 
                 if (roleDescription == null || roleDescription.trim().isEmpty())
                     roleDescription = c.getCode();
@@ -151,14 +153,15 @@ public class MetadataManagerImpl implements MetadataManager {
                 }
 
                 // check if update is necessary
-                if (!roleDescription.equals(role.getDescription())) {
+                if (!roleDescription.equals(role.getDescription()) || !Objects.equals(roleEducationCodes, role.getEducationCodes())) {
                     role.setDescription(roleDescription);
+                    role.setEducationCodes(roleEducationCodes);
 
                     if (doSave) {
                         roleDao.save(role);
                     }
 
-                    msg = "  Role [" + c + "] updated, description=[" + roleDescription + "]";
+                    msg = "  Role [" + c + "] updated, description=[" + roleDescription + "], educationCodes=" + roleEducationCodes;
                     result.append(msg).append('\n');
                     logger.info(msg);
                 }
@@ -366,7 +369,7 @@ public class MetadataManagerImpl implements MetadataManager {
             for (Role role : roles) {
                 role.setSystem(delegatingSystem);
                 role.setDelegatablePermissions(new HashSet<>(delegatablePermissionDao.findBySystemAndRole(delegatingSystem.getId(), role.getId())));
-                metadata.addRole(role.getCode(), role.getDescription());
+                metadata.addRole(role.getCode(), role.getDescription(), role.getEducationCodes());
             }
         }
 

@@ -248,7 +248,7 @@ public class DelegationWebService extends AbstractWebService implements Delegati
 
             if (request.getRoles() != null) {
                 for (DelegatingRole role : request.getRoles()) {
-                    metadata.addRole(role.getRoleId(), role.getRoleDescription());
+                    metadata.addRole(role.getRoleId(), role.getRoleDescription(), role.getEducationCodes() != null ? role.getEducationCodes().getEducationCodes() : null);
 
                     if (role.getDelegatablePermissions() != null) {
                         for (String permissionCode : role.getDelegatablePermissions().getPermissionIds()) {
@@ -347,6 +347,7 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                     DelegatingRole role = new DelegatingRole();
                     role.setRoleId(c.getCode());
                     role.setRoleDescription(c.getDescription());
+                    role.setEducationCodes(mapEducationCodes(c.getEducationCodes()));
 
                     if (metadata.getDelegatablePermissions() != null) {
                         for (DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
@@ -416,6 +417,7 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                             DelegatingRole role = new DelegatingRole();
                             role.setRoleId(c.getCode());
                             role.setRoleDescription(c.getDescription());
+                            role.setEducationCodes(mapEducationCodes(c.getEducationCodes()));
 
                             if (metadata.getDelegatablePermissions() != null) {
                                 for (DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
@@ -484,6 +486,17 @@ public class DelegationWebService extends AbstractWebService implements Delegati
         } finally {
             RequestContext.clear();
         }
+    }
+
+    private DelegatingRole.EducationCodes mapEducationCodes(List<String> educationCodes) {
+        if (educationCodes == null || educationCodes.isEmpty()) {
+            return null;
+        }
+        DelegatingRole.EducationCodes mapped = new DelegatingRole.EducationCodes();
+        for (String educationCode : educationCodes) {
+            mapped.getEducationCodes().add(educationCode);
+        }
+        return mapped;
     }
 
     private RuntimeException createException(Exception ex, boolean isWarning) {

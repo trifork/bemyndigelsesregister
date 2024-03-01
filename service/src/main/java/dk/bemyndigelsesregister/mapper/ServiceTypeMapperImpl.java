@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.mapper;
 
 import dk.bemyndigelsesregister.domain.*;
 import dk.bemyndigelsesregister.service.MetadataManager;
+import dk.nsi.bemyndigelse._2017._08._01.DelegatingRole;
 import dk.nsi.bemyndigelse._2017._08._01.ObjectFactory;
 import dk.nsi.bemyndigelse._2017._08._01.State;
 import dk.nsi.bemyndigelse._2017._08._01.SystemPermission;
@@ -119,6 +120,13 @@ public class ServiceTypeMapperImpl implements ServiceTypeMapper {
         dk.nsi.bemyndigelse._2017._08._01.DelegatingRole xmlRole = objectFactory.createDelegatingRole();
         xmlRole.setRoleId(r.getCode());
         xmlRole.setRoleDescription(r.getDescription());
+        if (r.getEducationCodes() != null && !r.getEducationCodes().isEmpty()) {
+            DelegatingRole.EducationCodes educationCodes = new DelegatingRole.EducationCodes();
+            for (String educationCode : r.getEducationCodes()) {
+                educationCodes.getEducationCodes().add(educationCode);
+            }
+            xmlRole.setEducationCodes(educationCodes);
+        }
 
         return xmlRole;
     }

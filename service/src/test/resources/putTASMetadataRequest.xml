@@ -25,6 +25,9 @@
             <Role>
                 <RoleId>Læge</RoleId>
                 <RoleDescription>Læge</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>7170</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>LæsKladder</PermissionId>
                     <PermissionId>SkrivKladder</PermissionId>
@@ -34,6 +37,9 @@
             <Role>
                 <RoleId>Tandlæge</RoleId>
                 <RoleDescription>Tandlæge</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5433</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>LæsKladder</PermissionId>
                     <PermissionId>SkrivKladder</PermissionId>
@@ -43,6 +49,9 @@
             <Role>
                 <RoleId>Sygeplejerske</RoleId>
                 <RoleDescription>Sygeplejerske</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5166</EducationCode>
+                </EducationCodes>
             </Role>
         </PutMetadataRequest>
     </soapenv:Body>

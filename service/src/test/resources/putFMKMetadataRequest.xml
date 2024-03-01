@@ -65,6 +65,9 @@
             <Role>
                 <RoleId>Læge</RoleId>
                 <RoleDescription>Læge</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>7170</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>SundhedsfagligOpslag</PermissionId>
                     <PermissionId>Lægemiddelordination</PermissionId>
@@ -86,6 +89,9 @@
             <Role>
                 <RoleId>Tandlæge</RoleId>
                 <RoleDescription>Tandlæge</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5433</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>SundhedsfagligOpslag</PermissionId>
                     <PermissionId>Lægemiddelordination</PermissionId>
@@ -106,6 +112,9 @@
             <Role>
                 <RoleId>Jordemoder</RoleId>
                 <RoleDescription>Jordemoder</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5175</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>SundhedsfagligOpslag</PermissionId>
                     <PermissionId>Effektuering</PermissionId>
@@ -120,6 +129,9 @@
             <Role>
                 <RoleId>Sygeplejerske</RoleId>
                 <RoleDescription>Sygeplejerske</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5166</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>SundhedsfagligOpslag</PermissionId>
                     <PermissionId>Effektuering</PermissionId>
@@ -134,6 +146,9 @@
             <Role>
                 <RoleId>Social- og sundhedsassistent</RoleId>
                 <RoleDescription>Social- og sundhedsassistent</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5152</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>SundhedsfagligOpslag</PermissionId>
                     <PermissionId>Effektuering</PermissionId>
@@ -148,6 +163,9 @@
             <Role>
                 <RoleId>Social- og sundhedshjælper</RoleId>
                 <RoleDescription>Social- og sundhedshjælper</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5147</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>Privatmarkering</PermissionId>
                 </DelegatablePermissions>
@@ -155,6 +173,9 @@
             <Role>
                 <RoleId>Sundhedsplejerske</RoleId>
                 <RoleDescription>Sundhedsplejerske</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5168</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>Privatmarkering</PermissionId>
                 </DelegatablePermissions>
@@ -162,6 +183,9 @@
             <Role>
                 <RoleId>Farmaceut</RoleId>
                 <RoleDescription>Farmaceut</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5425</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>Privatmarkering</PermissionId>
                 </DelegatablePermissions>
@@ -169,6 +193,9 @@
             <Role>
                 <RoleId>Farmakonom</RoleId>
                 <RoleDescription>Farmakonom</RoleDescription>
+                <EducationCodes>
+                    <EducationCode>5177</EducationCode>
+                </EducationCodes>
                 <DelegatablePermissions>
                     <PermissionId>Privatmarkering</PermissionId>
                 </DelegatablePermissions>
