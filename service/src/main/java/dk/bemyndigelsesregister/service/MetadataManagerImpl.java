@@ -156,6 +156,7 @@ public class MetadataManagerImpl implements MetadataManager {
                 if (!roleDescription.equals(role.getDescription()) || !Objects.equals(roleEducationCodes, role.getEducationCodes())) {
                     role.setDescription(roleDescription);
                     role.setEducationCodes(roleEducationCodes);
+                    role.setSystem(system);
 
                     if (doSave) {
                         roleDao.save(role);

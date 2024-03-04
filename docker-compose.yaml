@@ -52,6 +52,7 @@ services:
       - ./etc/db/migration/bem/V13__Drop_BEM1_table.sql:/flyway/sql/V13__Drop_BEM1_table.sql
       - ./etc/db/migration/bem/V14__Drop_retransmission_table.sql:/flyway/sql/V14__Drop_retransmission_table.sql
       - ./etc/db/migration/bem/V15__Whitelist_Trifork_CVR.sql:/flyway/sql/V15__Whitelist_Trifork_CVR.sql
+      - ./etc/db/migration/bem/V16__Add_education_code.sql:/flyway/sql/V16__Add_education_code.sql
     depends_on:
       - bemdb
   bem:
