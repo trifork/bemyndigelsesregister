@@ -93,6 +93,7 @@ public abstract class AbstractWebService {
                             educationCodeFromSecurityContext = credentials.getEducationCode().get();
                             for (String educationCode : educationCodes) {
                                 if (educationCode.equalsIgnoreCase(educationCodeFromSecurityContext)) {
+                                    log.info("Role matched");
                                     return;
                                 }
                             }

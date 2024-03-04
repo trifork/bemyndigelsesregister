@@ -59,7 +59,7 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                 }
 
                 // check role
-                Metadata metadata = metadataManager.getMetadata(Domain.DEFAULT_DOMAIN, createDelegation.getSystemId());
+                Metadata metadata = metadataManager.getMetadata(Domain.DEFAULT_DOMAIN, createDelegation.getSystemId()); // throws exception if system is unknown
                 Role role = metadata.getRole(createDelegation.getRoleId());
                 checkCallingRole(role, securityContext);
 
