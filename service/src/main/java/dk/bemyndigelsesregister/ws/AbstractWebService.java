@@ -1,6 +1,7 @@
 package dk.bemyndigelsesregister.ws;
 
 import dk.bemyndigelsesregister.dao.WhitelistDAO;
+import dk.bemyndigelsesregister.domain.Role;
 import dk.bemyndigelsesregister.domain.WhitelistType;
 import dk.bemyndigelsesregister.service.AuditLogger;
 import dk.sds.nsp.security.Security;
@@ -8,11 +9,9 @@ import dk.sds.nsp.security.SecurityContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public abstract class AbstractWebService {
     private static final Logger log = LogManager.getLogger(AbstractWebService.class);
@@ -22,6 +21,9 @@ public abstract class AbstractWebService {
 
     @Autowired
     private WhitelistDAO whitelistDAO;
+
+    @Value("${rolevalidation.enabled}")
+    private String roleValidationEnabled;
 
     protected SecurityContext getSecurityContext() {
         try {
@@ -42,18 +44,18 @@ public abstract class AbstractWebService {
         } catch (Exception ex) { // avoid NPE in NspSecurityContext.java:113
             throw new SecurityException("No security ticket is present");
         }
-        if (!ticketOptional.isPresent()) {
+        if (ticketOptional.isEmpty()) {
             throw new SecurityException("No security ticket is present");
         }
         SecurityContext.Ticket ticket = ticketOptional.get();
         if (!ticket.isValid()) {
             throw new SecurityException("Invalid security ticket");
         }
-        if (userRequired && !securityContext.getActingUser().isPresent()) {
+        if (userRequired && securityContext.getActingUser().isEmpty()) {
             throw new SecurityException("Calling user not found in security context");
         }
         if (whitelist != null) {
-            if (!securityContext.getOrganisation().isPresent()) {
+            if (securityContext.getOrganisation().isEmpty()) {
                 throw new SecurityException("Calling organisation not found in security context");
             }
 
@@ -77,18 +79,32 @@ public abstract class AbstractWebService {
         RequestContext.get().setActingUser(getCallingUser(securityContext));
     }
 
-    protected void checkCallingRole(String roleId, SecurityContext securityContext) {
-        if (securityContext.getActingUser().isPresent()) {
-            SecurityContext.User user = securityContext.getActingUser().get();
-            if (user.getCredentials().isPresent()) {
-                SecurityContext.User.Credentials credentials = user.getCredentials().get();
-                if (credentials.getEducationCode().isPresent()) {
-                    String educationCode = credentials.getEducationCode().get();
-                    Education education = Education.fromEducationCode(educationCode);
+    protected void checkCallingRole(Role role, SecurityContext securityContext) {
+        if (role != null) { // unknown roles are handled by createDelegationObject in DelegationManagerImpl
+            List<String> educationCodes = role.getEducationCodes();
+            if (educationCodes != null && !educationCodes.isEmpty()) {
 
-                    if (education != null && !education.getRoleId().equals(roleId)) {
-                        log.warn("Role/EducationCode mismatch: RoleId from request = " + roleId + ", EducationCode from SecurityContext = " + educationCode);
+                String educationCodeFromSecurityContext = null;
+                if (securityContext.getActingUser().isPresent()) {
+                    SecurityContext.User user = securityContext.getActingUser().get();
+                    if (user.getCredentials().isPresent()) {
+                        SecurityContext.User.Credentials credentials = user.getCredentials().get();
+                        if (credentials.getEducationCode().isPresent()) {
+                            educationCodeFromSecurityContext = credentials.getEducationCode().get();
+                            for (String educationCode : educationCodes) {
+                                if (educationCode.equalsIgnoreCase(educationCodeFromSecurityContext)) {
+                                    return;
+                                }
+                            }
+                        }
                     }
+                }
+
+                String message = "Role/EducationCode mismatch. Required educationCode = " + educationCodes + ", educationCode from SecurityContext = " + educationCodeFromSecurityContext;
+                if (Boolean.parseBoolean(roleValidationEnabled)) {
+                    throw new SecurityException(message);
+                } else {
+                    log.warn(message);
                 }
             }
         }

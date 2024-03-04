@@ -30,7 +30,7 @@ public class DelegationCleanupJob {
 
     @Scheduled(cron = "${delegationcleanupjob.cron}")
     public void start() {
-        if (Boolean.valueOf(jobEnabled)) {
+        if (Boolean.parseBoolean(jobEnabled)) {
             logger.info("delegationCleanup job started");
             try {
                 cleanup();

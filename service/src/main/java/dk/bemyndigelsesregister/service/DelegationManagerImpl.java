@@ -167,11 +167,13 @@ public class DelegationManagerImpl implements DelegationManager {
         }
 
         Metadata metadata = metadataManager.getMetadata(Domain.DEFAULT_DOMAIN, systemCode);
-        if (metadata == null)
+        if (metadata == null) {
             throw new IllegalArgumentException("No system [" + systemCode + "] exists");
+        }
 
-        if (!metadata.containsRole(roleCode))
+        if (!metadata.containsRole(roleCode)) {
             throw new IllegalArgumentException("No role [" + roleCode + "] exists for system [" + systemCode + "]");
+        }
 
         final Delegation delegation = new Delegation();
         delegation.setCode(systemService.createUUIDString());
