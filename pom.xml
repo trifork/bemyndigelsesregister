@@ -88,5 +88,6 @@
 	<modules>
 		<module>schemas</module>
 		<module>service</module>
+		<module>sql</module>
 	</modules>
 </project>

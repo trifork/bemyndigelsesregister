@@ -1,0 +1,21 @@
+CREATE TABLE `bemyndigelse20` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `kode` varchar(255) NOT NULL,
+  `bemyndigende_cpr` varchar(10) NOT NULL,
+  `bemyndigede_cpr` varchar(10) NOT NULL,
+  `bemyndigede_cvr` varchar(10) DEFAULT NULL,
+  `godkendelsesdato` datetime DEFAULT NULL,
+  `gyldig_fra` datetime NOT NULL,
+  `gyldig_til` datetime NOT NULL,
+  `versionsid` int(11) NOT NULL,
+  `sidst_modificeret` datetime DEFAULT NULL,
+  `sidst_modificeret_af` varchar(255) DEFAULT NULL,
+  `status` enum('GODKENDT','ANMODET') NOT NULL DEFAULT 'ANMODET',
+  `linked_system_kode` varchar(255) NOT NULL,
+  `arbejdsfunktion_kode` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ix_bemyndigende_cpr` (`bemyndigende_cpr`),
+  KEY `ix_bemyndigede_cpr` (`bemyndigede_cpr`),
+  KEY `ix_sidst_modificeret` (`sidst_modificeret`),
+  KEY `ix_system_gyldig_til` (`linked_system_kode`,`gyldig_til`)
+) ENGINE=InnoDB COMMENT='Bemyndigelse version 2.0'
