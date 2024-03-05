@@ -4,6 +4,7 @@
         <ns:GetMetadataRequest>
             <ns:Domain>Trifork</ns:Domain>
             <ns:SystemId>FMK</ns:SystemId>
+            <ns:IncludeEducationCodes>true</ns:IncludeEducationCodes>
         </ns:GetMetadataRequest>
     </soapenv:Body>
 </soapenv:Envelope>

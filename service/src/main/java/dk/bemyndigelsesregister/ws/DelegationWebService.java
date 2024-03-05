@@ -350,7 +350,10 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                     DelegatingRole role = new DelegatingRole();
                     role.setRoleId(c.getCode());
                     role.setRoleDescription(c.getDescription());
-                    role.setEducationCodes(mapEducationCodes(c.getEducationCodes()));
+
+                    if (Boolean.TRUE.equals(request.isIncludeEducationCodes())) { // preserve backward compatibility
+                        role.setEducationCodes(mapEducationCodes(c.getEducationCodes()));
+                    }
 
                     if (metadata.getDelegatablePermissions() != null) {
                         for (DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {
@@ -420,7 +423,10 @@ public class DelegationWebService extends AbstractWebService implements Delegati
                             DelegatingRole role = new DelegatingRole();
                             role.setRoleId(c.getCode());
                             role.setRoleDescription(c.getDescription());
-                            role.setEducationCodes(mapEducationCodes(c.getEducationCodes()));
+
+                            if (Boolean.TRUE.equals(request.isIncludeEducationCodes())) { // preserve backward compatibility
+                                role.setEducationCodes(mapEducationCodes(c.getEducationCodes()));
+                            }
 
                             if (metadata.getDelegatablePermissions() != null) {
                                 for (DelegatablePermission dp : metadata.getDelegatablePermissions(c.getCode())) {

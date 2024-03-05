@@ -3,6 +3,7 @@
     <soapenv:Body>
         <ns:GetAllMetadataRequest>
             <ns:Domain>Trifork</ns:Domain>
+            <ns:IncludeEducationCodes>true</ns:IncludeEducationCodes>
         </ns:GetAllMetadataRequest>
     </soapenv:Body>
 </soapenv:Envelope>

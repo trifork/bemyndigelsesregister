@@ -1118,6 +1118,7 @@ This element allows a creation time to be applied anywhere element wildcards are
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="Domain" type="bms20170801:Domain"/>
                 <xs:element name="SystemId" type="bms20170801:SystemId"/>
+                <xs:element name="IncludeEducationCodes" type="xs:boolean" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -1138,6 +1139,7 @@ This element allows a creation time to be applied anywhere element wildcards are
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="Domain" type="bms20170801:Domain"/>
+                <xs:element name="IncludeEducationCodes" type="xs:boolean" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

@@ -180,6 +180,7 @@
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="Domain" type="tns:Domain"/>
                 <xs:element name="SystemId" type="tns:SystemId"/>
+                <xs:element name="IncludeEducationCodes" type="xs:boolean" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -200,6 +201,7 @@
         <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
             <xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="Domain" type="tns:Domain"/>
+                <xs:element name="IncludeEducationCodes" type="xs:boolean" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
