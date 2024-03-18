@@ -5,4 +5,4 @@ CREATE TABLE `domaene` (
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `kode_unique` (`kode`)
-) ENGINE=InnoDB
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

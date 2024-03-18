@@ -5,4 +5,4 @@ CREATE TABLE `system_variable` (
   `name` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

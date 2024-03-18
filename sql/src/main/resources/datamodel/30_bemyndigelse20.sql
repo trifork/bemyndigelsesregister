@@ -18,4 +18,4 @@ CREATE TABLE `bemyndigelse20` (
   KEY `ix_bemyndigede_cpr` (`bemyndigede_cpr`),
   KEY `ix_sidst_modificeret` (`sidst_modificeret`),
   KEY `ix_system_gyldig_til` (`linked_system_kode`,`gyldig_til`)
-) ENGINE=InnoDB COMMENT='Bemyndigelse version 2.0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Bemyndigelse version 2.0'

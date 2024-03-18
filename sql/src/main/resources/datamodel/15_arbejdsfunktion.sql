@@ -9,4 +9,4 @@ CREATE TABLE `arbejdsfunktion` (
   PRIMARY KEY (`id`),
   KEY `arbejdsfunktion_system_type` (`linked_system_id`),
   CONSTRAINT `arbejdsfunktion_system_type` FOREIGN KEY (`linked_system_id`) REFERENCES `linked_system` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

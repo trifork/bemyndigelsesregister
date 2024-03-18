@@ -7,4 +7,4 @@ CREATE TABLE `linked_system` (
   `beskrivelse` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `kode_unique` (`kode`)
-) ENGINE=InnoDB
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

@@ -6,4 +6,4 @@ CREATE TABLE `whitelist` (
   `sidst_modificeret` datetime DEFAULT NULL,
   `sidst_modificeret_af` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
