@@ -141,7 +141,7 @@ public abstract class AbstractWebService {
     protected void authorizeOperationForCpr(SecurityContext securityContext, String errorMessage, String... authorizedCprs) {
         Set<String> authorizedCprSet = new HashSet<>(Arrays.asList(authorizedCprs));
 
-        if (!securityContext.getActingUser().isPresent()) {
+        if (securityContext.getActingUser().isEmpty()) {
             throw new SecurityException("Calling user not found in security context");
         }
 

@@ -1,5 +1,7 @@
 package dk.bemyndigelsesregister.ws;
 
+import org.apache.logging.log4j.ThreadContext;
+
 public class RequestContext {
     private static final ThreadLocal<RequestContext> currentRequestContext = new ThreadLocal<>();
 
@@ -14,6 +16,7 @@ public class RequestContext {
 
     public static void clear() {
         currentRequestContext.remove();
+        ThreadContext.clearAll();
     }
 
     private String actingUser;
@@ -33,5 +36,6 @@ public class RequestContext {
 
     public void setMessageId(String messageId) {
         this.messageId = messageId;
+        ThreadContext.put("uuid", messageId);
     }
 }

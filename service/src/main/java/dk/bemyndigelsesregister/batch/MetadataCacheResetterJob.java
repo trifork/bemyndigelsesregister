@@ -17,7 +17,7 @@ import java.time.Instant;
  * Job to clear metadata cache after metadata updates - ensures clear when another server updates
  */
 @Component
-public class MetadataCacheResetterJob {
+public class MetadataCacheResetterJob extends AbstractJob {
     private static final Logger logger = LogManager.getLogger(MetadataCacheResetterJob.class);
 
     @Autowired
@@ -29,23 +29,36 @@ public class MetadataCacheResetterJob {
     @Value("${metadatacacheresetterjob.enabled}")
     private String jobEnabled;
 
+    public MetadataCacheResetterJob() {
+        super(logger, "MetadataCacheResetter");
+    }
+
     @Scheduled(cron = "${metadatacacheresetterjob.cron}")
     public void start() {
-        if (Boolean.valueOf(jobEnabled)) {
-            logger.info("MetadataCacheResetter job started");
+        try {
+            initJob();
 
-            SystemVariable lastUpdate = systemVariableDAO.getByName(MetadataManager.LAST_METADATA_UPDATE_SYSTEM_VARIABLE);
-            if (lastUpdate != null) {
-                Instant oldestContent = metadataCache.getOldestContent();
-                Instant updateTime = lastUpdate.getInstantValue();
-                if (oldestContent != null && oldestContent.isBefore(updateTime)) {
-                    logger.info("Oldest metadata cache content " + oldestContent + " before update time " + updateTime + ", clear cache");
-                    metadataCache.clear();
+            if (Boolean.parseBoolean(jobEnabled)) {
+                startJob();
+
+                SystemVariable lastUpdate = systemVariableDAO.getByName(MetadataManager.LAST_METADATA_UPDATE_SYSTEM_VARIABLE);
+                if (lastUpdate != null) {
+                    Instant oldestContent = metadataCache.getOldestContent();
+                    Instant updateTime = lastUpdate.getInstantValue();
+                    if (oldestContent != null && oldestContent.isBefore(updateTime)) {
+                        logger.info("Oldest metadata cache content " + oldestContent + " before update time " + updateTime + ", clear cache");
+                        metadataCache.clear();
+                    }
                 }
-            }
 
-            logger.info("MetadataCacheResetter job ended");
-        } else
-            logger.info("MetadataCacheResetter job disabled");
+                endJob();
+            } else {
+                jobDisabled();
+            }
+        } catch (Exception ex) {
+            logger.error("An error occurred during reset of metadata cache", ex);
+        } finally {
+            cleanupJob();
+        }
     }
 }

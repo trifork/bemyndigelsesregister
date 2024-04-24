@@ -22,7 +22,7 @@ import java.util.*;
  */
 
 @Component
-public class MetadataChangeHandlerJob {
+public class MetadataChangeHandlerJob extends AbstractJob {
     private static final Logger logger = LogManager.getLogger(MetadataChangeHandlerJob.class);
     private static final String LAST_RUN_SYSTEM_VARIABLE = "lastMetadataChangeHandlerRun";
 
@@ -49,24 +49,37 @@ public class MetadataChangeHandlerJob {
     @Value("${metadatachangehandlerjob.enabled}")
     private String jobEnabled;
 
+    public MetadataChangeHandlerJob() {
+        super(logger, "MetadataChangeHandler");
+    }
+
     @Scheduled(cron = "${metadatachangehandlerjob.cron}")
     public void start() {
-        if (Boolean.valueOf(jobEnabled)) {
-            logger.info("MetadataChangeHandler job started");
+        try {
+            initJob();
 
-            SystemVariable lastRun = systemVariableDAO.getByName(LAST_RUN_SYSTEM_VARIABLE);
-            if (lastRun == null) {
-                lastRun = new SystemVariable(LAST_RUN_SYSTEM_VARIABLE, Instant.now());
+            if (Boolean.parseBoolean(jobEnabled)) {
+                startJob();
+
+                SystemVariable lastRun = systemVariableDAO.getByName(LAST_RUN_SYSTEM_VARIABLE);
+                if (lastRun == null) {
+                    lastRun = new SystemVariable(LAST_RUN_SYSTEM_VARIABLE, Instant.now());
+                }
+                Instant startTime = Instant.now();
+
+                // update delegations with asterisk permission for changed systems
+                handleChangedMetadata(startTime, lastRun.getInstantValue());
+
+                updateLastRun(lastRun, startTime);
+                endJob();
+            } else {
+                jobDisabled();
             }
-            Instant startTime = Instant.now();
-
-            // update delegations with asterisk permission for changed systems
-            handleChangedMetadata(startTime, lastRun.getInstantValue());
-
-            updateLastRun(lastRun, startTime);
-            logger.info("MetadataChangeHandler job ended");
-        } else
-            logger.info("MetadataChangeHandler job disabled");
+        } catch (Exception ex) {
+            logger.error("An error occurred during reset of metadata cache", ex);
+        } finally {
+            cleanupJob();
+        }
     }
 
 

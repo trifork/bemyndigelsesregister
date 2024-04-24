@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 
 @Component
-public class DelegationCleanupJob {
+public class DelegationCleanupJob extends AbstractJob {
     private static final Logger logger = LogManager.getLogger(DelegationCleanupJob.class);
 
     @Value("${delegationcleanupjob.enabled}")
@@ -28,18 +28,27 @@ public class DelegationCleanupJob {
     @Autowired
     private DelegationManager delegationManager;
 
+    public DelegationCleanupJob() {
+        super(logger, "DelegationCleanup");
+    }
+
     @Scheduled(cron = "${delegationcleanupjob.cron}")
     public void start() {
-        if (Boolean.parseBoolean(jobEnabled)) {
-            logger.info("delegationCleanup job started");
-            try {
+        try {
+            initJob();
+
+            if (Boolean.parseBoolean(jobEnabled)) {
+                startJob();
                 cleanup();
-            } catch (Exception ex) {
-                logger.error("An error occurred during cleanup of old delegation records", ex);
+                endJob();
+            } else {
+                jobDisabled();
             }
-            logger.info("delegationCleanup job ended");
-        } else
-            logger.info("delegationCleanup job disabled");
+        } catch (Exception ex) {
+            logger.error("An error occurred during cleanup of old delegation records", ex);
+        } finally {
+            cleanupJob();
+        }
     }
 
     private void cleanup() {

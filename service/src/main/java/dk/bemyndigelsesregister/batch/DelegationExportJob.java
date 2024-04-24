@@ -14,14 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
 @Component
-public class DelegationExportJob {
+public class DelegationExportJob extends AbstractJob {
     private static final Logger logger = LogManager.getLogger(DelegationExportJob.class);
     private static final String LAST_RUN_SYSTEM_VARIABLE = "lastRun";
 
@@ -54,36 +52,48 @@ public class DelegationExportJob {
 
     private int batchNo;
 
+    public DelegationExportJob() {
+        super(logger, "DelegationExport");
+    }
+
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
-    public void startExport() throws IOException {
-        if (Boolean.valueOf(jobEnabled)) {
-            RequestContext.get().setActingUser("DelegationExportJob");
+    public void startExport() {
+        try {
+            initJob();
 
-            logger.info("DelegationExport job started");
+            if (Boolean.parseBoolean(jobEnabled)) {
+                startJob();
+                RequestContext.get().setActingUser("DelegationExportJob");
 
-            batchNo = 1;
-            Instant startTime = Instant.now();
-            SystemVariable lastRun = systemVariableDAO.getByName(LAST_RUN_SYSTEM_VARIABLE);
-            if (lastRun == null) {
-                lastRun = new SystemVariable();
-                lastRun.setName(LAST_RUN_SYSTEM_VARIABLE);
-                lastRun.setInstantValue(startTime);
+                batchNo = 1;
+                Instant startTime = Instant.now();
+                SystemVariable lastRun = systemVariableDAO.getByName(LAST_RUN_SYSTEM_VARIABLE);
+                if (lastRun == null) {
+                    lastRun = new SystemVariable();
+                    lastRun.setName(LAST_RUN_SYSTEM_VARIABLE);
+                    lastRun.setInstantValue(startTime);
+                }
+
+                Instant fromIncluding = DateUtils.plusMinutes(lastRun.getInstantValue(), -1);
+                Instant toExcluding = DateUtils.plusMinutes(startTime, -1);
+
+                // export changed delegations
+                exportChangedDelegations(startTime, delegationDAO.findByModifiedInPeriod(fromIncluding, toExcluding));
+
+                updateLastRun(lastRun, startTime);
+
+                systemService.cleanupTempDir(retentionDays);
+
+                endJob();
+            } else {
+                jobDisabled();
             }
-
-            Instant fromIncluding = DateUtils.plusMinutes(lastRun.getInstantValue(), -1);
-            Instant toExcluding = DateUtils.plusMinutes(startTime, -1);
-
-            // export changed delegations
-            exportChangedDelegations(startTime, delegationDAO.findByModifiedInPeriod(fromIncluding, toExcluding));
-
-            updateLastRun(lastRun, startTime);
-
-            systemService.cleanupTempDir(retentionDays);
-
+        } catch (Exception ex) {
+            logger.error("An error occurred during export of changed delegations", ex);
+        } finally {
             RequestContext.clear();
-            logger.info("DelegationExport job ended");
-        } else
-            logger.info("DelegationExport job disabled");
+            cleanupJob();
+        }
     }
 
     public int exportChangedDelegations(Instant startTime, List<Long> delegationIds) {
