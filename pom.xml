@@ -19,12 +19,12 @@
 		<security-api.version>1.0.5</security-api.version>
 		<nsp-util.version>1.0.11</nsp-util.version>
 		<apache.cxf.version>3.3.0</apache.cxf.version>
-		<jaxb-core.version>2.3.0</jaxb-core.version>
-		<jaxb-impl.version>2.3.0</jaxb-impl.version>
+		<jaxb-core.version>2.3.0.1</jaxb-core.version>
+		<jaxb-impl.version>2.3.1</jaxb-impl.version>
 		<jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
 		<!--https://stackoverflow.com/questions/50237516/proper-fix-for-java-10-complaining-about-illegal-reflection-access-by-jaxb-impl-->
 		<jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<spring-boot.version>2.7.9</spring-boot.version>
 		<log4j2.version>2.17.1</log4j2.version>
 		<h2.version>1.4.200</h2.version>

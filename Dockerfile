@@ -5,7 +5,7 @@ ARG KAFKA_FILE=etc/bem-kafka-producer.properties
 ARG IDWS_RESPONSE_SIGNING_CERT=etc/NSP_Test_Service_Consumer_sds.p12
 
 
-FROM amazoncorretto:11.0.14-alpine
+FROM openjdk:17-oracle
 # Set Timezone
 ENV TZ Europe/Copenhagen
 
