@@ -4,7 +4,6 @@ import dk.bemyndigelsesregister.ws.RequestContext;
 import dk.nsi.fmk.auditlog.client.AuditLogKafkaClient;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog;
 import dk.nsi.fmk.auditlog.data.proto.AuditLog.AuditLogEntry;
-import dk.nsi.fmk.moduleframework.data.ModuleFramework;
 import dk.sds.nsp.security.SecurityContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -135,18 +134,14 @@ public class AuditLoggerImpl implements AuditLogger {
 
             AuditLogEntry logEntry = entryBuilder.build();
             log.debug("built logEntry");
-
-            ModuleFramework.RequestContext.Builder ctxBuilder = ModuleFramework.RequestContext.newBuilder();
-            ctxBuilder.setMessageId(logEntry.getMessageId());
-            ModuleFramework.RequestContext reqCtx = ctxBuilder.build();
+            AuditLog.AuditLogRequestContext reqCtx = AuditLog.AuditLogRequestContext.newBuilder().setMessageId(messageId).build();
             log.debug("built reqCtx");
-
             AuditLog.AuditLogEntryId auditLogEntryId = auditLogKafkaClient.createAuditLogEntryId(logEntry);
             sendAuditLog(reqCtx, logEntry, auditLogEntryId);
         }
     }
 
-    private void sendAuditLog(ModuleFramework.RequestContext reqCtx, AuditLogEntry logEntry, AuditLog.AuditLogEntryId auditLogEntryId) {
+    private void sendAuditLog(AuditLog.AuditLogRequestContext reqCtx, AuditLogEntry logEntry, AuditLog.AuditLogEntryId auditLogEntryId) {
         log.debug("calling sendAuditLog" + logEntry);
         auditLogKafkaClient.sendAuditLog(reqCtx, logEntry, auditLogEntryId);
         log.debug("sent sendAuditLog");
