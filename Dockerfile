@@ -3,9 +3,10 @@ ARG PROPERTIES_FILE=etc/application.properties
 ARG LOG4J2_FILE=etc/log4j2.xml
 ARG KAFKA_FILE=etc/bem-kafka-producer.properties
 ARG IDWS_RESPONSE_SIGNING_CERT=etc/NSP_Test_Service_Consumer_sds.p12
+ARG JAVA_VERSION=17
+ARG BASE_IMAGE=eclipse-temurin:${JAVA_VERSION}-jre
 
-
-FROM openjdk:17-oracle
+FROM ${BASE_IMAGE}
 # Set Timezone
 ENV TZ Europe/Copenhagen
 
