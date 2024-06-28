@@ -30,6 +30,7 @@
 		<log4j2.version>2.17.1</log4j2.version>
 		<h2.version>1.4.200</h2.version>
 		<mariadb.version>3.1.2</mariadb.version>
+		<xalanVersion>2.7.3</xalanVersion>
 	</properties>
 
 	<repositories>
@@ -85,6 +86,45 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<!--Patch spring -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>5.3.37</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaml</groupId>
+				<artifactId>snakeyaml</artifactId>
+				<version>2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>io.undertow</groupId>
+				<artifactId>undertow-core</artifactId>
+				<version>2.3.14.Final</version>
+			</dependency>
+			<!--Patch seal -->
+			<dependency>
+				<groupId>xalan</groupId>
+				<artifactId>xalan</artifactId>
+				<version>${xalanVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>xalan</groupId>
+				<artifactId>serializer</artifactId>
+				<version>${xalanVersion}</version>
+			</dependency>
+			<!-- Patch kafka (auditlog-common) -->
+			<!--patch kafka-clients -->
+			<dependency>
+				<groupId>org.xerial.snappy</groupId>
+				<artifactId>snappy-java</artifactId>
+				<version>1.1.10.4</version>
+			</dependency>
+			<!-- patch kafka-clients end -->
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
