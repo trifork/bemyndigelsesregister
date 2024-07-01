@@ -6,7 +6,7 @@
     <parent>
         <groupId>dk.bemyndigelsesregister</groupId>
         <artifactId>parent</artifactId>
-        <version>5.12-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>service</artifactId>
@@ -87,6 +87,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
@@ -120,24 +121,13 @@
         <dependency>
             <groupId>dk.nsi.fmk.auditlogmodul</groupId>
             <artifactId>fmk-auditlog-modul-client</artifactId>
-            <version>2.9.13-20211207072339-8ede7</version>
+            <version>3.1.16</version>
         </dependency>
         <dependency>
             <groupId>dk.nsi.fmk.auditlogmodul</groupId>
             <artifactId>fmk-auditlog-modul-common</artifactId>
-            <version>2.9.13-20211207072339-8ede7</version>
+            <version>3.1.16</version>
         </dependency>
-        <dependency>
-            <groupId>dk.nsi.fmk.moduleframework</groupId>
-            <artifactId>fmk-module-framework-client</artifactId>
-            <version>1.2.2-20180327092902-25678</version>
-        </dependency>
-        <dependency>
-            <groupId>dk.nsi.fmk.moduleframework</groupId>
-            <artifactId>fmk-module-framework-common</artifactId>
-            <version>1.2.2-20180327092902-25678</version>
-        </dependency>
-
         <!-- local dependencies -->
         <dependency>
             <groupId>dk.bemyndigelsesregister</groupId>
@@ -178,7 +168,7 @@
         <dependency>
             <groupId>dk.sosi.seal</groupId>
             <artifactId>seal</artifactId>
-            <version>2.6.19</version>
+            <version>2.6.29</version>
             <exclusions>
                 <exclusion>
                     <groupId>log4j</groupId>
@@ -193,6 +183,10 @@
                     <artifactId>commons-httpclient</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>serializer</artifactId>
         </dependency>
         <dependency>
             <groupId>com.trifork.commons-httpclient-wrapper</groupId>
