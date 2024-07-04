@@ -15,7 +15,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<revision>5.12-SNAPSHOT</revision>
+		<revision>5.12.1-SNAPSHOT</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<security-api.version>1.0.5</security-api.version>
 		<nsp-util.version>1.0.11</nsp-util.version>
