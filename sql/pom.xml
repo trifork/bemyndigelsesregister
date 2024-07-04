@@ -7,7 +7,7 @@
     <parent>
         <groupId>dk.bemyndigelsesregister</groupId>
         <artifactId>parent</artifactId>
-        <version>5.12-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <dependencies>
