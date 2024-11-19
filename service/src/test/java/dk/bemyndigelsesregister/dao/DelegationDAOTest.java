@@ -129,15 +129,34 @@ public class DelegationDAOTest {
     public void testFindByLastModifiedGreaterThanOrEquals() {
         Instant when = DateUtils.toInstant(2011, 1, 1);
 
-        final List<Long> before = delegationDAO.findByModifiedInPeriod(when, null);
+        final List<Long> before = delegationDAO.findByModifiedInPeriod(when, null, null);
 
         // modify one
         Delegation delegation = createDelegation(Instant.now(), DateUtils.plusDays(Instant.now(), 2));
         delegationDAO.save(delegation);
 
-        final List<Long> after = delegationDAO.findByModifiedInPeriod(when, null);
+        final List<Long> after = delegationDAO.findByModifiedInPeriod(when, null, null);
 
         assertEquals(before.size() + 1, after.size());
+    }
+
+    @Test
+    public void testFindWithSkiplist() {
+        Instant when = DateUtils.toInstant(2011, 1, 1);
+
+        final List<Long> before = delegationDAO.findByModifiedInPeriod(when, null, null);
+
+        // modify one
+        Delegation delegation = createDelegation(Instant.now(), DateUtils.plusDays(Instant.now(), 2));
+        delegationDAO.save(delegation);
+
+        final List<Long> after = delegationDAO.findByModifiedInPeriod(when, null, null);
+
+        assertEquals(before.size() + 1, after.size());
+
+        final List<Long> withSkipped = delegationDAO.findByModifiedInPeriod(when, null, Collections.singletonList(delegation.getDelegatorCpr()));
+
+        assertTrue(withSkipped.size() < after.size());
     }
 
     @Test

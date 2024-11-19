@@ -113,11 +113,12 @@ public class DelegationDAOImpl extends AbstractDAOImpl<Delegation> implements De
     }
 
     @Override
-    public List<Long> findByModifiedInPeriod(Instant fromIncluding, Instant toExcluding) {
+    public List<Long> findByModifiedInPeriod(Instant fromIncluding, Instant toExcluding, List<String> skipList) {
         MapSqlParameterSource paramMap = new MapSqlParameterSource()
                 .addValue("status", Status.GODKENDT.name())
                 .addValue("fra", fromIncluding)
-                .addValue("til", toExcluding);
+                .addValue("til", toExcluding)
+                .addValue("skipList", skipList);
 
         String sql = "SELECT * FROM " + tableName + " WHERE status = :status";
         if (fromIncluding != null) {
@@ -126,6 +127,10 @@ public class DelegationDAOImpl extends AbstractDAOImpl<Delegation> implements De
         if (toExcluding != null) {
             sql += " AND sidst_modificeret <= :til";
         }
+        if (skipList != null && !skipList.isEmpty()) {
+            sql += " AND bemyndigende_cpr NOT IN (:skipList)";
+        }
+
 
         return queryForIdList(sql, paramMap);
     }

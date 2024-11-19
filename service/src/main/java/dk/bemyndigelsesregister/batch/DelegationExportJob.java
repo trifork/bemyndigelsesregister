@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.Instant;
 import java.util.List;
 
@@ -50,10 +51,20 @@ public class DelegationExportJob extends AbstractJob {
     @Value("${bemyndigelsesexportjob.retentiondays}")
     Integer retentionDays;
 
+    @Value("${bemyndigelsesexportjob.skiplist:}")
+    private List<String> skipList;
+
     private int batchNo;
 
     public DelegationExportJob() {
         super(logger, "DelegationExport");
+    }
+
+    @PostConstruct
+    public void init() {
+        if (Boolean.parseBoolean(jobEnabled)) {
+            logger.info("DelegationExportJob initializing, batchSize=" + batchSize + ", retentionDays=" + retentionDays + ", skipList=" + skipList);
+        }
     }
 
     @Scheduled(cron = "${bemyndigelsesexportjob.cron}")
@@ -78,7 +89,7 @@ public class DelegationExportJob extends AbstractJob {
                 Instant toExcluding = DateUtils.plusMinutes(startTime, -1);
 
                 // export changed delegations
-                exportChangedDelegations(startTime, delegationDAO.findByModifiedInPeriod(fromIncluding, toExcluding));
+                exportChangedDelegations(startTime, delegationDAO.findByModifiedInPeriod(fromIncluding, toExcluding, skipList));
 
                 updateLastRun(lastRun, startTime);
 
