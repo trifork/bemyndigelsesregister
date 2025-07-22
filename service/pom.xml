@@ -121,12 +121,12 @@
         <dependency>
             <groupId>dk.nsi.fmk.auditlogmodul</groupId>
             <artifactId>fmk-auditlog-modul-client</artifactId>
-            <version>3.1.16</version>
+            <version>3.1.30</version>
         </dependency>
         <dependency>
             <groupId>dk.nsi.fmk.auditlogmodul</groupId>
             <artifactId>fmk-auditlog-modul-common</artifactId>
-            <version>3.1.16</version>
+            <version>3.1.30</version>
         </dependency>
         <!-- local dependencies -->
         <dependency>
