@@ -2,6 +2,7 @@ package dk.bemyndigelsesregister.batch;
 
 import dk.bemyndigelsesregister.dao.DelegatingSystemDAO;
 import dk.bemyndigelsesregister.dao.DelegationDAO;
+import dk.bemyndigelsesregister.dao.DelegationPermissionDAO;
 import dk.bemyndigelsesregister.dao.SystemVariableDAO;
 import dk.bemyndigelsesregister.domain.*;
 import dk.bemyndigelsesregister.service.DelegationManager;
@@ -33,6 +34,9 @@ public class MetadataChangeHandlerJob extends AbstractJob {
 
     @Autowired
     private DelegationDAO delegationDAO;
+
+    @Autowired
+    private DelegationPermissionDAO delegationPermissionDAO;
 
     @Autowired
     private SystemVariableDAO systemVariableDAO;
@@ -141,34 +145,29 @@ public class MetadataChangeHandlerJob extends AbstractJob {
             for (Long delegationId : delegationIds) {
                 Delegation delegation = delegationDAO.get(delegationId);
                 if (delegation.getState() == Status.GODKENDT) {
-                    boolean update = true;
+                    delegation.getDelegationPermissions().addAll(delegationPermissionDAO.findByDelegationId(delegationId));
 
-                    if (delegation.getDelegationPermissions() != null) {
-                        // check if permissions is unchanged
-
-                        Set<String> permissionCodesDelegation = new HashSet<>();
-                        for (DelegationPermission dp : delegation.getDelegationPermissions()) {
-                            if (!Metadata.ASTERISK_PERMISSION_CODE.equals(dp.getPermissionCode())) {
-                                permissionCodesDelegation.add(dp.getPermissionCode());
-                            }
-                        }
-
-                        Set<String> permissionCodesMetadata = new HashSet<>();
-                        for (DelegatablePermission dp : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
-                            if (dp.isDelegatable() && !Metadata.ASTERISK_PERMISSION_CODE.equals(dp.getPermission().getCode())) {
-                                permissionCodesMetadata.add(dp.getPermission().getCode());
-                            }
-                        }
-
-                        if (permissionCodesDelegation.equals(permissionCodesMetadata)) {
-                            update = false;
+                    // check if permissions is unchanged
+                    Set<String> permissionCodesDelegation = new HashSet<>();
+                    for (DelegationPermission dp : delegation.getDelegationPermissions()) {
+                        if (!Metadata.ASTERISK_PERMISSION_CODE.equals(dp.getPermissionCode())) {
+                            permissionCodesDelegation.add(dp.getPermissionCode());
                         }
                     }
 
-                    if (update) {
+                    Set<String> permissionCodesMetadata = new HashSet<>();
+                    for (DelegatablePermission dp : metadata.getDelegatablePermissions(delegation.getRoleCode())) {
+                        if (dp.isDelegatable() && !Metadata.ASTERISK_PERMISSION_CODE.equals(dp.getPermission().getCode())) {
+                            permissionCodesMetadata.add(dp.getPermission().getCode());
+                        }
+                    }
+
+                    if (!permissionCodesDelegation.equals(permissionCodesMetadata)) {
                         // delegationManager will expand asterisk to new permissions
                         delegationManager.createDelegation(delegation.getSystemCode(), delegation.getDelegatorCpr(), delegation.getDelegateeCpr(), delegation.getDelegateeCvr(), delegation.getRoleCode(), Status.GODKENDT, Collections.singletonList(Metadata.ASTERISK_PERMISSION_CODE), startTime, delegation.getEffectiveTo());
                         updateCount++;
+                    } else {
+                        logger.info("Delegation " + delegationId + " permissions unchanged, skipping update");
                     }
                 }
             }
