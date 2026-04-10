@@ -74,4 +74,4 @@ services:
       - bem_net
     environment:
       - NSP_TEST_FEDERATION=true
-    command: ["java","-Dlogging.config=/log4j2.xml","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "application.jar"]
+    command: ["java","-Dlogging.config=/config/log4j2.xml","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "application.jar"]

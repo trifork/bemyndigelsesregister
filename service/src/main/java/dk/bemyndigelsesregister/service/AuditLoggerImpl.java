@@ -43,7 +43,7 @@ public class AuditLoggerImpl implements AuditLogger {
             try {
                 Properties props = new Properties();
 
-                File configFile = new File("bem-kafka-producer.properties");
+                File configFile = new File("/config/bem-kafka-producer.properties");
                 if (configFile.exists() && configFile.canRead()) {
                     log.info("Loading kafka properties from " + configFile.getAbsolutePath());
                     InputStream is = new FileInputStream(configFile);
