@@ -56,7 +56,6 @@ import java.util.Properties;
 
 public class SosiUtil {
     private static final String KEYSTORE_PASSWORD = "Test1234";
-    private static final String CERTIFICATE_ALIAS = "sosi:alias_system";
     private static final String CERTIFICATE_CVR = "20921897";
     private static final String CERTIFICATE_CPR = "0501792275";
     private static final String CERTIFICATE_ORGANISATION = "Trifork";
@@ -77,8 +76,8 @@ public class SosiUtil {
         props = SignatureUtil.setupCryptoProviderForJVM();
 
         System.out.println("Getting Credential Vaults");
-        mocesVault = getCredentialVault("/validMocesVault.jks");
-        vocesVault = getCredentialVault("/test_voces1.jks");
+        mocesVault = getCredentialVault("/validMocesVault.p12", "lars larsen");
+        vocesVault = getCredentialVault("/OAKS_SDS_BEM_Test.p12", "sosi:alias_system");
 
         System.out.println("Instantiating SOSITestFederation");
         SOSITestFederation federation = new SOSITestFederation(props);
@@ -88,15 +87,15 @@ public class SosiUtil {
         vocesFactory = new SOSIFactory(federation, vocesVault, props);
     }
 
-    private CredentialVault getCredentialVault(String filename) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
+    private CredentialVault getCredentialVault(String filename, String certificateAlias) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException, UnrecoverableKeyException {
         CredentialVault result = new GenericCredentialVault(props, KEYSTORE_PASSWORD);
 
         InputStream keyInputStream = getClass().getResourceAsStream(filename);
         result.getKeyStore().load(keyInputStream, KEYSTORE_PASSWORD.toCharArray());
         keyInputStream.close();
 
-        X509Certificate certificate = (X509Certificate) result.getKeyStore().getCertificate(CERTIFICATE_ALIAS);
-        Key priv = result.getKeyStore().getKey(CERTIFICATE_ALIAS, KEYSTORE_PASSWORD.toCharArray());
+        X509Certificate certificate = (X509Certificate) result.getKeyStore().getCertificate(certificateAlias);
+        Key priv = result.getKeyStore().getKey(certificateAlias, KEYSTORE_PASSWORD.toCharArray());
         result.setSystemCredentialPair(new CredentialPair(certificate, (PrivateKey) priv));
 
         return result;
@@ -117,10 +116,10 @@ public class SosiUtil {
         IDCard requestCard = null;
 
         if (authLevel == AuthenticationLevel.VOCES_TRUSTED_SYSTEM) {
-            CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, "33257872", "Sundhedsdatastyrelsen");
+            CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, CERTIFICATE_CVR, CERTIFICATE_ORGANISATION);
             requestCard = factory.createNewSystemIDCard(CERTIFICATE_ORGANISATION, careProvider, authLevel, null, null, vault.getSystemCredentialPair().getCertificate(), null);
         } else if (authLevel == AuthenticationLevel.MOCES_TRUSTED_USER) {
-            CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, CERTIFICATE_CVR, CERTIFICATE_ORGANISATION);
+            CareProvider careProvider = new CareProvider(SubjectIdentifierTypeValues.CVR_NUMBER, "96908409", CERTIFICATE_ORGANISATION);
             requestCard = factory.createNewUserIDCard(CERTIFICATE_ORGANISATION, CERTIFICATE_CPR, "Lars", "Larsen", "ll@trifork.com", "developer", "Doctor", careProvider, "J0184", authLevel, vault.getSystemCredentialPair().getCertificate(), null);
         }
 
